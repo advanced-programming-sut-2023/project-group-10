@@ -1,4 +1,4 @@
-package model;
+package model.government;
 
 public enum Food {
     APPLE("apple",0,0),

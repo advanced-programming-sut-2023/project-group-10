@@ -1,23 +1,25 @@
-package model;
+package model.government;
 
-import java.util.ArrayList;
+import model.NumericalEnums;
+import model.User;
+
 import java.util.HashMap;
 
-public class government {
+public class Government {
     private User owner;
     private int popularity;
     private int gold;
     // TODO: check the fields name with Rozhin
     private int stone;
     private int wood;
-    private HashMap<Food ,Integer> foodList=new HashMap<Food, Integer>();
+    private HashMap<Food,Integer> foodList=new HashMap<Food, Integer>();
     private int foodRate;
     private int taxRate;
     private int fearRate;
 
-    public government(User owner) {
+    public Government(User owner) {
         this.owner = owner;
-        this.popularity=NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
+        this.popularity= NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
     }
     public User getOwner() {
         return owner;

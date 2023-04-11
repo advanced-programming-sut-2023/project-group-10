@@ -81,5 +81,9 @@ public class User {
     }
     //TODO: Move it to register menu controller
 
+    public boolean checkPassword(String password){
+        return this.password.equals(password);
+    }
+
 
 }
