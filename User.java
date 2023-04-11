@@ -11,6 +11,7 @@ public class User {
     private String slogan;
     private HashMap<String, String> passwordRecoveryQuestionAndAnswer;
     private String securityQuestionNumber;
+    private int highScore;
     //I think it should be moved in the game class or whatever
     private final static ArrayList<User> users = new ArrayList<>();
 
@@ -85,5 +86,21 @@ public class User {
         return this.password.equals(password);
     }
 
+    public boolean isPasswordFormatValid(String password){
+        return true;
+    }
+    public boolean isUserNameFormatValid(String password){
+        return true;
+    }
 
+    public int getHighScore() {
+        return highScore;
+    }
+
+    public void setHighScore(int highScore) {
+        this.highScore = highScore;
+    }
+    public int getRank(){
+        return 0;
+    }
 }
