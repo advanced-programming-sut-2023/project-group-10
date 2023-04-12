@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 
 public class LoginMenu {
     
-    public void run(){
+    public static void run(){
     
     }
 
