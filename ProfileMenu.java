@@ -4,6 +4,10 @@ import model.User;
 
 public class ProfileMenu {
     private User currentUser;
+    
+    public static void run(){
+        
+    }
 
     public void changeUsername(){
 
