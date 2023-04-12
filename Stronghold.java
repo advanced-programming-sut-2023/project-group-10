@@ -4,7 +4,16 @@ import java.util.ArrayList;
 
 public class Stronghold {
     private User currentUser;
-    private static final ArrayList<User> users=new ArrayList<>();
+    // TODO: complete this, read from file!
+    private final ArrayList<Trade> allTradeRequests=new ArrayList<>();
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
 
 
 }

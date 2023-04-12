@@ -1,25 +1,35 @@
-package model.government;
+package main.java.model.government;
 
+import main.java.model.Color;
+import main.java.model.Item;
+import main.java.model.Trade;
+import main.java.model.User;
 import model.NumericalEnums;
-import model.User;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Government {
+
     private User owner;
     private int popularity;
-    private int gold;
+    private double gold;
     // TODO: check the fields name with Rozhin
     private int stone;
     private int wood;
-    private HashMap<Food,Integer> foodList=new HashMap<Food, Integer>();
+    private Color color;
+    private HashMap<Item,Integer> foodList=new HashMap<Item, Integer>();
     private int foodRate;
     private int taxRate;
     private int fearRate;
+    private  ArrayList<Trade> tradeList=new ArrayList<>();
 
-    public Government(User owner) {
+    public Government(User owner, Color color) {
+
         this.owner = owner;
         this.popularity= NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
+        this.color=color;
     }
     public User getOwner() {
         return owner;
@@ -48,14 +58,14 @@ public class Government {
         return foodRate;
     }
 
-    public int getGold() {
+    public double getGold() {
         return gold;
     }
 
     public int getTaxRate() {
         return taxRate;
     }
-    public void addFood(Food food, int foodCount){
+    public void addFood(Item food, int foodCount){
         if(foodList.containsKey(food)){
             foodList.put(food,foodList.get(food)+foodCount);
             return;
@@ -63,12 +73,20 @@ public class Government {
         foodList.put(food,foodCount);
 
     }
-    public void sellFood(Food food, int amount){
+    public void sellFood(Item food, int amount){
         if(foodList.get(food) > amount){
             foodList.put(food,foodList.get(food)-amount);
             return;
         }
         foodList.remove(food);
+    }
+
+    public void addToTradeList(Trade trade){
+
+    }
+
+    public ArrayList<Trade> getTradeList() {
+        return tradeList;
     }
 
 }
