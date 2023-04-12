@@ -1,16 +1,19 @@
 package model.environment;
 
+import model.droppableitems.Droppable;
+import model.people.Person;
+
 import java.util.ArrayList;
 
 public class Block {
     private BlockTexture texture;
-    private Building building;
-    private ArrayList<Person> people;
+    private Droppable droppable;
+    private final ArrayList<Person> people;
 
-    Block(BlockTexture texture, int x, int y) {
+    Block(BlockTexture texture) {
         this.texture = texture;
-        building = null;
-        this.people = new ArrayList<>();
+        droppable = null;
+        people = new ArrayList<>();
     }
 
     public BlockTexture getTexture() {
@@ -18,18 +21,33 @@ public class Block {
     }
 
     public Building getBuilding() {
-        return building;
+        if (droppable instanceof Building) return ((Building) droppable);
+        return null;
     }
 
-    public ArrayList<Person> getPeople() {
-        return people;
+    public Person getUnit() {
+        if ((droppable instanceof Person)) return ((Person) droppable);
+        return null;
     }
 
     public void setTexture(BlockTexture texture) {
         this.texture = texture;
     }
 
-    public void setBuilding(Building building) {
-        this.building = building;
+    public void clearBlock() {
+        droppable = null;
+    }
+
+    public boolean setDroppable(Droppable droppable) {
+        if (this.droppable != null || !people.isEmpty()) return false;
+        if (droppable instanceof Farm && !texture.isFertile()) return false;
+        if (droppable instanceof Building && !texture.isBuildable()) return false;
+        this.droppable = droppable;
+        return true;
+    }
+
+    public void addPerson(Person person) {
+        //TODO: check signature after designing Person class
+        people.add(person);
     }
 }

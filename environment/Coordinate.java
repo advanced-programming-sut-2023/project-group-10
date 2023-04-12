@@ -9,11 +9,6 @@ public class Coordinate {
         this.column = column;
     }
 
-    boolean isValid(int mapSize) {
-        return row >= 0 && row < mapSize && column >= 0 && column < mapSize;
-    }
-
-
     void modify(int horizontalChange, int verticalChange, int size) {
         row += verticalChange;
         row = keepCoordinateInBounds(row, size);

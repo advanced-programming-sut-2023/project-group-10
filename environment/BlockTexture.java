@@ -20,9 +20,9 @@ public enum BlockTexture {
     BEACH(false, true, true),
     SEA (false, false, false);
 
-    final boolean fertile;
-    final boolean buildable;
-    final boolean walkable;
+    private final boolean fertile;
+    private final boolean buildable;
+    private final boolean walkable;
 
     BlockTexture(boolean fertile, boolean buildable, boolean walkable) {
         this.fertile = fertile;
