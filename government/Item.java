@@ -19,7 +19,7 @@ public enum Item {
     PIKE("pike", 0, 0, 0, 0, false),
     MACE("mace", 0, 0, 0, 0, false),
     SWORDS("swords", 0, 0, 0, 0, false),
-    LEATHER_ARMOR("Leahter armor", 0, 0, 0, 0, false),
+    LEATHER_ARMOR("Leather armor", 0, 0, 0, 0, false),
     METAL_ARMOR("metal armor", 0, 0, 0, 0, false);
 
     private final String name;
