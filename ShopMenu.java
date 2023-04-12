@@ -1,0 +1,13 @@
+package main.java.view;
+
+public class ShopMenu {
+    public static void run(){
+
+    }
+    public void buy(){
+
+    }
+    public void sell(){
+
+    }
+}
