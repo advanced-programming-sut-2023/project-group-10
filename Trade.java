@@ -11,7 +11,6 @@ public class Trade {
     private final int amount;
     private final int price;
     private boolean acceptedStatus;
-    private ArrayList<Trade> trades = new ArrayList<>();
 
 
     public Trade(String recipientId, String senderId, String message, String type, int amount, int price) {
@@ -23,10 +22,7 @@ public class Trade {
         this.price = price;
         this.acceptedStatus = false;
     }
-    public void addTrade(String recipientId, String senderId, String message, String type, int amount, int price){
-        trades.add( new Trade( recipientId,  senderId,  message,  type,  amount,  price));
 
-    }
 
     public String getRecipientId() {
         return recipientId;
