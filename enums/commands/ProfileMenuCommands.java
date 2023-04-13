@@ -1,11 +1,19 @@
-package view.enums.commands
+package view.enums.commands;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum ProfileMenuCommands {
-    LOGIN(""),
-    FORGET_PASSWORD("");
+
+    CHANGE_USERNAME(""),
+    CHANGE_NICKNAME(""),
+    CHANGE_PASSWORD(""),
+    CHANGE_EMAIL(""),
+    CHANGE_SLOGAN(""),
+    REMOVE_SLOGAN(""),
+    DISPLAY_HIGHSCORE(""),
+    DISPLAY_RANK(""),
+    DISPLAY_PROFILE("");
 
     private final String regex;
 
