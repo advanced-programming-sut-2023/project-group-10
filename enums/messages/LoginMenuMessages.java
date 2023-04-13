@@ -1,6 +1,6 @@
 package view.messages;
 
-public enum loginMessages {
+public enum LoginMenuMessages {
     USERNAME_NOT_EXIST,
     WRONG_PASSWORD,
     LOGIN_SUCCESSFUL;
