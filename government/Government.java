@@ -14,11 +14,13 @@ public class Government {
 
     private User owner;
     private int popularity;
+    private HashMap<String,Boolean> popularityFactors=new HashMap<>();
     private double gold;
     // TODO: check the fields name with Rozhin
     private int stone;
     private int wood;
     private Color color;
+
     private HashMap<Item,Integer> foodList=new HashMap<Item, Integer>();
     private int foodRate;
     private int taxRate;
@@ -44,14 +46,21 @@ public class Government {
     }
     public void setTaxRate(int value){
         taxRate=value;
+        popularityFactors.put("tax",true);
     }
 
     public void setFearRate(int fearRate) {
         this.fearRate = fearRate;
+        popularityFactors.put("fear",true);
+    }
+    public void religion(){
+        popularityFactors.put("religion",true);
     }
 
     public void setFoodRate(int foodRate) {
         this.foodRate = foodRate;
+        popularityFactors.put("food",true);
+
     }
 
     public int getFoodRate() {
@@ -89,4 +98,7 @@ public class Government {
         return tradeList;
     }
 
+    public HashMap<String, Boolean> getPopularityFactors() {
+        return popularityFactors;
+    }
 }
