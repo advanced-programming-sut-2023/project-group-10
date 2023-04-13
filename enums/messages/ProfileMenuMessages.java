@@ -1,6 +1,6 @@
 package view.messages;
 
-public enum profileMessages {
+public enum ProfileMenuMessages {
 
     NO_USERNAME_PROVIDED,
     NO_PASSWORD_PROVIDED,
