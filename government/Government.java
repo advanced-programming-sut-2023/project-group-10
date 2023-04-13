@@ -1,40 +1,46 @@
-package main.java.model.government;
+package model.government;
 
-import main.java.model.Color;
-import main.java.model.Item;
-import main.java.model.Trade;
-import main.java.model.User;
+import model.Trade;
+import model.User;
 import model.NumericalEnums;
+import model.environment.Coordinate;
+import model.government.people.MilitaryUnit;
+import model.government.people.Role;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class Government {
 
     private User owner;
+    private MilitaryUnit lord;
+    private final HashMap<Role, Integer> peopleList = new HashMap<>();
+    private final HashMap<Item, Integer> itemList = new HashMap<>();
     private int popularity;
-    private HashMap<String,Boolean> popularityFactors=new HashMap<>();
+    private HashMap<String, Boolean> popularityFactors = new HashMap<>();
+    private int popularity;
     private double gold;
     // TODO: check the fields name with Rozhin
-    private int stone;
-    private int wood;
-    private Color color;
-
-    private HashMap<Item,Integer> foodList=new HashMap<Item, Integer>();
+    private final Color color;
     private int foodRate;
     private int taxRate;
     private int fearRate;
-    private  ArrayList<Trade> tradeList=new ArrayList<>();
+    private ArrayList<Trade> tradeList = new ArrayList<>();
 
     public Government(User owner, Color color) {
 
         this.owner = owner;
-        this.popularity= NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
-        this.color=color;
+        lord = new MilitaryUnit("lord", this);
+        this.popularity = NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
+        this.color = color;
     }
+
     public User getOwner() {
         return owner;
+    }
+
+    public MilitaryUnit getLord() {
+        return lord;
     }
 
     public int getPopularity() {
@@ -44,23 +50,21 @@ public class Government {
     public void changePopularity(int value) {
         popularity += value;
     }
-    public void setTaxRate(int value){
-        taxRate=value;
-        popularityFactors.put("tax",true);
+
+    public void setTaxRate(int value) {
+        taxRate = value;
     }
 
     public void setFearRate(int fearRate) {
         this.fearRate = fearRate;
-        popularityFactors.put("fear",true);
     }
-    public void religion(){
-        popularityFactors.put("religion",true);
+
+    public void religion() {
+        popularityFactors.put("religion", true);
     }
 
     public void setFoodRate(int foodRate) {
         this.foodRate = foodRate;
-        popularityFactors.put("food",true);
-
     }
 
     public int getFoodRate() {
@@ -74,29 +78,33 @@ public class Government {
     public int getTaxRate() {
         return taxRate;
     }
-    public void addFood(Item food, int foodCount){
-        if(foodList.containsKey(food)){
-            foodList.put(food,foodList.get(food)+foodCount);
-            return;
-        }
-        foodList.put(food,foodCount);
 
-    }
-    public void sellFood(Item food, int amount){
-        if(foodList.get(food) > amount){
-            foodList.put(food,foodList.get(food)-amount);
-            return;
-        }
-        foodList.remove(food);
+    public HashMap<Role, Integer> getPeopleList() {
+        return peopleList;
     }
 
-    public void addToTradeList(Trade trade){
+    public void addPerson(String role, Coordinate target) {
+    }
 
+    public void addItem(Item item, int itemCount) {
+        if (itemList.containsKey(item))
+            itemList.put(item, itemList.get(item) + itemCount);
+        else itemList.put(item, itemCount);
+    }
+
+    public void sellItem(Item item, int amount) {
+        if (itemList.get(item) >= amount)
+            itemList.put(item, itemList.get(item) - amount);
+        else itemList.remove(item);
+    }
+
+    public void addToTradeList(Trade trade) {
     }
 
     public ArrayList<Trade> getTradeList() {
         return tradeList;
     }
+
 
     public HashMap<String, Boolean> getPopularityFactors() {
         return popularityFactors;
