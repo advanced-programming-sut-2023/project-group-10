@@ -1,3 +1,5 @@
+package model;
+
 public enum BuildingTypes {
 
     APPLE_ORCHARD("apple orchard", "farm building"),
