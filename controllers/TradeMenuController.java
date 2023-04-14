@@ -1,9 +1,6 @@
-package main.java.controller;
+package controllers;
 
 public class TradeMenuController {
-    public static void run() {
-
-    }
 
     public String showAllPresentUsersInTheGame() {
         return null;
