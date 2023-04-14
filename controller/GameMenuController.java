@@ -1,4 +1,4 @@
-package main.java.controller;
+package controller;
 
 import main.java.model.User;
 import main.java.model.environment.Map;
