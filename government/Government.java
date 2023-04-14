@@ -1,11 +1,14 @@
-package model.government;
 
-import model.Trade;
-import model.User;
+package main.java.model.government;
+
+import main.java.model.Color;
+import main.java.model.Item;
+import main.java.model.Trade;
+import main.java.model.User;
 import model.NumericalEnums;
-import model.environment.Coordinate;
-import model.government.people.MilitaryUnit;
-import model.government.people.Role;
+import main.java.model.environment.Coordinate;
+import main.java.model.government.people.MilitaryUnit;
+import main.java.model.government.people.Role;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +89,7 @@ public class Government {
     public void addPerson(String role, Coordinate target) {
     }
 
-    public void addItem(Item item, int itemCount) {
+    public void buyItem(Item item, int itemCount) {
         if (itemList.containsKey(item))
             itemList.put(item, itemList.get(item) + itemCount);
         else itemList.put(item, itemCount);
@@ -96,6 +99,9 @@ public class Government {
         if (itemList.get(item) >= amount)
             itemList.put(item, itemList.get(item) - amount);
         else itemList.remove(item);
+    }
+    public void tradeItem(){
+        
     }
 
     public void addToTradeList(Trade trade) {
