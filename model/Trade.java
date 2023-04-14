@@ -7,7 +7,7 @@ public class Trade {
     private final String senderId;
     private final String message;
     //TODO: change this field after we completed items completely(buildings, entities, food and etc)
-    private final String type;
+    private final Item item;
     private final int amount;
     private final int price;
     private boolean acceptedStatus;
@@ -17,12 +17,11 @@ public class Trade {
         this.recipientId = recipientId;
         this.senderId = senderId;
         this.message = message;
-        this.type = type;
+        this.item=Item.valueOf(type);
         this.amount = amount;
         this.price = price;
         this.acceptedStatus = false;
     }
-
 
     public String getRecipientId() {
         return recipientId;
@@ -36,8 +35,8 @@ public class Trade {
         return message;
     }
 
-    public String getType() {
-        return type;
+    public Item getItem() {
+        return item;
     }
 
     public int getAmount() {
