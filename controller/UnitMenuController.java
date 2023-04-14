@@ -1,4 +1,4 @@
-package controllers;
+package controller;
 
 import main.java.view.enums.messages.GameMenuMessages;
 import main.java.view.enums.messages.UnitMenuMessages;
