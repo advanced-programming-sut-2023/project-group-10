@@ -8,7 +8,7 @@ public class TradeMenuController {
 
     //params of the function?
     //TODO: add remove entity in government after Yasna uploaded them
-    public void sendRequest() {
+    public void sendRequest(String resourceType, int resourceAmount, int price, String message) {
 
     }
 
@@ -20,7 +20,7 @@ public class TradeMenuController {
         return null;
     }
 
-    public void acceptRequest() {
+    public void acceptRequest(String id) {
 
     }
 
