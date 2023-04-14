@@ -1,9 +1,9 @@
 package model.government.units.unitconstants;
 
-import model.government.units.Quality;
+import model.buildings.Building;
 
 public class WorkerRole extends Role {
-    private Building workplace;
+    private final Building workplace;
 
     static {
         //TODO: add worker initialization

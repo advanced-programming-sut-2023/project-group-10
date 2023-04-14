@@ -1,13 +1,11 @@
-package main.java.model;
-
-import java.util.ArrayList;
+package model;
 
 public class Trade {
     private final String recipientId;
     private final String senderId;
     private final String message;
     //TODO: change this field after we completed items completely(buildings, entities, food and etc)
-    private final Item item;
+    private final String type;
     private final int amount;
     private final int price;
     private boolean acceptedStatus;
@@ -17,11 +15,12 @@ public class Trade {
         this.recipientId = recipientId;
         this.senderId = senderId;
         this.message = message;
-        this.item=Item.valueOf(type);
+        this.type = type;
         this.amount = amount;
         this.price = price;
         this.acceptedStatus = false;
     }
+
 
     public String getRecipientId() {
         return recipientId;
@@ -35,8 +34,8 @@ public class Trade {
         return message;
     }
 
-    public Item getItem() {
-        return item;
+    public String getType() {
+        return type;
     }
 
     public int getAmount() {

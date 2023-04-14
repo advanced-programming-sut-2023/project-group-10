@@ -1,98 +1,83 @@
-package main.java.view;
+package view;
 
-import main.java.model.User;
-import main.java.view.enums.messages.GameMenuMessages;
-
-import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class GameMenu {
-    public void run(){
+    public static void run(){
 
     }
 
-    public void chooseMapSize(Matcher matcher) {
+    private static void endTurn() {}
 
-    }
+    private static void leaveGame() {}
 
-
-    public void showRoundsPlayed() {
-
-
-    }
-
-    public void showCurrentPlayer() {
+    private static void showRoundsPlayed() {
 
 
     }
 
+    private static void showCurrentPlayer() {
+    }
 
-    public void showPopularityFactors() {
+    private static void showPopularityFactors() {
         
 
     }
 
-    public static void setFoodRate(Matcher matcher) {
+    private static void setFoodRate(Matcher matcher) {
 
     }
 
-    public static void setTaxRate(Matcher matcher) {
+    private static void setTaxRate(Matcher matcher) {
 
     }
 
-    public static void setFearRate(Matcher matcher) {
-
-
+    private static void setFearRate(Matcher matcher) {
     }
 
-    public void showPlayers() {
-
-
-    }
-
-
-    public static void dropBuilding(Matcher matcher) {
+    private static void showPlayers() {
 
 
     }
 
-    //
-    public static void selectBuilding(Matcher matcher) {
-
-    }
-
-    public static void createUnit(Matcher matcher) {
+    private static void dropBuilding(Matcher matcher) {
 
 
     }
 
-    public void repair() {
+    private static void selectBuilding(Matcher matcher) {
+
+    }
+
+    private static void createUnit(Matcher matcher) {
+
+
+    }
+
+    private static void repair() {
 
     }
 
     // UNIT RELATED
-    public static void selectUnit(Matcher matcher) {
+    private static void selectUnit(Matcher matcher) {
 
     }
 
-    public static void setTexture(Matcher matcher) {
-
-    }
-
-
-    public static void clear(Matcher matcher) {
-
-
-    }
-
-    public static void dropRock(Matcher matcher) {
-
-    }
-
-    public static void dropTree(Matcher matcher) {
+    private static void setTexture(Matcher matcher) {
 
     }
 
 
+    private static void clear(Matcher matcher) {
 
+
+    }
+
+    private static void dropRock(Matcher matcher) {
+
+    }
+
+    private static void dropTree(Matcher matcher) {
+
+    }
 }

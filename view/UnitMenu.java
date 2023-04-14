@@ -1,6 +1,4 @@
-package main.java.view;
-
-import main.java.model.mapDirections;
+package view;
 
 import java.util.regex.Matcher;
 
@@ -8,39 +6,39 @@ public class UnitMenu {
     public void run(){
 
     }
-    public static void moveUnit(Matcher matcher){
+    private static void moveUnit(Matcher matcher){
 
     }
 
-    public static void patrolUnit(Matcher matcher) {
-
-    }
-    //
-    public static void setState(Matcher matcher) {
+    private static void patrolUnit(Matcher matcher) {
 
     }
 
-    public static void airAttack(Matcher matcher) {
+    private static void setState(Matcher matcher) {
 
     }
 
-    public static void attackEnemy(Matcher matcher) {
+    private static void airAttack(Matcher matcher) {
 
     }
 
-    public static void pourOil(Matcher matcher) {
+    private static void attackEnemy(Matcher matcher) {
 
     }
 
-    public static void digTunnel(Matcher matcher) {
+    private static void pourOil(Matcher matcher) {
 
     }
 
-    public static void build(Matcher matcher) {
+    private static void digTunnel(Matcher matcher) {
 
     }
 
-    public static void disband() {
+    private static void build(Matcher matcher) {
+
+    }
+
+    private static void disband() {
 
     }
 }

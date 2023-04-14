@@ -1,30 +1,26 @@
-package main.java.controller;
+package controller;
 
-import main.java.model.User;
-import main.java.view.enums.messages.GameMenuMessages;
-
-import java.util.HashMap;
-import java.util.regex.Matcher;
+import model.User;
+import view.enums.messages.GameMenuMessages;
 
 public class GameMenuController {
-    public void chooseMapSize(int length) {
+    public static void chooseMapSize(int length) {
 
     }
 
-
-    public int roundsPlayed() {
+    public static int roundsPlayed() {
         return 0;
     }
 
-    public User currentPlayer() {
+    public static User currentPlayer() {
         return null;
     }
 
-    public void applyChanges() {
+    public static void applyChanges() {
     }
 
 
-    public HashMap<String, Integer> showPopularityFactors() {
+    public static String showPopularityFactors() {
         return null;
     }
 
@@ -95,15 +91,8 @@ public class GameMenuController {
     public static GameMenuMessages endTurn(){
         return null;
     }
-    public static GameMenuMessages goToNextTurn(){
-        return null;
-    }
-    public static GameMenuMessages goToNextPlayer(){
-        return null;
-    }
+
     public static GameMenuMessages leaveGame(){
         return null;
     }
-
-
 }

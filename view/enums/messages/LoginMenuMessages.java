@@ -1,4 +1,4 @@
-package view.messages;
+package view.enums.messages;
 
 public enum LoginMenuMessages {
     USERNAME_NOT_EXIST,

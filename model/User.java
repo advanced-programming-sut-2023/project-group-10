@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class User {
     private String username;
@@ -9,8 +8,8 @@ public class User {
     private String nickname;
     private String email;
     private String slogan;
-    private HashMap<String, String> passwordRecoveryQuestionAndAnswer;
-    private String securityQuestionNumber;
+    private String questionNumber;
+    private String questionAnswer;
     private int highScore;
     //I think it should be moved in the game class or whatever
     private final static ArrayList<User> users = new ArrayList<>();
@@ -20,6 +19,13 @@ public class User {
         this.password = password;
         this.nickname = nickname;
         this.email = email;
+        users.add(this);
+    }
+
+    public static void loadUsersFromFile() {
+    }
+
+    public static void saveUsersToFile() {
     }
 
     public String getUsername() {
@@ -61,36 +67,33 @@ public class User {
     public void setSlogan(String slogan) {
         this.slogan = slogan;
     }
-    public User getUserByUsername(String username){
-        if(users.size()==0)
+
+    public User getUserByUsername(String username) {
+        if (users.size() == 0)
             return null;
         for (User user : users) {
-            if(user.getUsername().equals(username))
+            if (user.getUsername().equals(username))
                 return user;
         }
         return null;
     }
 
-
     //TODO: discuss the type
     public void setSecurityQuestion(String number, String answer) {
-       passwordRecoveryQuestionAndAnswer.put( SecurityQuestion.getQuestionByNumber(number),answer);
-       securityQuestionNumber=number;
+        questionNumber=number;
+        questionAnswer=answer;
     }
-    public String getSecurityAnswer(){
-        return passwordRecoveryQuestionAndAnswer.get(securityQuestionNumber);
-    }
-    //TODO: Move it to register menu controller
 
-    public boolean checkPassword(String password){
+    public String getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public String getQuestionAnswer() {
+        return questionAnswer;
+    }
+
+    public boolean checkPassword(String password) {
         return this.password.equals(password);
-    }
-
-    public boolean isPasswordFormatValid(String password){
-        return true;
-    }
-    public boolean isUserNameFormatValid(String password){
-        return true;
     }
 
     public int getHighScore() {
@@ -100,7 +103,8 @@ public class User {
     public void setHighScore(int highScore) {
         this.highScore = highScore;
     }
-    public int getRank(){
+
+    public int getRank() {
         return 0;
     }
 }

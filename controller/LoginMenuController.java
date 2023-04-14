@@ -1,14 +1,13 @@
 package controller;
 
-import model.User;
-import view.messages.loginMessages;
+import view.enums.messages.LoginMenuMessages;
 
 public class LoginMenuController {
-    public static loginMessages login(String username, String password){
+    public static LoginMenuMessages login(String username, String password){
         return null;
     }
 
-    public static loginMessages forgetPassword(User user, String answer){
+    public static LoginMenuMessages forgetPassword(String username, String answer){
         return null;
     }
 }

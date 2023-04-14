@@ -1,4 +1,4 @@
-package main.java.view.enums.commands;
+package view.enums.commands;
 
 public enum MainMenuCommands  {
     LOGOUT("logout"),

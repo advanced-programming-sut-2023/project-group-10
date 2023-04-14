@@ -1,7 +1,7 @@
 package model;
 
-import model.government.Government;
 import model.environment.Map;
+import model.government.Government;
 
 public class Battle {
     private final Government[] governments;
@@ -32,5 +32,26 @@ public class Battle {
     }
 
     public void goToNextPlayer() {
+    }
+
+    private void moveAllUnits(Government government) {
+    }
+
+    private void attackAllUnits(Government government) {
+    }
+
+    private void produceItems(Government government) {
+    }
+
+    private void collectTaxes(Government government) {
+    }
+
+    private void producePeasants (Government government) {
+    }
+
+    private void updateFoodCount(Government government) {
+    }
+
+    private void updatePopularity(Government government) {
     }
 }

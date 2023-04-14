@@ -1,5 +1,4 @@
 package model.utils;
-import model.util.Random;
 
 public class RandomGenerator {
     private static String[] slogans={" ", " "," "};
@@ -12,7 +11,4 @@ public class RandomGenerator {
     public static String randomCaptchaCode(){
         return null;
     }
-
-
-
 }

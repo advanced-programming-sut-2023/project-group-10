@@ -1,7 +1,5 @@
 package model.government.units.unitconstants;
 
-import model.government.units.Quality;
-
 import java.util.ArrayList;
 
 public class Role {

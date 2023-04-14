@@ -1,4 +1,4 @@
-package main.java.view.enums.messages;
+package view.enums.messages;
 
 public enum MainMenuMessages {
     LOGOUT,

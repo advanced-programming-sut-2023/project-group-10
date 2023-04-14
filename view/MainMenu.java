@@ -1,17 +1,20 @@
-package main.java.view;
+package view;
 
 import java.util.regex.Matcher;
 
 public class MainMenu {
-    public void run(){}
-    public void startGame(Matcher matcher){
+    public static void run(){}
+
+    private static void startGame(Matcher matcher){
 
     }
-    public void logout(){
+    private static void gameInitialization(int mapSize, int governmentCount) {
 
     }
-    public void profileMenu(){
+    private static void logout(){
 
     }
+    private static void goToProfileMenu(){
 
+    }
 }

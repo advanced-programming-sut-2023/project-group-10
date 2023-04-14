@@ -1,20 +1,19 @@
 package controller;
-import kotlin.Pair;
-import main.java.model.mapDirections;
+
+
+import model.environment.Map;
 
 public class MapMenuController {
 
-    public main.java.model.environment.Map showMap(int row, int column) {
+    public static Map showMap(int row, int column) {
         return null;
     }
-// TODO: enum for directions?
-    @SafeVarargs
-    public final void moveMap(Pair<mapDirections, Integer>[]... directionsAndValues) {
 
+    public static void moveMap(String directions) {
     }
 
     // TODO: decide about  the type
-    public String showDetails(int row, int column) {
+    public static String showDetails(int row, int column) {
         return null;
     }
 

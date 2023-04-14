@@ -1,14 +1,16 @@
 package model.environment;
 
+import model.buildings.Building;
+import model.buildings.FarmBuilding;
 import model.droppableitems.Droppable;
-import model.people.Person;
+import model.government.units.Unit;
 
 import java.util.ArrayList;
 
 public class Block {
     private BlockTexture texture;
     private Droppable droppable;
-    private final ArrayList<Person> people;
+    private final ArrayList<Unit> people;
 
     Block(BlockTexture texture) {
         this.texture = texture;
@@ -25,8 +27,8 @@ public class Block {
         return null;
     }
 
-    public Person getUnit() {
-        if ((droppable instanceof Person)) return ((Person) droppable);
+    public Unit getPerson() {
+        if ((droppable instanceof Unit)) return ((Unit) droppable);
         return null;
     }
 
@@ -40,13 +42,13 @@ public class Block {
 
     public boolean setDroppable(Droppable droppable) {
         if (this.droppable != null || !people.isEmpty()) return false;
-        if (droppable instanceof Farm && !texture.isFertile()) return false;
+        if (droppable instanceof FarmBuilding && !texture.isFertile()) return false;
         if (droppable instanceof Building && !texture.isBuildable()) return false;
         this.droppable = droppable;
         return true;
     }
 
-    public void addPerson(Person person) {
+    public void addPerson(Unit person) {
         //TODO: check signature after designing Person class
         people.add(person);
     }

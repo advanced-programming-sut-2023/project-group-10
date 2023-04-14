@@ -2,7 +2,6 @@ package model.government.units.unitconstants;
 
 import model.government.Government;
 import model.government.Item;
-import model.government.units.Quality;
 
 public class MilitaryPersonRole extends MilitaryUnitRole {
     private final Item weapon;
@@ -15,7 +14,7 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
         //LORD, ARCHER, CROSSBOWMAN, SPEARMAN, PIKEMAN, MACEMAN, SWORDSMAN, KNIGHT, TUNNELER, LADDERMAN, ENGINEER, BLACK_MONK, ARABIAN_BOW, SLAVE, SLINGER, ASSASSIN, HORSE_ARCHER, ARABIAN_SWORDSMAN, FIRE_THROWER
     }
 
-    public MilitaryPersonRole(String name, int maxHitPoint, Quality speed, int attackRating, int attackRange, Quality accuracy, int cost, Item weapon, Item[] armors, boolean canClimbLadders, boolean canDigMoats) {
+    MilitaryPersonRole(String name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost, Item weapon, Item[] armors, boolean canClimbLadders, boolean canDigMoats) {
         super(name, maxHitPoint, speed, attackRating, attackRange, accuracy, cost);
         this.weapon = weapon;
         this.armors = armors;

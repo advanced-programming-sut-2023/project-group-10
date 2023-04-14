@@ -1,47 +1,49 @@
 package view;
 
-import model.User;
+import java.util.regex.Matcher;
 
 public class ProfileMenu {
-    private User currentUser;
-    
     public static void run(){
         
     }
 
-    public void changeUsername(){
+    private static void changeUsername(Matcher matcher){
 
     }
 
-    public void changeNickname(){
+    private static void changeNickname(Matcher matcher){
 
     }
 
-    public void changePassword(){
+    private static void changePassword(Matcher matcher){
 
     }
 
-    public void changeEmail(){
+    private static void changeEmail(Matcher matcher){
 
     }
 
-    public void changeSlogan(){
+    private static void changeSlogan(Matcher matcher){
 
     }
 
-    public void showHighscore(){
+    private static void showHighscore(Matcher matcher){
 
     }
 
-    public void showRank(){
+    private static void showRank(Matcher matcher){
 
     }
 
-    public void showSlogan(){
+    private static void showSlogan(Matcher matcher){
 
     }
 
-    public void showDisplay(){
+    private static void showProfile(Matcher matcher){
+
+    }
+
+    private static void goToMainMenu(){
 
     }
 }

@@ -1,15 +1,14 @@
 package model.government.units.unitconstants;
 
 import model.government.Government;
-import model.government.units.Quality;
 
 public abstract class MilitaryUnitRole extends Role {
-    private final int attackRating;
-    private final int attackRange;
+    private final Quality attackRating;
+    private final Quality attackRange;
     private final Quality accuracy;
     private final int cost;
 
-    public MilitaryUnitRole(String name, int maxHitPoint, Quality speed, int attackRating, int attackRange, Quality accuracy, int cost) {
+    MilitaryUnitRole(String name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost) {
         super(name, maxHitPoint, speed);
         this.attackRating = attackRating;
         this.attackRange = attackRange;
@@ -17,11 +16,11 @@ public abstract class MilitaryUnitRole extends Role {
         this.cost = cost;
     }
 
-    public int getAttackRating() {
+    public Quality getAttackRating() {
         return attackRating;
     }
 
-    public int getAttackRange() {
+    public Quality getAttackRange() {
         return attackRange;
     }
 

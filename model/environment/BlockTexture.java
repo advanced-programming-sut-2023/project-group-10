@@ -12,7 +12,7 @@ public enum BlockTexture {
     THICK_SCRUB(false, true, true),
     //on water
     OIL(false, false, true),
-    MARSH(false, false, true), /* people can spawn or walk here but drown if they do */
+    MARSH(false, false, true), /* units can spawn or walk here but drown if they do */
     FORD(false, false, true),
     RIVER(false, false, false),
     SMALL_POND(false, false, false),

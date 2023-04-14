@@ -1,7 +1,5 @@
 package model.government.units.unitconstants;
 
-import model.government.units.Quality;
-
 public class MilitaryEquipmentRole extends MilitaryUnitRole {
     private final int numberOfEngineersNeeded;
     private final int buildTime;
@@ -11,7 +9,7 @@ public class MilitaryEquipmentRole extends MilitaryUnitRole {
         //PORTABLE_SHIELD, BATTERING_RAM, SIEGE_TOWER, CATAPULT, TREBUCHET, FIRE_BALLISTA
     }
 
-    public MilitaryEquipmentRole(String name, int maxHitPoint, Quality speed, int attackRating, int attackRange, Quality accuracy, int cost, int numberOfEngineersNeeded, int buildTime) {
+    MilitaryEquipmentRole(String name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost, int numberOfEngineersNeeded, int buildTime) {
         super(name, maxHitPoint, speed, attackRating, attackRange, accuracy, cost);
         this.numberOfEngineersNeeded = numberOfEngineersNeeded;
         this.buildTime = buildTime;

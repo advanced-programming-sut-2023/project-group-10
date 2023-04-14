@@ -1,13 +1,14 @@
 package model.droppableitems;
 
+import model.mapDirections;
+
 public class Rock implements Droppable {
-    private final char direction;
+    private mapDirections direction;
 
     public Rock(char direction) {
-        this.direction = direction;
     }
 
-    public char getDirection() {
+    public mapDirections getDirection() {
         return direction;
     }
 }

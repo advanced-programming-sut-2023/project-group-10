@@ -2,6 +2,7 @@ package model.government.units;
 
 import model.environment.Coordinate;
 import model.government.Government;
+import model.government.units.unitconstants.MilitaryUnitStance;
 
 import java.util.ArrayList;
 

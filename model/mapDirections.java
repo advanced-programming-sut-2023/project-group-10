@@ -1,4 +1,4 @@
-package main.java.model;
+package model;
 
 public enum mapDirections {
     UP("up",0,1),
@@ -16,6 +16,4 @@ public enum mapDirections {
         this.horizontalChange = horizontalChange;
         this.verticalChange = verticalChange;
     }
-
-
 }

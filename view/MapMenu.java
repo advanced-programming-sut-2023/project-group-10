@@ -1,7 +1,5 @@
-package main.java.view;
+package view;
 
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.regex.Matcher;
 
 public class MapMenu {
@@ -9,13 +7,13 @@ public class MapMenu {
 
     }
     //TODO: type check
-    public void showMap(Matcher matcher){
+    private static void showMap(Matcher matcher){
 
     }
-    public void showDetails(Matcher matcher){
+    private static void showDetails(Matcher matcher){
 
     }
-    public void moveMap(Matcher matcher){
+    private static void moveMap(Matcher matcher){
 
     }
 }

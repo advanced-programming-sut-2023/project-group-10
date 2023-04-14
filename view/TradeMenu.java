@@ -1,21 +1,21 @@
 package view;
 
-import java.util.Scanner;
+import java.util.regex.Matcher;
 
 public class TradeMenu {
-     public static void run(){
+    public static void run(){
 
     }
-    public static void showPresentUsersInTheGame(){
+    private static void showPresentUsersInTheGame(){
 
     }
-    public static void request(Matcher matcher){
+    private static void request(Matcher matcher){
 
     }
-    public static void acceptRequest(Matcher matcher){
+    private static void acceptRequest(Matcher matcher){
 
     }
-    public static void showHistory(){
+    private static void showHistory(){
 
     }
 }

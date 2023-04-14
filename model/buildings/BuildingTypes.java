@@ -1,14 +1,13 @@
-package model;
+package model.buildings;
 
 public enum BuildingTypes {
-
     APPLE_ORCHARD("apple orchard", "farm building"),
     DIARY_FARMER("diary farmer", "farm building"),
     HOPS_FARMER("hops farmer", "farm building");
     //define all buildings
 
-    private String type;
-    private String category;
+    private final String type;
+    private final String category;
 
     BuildingTypes(String type, String category){
         this.type = type;

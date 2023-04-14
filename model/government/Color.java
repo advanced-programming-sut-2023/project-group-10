@@ -1,4 +1,4 @@
-package main.java.model;
+package model.government;
 
 public enum Color {
     RED,

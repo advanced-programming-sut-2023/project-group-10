@@ -1,9 +1,9 @@
 
 package model.government;
 
+import model.NumericalEnums;
 import model.Trade;
 import model.User;
-import model.NumericalEnums;
 import model.environment.Coordinate;
 import model.government.units.MilitaryPerson;
 import model.government.units.Unit;

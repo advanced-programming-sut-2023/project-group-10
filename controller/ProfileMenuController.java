@@ -1,26 +1,25 @@
 package controller;
 
-import model.User;
-import view.messages.profileMessages;
+import view.enums.messages.ProfileMenuMessages;
 
 public class ProfileMenuController {
-    public static profileMessages changeUsername(User user, String username){
+    public static ProfileMenuMessages changeUsername(String newUsername){
         return null;
     }
 
-    public static profileMessages changeNickname(User user, String nickname){
+    public static ProfileMenuMessages changeNickname(String newNickname){
         return null;
     }
 
-    public static profileMessages changePassword(User user, String password){
+    public static ProfileMenuMessages changePassword(String oldPassword, String newPassword){
         return null;
     }
 
-    public static profileMessages changeEmail(User user, String email){
+    public static ProfileMenuMessages changeEmail(String email){
         return null;
     }
 
-    public static profileMessages changeSlogan(User user, String slogan){
+    public static ProfileMenuMessages changeSlogan(String slogan){
         return null;
     }
 }

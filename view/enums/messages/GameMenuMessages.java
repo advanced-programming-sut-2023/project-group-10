@@ -1,4 +1,4 @@
-package main.java.view.enums.messages;
+package view.enums.messages;
 
 public enum GameMenuMessages {
     EMPTY_FIELD_DROP_BUILDING,

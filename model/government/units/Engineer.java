@@ -1,6 +1,5 @@
 package model.government.units;
 
-import model.SiegeEquipment;
 import model.government.Government;
 
 public class Engineer extends MilitaryUnit {
