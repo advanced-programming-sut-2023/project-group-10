@@ -20,7 +20,6 @@ public class GameMenuController {
         return null;
     }
 
-    // not sure
     public void applyChanges() {
     }
 
@@ -90,6 +89,19 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages dropTree(int row, int column,String type) {
+        return null;
+    }
+
+    public static GameMenuMessages endTurn(){
+        return null;
+    }
+    public static GameMenuMessages goToNextTurn(){
+        return null;
+    }
+    public static GameMenuMessages goToNextPlayer(){
+        return null;
+    }
+    public static GameMenuMessages leaveGame(){
         return null;
     }
 
