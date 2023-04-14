@@ -20,7 +20,7 @@ public class Government {
     private final HashMap<Role, Integer> peopleList = new HashMap<>();
     private final HashMap<Item, Integer> itemList = new HashMap<>();
     private int popularity;
-    private HashMap<String, Boolean> popularityFactors = new HashMap<>();
+    private HashMap<String, Integer> popularityFactors = new HashMap<>();
     private int popularity;
     private double gold;
     // TODO: check the fields name with Rozhin
@@ -101,7 +101,7 @@ public class Government {
         else itemList.remove(item);
     }
     public void tradeItem(){
-        
+
     }
 
     public void addToTradeList(Trade trade) {
@@ -112,7 +112,7 @@ public class Government {
     }
 
 
-    public HashMap<String, Boolean> getPopularityFactors() {
+    public HashMap<String, Integer> getPopularityFactors() {
         return popularityFactors;
     }
 }
