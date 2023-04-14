@@ -1,4 +1,4 @@
-package main.java.controller;
+package controller;
 import kotlin.Pair;
 import main.java.model.mapDirections;
 
