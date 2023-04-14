@@ -1,4 +1,4 @@
-package main.java.controller;
+package controller;
 
 import main.java.model.SecurityQuestion;
 import main.java.view.enums.messages.SignUpMenuMessages;
