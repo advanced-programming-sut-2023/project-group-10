@@ -9,10 +9,10 @@ public class TradeMenu {
     public static void showPresentUsersInTheGame(){
 
     }
-    public static void request(){
+    public static void request(Matcher matcher){
 
     }
-    public static void acceptRequest(){
+    public static void acceptRequest(Matcher matcher){
 
     }
     public static void showHistory(){

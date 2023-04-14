@@ -4,10 +4,10 @@ public class ShopMenu {
     public static void run(){
 
     }
-    public void buy(){
+    public void buy(Matcher matcher){
 
     }
-    public void sell(){
+    public void sell(Matcher matcher){
 
     }
 }

@@ -6,7 +6,6 @@ public class TradeMenuController {
         return null;
     }
 
-    //params of the function?
     //TODO: add remove entity in government after Yasna uploaded them
     public void sendRequest(String resourceType, int resourceAmount, int price, String message) {
 
