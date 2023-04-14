@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class GameMenuController {
-    public void run() {
-    }
 
     public int roundsPlayed() {
         return 0;
