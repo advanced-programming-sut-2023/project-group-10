@@ -1,13 +1,16 @@
-package controller;
+package main.java.controller;
 
 import main.java.model.User;
-import main.java.model.environment.Map;
 import main.java.view.enums.messages.GameMenuMessages;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class GameMenuController {
+    public void chooseMapSize(int length) {
+
+    }
+
 
     public int roundsPlayed() {
         return 0;
@@ -22,19 +25,19 @@ public class GameMenuController {
     }
 
 
-    public HashMap<String, Boolean> showPopularityFactors() {
+    public HashMap<String, Integer> showPopularityFactors() {
         return null;
     }
 
-    public static void setFoodRate(Matcher matcher) {
+    public static void setFoodRate(int foodRate) {
 
     }
 
-    public static GameMenuMessages setTaxRate(Matcher matcher) {
+    public static GameMenuMessages setTaxRate(int taxRate) {
         return null;
     }
 
-    public static GameMenuMessages setFearRate(Matcher matcher) {
+    public static GameMenuMessages setFearRate(int fearRate) {
         return null;
     }
 
@@ -42,22 +45,18 @@ public class GameMenuController {
         return null;
     }
 
-    public static Map showMap(Matcher matcher) {
-        return null;
-    }
 
-
-    public static GameMenuMessages dropBuilding(Matcher matcher) {
+    public static GameMenuMessages dropBuilding(int row, int column, String type) {
         return null;
     }
 
     //
-    public static GameMenuMessages selectBuilding(Matcher matcher) {
+    public static GameMenuMessages selectBuilding(int row, int column) {
         return null;
     }
 
     // what does "drop unit" do if we already have " create unit"
-    public static GameMenuMessages createUnit(Matcher matcher) {
+    public static GameMenuMessages createUnit(String type, int count) {
         return null;
     }
 
@@ -66,34 +65,31 @@ public class GameMenuController {
     }
 
     // UNIT RELATED
-    public static GameMenuMessages selectUnit(Matcher matcher) {
+    public static GameMenuMessages selectUnit(int row, int column) {
         return null;
     }
 
 
-    public static GameMenuMessages setTextureProcessor(Matcher matcher) {
-        return null;
 
-    }
 
     public static GameMenuMessages setTexture(String landType, int row, int column) {
         return null;
     }
 
-    public static GameMenuMessages setTexture(String landType, int row1, int colum1, int row2, int column2n) {
+    public static GameMenuMessages setTexture(String landType, int row1, int column1, int row2, int column2) {
         return null;
     }
 
 
-    public static GameMenuMessages clear(Matcher matcher) {
+    public static GameMenuMessages clear(int row, int column) {
         return null;
     }
 
-    public static GameMenuMessages dropRock(Matcher matcher) {
+    public static GameMenuMessages dropRock(int row, int column,String direction) {
         return null;
     }
 
-    public static GameMenuMessages dropTree(Matcher matcher) {
+    public static GameMenuMessages dropTree(int row, int column,String type) {
         return null;
     }
 
