@@ -1,4 +1,4 @@
-package main.java.controller;
+package controllers;
 
 import main.java.view.enums.messages.GameMenuMessages;
 import main.java.view.enums.messages.UnitMenuMessages;
@@ -6,9 +6,6 @@ import main.java.view.enums.messages.UnitMenuMessages;
 import java.util.regex.Matcher;
 
 public class UnitMenuController {
-    public void run(){
-
-    }
 
     public static UnitMenuMessages moveUnit(Matcher matcher) {
         return null;
