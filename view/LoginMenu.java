@@ -1,12 +1,13 @@
 package view;
 
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class LoginMenu {
-    
-    public static void run(){
-    
+    public void run(Scanner scanner){
+
     }
+
 
     public void login(Matcher matcher){
 
