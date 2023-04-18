@@ -1,0 +1,56 @@
+package org.example.model.game;
+
+public class Trade {
+    private final String recipientId;
+    private final String senderId;
+    private final String message;
+    //TODO: change this field after we completed items completely(buildings, entities, food and etc)
+    private final String type;
+    private final int amount;
+    private final int price;
+    private boolean acceptedStatus;
+
+
+    public Trade(String recipientId, String senderId, String message, String type, int amount, int price) {
+        this.recipientId = recipientId;
+        this.senderId = senderId;
+        this.message = message;
+        this.type = type;
+        this.amount = amount;
+        this.price = price;
+        this.acceptedStatus = false;
+    }
+
+
+    public String getRecipientId() {
+        return recipientId;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public boolean isAcceptedStatus() {
+        return acceptedStatus;
+    }
+
+    public void setAcceptedStatus(boolean acceptedStatus) {
+        this.acceptedStatus = acceptedStatus;
+    }
+}
