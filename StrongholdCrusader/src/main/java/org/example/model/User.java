@@ -68,7 +68,7 @@ public class User {
         this.slogan = slogan;
     }
 
-    public User getUserByUsername(String username) {
+    public static User getUserByUsername(String username) {
         if (users.size() == 0)
             return null;
         for (User user : users) {
