@@ -2,6 +2,7 @@ package org.example.model.game.envirnmont;
 
 import org.example.model.game.Droppable;
 import org.example.model.game.buildings.Building;
+import org.example.model.game.buildings.buildingconstants.ItemProducingBuildingType;
 import org.example.model.game.units.Unit;
 
 import java.util.ArrayList;
@@ -9,16 +10,20 @@ import java.util.ArrayList;
 public class Block {
     private BlockTexture texture;
     private Droppable droppable;
-    private final ArrayList<Unit> people;
+    private final ArrayList<Unit> units;
 
     Block(BlockTexture texture) {
         this.texture = texture;
         droppable = null;
-        people = new ArrayList<>();
+        units = new ArrayList<>();
     }
 
     public BlockTexture getTexture() {
         return texture;
+    }
+
+    public Droppable getDroppable() {
+        return droppable;
     }
 
     public Building getBuilding() {
@@ -26,9 +31,8 @@ public class Block {
         return null;
     }
 
-    public Unit getPerson() {
-        if ((droppable instanceof Unit)) return ((Unit) droppable);
-        return null;
+    public ArrayList<Unit> getUnits() {
+        return units;
     }
 
     public void setTexture(BlockTexture texture) {
@@ -37,14 +41,25 @@ public class Block {
 
     public void clearBlock() {
         droppable = null;
+        units.clear();
     }
 
     public boolean setDroppable(Droppable droppable) {
+        if (this.droppable != null) return false;
+        if (!texture.isBuildable()) return false;
+        if (!texture.isFertile() && droppable instanceof ItemProducingBuildingType && ((ItemProducingBuildingType) droppable).isFarm())
+            return false;
+        this.droppable = droppable;
         return true;
     }
 
-    public void addPerson(Unit person) {
-        //TODO: check signature after designing Person class
-        people.add(person);
+    public boolean addUnit(Unit unit) {
+        if (!texture.isWalkable()) return false;
+        units.add(unit);
+        return true;
+    }
+
+    public boolean removeUnit(Unit unit) {
+        return units.remove(unit);
     }
 }
