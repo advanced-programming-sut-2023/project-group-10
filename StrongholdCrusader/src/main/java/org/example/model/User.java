@@ -1,6 +1,15 @@
 package org.example.model;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.checkerframework.checker.units.qual.A;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class User {
     private String username;
@@ -12,20 +21,43 @@ public class User {
     private String questionAnswer;
     private int highScore;
     //I think it should be moved in the game class or whatever
-    private final static ArrayList<User> users = new ArrayList<>();
+    private static ArrayList<User> users = new ArrayList<>();
+    private static final Gson gson = new Gson();
 
-    public User(String username, String password, String nickname, String email) {
+
+    public User(String username, String password, String nickname, String email,String slogan) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
-        users.add(this);
+        this.slogan=slogan;
+    }
+    public static void addUser(String username, String password, String nickname, String email, String slogan){
+        users.add(new User(username,password,nickname,email,slogan));
     }
 
     public static void loadUsersFromFile() {
+        try {
+            String json = new String(Files.readAllBytes(Paths.get("src/main/resources/UserDatabase.json")));
+            ArrayList<User> createdUsers;
+            createdUsers = gson.fromJson(json, new TypeToken<List<User>>() {
+            }.getType());
+            if (createdUsers != null) {
+                users = createdUsers;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void saveUsersToFile() {
+        try {
+        FileWriter fileWriter = new FileWriter("./src/main/resources/UserDatabase.json");
+        fileWriter.write(gson.toJson(users));
+        fileWriter.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 
     public String getUsername() {
