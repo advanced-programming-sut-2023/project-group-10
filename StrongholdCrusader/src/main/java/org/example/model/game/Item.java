@@ -22,9 +22,10 @@ public enum Item {
     SPEAR("spear", 0, 0, 0, 0, false),
     PIKE("pike", 0, 0, 0, 0, false),
     MACE("mace", 0, 0, 0, 0, false),
-    SWORDS("swords", 0, 0, 0, 0, false),
+    SWORD("swords", 0, 0, 0, 0, false),
     LEATHER_ARMOR("Leather armor", 0, 0, 0, 0, false),
-    METAL_ARMOR("metal armor", 0, 0, 0, 0, false);
+    METAL_ARMOR("metal armor", 0, 0, 0, 0, false),
+    HORSE("horse", 0, 0, 0, 0, false);
 
     private final String name;
     private final int stoneRequired;

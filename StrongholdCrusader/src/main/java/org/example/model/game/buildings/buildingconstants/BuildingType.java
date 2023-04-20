@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class BuildingType {
     private final static ArrayList<BuildingType> allBuildingTypes = new ArrayList<>();
 
-    private final String name;
+    private final BuildingTypeName name;
     private final int maxHitPoint;
     private boolean isClimbable;
     private final int buildingCost;
@@ -18,21 +18,20 @@ public class BuildingType {
         //TODO: initialize building types
     }
 
-    BuildingType(String name, int maxHitPoint, int buildingCost, HashMap<Item, Integer> resourcesNeeded) {
+    BuildingType(BuildingTypeName name, int maxHitPoint, int buildingCost, HashMap<Item, Integer> resourcesNeeded) {
         this.name = name;
         this.maxHitPoint = maxHitPoint;
         this.buildingCost = buildingCost;
         this.resourcesNeeded = resourcesNeeded;
     }
 
-    public static BuildingType getBuildingTypeByName(String name) {
-        name = name.replaceAll("[\\s_-]", "").toLowerCase();
+    public static BuildingType getBuildingTypeByName(BuildingTypeName name) {
         for (BuildingType buildingType : allBuildingTypes)
-            if (buildingType.name.replaceAll("\\s", "").equals(name)) return buildingType;
+            if (buildingType.name == name) return buildingType;
         return null;
     }
 
-    public String getName() {
+    public BuildingTypeName getName() {
         return name;
     }
 

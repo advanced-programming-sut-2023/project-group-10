@@ -4,36 +4,35 @@ import java.util.ArrayList;
 
 public class Role {
     private static final ArrayList<Role> allRoles = new ArrayList<>();
-    private final String name;
+    private final RoleName name;
     private final int maxHitPoint;
     private final Quality speed;
 
     static {
-        new Role("peasant", 50, Quality.AVERAGE);
-        new Role("lady", 400, Quality.LOW);
-        new Role("jester", 50, Quality.AVERAGE);
-        new Role("juggler", 50, Quality.AVERAGE);
-        new Role("fire eater", 50, Quality.AVERAGE);
-        new Role("child", 50, Quality.AVERAGE);
-        new Role("mother and babies", 50, Quality.AVERAGE);
-        new Role("drunkard", 50, Quality.LOW);
+        new Role(RoleName.PEASANT, 50, Quality.AVERAGE);
+        new Role(RoleName.LADY, 400, Quality.LOW);
+        new Role(RoleName.JESTER, 50, Quality.AVERAGE);
+        new Role(RoleName.JUGGLER, 50, Quality.AVERAGE);
+        new Role(RoleName.FIRE_EATER, 50, Quality.AVERAGE);
+        new Role(RoleName.CHILD, 50, Quality.AVERAGE);
+        new Role(RoleName.MOTHER_AND_BABIES, 50, Quality.AVERAGE);
+        new Role(RoleName.DRUNKARD, 50, Quality.LOW);
     }
 
-    Role(String name, int maxHitPoint, Quality speed) {
+    protected Role(RoleName name, int maxHitPoint, Quality speed) {
         this.name = name;
         this.maxHitPoint = maxHitPoint;
         this.speed = speed;
         allRoles.add(this);
     }
 
-    public static Role getRoleByName(String name) {
-        name = name.replaceAll("[\\s_-]", "").toLowerCase();
+    public static Role getRoleByName(RoleName name) {
         for (Role role : allRoles)
-            if (role.name.replaceAll("\\s", "").equals(name)) return role;
+            if (role.name == name) return role;
         return null;
     }
 
-    public String getName() {
+    public RoleName getName() {
         return name;
     }
 

@@ -8,7 +8,7 @@ public abstract class MilitaryUnitRole extends Role {
     private final Quality accuracy;
     private final int cost;
 
-    MilitaryUnitRole(String name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost) {
+    protected MilitaryUnitRole(RoleName name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost) {
         super(name, maxHitPoint, speed);
         this.attackRating = attackRating;
         this.attackRange = attackRange;
