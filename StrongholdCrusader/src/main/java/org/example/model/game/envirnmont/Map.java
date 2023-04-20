@@ -14,6 +14,10 @@ public class Map {
                 blocks[i][j] = new Block(BlockTexture.EARTH);
     }
 
+    public int getSize() {
+        return size;
+    }
+
     public Block[][] getBlocks() {
         return blocks;
     }
@@ -21,6 +25,10 @@ public class Map {
     public Block getBlockByRowAndColumn(int row, int column) {
         if (!isIndexInBounds(row) || !isIndexInBounds(column)) return null;
         else return blocks[row][column];
+    }
+
+    public Coordinate getTopLeftBlockCoordinate() {
+        return topLeftBlockCoordinate;
     }
 
     public void setOrigin(Coordinate coordinate, int NumberOfBlocksInARow, int NumberOfBlocksInAColumn) {
