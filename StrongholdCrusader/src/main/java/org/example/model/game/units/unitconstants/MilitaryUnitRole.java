@@ -32,7 +32,7 @@ public abstract class MilitaryUnitRole extends Role {
         return cost;
     }
 
-    public boolean canBeSpawned(Government government, int count) {
-        return government.getGold() >= count * cost;
+    public int numberOfUnitsThatCanBeSpawned(Government government) {
+        return ((int) government.getGold()) / cost;
     }
 }

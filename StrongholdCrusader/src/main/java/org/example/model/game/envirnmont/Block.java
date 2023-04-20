@@ -3,6 +3,7 @@ package org.example.model.game.envirnmont;
 import org.example.model.game.Droppable;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.buildingconstants.ItemProducingBuildingType;
+import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
 
 import java.util.ArrayList;
@@ -31,8 +32,15 @@ public class Block {
         return null;
     }
 
-    public ArrayList<Unit> getUnits() {
+    public ArrayList<Unit> getAllUnits() {
         return units;
+    }
+
+    public ArrayList<MilitaryUnit> getMilitaryUnits() {
+        ArrayList<MilitaryUnit> militaryUnits = new ArrayList<>();
+        for (Unit unit : units)
+            if (unit instanceof MilitaryUnit) militaryUnits.add((MilitaryUnit) unit);
+        return militaryUnits;
     }
 
     public void setTexture(BlockTexture texture) {

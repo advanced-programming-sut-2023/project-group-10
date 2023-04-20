@@ -12,7 +12,7 @@ public class PersonProducingBuildingType extends BuildingType {
 
     }
 
-    PersonProducingBuildingType(String name, int maxHitPoint, int buildingCost, HashMap<Item, Integer> resourcesNeeded, Role...producedPeopleTypes) {
+    PersonProducingBuildingType(BuildingTypeName name, int maxHitPoint, int buildingCost, HashMap<Item, Integer> resourcesNeeded, Role...producedPeopleTypes) {
         super(name, maxHitPoint, buildingCost, resourcesNeeded);
         this.producedPersonType = producedPeopleTypes;
     }

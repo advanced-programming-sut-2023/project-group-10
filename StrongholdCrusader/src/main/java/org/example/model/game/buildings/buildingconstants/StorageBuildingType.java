@@ -10,7 +10,7 @@ public class StorageBuildingType extends BuildingType{
     static {
     }
 
-    public StorageBuildingType(String name, int maxHitPoint, int buildingCost, HashMap<Item, Integer> resourcesNeeded, int capacity) {
+    public StorageBuildingType(BuildingTypeName name, int maxHitPoint, int buildingCost, HashMap<Item, Integer> resourcesNeeded, int capacity) {
         super(name, maxHitPoint, buildingCost, resourcesNeeded);
         this.capacity = capacity;
     }

@@ -13,6 +13,8 @@ public enum BuildingTypeName {
     BARRACKS,
     MERCENARY_POST,
     ENGINEER_GUILD,
+    STAIRS,
+    WALL,
     KILLING_PIT,
     OIL_SMELTER,
     PITCH_DITCH,

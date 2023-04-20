@@ -12,7 +12,7 @@ public class AttackingBuildingType extends BuildingType {
         // TODO: add attacking building types
     }
 
-    AttackingBuildingType(String name, int maxHitPoint, int buildingCost, HashMap<Item, Integer> resourcesNeeded, int fireRange, int defendRange) {
+    AttackingBuildingType(BuildingTypeName name, int maxHitPoint, int buildingCost, HashMap<Item, Integer> resourcesNeeded, int fireRange, int defendRange) {
         super(name, maxHitPoint, buildingCost, resourcesNeeded);
         this.fireRange = fireRange;
         this.defendRange = defendRange;

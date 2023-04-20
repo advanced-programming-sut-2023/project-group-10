@@ -1,15 +1,17 @@
 package org.example.model.game.units;
 
 import org.example.model.game.Government;
+import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.unitconstants.MilitaryEquipmentRole;
+import org.example.model.game.units.unitconstants.RoleName;
 
 import java.util.ArrayList;
 
 public class SiegeEquipment extends MilitaryUnit {
     private final ArrayList<Engineer> engineers;
 
-    public SiegeEquipment(String role, Government government) {
-        super(role, government);
+    public SiegeEquipment(Coordinate position, RoleName role, Government government) {
+        super(position, role, government);
         this.engineers = new ArrayList<>();
     }
 

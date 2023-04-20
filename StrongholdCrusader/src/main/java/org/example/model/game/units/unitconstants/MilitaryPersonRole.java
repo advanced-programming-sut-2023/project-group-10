@@ -57,10 +57,11 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
     }
 
     @Override
-    public boolean canBeSpawned(Government government, int count) {
-        if (!super.canBeSpawned(government, count)) return false;
+    public int numberOfUnitsThatCanBeSpawned(Government government) {
+        int result = super.numberOfUnitsThatCanBeSpawned(government);
         for (Item armor : armors)
-            if (government.getItemCount(armor) < count) return false;
-        return weapon==null || government.getItemCount(weapon) >= count;
+            result = Math.min(result, government.getItemCount(armor));
+        result = Math.min(result, government.getItemCount(weapon));
+        return result;
     }
 }

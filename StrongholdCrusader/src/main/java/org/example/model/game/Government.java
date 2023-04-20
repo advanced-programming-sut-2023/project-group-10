@@ -4,6 +4,7 @@ import org.example.model.User;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.Unit;
+import org.example.model.game.units.unitconstants.RoleName;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,8 @@ public class Government {
     public Government(User owner, Color color) {
 
         this.owner = owner;
-        this.lord = new MilitaryPerson("lord", this);
+        //TODO: set lord's position to keep's position
+        this.lord = new MilitaryPerson(new Coordinate(0, 0), RoleName.LORD, this);
         this.popularity = NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
         this.color = color;
     }
@@ -80,11 +82,16 @@ public class Government {
         return units;
     }
 
-    public void addPerson(String role, Coordinate target) {
+    public void addUnit(Unit unit) {
+        units.add(unit);
     }
 
     public int getItemCount(Item item) {
         return itemList.getOrDefault(item, 0);
+    }
+
+    public void changeGold(double change) {
+        gold += change;
     }
 
     public void buyItem(Item item, int itemCount) {
@@ -97,6 +104,10 @@ public class Government {
         if (itemList.get(item) >= amount)
             itemList.put(item, itemList.get(item) - amount);
         else itemList.remove(item);
+    }
+
+    public void changeItemCount(Item item, int change) {
+        itemList.put(item, itemList.getOrDefault(item, 0) + change);
     }
 
     public void tradeItem(Trade trade) {
