@@ -2,7 +2,7 @@ package org.example.model;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.checkerframework.checker.units.qual.A;
+import org.example.model.utils.CheckFormatAndEncrypt;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,20 +25,28 @@ public class User {
     private static final Gson gson = new Gson();
 
 
-    public User(String username, String password, String nickname, String email,String slogan) {
+    public User(String username, String password, String nickname, String email, String slogan, String questionNumber,
+                String securityAnswer) {
         this.username = username;
-        this.password = password;
+        this.password = CheckFormatAndEncrypt.encryptString(password);
         this.nickname = nickname;
         this.email = email;
-        this.slogan=slogan;
+        this.slogan = slogan;
+        this.questionNumber = questionNumber;
+        this.questionAnswer = CheckFormatAndEncrypt.encryptString(securityAnswer);
+
     }
-    public static void addUser(String username, String password, String nickname, String email, String slogan){
-        users.add(new User(username,password,nickname,email,slogan));
+
+    public static void addUser(String username, String password, String nickname, String email, String slogan,
+                               String questionNumber, String securityAnswer) {
+        loadUsersFromFile();
+        users.add(new User(username, password, nickname, email, slogan, questionNumber, securityAnswer));
+        saveUsersToFile();
     }
 
     public static void loadUsersFromFile() {
         try {
-            String json = new String(Files.readAllBytes(Paths.get("src/main/resources/UserDatabase.json")));
+            String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/UserDatabase.json")));
             ArrayList<User> createdUsers;
             createdUsers = gson.fromJson(json, new TypeToken<List<User>>() {
             }.getType());
@@ -52,12 +60,12 @@ public class User {
 
     public static void saveUsersToFile() {
         try {
-        FileWriter fileWriter = new FileWriter("./src/main/resources/UserDatabase.json");
-        fileWriter.write(gson.toJson(users));
-        fileWriter.close();
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+            FileWriter fileWriter = new FileWriter("./src/main/resources/UserDatabase.json");
+            fileWriter.write(gson.toJson(users));
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUsername() {
@@ -110,10 +118,21 @@ public class User {
         return null;
     }
 
+    public static User getUserByEmail(String email) {
+        if (users.size() == 0)
+            return null;
+        email=email.toLowerCase();
+        for (User user : users) {
+            if (user.email.toLowerCase().equals(email))
+                return user;
+        }
+        return null;
+    }
+
     //TODO: discuss the type
     public void setSecurityQuestion(String number, String answer) {
-        questionNumber=number;
-        questionAnswer=answer;
+        questionNumber = number;
+        questionAnswer = answer;
     }
 
     public String getQuestionNumber() {
@@ -125,7 +144,7 @@ public class User {
     }
 
     public boolean checkPassword(String password) {
-        return this.password.equals(password);
+        return this.password.equals(CheckFormatAndEncrypt.encryptString(password));
     }
 
     public int getHighScore() {
@@ -138,5 +157,9 @@ public class User {
 
     public int getRank() {
         return 0;
+    }
+
+    public static ArrayList<User> getUsers() {
+        return users;
     }
 }
