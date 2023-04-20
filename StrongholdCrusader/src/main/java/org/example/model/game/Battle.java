@@ -1,6 +1,7 @@
 package org.example.model.game;
 
 import org.example.model.game.Government;
+import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Map;
 
 public class Battle {
@@ -32,6 +33,14 @@ public class Battle {
     }
 
     public void goToNextPlayer() {
+        moveAllUnits(governments[currentPlayerIndex]);
+        attackAllUnits(governments[currentPlayerIndex]);
+        produceItems(governments[currentPlayerIndex]);
+        collectTaxes(governments[currentPlayerIndex]);
+        producePeasants(governments[currentPlayerIndex]);
+        updateFoodCount(governments[currentPlayerIndex]);
+        updatePopularity(governments[currentPlayerIndex]);
+        currentPlayerIndex++;
     }
 
     private void moveAllUnits(Government government) {
@@ -46,7 +55,7 @@ public class Battle {
     private void collectTaxes(Government government) {
     }
 
-    private void producePeasants (Government government) {
+    private void producePeasants(Government government) {
     }
 
     private void updateFoodCount(Government government) {
