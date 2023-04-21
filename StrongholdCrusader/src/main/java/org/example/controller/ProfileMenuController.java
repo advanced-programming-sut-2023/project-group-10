@@ -1,7 +1,7 @@
 package org.example.controller;
 
 import org.example.model.Stronghold;
-import org.example.model.utils.CheckFormat;
+import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.ProfileMenuMessages;
 
 import java.util.Scanner;
@@ -13,7 +13,7 @@ public class ProfileMenuController {
         if(username.matches("\\s*"))
             return ProfileMenuMessages.NO_USERNAME_PROVIDED;
 
-        if(!CheckFormat.checkUsernameFormat(username))
+        if(CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
             return ProfileMenuMessages.INVALID_USERNAME;
 
         //TODO add username exists
@@ -28,7 +28,7 @@ public class ProfileMenuController {
         if(nickname.matches("\\s*"))
             return ProfileMenuMessages.NO_NICKNAME_PROVIDED;
 
-        if(!CheckFormat.checkNicknameFormat(nickname))
+        if(!CheckFormatAndEncrypt.checkNicknameFormat(nickname))
             return ProfileMenuMessages.INVALID_NICKNAME;
 
         else{
@@ -43,7 +43,7 @@ public class ProfileMenuController {
         if(oldPassword.matches("\\s*") || newPassword.matches("\\s*"))
             return ProfileMenuMessages.NO_PASSWORD_PROVIDED;
 
-        if(!CheckFormat.checkPasswordFormat(newPassword))
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword))
             return ProfileMenuMessages.WEAK_PASSWORD;
 
         if(!Stronghold.getCurrentUser().getPassword().equals(oldPassword))
@@ -62,7 +62,7 @@ public class ProfileMenuController {
         if(email.matches("\\s*"))
             return ProfileMenuMessages.NO_EMAIL_PROVIDED;
 
-        if(!CheckFormat.checkEmailFormat(email))
+        if(CheckFormatAndEncrypt.isEmailFormatInvalid(email))
             return ProfileMenuMessages.INVALID_EMAIL;
 
         //TODO add email exists function

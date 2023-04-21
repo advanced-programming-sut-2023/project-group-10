@@ -1,13 +1,14 @@
 package org.example.model.utils;
 
-import java.util.Random;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+
 public class RandomGenerator {
-    private static final String[] slogans={
+    private static final String[] slogans = {
             "I have dispatched another of our enemies, my friend. The struggle continues!",
             "You fight well, my friend. You have struck a mighty blow for our cause.",
             "I am lost, my friend. You must continue the struggle... without me.",
@@ -19,13 +20,15 @@ public class RandomGenerator {
             "I will kill you soon! You and all your vermin!"
     };
 
-    public  static String getRandomSlogan(){
-        Random random=new Random(slogans.length);
-        return slogans[random.nextInt()-1];
+    public static String getRandomSlogan() {
+        Random random = new Random(slogans.length);
+        return slogans[random.nextInt() - 1];
     }
-    public static String randomCaptchaCode(){
+
+    public static String randomCaptchaCode() {
         return null;
     }
+
     //TODO: are all of these compatible with my teammates?
     public static String generateSecurePassword() {
         String upperCaseStr = RandomStringUtils.random(2, 65, 90, true, true);

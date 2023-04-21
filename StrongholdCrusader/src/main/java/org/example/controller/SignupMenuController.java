@@ -5,7 +5,7 @@ import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 public class SignupMenuController {
-    private static void createUser(String username, String password, String passwordConfirmation, String email,
+    public static void createUser(String username, String password, String email,
                                    String nickname, String slogan, String securityQuestionNumber, String securityAnswer) {
         User.addUser(username, password, nickname, email, slogan, securityQuestionNumber, securityAnswer);
     }
@@ -17,7 +17,7 @@ public class SignupMenuController {
         if (!password.equals("random") && passwordConfirmation == null)
             return SignupMenuMessages.EMPTY_FIELD;
         //TODO: handle empty slogan
-        if (!CheckFormatAndEncrypt.isUsernameFormatValid(username))
+        if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
             return SignupMenuMessages.INVALID_USERNAME_FORMAT;
         if (User.getUserByUsername(username) != null)
             return SignupMenuMessages.USER_EXISTS;
@@ -27,13 +27,13 @@ public class SignupMenuController {
             return SignupMenuMessages.RANDOM_SLOGAN;
         if (password.equals("random"))
             return SignupMenuMessages.RANDOM_PASSWORD;
-        else if (!CheckFormatAndEncrypt.isPasswordStrong(password))
+        else if (CheckFormatAndEncrypt.isPasswordWeak(password))
             return SignupMenuMessages.WEAK_PASSWORD;
         if (!password.equals(passwordConfirmation))
             return SignupMenuMessages.REENTER_PASSWORD_CONFIRMATION;
         if (User.getUserByEmail(email) != null)
             return SignupMenuMessages.EMAIL_EXISTS;
-        if (!CheckFormatAndEncrypt.isEmailFormatValid(email))
+        if (CheckFormatAndEncrypt.isEmailFormatInvalid(email))
             return SignupMenuMessages.INVALID_EMAIL_FORMAT;
         return SignupMenuMessages.SHOW_QUESTIONS;
     }

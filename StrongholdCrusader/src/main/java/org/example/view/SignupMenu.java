@@ -26,9 +26,11 @@ public class SignupMenu {
 
     private static void register(Matcher matcher) {
         Scanner scanner = new Scanner(System.in);
-        String username = "", password = "", passwordConfirmation = "", nickname = "", slogan = "", email = "", questionNumber = "", answer = "", answerConfirmation = "";
+        String username = "", password = "", passwordConfirmation = "", nickname = "", slogan = "",
+                email = "", questionNumber = "", answer = "", answerConfirmation = "";
         while (true) {
-            SignupMenuMessages registerMessage = SignupMenuController.createUser(username, password, passwordConfirmation, email, nickname, slogan);
+            SignupMenuMessages registerMessage = SignupMenuController
+                    .createUser(username, password, passwordConfirmation, email, nickname, slogan);
             if (registerMessage.equals(SignupMenuMessages.RANDOM_SLOGAN)) {
                 slogan = RandomGenerator.getRandomSlogan();
                 System.out.println(slogan);
@@ -37,8 +39,7 @@ public class SignupMenu {
                 System.out.println("Your random password is: " + suggestedPassword);
                 System.out.println("Please re-enter your password here:");
                 String passwordByUser = scanner.nextLine();
-                if (passwordByUser.equals(suggestedPassword))
-                    password = suggestedPassword;
+                if (passwordByUser.equals(suggestedPassword)) password = suggestedPassword;
                 else {
                     System.out.println("You've entered the suggested password incorrectly, try to signup again");
                     return;
@@ -71,22 +72,50 @@ public class SignupMenu {
             } else if (registerMessage.equals(SignupMenuMessages.USER_EXISTS)) {
                 System.out.println("There is already a user registered with username: " + username);
                 String suggestedUsername = SignupMenuController.suggestNewUsername(username);
-                System.out.println("Do you want \"" + suggestedUsername + "\" as your new username? " +
-                        "[ Y : yes / N : no ]");
+                System.out.println("Do you want \"" + suggestedUsername + "\" as your new username? " + "[ Y : yes / N : no ]");
                 String userAnswer = scanner.nextLine();
-                if (userAnswer.equals("N"))
-                    return;
-                else
-                    username = suggestedUsername;
+                if (userAnswer.equals("N")) return;
+                else username = suggestedUsername;
             } else if (registerMessage.equals(SignupMenuMessages.SHOW_QUESTIONS)) {
-                
+                System.out.println("Pick your security question: 1. What is my father’s name" +
+                        " 2. What was my first pet’s name? " +
+                        "3. What is my mother’s last name?");
+                String input = scanner.nextLine();
+                //process the input
+                securityQuestion(username, password, nickname, slogan, email, questionNumber, answer, answerConfirmation);
+                return;
             }
 
         }
 
     }
 
-    private static void securityQuestion(Matcher matcher) {
+    private static void securityQuestion(String username, String password,
+                                         String nickname, String slogan, String email,
+                                         String questionNumber, String answer, String answerConfirmation) {
+        Scanner scanner = new Scanner(System.in);
+        SignupMenuMessages securityQuestionMessage = SignupMenuController.pickSecurityQuestion(questionNumber, answer, answerConfirmation);
+        while (!securityQuestionMessage.equals(SignupMenuMessages.SUCCESS)) {
+            securityQuestionMessage = SignupMenuController.pickSecurityQuestion(questionNumber, answer, answerConfirmation);
+            if (securityQuestionMessage.equals(SignupMenuMessages.REENTER_ANSWER)) {
+                System.out.println("Please re-enter your answer!");
+                String confirmation = scanner.nextLine();
+                while (!confirmation.equals(answer)) {
+                    confirmation = scanner.nextLine();
+                }
+                answerConfirmation = confirmation;
+
+
+            } // didn't handle number out of bounds
+            else if (securityQuestionMessage.equals(SignupMenuMessages.SUCCESS)) {
+                SignupMenuController.createUser(username, password, email, nickname, slogan, questionNumber, answer);
+                System.out.println("User successfully created");
+                return;
+            } else {
+                System.out.println("Invalid command!");
+            }
+        }
+        return;
     }
 
     private static void goToLoginMenu(Matcher matcher) {
