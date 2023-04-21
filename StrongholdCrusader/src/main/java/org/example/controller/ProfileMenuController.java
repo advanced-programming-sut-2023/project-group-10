@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class ProfileMenuController {
     public static ProfileMenuMessages changeUsername(String username){
-        if(username == null)
+        if(username.matches("\\s*"))
             return ProfileMenuMessages.NO_USERNAME_PROVIDED;
 
         if(!CheckFormat.checkUsernameFormat(username))
@@ -25,7 +25,7 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages changeNickname(String nickname){
-        if(nickname == null)
+        if(nickname.matches("\\s*"))
             return ProfileMenuMessages.NO_NICKNAME_PROVIDED;
 
         else{
@@ -35,7 +35,7 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages changePassword(String oldPassword, String newPassword){
-        if(oldPassword == null || newPassword == null)
+        if(oldPassword.matches("\\s*") || newPassword.matches("\\s*"))
             return ProfileMenuMessages.NO_PASSWORD_PROVIDED;
 
         if(!CheckFormat.checkPasswordFormat(newPassword))
@@ -54,7 +54,7 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages changeEmail(String email){
-        if(email == null)
+        if(email.matches("\\s*"))
             return ProfileMenuMessages.NO_EMAIL_PROVIDED;
 
         if(!CheckFormat.checkEmailFormat(email))
@@ -69,7 +69,7 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages changeSlogan(String slogan){
-        if(slogan == null)
+        if(slogan.matches("\\s*"))
             return ProfileMenuMessages.NO_SLOGAN_PROVIDED;
 
         else{
