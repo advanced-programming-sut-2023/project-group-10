@@ -1,6 +1,7 @@
 package org.example.model.game.envirnmont;
 
 import org.example.model.game.Droppable;
+import org.example.model.game.Government;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.ItemProducingBuilding;
 import org.example.model.game.buildings.buildingconstants.ItemProducingBuildingType;
@@ -37,11 +38,25 @@ public class Block {
         return units;
     }
 
-    public ArrayList<MilitaryUnit> getMilitaryUnits() {
+    public ArrayList<Unit> getUnitsByGovernment(Government government) {
+        ArrayList<Unit> result = new ArrayList<>();
+        for (Unit unit : units)
+            if (unit.getGovernment() == government) result.add(unit);
+        return result;
+    }
+
+    public ArrayList<MilitaryUnit> getAllMilitaryUnits() {
         ArrayList<MilitaryUnit> militaryUnits = new ArrayList<>();
         for (Unit unit : units)
             if (unit instanceof MilitaryUnit) militaryUnits.add((MilitaryUnit) unit);
         return militaryUnits;
+    }
+
+    public ArrayList<MilitaryUnit> getMilitaryUnitsByGovernment(Government government) {
+        ArrayList<MilitaryUnit> result = new ArrayList<>();
+        for (MilitaryUnit militaryUnit : getAllMilitaryUnits())
+            if (militaryUnit.getGovernment() == government) result.add(militaryUnit);
+        return result;
     }
 
     public void setTexture(BlockTexture texture) {

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class SiegeEquipment extends MilitaryUnit {
     private final ArrayList<Engineer> engineers;
 
-    public SiegeEquipment(Coordinate position, RoleName role, Government government) {
+    SiegeEquipment(Coordinate position, RoleName role, Government government) {
         super(position, role, government);
         this.engineers = new ArrayList<>();
     }
