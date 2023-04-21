@@ -1,7 +1,5 @@
 package org.example.model.game;
 
-import org.example.model.game.Government;
-import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Map;
 
 public class Battle {
@@ -62,5 +60,14 @@ public class Battle {
     }
 
     private void updatePopularity(Government government) {
+    }
+
+
+    public Government getGovernmentByOwnerId(String id) {
+        for (Government government : governments) {
+            if (government.getOwner().getUsername().equals(id))
+                return government;
+        }
+        return null;
     }
 }

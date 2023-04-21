@@ -45,7 +45,7 @@ public enum Item {
         this.isFood = isFood;
     }
 
-    public Item getItemByName(String name) {
+    public static Item getItemByName(String name) {
         name = name.replaceAll("[\\s_-]", "").toUpperCase();
         for (Item item : Item.values())
             if (item.name.replaceAll("_", "").equals(name)) return item;

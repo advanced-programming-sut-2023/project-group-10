@@ -1,5 +1,6 @@
 package org.example.view.enums.messages;
 
 public enum TradeMenuMessages {
-    //TODO: Design!
+    INSUFFICIENT_STOCK,
+    TRADE_ADDED_TO_TRADELIST, INVALID_TRADE_ID, TRADE_SUCCESSFULLY_ACCEPTED, MISMATCH_OF_TRADERS, INVALID_USER
 }
