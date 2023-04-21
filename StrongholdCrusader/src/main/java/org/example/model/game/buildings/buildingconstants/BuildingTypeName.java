@@ -17,7 +17,6 @@ public enum BuildingTypeName {
     WALL,
     KILLING_PIT,
     OIL_SMELTER,
-    PITCH_DITCH,
     CAGED_WAR_DOGS,
     SIEGE_TENT,
     STABLE,

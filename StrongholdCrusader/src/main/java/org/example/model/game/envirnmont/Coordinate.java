@@ -1,8 +1,8 @@
 package org.example.model.game.envirnmont;
 
 public class Coordinate {
-    int row;
-    int column;
+    public int row;
+    public int column;
 
     public Coordinate(int row, int column) {
         this.row = row;

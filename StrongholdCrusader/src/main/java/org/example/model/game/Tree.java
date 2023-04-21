@@ -1,9 +1,16 @@
 package org.example.model.game;
 
-public class Tree implements Droppable {
-    TreeType type;
+import org.example.model.game.envirnmont.Coordinate;
 
-    public Tree(TreeType type) {
+public class Tree extends Droppable {
+    private final TreeType type;
+
+    public Tree(Coordinate position, Government government, TreeType type) {
+        super(position, government);
         this.type = type;
+    }
+
+    public TreeType getType() {
+        return type;
     }
 }

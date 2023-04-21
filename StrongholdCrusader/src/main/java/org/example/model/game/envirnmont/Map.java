@@ -64,7 +64,7 @@ public class Map {
         return true;
     }
 
-    private boolean isIndexInBounds(int index) {
+    public boolean isIndexInBounds(int index) {
         return index >= 0 && index < size;
     }
 }

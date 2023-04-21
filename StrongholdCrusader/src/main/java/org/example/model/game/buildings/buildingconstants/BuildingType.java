@@ -10,7 +10,6 @@ public class BuildingType {
 
     private final BuildingTypeName name;
     private final int maxHitPoint;
-    private boolean isClimbable;
     private final int buildingCost;
     private final HashMap<Item, Integer> resourcesNeeded;
 
@@ -45,9 +44,5 @@ public class BuildingType {
 
     public HashMap<Item, Integer> getResourcesNeeded() {
         return resourcesNeeded;
-    }
-
-    public boolean isClimbable() {
-        return isClimbable;
     }
 }
