@@ -58,12 +58,12 @@ public class SignupMenu {
                 return;
             } else if (registerMessage.equals(SignupMenuMessages.REENTER_PASSWORD_CONFIRMATION)) {
                 String passwordByUser = passwordConfirmation;
-                while (!passwordByUser.equals(password)) {
+               inner: while (!passwordByUser.equals(password)) {
                     System.out.println("Please re-enter your password:");
                     passwordByUser = scanner.nextLine();
                     if (passwordByUser.equals(password)) {
                         passwordConfirmation = passwordByUser;
-                        break;
+                        break inner;
                     }
                 }
             } else if (registerMessage.equals(SignupMenuMessages.WEAK_PASSWORD)) {

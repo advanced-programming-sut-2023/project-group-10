@@ -8,7 +8,8 @@ public class LoginMenuController {
         if(User.getUserByUsername(username) == null)
             return LoginMenuMessages.USERNAME_NOT_EXIST;
         //TODO: a function for checking password exists in user,Mehrazin would probably modifies it, but try to use that function
-        if(!User.getUserByUsername(username).getPassword().equals(password))
+        //modified by Mehrazin
+        if(!User.getUserByUsername(username).checkPassword(password))
             return LoginMenuMessages.WRONG_PASSWORD;
 
         //login user

@@ -14,6 +14,6 @@ public enum SignupMenuMessages {
     SHOW_QUESTIONS,
     //Security questions
     REENTER_ANSWER,
-    NUMBER_OUT_OF_BOUNDS
+    INVALID_NICKNAME_FORMAT, NUMBER_OUT_OF_BOUNDS
 
 }

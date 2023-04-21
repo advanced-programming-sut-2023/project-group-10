@@ -5,20 +5,18 @@ import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 public class SignupMenuController {
-    public static void createUser(String username, String password, String email,
-                                   String nickname, String slogan, String securityQuestionNumber, String securityAnswer) {
+    private static void createUser( String securityQuestionNumber, String securityAnswer,String username, String password,String nickname, String slogan,
+                                    String email) {
         User.addUser(username, password, nickname, email, slogan, securityQuestionNumber, securityAnswer);
     }
 
     public static SignupMenuMessages createUser(String username, String password, String passwordConfirmation, String email,
                                                  String nickname, String slogan) {
-        if (username == null || password == null || email == null || nickname == null)
-            return SignupMenuMessages.EMPTY_FIELD;
-        if (!password.equals("random") && passwordConfirmation == null)
-            return SignupMenuMessages.EMPTY_FIELD;
         //TODO: handle empty slogan
         if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
             return SignupMenuMessages.INVALID_USERNAME_FORMAT;
+        if(!CheckFormatAndEncrypt.checkNicknameFormat(nickname))
+            return SignupMenuMessages.INVALID_NICKNAME_FORMAT;
         if (User.getUserByUsername(username) != null)
             return SignupMenuMessages.USER_EXISTS;
         if (password.equals("random") && slogan.equals("random"))
@@ -49,11 +47,13 @@ public class SignupMenuController {
     }
 
 
-    public static SignupMenuMessages pickSecurityQuestion(String questionNumber, String answer, String answerConfirmation) {
+    public static SignupMenuMessages pickSecurityQuestion(String questionNumber, String answer, String answerConfirmation,String username,String
+                                                          password,String nickname,String slogan,String email) {
         if (Integer.parseInt(questionNumber) > 3 || Integer.parseInt(questionNumber) < 1)
             return SignupMenuMessages.NUMBER_OUT_OF_BOUNDS;
         if (!answer.equals(answerConfirmation))
             return SignupMenuMessages.REENTER_ANSWER;
+        createUser(questionNumber,answer,username,password,nickname,slogan,email);
         return SignupMenuMessages.SUCCESS;
     }
 

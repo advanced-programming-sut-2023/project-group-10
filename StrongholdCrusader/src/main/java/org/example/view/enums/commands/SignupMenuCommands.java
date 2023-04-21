@@ -5,7 +5,8 @@ import java.util.regex.Pattern;
 
 public enum SignupMenuCommands {
     CREATE_USER("^\\s*user\\s+create.+"),
-    USER_LOGIN("^\\s*user\\s+login");
+    PICK_QUESTION("^\\s*user\\s+create.+"),
+    USER_LOGIN("^\\s*user\\s+login.+");
 
     public final String regex;
 
