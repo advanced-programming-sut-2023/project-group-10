@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class RandomGenerator {
-    private static int tradeNumber = 0;
     private static final String[] slogans = {
             "I have dispatched another of our enemies, my friend. The struggle continues!",
             "You fight well, my friend. You have struck a mighty blow for our cause.",
@@ -48,10 +47,5 @@ public class RandomGenerator {
         return listOfChar.stream()
                 .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                 .toString();
-    }
-
-    public static String tradeId() {
-        tradeNumber++;
-        return Integer.toString(tradeNumber);
     }
 }

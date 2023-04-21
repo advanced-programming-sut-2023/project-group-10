@@ -22,7 +22,7 @@ public class Government {
     private int foodRate;
     private int taxRate;
     private int fearRate;
-    private final ArrayList<Trade> tradeList = new ArrayList<>();
+    private ArrayList<Trade> tradeList = new ArrayList<>();
 
     public Government(User owner, Color color) {
 
@@ -98,40 +98,25 @@ public class Government {
         gold += change;
     }
 
-    public void addItem(Item item, int amount) {
+    public void buyItem(Item item, int itemCount) {
         if (itemList.containsKey(item))
-            itemList.put(item, itemList.get(item) + amount);
-        else itemList.put(item, amount);
-        gold -= item.getBuyPrice() * amount;
-
+            itemList.put(item, itemList.get(item) + itemCount);
+        else itemList.put(item, itemCount);
     }
-    public void addItem(Trade trade) {
-        Item item=Item.getItemByName(trade.getType());
-        if (itemList.containsKey(item))
-            itemList.put(item, itemList.get(item) + trade.getAmount());
-        else itemList.put(item, trade.getAmount());
-        gold -= trade.getPrice() * trade.getAmount();
 
-    }
-    public void reduceItem(Trade trade) {
-        Item item=Item.getItemByName(trade.getType());
-        if (itemList.get(item) >= trade.getAmount())
-            itemList.put(item, itemList.get(item) - trade.getAmount());
-        else itemList.remove(item);
-        gold += trade.getPrice() * trade.getAmount();
-
-    }
-    public void reduceItem(Item item, int amount,double price) {
+    public void sellItem(Item item, int amount) {
         if (itemList.get(item) >= amount)
             itemList.put(item, itemList.get(item) - amount);
         else itemList.remove(item);
-        gold -= price * amount;
     }
 
     public void changeItemCount(Item item, int change) {
         itemList.put(item, itemList.getOrDefault(item, 0) + change);
     }
 
+    public void tradeItem(Trade trade) {
+
+    }
 
     public void addToTradeList(Trade trade) {
     }
@@ -144,20 +129,4 @@ public class Government {
     public HashMap<String, Integer> getPopularityFactors() {
         return popularityFactors;
     }
-
-    public int getItemFromListByType(String type) {
-        if (itemList.containsKey(type))
-            return itemList.get(type);
-        else
-            return 0;
-    }
-
-    public Trade getTradeFromTradeList(String id) {
-        for (Trade trade : tradeList) {
-            if (trade.getId().equals(id))
-                return trade;
-        }
-        return null;
-    }
-
 }
