@@ -86,6 +86,10 @@ public class Government {
         units.add(unit);
     }
 
+    public boolean deleteUnit(Unit unit) {
+        return units.remove(unit);
+    }
+
     public int getItemCount(Item item) {
         return itemList.getOrDefault(item, 0);
     }

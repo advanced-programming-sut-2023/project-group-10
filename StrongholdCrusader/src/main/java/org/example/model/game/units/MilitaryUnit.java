@@ -22,7 +22,12 @@ public abstract class MilitaryUnit extends Unit {
         return stance;
     }
 
+    public ArrayList<Coordinate> getPath() {
+        return path;
+    }
+
     public void changeStance(MilitaryUnitStance newStance) {
+        stance = newStance;
     }
 
     public void attackEnemy(Unit enemy) {
@@ -38,9 +43,15 @@ public abstract class MilitaryUnit extends Unit {
     }
 
     public void disband() {
+        new Unit(getPosition(), RoleName.PEASANT, getGovernment());
+        getGovernment().deleteUnit(this);
     }
 
     public Coordinate getNextPointOnPath() {
         return path.get(0);
+    }
+
+    public void removeFirstElementOfPath() {
+        path.remove(0);
     }
 }
