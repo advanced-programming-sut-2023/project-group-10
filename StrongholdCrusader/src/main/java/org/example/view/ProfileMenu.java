@@ -34,19 +34,19 @@ public class ProfileMenu {
             else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_SLOGAN)) != null)
                 changeSlogan(matcher);
 
-            else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_HIGHSCORE)) != null)
+            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_HIGHSCORE) != null)
                 showHighscore();
 
-            else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_RANK)) != null)
+            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_RANK) != null)
                 showRank();
 
-            else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_SLOGAN)) != null)
+            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_SLOGAN) != null)
                 showSlogan();
 
-            else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.REMOVE_SLOGAN)) != null)
+            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.REMOVE_SLOGAN) != null)
                 removeSlogan();
 
-            else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_PROFILE)) != null)
+            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_PROFILE) != null)
                 showProfile();
         }
     }
@@ -85,6 +85,9 @@ public class ProfileMenu {
                 System.out.println("No nickname provided!");
                 break;
 
+            case INVALID_NICKNAME:
+                System.out.println("Nickname format is invalid!");
+
             default:
                 System.out.println("Nickname changed successfully!");
                 break;
@@ -98,7 +101,6 @@ public class ProfileMenu {
         ProfileMenuMessages message = ProfileMenuController.changePassword(oldPassword, newPassword);
 
         switch (message){
-            //TODO ask about repetition
             case INCORRECT_CAPTCHA:
                 System.out.println("Incorrect captcha!");
                 break;
@@ -107,14 +109,12 @@ public class ProfileMenu {
                 System.out.println("No new Password provided!");
                 break;
 
-            case INCORRECT_PASSWORD:
-                System.out.println("Current password is incorrect!");
-                break;
-
-            //TODO write enter new pass in controller
-
             case WEAK_PASSWORD:
                 System.out.println("Weak new password!");
+                break;
+
+            case INCORRECT_PASSWORD:
+                System.out.println("Current password is incorrect!");
                 break;
 
             default:
