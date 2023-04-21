@@ -28,6 +28,9 @@ public class ProfileMenuController {
         if(nickname.matches("\\s*"))
             return ProfileMenuMessages.NO_NICKNAME_PROVIDED;
 
+        if(!CheckFormat.checkNicknameFormat(nickname))
+            return ProfileMenuMessages.INVALID_NICKNAME;
+
         else{
             Stronghold.getCurrentUser().setNickname(nickname);
             return ProfileMenuMessages.CHANGE_NICKNAME_SUCCESSFUL;
@@ -35,6 +38,8 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages changePassword(String oldPassword, String newPassword){
+        //TODO add incorrect captcha
+
         if(oldPassword.matches("\\s*") || newPassword.matches("\\s*"))
             return ProfileMenuMessages.NO_PASSWORD_PROVIDED;
 
