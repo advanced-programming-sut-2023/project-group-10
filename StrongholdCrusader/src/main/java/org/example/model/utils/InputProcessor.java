@@ -17,13 +17,11 @@ public class InputProcessor {
         }
 
         for(int i = 0; i < arrayList.size(); i++){
-            if(arrayList.get(i).startsWith("-") && (i == arrayList.size()-1 || arrayList.get(i+1).startsWith("-"))){
+            if(arrayList.get(i).startsWith("-") && (i == arrayList.size()-1 || arrayList.get(i+1).startsWith("-")))
                 optArg.put(arrayList.get(i), null);
-            }
 
-            else if(arrayList.get(i).startsWith("-") && !arrayList.get(i+1).startsWith("-")){
+            else if(arrayList.get(i).startsWith("-") && !arrayList.get(i+1).startsWith("-"))
                 optArg.put(arrayList.get(i), arrayList.get(i+1));
-            }
         }
 
         return optArg;
