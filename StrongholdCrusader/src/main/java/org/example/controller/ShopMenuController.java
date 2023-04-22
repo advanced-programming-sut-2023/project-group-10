@@ -29,6 +29,8 @@ public class ShopMenuController {
     public static ShopMenuMessages sell(String name, int amount){
         if(Item.getItemByName(name) == null)
             return ShopMenuMessages.INVALID_ITEM;
+        if(amount <= 0)
+            return ShopMenuMessages.INVALID_AMOUNT;
         if(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(Item.getItemByName(name)) < amount)
             return ShopMenuMessages.INSUFFICIENT_AMOUNT;
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().reduceItem(Item.getItemByName(name),amount,Item.getItemByName(name).getBuyPrice());

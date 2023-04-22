@@ -2,8 +2,6 @@ package org.example.view;
 
 import org.apache.commons.cli.*;
 import org.example.controller.TradeMenuController;
-import org.example.model.utils.ExceptionMessages;
-import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.TradeMenuCommands;
 import org.example.view.enums.messages.TradeMenuMessages;
 
@@ -42,7 +40,6 @@ public class TradeMenu extends Menu {
     private static void sendRequest(Matcher matcher) {
 
         String arguments = matcher.replaceAll("");
-        String[] args = InputProcessor.separateInput(arguments);
         Scanner scanner = new Scanner(System.in);
 
         Options options = new Options();
