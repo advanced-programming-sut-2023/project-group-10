@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.model.Stronghold;
+import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.ProfileMenuMessages;
 
@@ -16,7 +17,8 @@ public class ProfileMenuController {
         if(CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
             return ProfileMenuMessages.INVALID_USERNAME;
 
-        //TODO add username exists
+        if(User.getUserByUsername(username) != null)
+            return ProfileMenuMessages.USERNAME_EXISTS;
 
         else{
             Stronghold.getCurrentUser().setUsername(username);
@@ -65,7 +67,8 @@ public class ProfileMenuController {
         if(CheckFormatAndEncrypt.isEmailFormatInvalid(email))
             return ProfileMenuMessages.INVALID_EMAIL;
 
-        //TODO add email exists function
+        if(User.getUserByEmail(email) != null)
+            return ProfileMenuMessages.EMAIL_EXISTS;
 
         else{
             Stronghold.getCurrentUser().setEmail(email);
