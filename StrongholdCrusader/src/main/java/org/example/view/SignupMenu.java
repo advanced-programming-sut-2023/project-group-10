@@ -2,6 +2,7 @@ package org.example.view;
 
 import org.apache.commons.cli.*;
 import org.example.controller.SignupMenuController;
+import org.example.model.SecurityQuestion;
 import org.example.model.utils.InputProcessor;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.commands.SignupMenuCommands;
@@ -16,7 +17,7 @@ public class SignupMenu {
         Matcher matcher;
         while (true) {
             if ((matcher = SignupMenuCommands.getMatcher(scanner.nextLine(), SignupMenuCommands.CREATE_USER)) != null)
-                register(matcher);
+                register(scanner, matcher);
             else if ((matcher = SignupMenuCommands.getMatcher(scanner.nextLine(), SignupMenuCommands.USER_LOGIN)) != null) {
                 //TODO:Run login menu?
                 break;
@@ -26,13 +27,10 @@ public class SignupMenu {
         }
     }
 
-    private static void register(Matcher matcher) throws ParseException {
-        String username, email, nickname, slogan;
-
+    private static void register(Scanner scanner, Matcher matcher) throws ParseException {
         //extract options and arguments from input
         String arguments = matcher.replaceAll("");
         String[] args = InputProcessor.separateInput(arguments);
-        Scanner scanner = new Scanner(System.in);
 
         Options options = new Options();
         Option usernameOption = Option.builder().argName("u").longOpt("username").hasArgs().required().desc("username").build();
@@ -50,29 +48,19 @@ public class SignupMenu {
         try {
             CommandLine cmd = parser.parse(options, args);
 
+            String username, email, nickname, slogan;
+            String originalPassword, passwordConfirmation = "";
+
             //check username input
             if (cmd.getOptionValues(usernameOption).length != 1)
                 throw new ParseException("error: username must have only one argument");
             username = cmd.getOptionValue(usernameOption);
 
             //check password input
-            String originalPassword, passwordConfirmation;
             if (cmd.getOptionValues(usernameOption).length > 2)
                 throw new ParseException("error: password must have one or two arguments");
             originalPassword = cmd.getOptionValues(passwordOption)[0];
-            if (originalPassword.equals("random")) {
-                //TODO: generate random password after checking input requirements and printing random slogan
-                String suggestedPassword = RandomGenerator.generateSecurePassword();
-                passwordConfirmation = null;
-                System.out.println("Your random password is: " + suggestedPassword);
-                System.out.println("Please re-enter your password here:");
-                String passwordByUser = scanner.nextLine();
-                if (passwordByUser.equals(suggestedPassword)) originalPassword = suggestedPassword;
-                else {
-                    System.out.println("You've entered the suggested password incorrectly, try to signup again");
-                    return;
-                }
-            } else {
+            if (!originalPassword.equals("random")) {
                 if (cmd.getOptionValues(passwordOption).length != 2)
                     throw new ParseException("error: password confirmation is missing");
                 passwordConfirmation = cmd.getOptionValues(passwordOption)[1];
@@ -92,11 +80,8 @@ public class SignupMenu {
             while (true) {
                 SignupMenuMessages registerMessage = SignupMenuController
                         .createUser(username, originalPassword, passwordConfirmation, email, nickname, slogan);
-                //TODO: random slogan and random password?
-                if (registerMessage.equals(SignupMenuMessages.RANDOM_SLOGAN)) {
-                    slogan = RandomGenerator.getRandomSlogan();
-                    System.out.println(slogan);
-                } else if (registerMessage.equals(SignupMenuMessages.INVALID_USERNAME_FORMAT)) {
+
+                if (registerMessage.equals(SignupMenuMessages.INVALID_USERNAME_FORMAT)) {
                     System.out.println("Invalid format for username");
                     return;
                 } else if (registerMessage.equals(SignupMenuMessages.INVALID_EMAIL_FORMAT)) {
@@ -105,17 +90,9 @@ public class SignupMenu {
                 } else if (registerMessage.equals(SignupMenuMessages.EMAIL_EXISTS)) {
                     System.out.println("There is a user who is registered with this email address!");
                     return;
-                } else if (registerMessage.equals(SignupMenuMessages.REENTER_PASSWORD_CONFIRMATION)) {
-                    String passwordByUser = passwordConfirmation;
-                    inner:
-                    while (!passwordByUser.equals(originalPassword)) {
-                        System.out.println("Please re-enter your password:");
-                        passwordByUser = scanner.nextLine();
-                        if (passwordByUser.equals(originalPassword)) {
-                            passwordConfirmation = passwordByUser;
-                            break inner;
-                        }
-                    }
+                } else if (registerMessage.equals(SignupMenuMessages.WRONG_PASSWORD_CONFIRMATION)) {
+                    System.out.println("passwords doesn't match, try to signup again");
+                    return;
                 } else if (registerMessage.equals(SignupMenuMessages.WEAK_PASSWORD)) {
                     System.out.println("Your password is weak!");
                     return;
@@ -124,31 +101,44 @@ public class SignupMenu {
                     String suggestedUsername = SignupMenuController.suggestNewUsername(username);
                     System.out.println("Do you want \"" + suggestedUsername + "\" as your new username? " + "[ Y : yes / N : no ]");
                     String userAnswer = scanner.nextLine();
-                    if (userAnswer.equals("N")) return;
-                    else username = suggestedUsername;
-                } else if (registerMessage.equals(SignupMenuMessages.SHOW_QUESTIONS)) {
-                    System.out.println("Pick your security question: 1. What is my father’s name" +
-                            " 2. What was my first pet’s name? " +
-                            "3. What is my mother’s last name?");
-                    String input = "";
-
-                    while ((matcher = SignupMenuCommands.getMatcher(input, SignupMenuCommands.USER_LOGIN)) == null) {
-                        input = scanner.nextLine();
-                        if ((matcher = SignupMenuCommands.getMatcher(input, SignupMenuCommands.USER_LOGIN)) != null) {
-                            securityQuestion(scanner, matcher, username, originalPassword, nickname, email, slogan);
-                        }
-                    }
-                    return;
+                    if (userAnswer.matches("\\s*N\\s*")) return;
+                    username = suggestedUsername;
                 }
-
+                if (slogan.equals("random")) {
+                    slogan = RandomGenerator.getRandomSlogan();
+                    System.out.println("your slogan is: \"" + slogan + "\"");
+                }
+                if (originalPassword.equals("random")) {
+                    String suggestedPassword = RandomGenerator.generateSecurePassword();
+                    System.out.println("Your random password is: " + suggestedPassword);
+                    System.out.println("Please re-enter your password here:");
+                    String passwordByUser = scanner.nextLine();
+                    if (passwordByUser.equals(suggestedPassword))
+                        originalPassword = suggestedPassword;
+                    else {
+                        System.out.println("You've entered the suggested password incorrectly, try to signup again");
+                        return;
+                    }
+                }
+                securityQuestion(scanner, username, originalPassword, nickname, email, slogan);
             }
         } catch (ParseException exception) {
             printMessage(getMessageFromException(exception));
         }
     }
 
-    private static void securityQuestion(Scanner scanner, Matcher matcher, String username, String password, String nickname, String email,
+    private static void securityQuestion(Scanner scanner, String username, String password, String nickname, String email,
                                          String slogan) {
+        System.out.println("Pick your security question: " + SecurityQuestion.getAllQuestionsString());
+        String input;
+        Matcher matcher;
+        while (true) {
+            input = scanner.nextLine();
+            if ((matcher = SignupMenuCommands.getMatcher(input, SignupMenuCommands.PICK_QUESTION)) == null)
+                System.out.println("invalid command, use \"question pick\" to select the security question");
+            else break;
+        }
+
         String questionNumber, answer, answerConfirmation;
 
         String arguments = matcher.replaceAll("");

@@ -12,23 +12,16 @@ public class SignupMenuController {
 
     public static SignupMenuMessages createUser(String username, String password, String passwordConfirmation, String email,
                                                  String nickname, String slogan) {
-        //TODO: handle empty slogan
         if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
             return SignupMenuMessages.INVALID_USERNAME_FORMAT;
         if(!CheckFormatAndEncrypt.checkNicknameFormat(nickname))
             return SignupMenuMessages.INVALID_NICKNAME_FORMAT;
         if (User.getUserByUsername(username) != null)
             return SignupMenuMessages.USER_EXISTS;
-        if (password.equals("random") && slogan.equals("random"))
-            return SignupMenuMessages.RANDOM_SLOGAN;
-        if (slogan.equals("random"))
-            return SignupMenuMessages.RANDOM_SLOGAN;
-        if (password.equals("random"))
-            return SignupMenuMessages.RANDOM_PASSWORD;
-        else if (CheckFormatAndEncrypt.isPasswordWeak(password))
+        if (!password.equals("random") && CheckFormatAndEncrypt.isPasswordWeak(password))
             return SignupMenuMessages.WEAK_PASSWORD;
-        if (!password.equals(passwordConfirmation))
-            return SignupMenuMessages.REENTER_PASSWORD_CONFIRMATION;
+        if (!password.equals("random") && !password.equals(passwordConfirmation))
+            return SignupMenuMessages.WRONG_PASSWORD_CONFIRMATION;
         if (User.getUserByEmail(email) != null)
             return SignupMenuMessages.EMAIL_EXISTS;
         if (CheckFormatAndEncrypt.isEmailFormatInvalid(email))
