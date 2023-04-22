@@ -1,33 +1,37 @@
 package org.example.model.game.envirnmont;
 
+import org.example.model.utils.ASCIIColor;
+
 public enum BlockTexture {
     //on land
-    EARTH(false, true, true),
-    EARTH_AND_STONES(false, true, true),
-    BOULDERS(false, true, true),
-    ROCKS(false, false, false),
-    IRON(false, true, true),
-    GRASS(true, true, true),
-    SCRUB(false, true, true),
-    THICK_SCRUB(false, true, true),
+    EARTH(false, true, true, ASCIIColor.RESET),
+    EARTH_AND_STONES(false, true, true, ASCIIColor.RESET),
+    BOULDERS(false, true, true, ASCIIColor.YELLOW_BACKGROUND),
+    ROCKS(false, false, false, ASCIIColor.YELLOW_BACKGROUND),
+    IRON(false, true, true, ASCIIColor.RED_BACKGROUND),
+    GRASS(true, true, true, ASCIIColor.GREEN_BACKGROUND),
+    SCRUB(false, true, true, ASCIIColor.GREEN_BACKGROUND),
+    THICK_SCRUB(false, true, true, ASCIIColor.GREEN_BACKGROUND),
     //on water
-    OIL(false, false, true),
-    MARSH(false, false, true), /* units can spawn or walk here but drown if they do */
-    FORD(false, false, true),
-    RIVER(false, false, false),
-    SMALL_POND(false, false, false),
-    LARGE_POND(false, false, false),
-    BEACH(false, true, true),
-    SEA (false, false, false);
+    OIL(false, false, true, ASCIIColor.BLACK_BACKGROUND),
+    MARSH(false, false, true, ASCIIColor.PURPLE_BACKGROUND), /* units can spawn or walk here but drown if they do */
+    FORD(false, false, true, ASCIIColor.CYAN_BACKGROUND),
+    RIVER(false, false, false, ASCIIColor.BLUE_BACKGROUND),
+    SMALL_POND(false, false, false, ASCIIColor.CYAN_BACKGROUND),
+    LARGE_POND(false, false, false, ASCIIColor.CYAN_BACKGROUND),
+    BEACH(false, true, true, ASCIIColor.WHITE_BACKGROUND),
+    SEA(false, false, false, ASCIIColor.BLUE_BACKGROUND);
 
     private final boolean fertile;
     private final boolean buildable;
     private final boolean walkable;
+    private final ASCIIColor color;
 
-    BlockTexture(boolean fertile, boolean buildable, boolean walkable) {
+    BlockTexture(boolean fertile, boolean buildable, boolean walkable, ASCIIColor color) {
         this.fertile = fertile;
         this.buildable = buildable;
         this.walkable = walkable;
+        this.color = color;
     }
 
     public boolean isFertile() {
@@ -40,5 +44,9 @@ public enum BlockTexture {
 
     public boolean isWalkable() {
         return walkable;
+    }
+
+    public ASCIIColor getColor() {
+        return color;
     }
 }
