@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class InputProcessor {
     public static HashMap<String, String> separateInput(String input) {
-        Pattern pattern = Pattern.compile("(-(?<option>.)\\s+(?<argument>\".*\"|[^\\s\\-]*))");
+        Pattern pattern = Pattern.compile("(-(?<option>\S+)\s*(?<argument>".*"|[^\s\-]*))");
         Matcher matcher = pattern.matcher(input);
         HashMap<String, String> optArg = new HashMap<>();
 
