@@ -11,7 +11,7 @@ public class SignupMenuController {
     }
 
     public static SignupMenuMessages createUser(String username, String password, String passwordConfirmation, String email,
-                                                 String nickname, String slogan) {
+                                                 String nickname) {
         if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
             return SignupMenuMessages.INVALID_USERNAME_FORMAT;
         if(!CheckFormatAndEncrypt.checkNicknameFormat(nickname))

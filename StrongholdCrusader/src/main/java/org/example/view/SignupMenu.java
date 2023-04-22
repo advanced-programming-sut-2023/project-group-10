@@ -2,11 +2,8 @@ package org.example.view;
 
 import org.apache.commons.cli.*;
 import org.example.controller.SignupMenuController;
-<<<<<<< HEAD
 import org.example.model.SecurityQuestion;
-=======
 import org.example.model.utils.ExceptionMessages;
->>>>>>> 440358b1c5bcabada1cb8b41563f7663a7d22ac7
 import org.example.model.utils.InputProcessor;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.commands.SignupMenuCommands;
@@ -21,7 +18,7 @@ public class SignupMenu extends Menu {
         Matcher matcher;
         while (true) {
             if ((matcher = SignupMenuCommands.getMatcher(scanner.nextLine(), SignupMenuCommands.CREATE_USER)) != null)
-                register(scanner, matcher);
+                register(matcher);
             else if ((matcher = SignupMenuCommands.getMatcher(scanner.nextLine(), SignupMenuCommands.USER_LOGIN)) != null) {
                 //TODO:Run login menu?
                 break;
@@ -32,11 +29,10 @@ public class SignupMenu extends Menu {
     }
 
     private static void register(Matcher matcher) throws ParseException {
-        String username, email, nickname, slogan;
-
         //extract options and arguments from input
         String arguments = matcher.replaceAll("");
         String[] args = InputProcessor.separateInput(arguments);
+        Scanner scanner = new Scanner(System.in);
 
         Options options = new Options();
         Option usernameOption = Option.builder().argName("u").longOpt("username").hasArgs().required().desc("username").build();
@@ -85,7 +81,7 @@ public class SignupMenu extends Menu {
 
             while (true) {
                 SignupMenuMessages registerMessage = SignupMenuController
-                        .createUser(username, originalPassword, passwordConfirmation, email, nickname, slogan);
+                        .createUser(username, originalPassword, passwordConfirmation, email, nickname);
 
                 if (registerMessage.equals(SignupMenuMessages.INVALID_USERNAME_FORMAT)) {
                     System.out.println("Invalid format for username");
@@ -146,7 +142,6 @@ public class SignupMenu extends Menu {
         }
 
         String questionNumber, answer, answerConfirmation;
-
         String arguments = matcher.replaceAll("");
         String[] args = InputProcessor.separateInput(arguments);
         Options options = new Options();
