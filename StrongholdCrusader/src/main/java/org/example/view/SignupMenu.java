@@ -2,7 +2,11 @@ package org.example.view;
 
 import org.apache.commons.cli.*;
 import org.example.controller.SignupMenuController;
+<<<<<<< HEAD
 import org.example.model.SecurityQuestion;
+=======
+import org.example.model.utils.ExceptionMessages;
+>>>>>>> 440358b1c5bcabada1cb8b41563f7663a7d22ac7
 import org.example.model.utils.InputProcessor;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.commands.SignupMenuCommands;
@@ -11,7 +15,7 @@ import org.example.view.enums.messages.SignupMenuMessages;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-public class SignupMenu {
+public class SignupMenu extends Menu {
     public static void run() throws ParseException {
         Scanner scanner = new Scanner(System.in);
         Matcher matcher;
@@ -27,7 +31,9 @@ public class SignupMenu {
         }
     }
 
-    private static void register(Scanner scanner, Matcher matcher) throws ParseException {
+    private static void register(Matcher matcher) throws ParseException {
+        String username, email, nickname, slogan;
+
         //extract options and arguments from input
         String arguments = matcher.replaceAll("");
         String[] args = InputProcessor.separateInput(arguments);
@@ -123,7 +129,7 @@ public class SignupMenu {
                 securityQuestion(scanner, username, originalPassword, nickname, email, slogan);
             }
         } catch (ParseException exception) {
-            printMessage(getMessageFromException(exception));
+            printMessage(ExceptionMessages.getMessageFromException(exception));
         }
     }
 
@@ -187,7 +193,7 @@ public class SignupMenu {
                 }
             }
         } catch (ParseException exception) {
-            printMessage(getMessageFromException(exception));
+            printMessage(ExceptionMessages.getMessageFromException(exception));
         }
     }
     //TODO
@@ -195,27 +201,5 @@ public class SignupMenu {
     private static void goToLoginMenu(Matcher matcher) {
     }
 
-    private static String getMessageFromException(ParseException exception) {
-        if (exception instanceof AlreadySelectedException)
-            return "error: " + ((AlreadySelectedException) exception).getOption().getDescription() + " was entered multiple times";
-        else if (exception instanceof MissingArgumentException)
-            return "error: " + "you must enter an argument for " + ((MissingArgumentException) exception).getOption().getDescription();
-        else if (exception instanceof MissingOptionException)
-            return "error: " + "missing " + getMissingOptionsString((MissingOptionException) exception);
-        else if (exception instanceof UnrecognizedOptionException)
-            return "error: " + "option " + ((UnrecognizedOptionException) exception).getOption() + " isn't recognized";
-        return exception.getMessage();
-    }
 
-    private static String getMissingOptionsString(MissingOptionException exception) {
-        String result = "";
-        for (Object missingOption : exception.getMissingOptions())
-            result = ((Option) missingOption).getDescription() + ", ";
-        result = result.replaceAll(", $", "");
-        return result;
-    }
-
-    private static void printMessage(String message) {
-        System.out.println(message);
-    }
 }

@@ -10,6 +10,7 @@ public class Trade {
     private final String recipientId;
     private final String senderId;
     private final HashMap<String, String> messages = new HashMap<>();
+    private boolean isDisplayedInHistory;
     //TODO: change this field after we completed items completely(buildings, entities, food and etc)
     private final String type;
     private final int amount;
@@ -27,6 +28,7 @@ public class Trade {
         this.amount = amount;
         this.price = price;
         this.acceptedStatus = false;
+        this.isDisplayedInHistory=false;
     }
 
     public String getId() {
@@ -78,4 +80,11 @@ public class Trade {
 
     }
 
+    public void setDisplayedInHistory(boolean displayedInHistory) {
+        isDisplayedInHistory = displayedInHistory;
+    }
+
+    public boolean isDisplayedInHistory() {
+        return isDisplayedInHistory;
+    }
 }
