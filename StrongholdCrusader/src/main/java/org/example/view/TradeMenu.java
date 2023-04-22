@@ -4,6 +4,7 @@ import org.apache.commons.cli.*;
 import org.example.controller.TradeMenuController;
 import org.example.model.utils.ExceptionMessages;
 import org.example.model.utils.InputProcessor;
+import org.example.view.enums.commands.TradeMenuCommands;
 import org.example.view.enums.messages.TradeMenuMessages;
 
 import java.util.Scanner;
@@ -11,9 +12,32 @@ import java.util.regex.Matcher;
 
 public class TradeMenu extends Menu {
     public static void run() {
+        Scanner scanner = new Scanner(System.in);
+        Matcher matcher;
+        while (true) {
+            if ((matcher = TradeMenuCommands.getMatcher(scanner.nextLine(), TradeMenuCommands.SEND_REQUEST)) != null)
+                sendRequest(matcher);
+            else if ((matcher = TradeMenuCommands.getMatcher(scanner.nextLine(), TradeMenuCommands.ACCEPT)) != null) {
+                acceptRequest(matcher);
+            }
+            else if ((matcher = TradeMenuCommands.getMatcher(scanner.nextLine(), TradeMenuCommands.TRADE_LIST)) != null) {
+                showTradeList();
+            }
+            else if ((matcher = TradeMenuCommands.getMatcher(scanner.nextLine(), TradeMenuCommands.HISTORY)) != null) {
+                showHistory();
+            }
+            else if ((matcher = TradeMenuCommands.getMatcher(scanner.nextLine(), TradeMenuCommands.BACK)) != null) {
+                // go to game menu
+            }
 
+            else {
+                System.out.println("Invalid command!");
+
+            }
+        }
 
     }
+    //TODO: change the whole controller
 
     private static void sendRequest(Matcher matcher) {
 
