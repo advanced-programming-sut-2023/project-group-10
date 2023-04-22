@@ -38,8 +38,8 @@ public class SignupMenu {
         Option usernameOption = Option.builder().argName("u").longOpt("username").hasArgs().required().desc("username").build();
         Option passwordOption = Option.builder().argName("p").longOpt("password").hasArgs().required().desc("password").build();
         Option emailOption = Option.builder().argName("e").longOpt("email").hasArgs().required().desc("email").build();
-        Option nicknameOption = Option.builder().argName("n").longOpt("nickname").hasArg().required().desc("nickname").build();
-        Option sloganOption = Option.builder().argName("s").longOpt("slogan").hasArg().required(false).desc("slogan").build();
+        Option nicknameOption = Option.builder().argName("n").longOpt("nickname").hasArgs().required().desc("nickname").build();
+        Option sloganOption = Option.builder().argName("s").longOpt("slogan").hasArgs().required(false).desc("slogan").build();
         options.addOption(usernameOption);
         options.addOption(passwordOption);
         options.addOption(emailOption);
@@ -57,10 +57,11 @@ public class SignupMenu {
 
             //check password input
             String originalPassword, passwordConfirmation;
-            if (cmd.getOptionValues(usernameOption).length > 2 || cmd.getOptionValues(usernameOption).length == 0)
+            if (cmd.getOptionValues(usernameOption).length > 2)
                 throw new ParseException("error: password must have one or two arguments");
             originalPassword = cmd.getOptionValues(passwordOption)[0];
             if (originalPassword.equals("random")) {
+                //TODO: generate random password after checking input requirements and printing random slogan
                 String suggestedPassword = RandomGenerator.generateSecurePassword();
                 passwordConfirmation = null;
                 System.out.println("Your random password is: " + suggestedPassword);
@@ -83,11 +84,15 @@ public class SignupMenu {
                 throw new ParseException("error: you must just enter one valid email address!");
             email = cmd.getOptionValue(emailOption);
             //TODO: handle all the ways slogan could be, the below may cause NullPointerException!
-            slogan = cmd.getOptionValue(sloganOption);
+            if (!cmd.hasOption(sloganOption)) slogan = "";
+            else if (cmd.getOptionValues(sloganOption).length == 1)
+                slogan = cmd.getOptionValue(sloganOption);
+            else throw new ParseException("error: slogan must have exactly one argument");
 
             while (true) {
                 SignupMenuMessages registerMessage = SignupMenuController
                         .createUser(username, originalPassword, passwordConfirmation, email, nickname, slogan);
+                //TODO: random slogan and random password?
                 if (registerMessage.equals(SignupMenuMessages.RANDOM_SLOGAN)) {
                     slogan = RandomGenerator.getRandomSlogan();
                     System.out.println(slogan);
@@ -137,18 +142,8 @@ public class SignupMenu {
                 }
 
             }
-
-
         } catch (ParseException exception) {
-            if (exception instanceof AlreadySelectedException)
-                printMessage("error: " + ((AlreadySelectedException) exception).getOption().getDescription() + " was entered multiple times");
-            else if (exception instanceof MissingArgumentException)
-                printMessage("error: " + "you must enter an argument for " + ((MissingArgumentException) exception).getOption().getDescription());
-            else if (exception instanceof MissingOptionException)
-                printMessage("error: " + "missing " + getMissingOptionsString((MissingOptionException) exception));
-            else if (exception instanceof UnrecognizedOptionException)
-                printMessage("error: " + "option " + ((UnrecognizedOptionException) exception).getOption() + " isn't recognized");
-            else printMessage(exception.getMessage());
+            printMessage(getMessageFromException(exception));
         }
     }
 
@@ -201,29 +196,26 @@ public class SignupMenu {
                     System.out.println("Invalid command!");
                 }
             }
-            return;
-
-
         } catch (ParseException exception) {
-
-            if (exception instanceof AlreadySelectedException)
-                printMessage("error: " + ((AlreadySelectedException) exception).getOption().getDescription() + " was entered multiple times");
-            else if (exception instanceof MissingArgumentException)
-                printMessage("error: " + "you must enter an argument for " + ((MissingArgumentException) exception).getOption().getDescription());
-            else if (exception instanceof MissingOptionException)
-                printMessage("error: " + "missing " + getMissingOptionsString((MissingOptionException) exception));
-            else if (exception instanceof UnrecognizedOptionException)
-                printMessage("error: " + "option " + ((UnrecognizedOptionException) exception).getOption() + " isn't recognized");
-            else printMessage(exception.getMessage());
+            printMessage(getMessageFromException(exception));
         }
-
-
     }
     //TODO
 
     private static void goToLoginMenu(Matcher matcher) {
     }
 
+    private static String getMessageFromException(ParseException exception) {
+        if (exception instanceof AlreadySelectedException)
+            return "error: " + ((AlreadySelectedException) exception).getOption().getDescription() + " was entered multiple times";
+        else if (exception instanceof MissingArgumentException)
+            return "error: " + "you must enter an argument for " + ((MissingArgumentException) exception).getOption().getDescription();
+        else if (exception instanceof MissingOptionException)
+            return "error: " + "missing " + getMissingOptionsString((MissingOptionException) exception);
+        else if (exception instanceof UnrecognizedOptionException)
+            return "error: " + "option " + ((UnrecognizedOptionException) exception).getOption() + " isn't recognized";
+        return exception.getMessage();
+    }
 
     private static String getMissingOptionsString(MissingOptionException exception) {
         String result = "";
