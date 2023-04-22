@@ -2,7 +2,6 @@ package org.example.view.enums.messages;
 
 public enum SignupMenuMessages {
     SUCCESS,
-    EMPTY_FIELD,
     USER_EXISTS,
     EMAIL_EXISTS,
     INVALID_USERNAME_FORMAT,
