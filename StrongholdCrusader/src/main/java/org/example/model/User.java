@@ -22,7 +22,7 @@ public class User {
     private int highScore;
     //I think it should be moved in the game class or whatever
     private static ArrayList<User> users = new ArrayList<>();
-    private static final Gson gson = new Gson();
+    static final Gson gson = new Gson();
 
 
     public User(String username, String password, String nickname, String email, String slogan, String questionNumber,
@@ -53,8 +53,8 @@ public class User {
             if (createdUsers != null) {
                 users = createdUsers;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -63,8 +63,8 @@ public class User {
             FileWriter fileWriter = new FileWriter("./src/main/resources/UserDatabase.json");
             fileWriter.write(gson.toJson(users));
             fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 

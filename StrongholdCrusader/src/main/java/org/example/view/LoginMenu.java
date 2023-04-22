@@ -24,8 +24,9 @@ public class LoginMenu {
     private static void login(Matcher matcher){
         String username = matcher.group("username");
         String password = matcher.group("password");
+        boolean stayLoggedIn=false;
 
-        LoginMenuMessages message = LoginMenuController.login(username, password);
+        LoginMenuMessages message = LoginMenuController.login(username, password,stayLoggedIn);
 
         switch (message){
             case USERNAME_NOT_EXIST:
