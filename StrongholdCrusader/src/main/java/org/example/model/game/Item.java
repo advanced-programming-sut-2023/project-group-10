@@ -1,45 +1,45 @@
 package org.example.model.game;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Item {
-    WOOD("wood", 0, 0, 0, 0, 0, false),
-    STONE("stone", 0, 0, 0, 0, 0, false),
-    IRON("iron", 0, 0, 0, 0, 0, false),
-    PITCH("pitch", 0, 0, 0, 0, 0, false),
-    //foods
-    MEAT("meat", 0, 0, 0, 0, 0, true),
-    CHEESE("cheese", 0, 0, 0, 0, 0, true),
-    APPLE("apple", 0, 0, 0, 0, 0, true),
-    BREAD("bread", 0, 0, 0, 0, 0, true),
-    ALE("ale", 0, 0, 0, 0, 0, true),
+    WOOD("wood", new HashMap<>(), 2, 1, false),
+    STONE("stone", new HashMap<>(), 4, 1, false),
+    IRON("iron", new HashMap<>(), 4, 2, false),
+    PITCH("pitch", new HashMap<>(), 4, 2, false),
     //essentials for foods
-    WHEAT("wheat", 0, 0, 0, 0, 0, false),
-    MILL("mill", 0, 0, 0, 0, 0, false),
-    FLOUR("flour", 0, 0, 0, 0, 0, false),
-    HOPS("hops", 0, 0, 0, 0, 0, false),
+    WHEAT("wheat", new HashMap<>(), 18, 1, false),
+    FLOUR("flour", (HashMap<Item, Integer>) Map.of(WHEAT, 1), 24, 1, false),
+    HOPS("hops", new HashMap<>(), 4, 1, false),
+    //foods
+    MEAT("meat", new HashMap<>(), 2, 1, true),
+    CHEESE("cheese", new HashMap<>(), 2, 1, true),
+    APPLE("apple", new HashMap<>(), 2, 1, true),
+    BREAD("bread", (HashMap<Item, Integer>) Map.of(Item.FLOUR, 1), 3, 1, true),
+    ALE("ale", (HashMap<Item, Integer>) Map.of(Item.HOPS, 1), 6, 2, true),
+    //animals (shouldn't appear in shop or trade)
+    HORSE("horse", new HashMap<>(), 0, 0, false),
+    COW("cow", new HashMap<>(), 0, 0, false),
     //weapons
-    BOW("bow", 0, 2, 0, 0, 0, false),
-    CROSSBOW("crossbow", 0, 3, 0, 0, 0, false),
-    SPEAR("spear", 0, 1, 0, 0, 0, false),
-    PIKE("pike", 0, 2, 0, 0, 0, false),
-    MACE("mace", 0, 0, 1, 0, 0, false),
-    SWORD("swords", 0, 0, 1, 0, 0, false),
-    LEATHER_ARMOR("Leather armor", 0, 0, 0, 0, 0, false),
-    METAL_ARMOR("metal armor", 0, 0, 1, 0, 0, false),
-    HORSE("horse", 0, 0, 0, 0, 0, false);
+    BOW("bow", (HashMap<Item, Integer>) Map.of(WOOD, 2), 16, 8, false),
+    CROSSBOW("crossbow", (HashMap<Item, Integer>) Map.of(WOOD, 3), 16, 8, false),
+    SPEAR("spear", (HashMap<Item, Integer>) Map.of(WOOD, 1), 12, 6, false),
+    PIKE("pike", (HashMap<Item, Integer>) Map.of(WOOD, 2), 24, 12, false),
+    MACE("mace", (HashMap<Item, Integer>) Map.of(IRON, 1), 32, 16, false),
+    SWORD("swords", (HashMap<Item, Integer>) Map.of(IRON, 1), 32, 16, false),
+    LEATHER_ARMOR("Leather armor", (HashMap<Item, Integer>) Map.of(COW, 1), 24, 12, false),
+    METAL_ARMOR("metal armor", (HashMap<Item, Integer>) Map.of(IRON, 1), 32, 16, false);
 
     private final String name;
-    private final int stoneRequired;
-    private final int woodRequired;
-    private final int ironRequired;
+    private final HashMap<Item, Integer> resourcesNeeded;
     private final double buyPrice;
     private final double sellPrice;
     private final boolean isFood;
 
-    Item(String name, int stoneRequired, int woodRequired, int ironRequired, double buyPrice, double sellPrice, boolean isFood) {
+    Item(String name, HashMap<Item, Integer> resourcesNeeded, double buyPrice, double sellPrice, boolean isFood) {
         this.name = name;
-        this.stoneRequired = stoneRequired;
-        this.woodRequired = woodRequired;
-        this.ironRequired = ironRequired;
+        this.resourcesNeeded = resourcesNeeded;
         this.buyPrice = buyPrice;
         this.sellPrice = sellPrice;
         this.isFood = isFood;
@@ -52,20 +52,28 @@ public enum Item {
         return null;
     }
 
+    public static Item[] getWeaponsAndArmors() {
+        return new Item[]{BOW, CROSSBOW, SPEAR, PIKE, MACE, SWORD, LEATHER_ARMOR, METAL_ARMOR, HORSE};
+    }
+
+    public static Item[] getFoods() {
+        return new Item[]{MEAT, CHEESE, APPLE, BREAD, ALE};
+    }
+
+    public static Item[] getPrimaryItems() {
+        return new Item[]{WOOD, STONE, IRON, PITCH, WHEAT, FLOUR, HOPS};
+    }
+
     public String getName() {
         return name;
     }
 
-    public int getStoneRequired() {
-        return stoneRequired;
+    public HashMap<Item, Integer> getAllResourcesNeeded() {
+        return resourcesNeeded;
     }
 
-    public int getWoodRequired() {
-        return woodRequired;
-    }
-
-    public int getIronRequired() {
-        return ironRequired;
+    public int getAmountOfResourceNeeded(Item resource) {
+        return resourcesNeeded.getOrDefault(resource, 0);
     }
 
     public double getBuyPrice() {
@@ -80,4 +88,18 @@ public enum Item {
         return isFood;
     }
 
+    public int numberOfItemThatCanBeProduced(Government government) {
+        int result = Integer.MAX_VALUE;
+        for (Map.Entry<Item, Integer> resource : resourcesNeeded.entrySet())
+            result = Math.min(result, government.getItemCount(resource.getKey()) / resource.getValue());
+        return result;
+    }
+
+    public int tryToProduceThisMany(Government government, int count) {
+        count = Math.min(count, numberOfItemThatCanBeProduced(government));
+        for (Map.Entry<Item, Integer> resource : resourcesNeeded.entrySet())
+            government.changeItemCount(resource.getKey(), -resource.getValue() * count);
+        government.changeItemCount(this, count);
+        return count;
+    }
 }

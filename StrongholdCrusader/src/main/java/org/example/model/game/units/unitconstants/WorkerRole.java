@@ -19,7 +19,7 @@ public class WorkerRole extends Role {
         new WorkerRole(RoleName.PITCH_DIGGER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.PITCH_RIG));
         new WorkerRole(RoleName.MILL_BOY, defaultHitPoint, Quality.HIGH, BuildingType.getBuildingTypeByName(BuildingTypeName.MILL));
         new WorkerRole(RoleName.BAKER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.BAKERY));
-        new WorkerRole(RoleName.BREWER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.BREWER));
+        new WorkerRole(RoleName.BREWER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.BREWERY));
         new WorkerRole(RoleName.INNKEEPER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.INN));
         new WorkerRole(RoleName.TANNER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.TANNER));
         new WorkerRole(RoleName.FLETCHER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.FLETCHER));

@@ -32,6 +32,10 @@ public class Role {
         return null;
     }
 
+    public static ArrayList<Role> getAllRoles() {
+        return allRoles;
+    }
+
     public RoleName getName() {
         return name;
     }

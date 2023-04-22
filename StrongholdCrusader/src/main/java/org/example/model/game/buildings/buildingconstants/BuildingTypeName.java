@@ -27,7 +27,7 @@ public enum BuildingTypeName {
     WHEAT_FARM,
     HUNTER_POST,
     BAKERY,
-    BREWER,
+    BREWERY,
     GRANARY,
     INN,
     MILL,

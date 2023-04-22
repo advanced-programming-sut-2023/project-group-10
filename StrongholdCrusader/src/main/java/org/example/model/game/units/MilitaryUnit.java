@@ -16,7 +16,6 @@ public abstract class MilitaryUnit extends Unit {
     public MilitaryUnit(Coordinate position, RoleName role, Government government) {
         //TODO: check if required resources are available
         super(position, role, government);
-        deductResourcesFromGovernment((MilitaryPersonRole) Role.getRoleByName(role));
         stance = MilitaryUnitStance.STAND_GROUND;
         path = new ArrayList<>();
     }
@@ -51,9 +50,5 @@ public abstract class MilitaryUnit extends Unit {
 
     public void removeFirstElementOfPath() {
         path.remove(0);
-    }
-
-    protected void deductResourcesFromGovernment(MilitaryPersonRole role) {
-        getGovernment().changeGold(-role.getCost());
     }
 }

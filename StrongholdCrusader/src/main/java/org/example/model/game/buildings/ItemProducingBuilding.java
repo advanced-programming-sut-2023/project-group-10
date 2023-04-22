@@ -6,8 +6,6 @@ import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.buildings.buildingconstants.ItemProducingBuildingType;
 import org.example.model.game.envirnmont.Coordinate;
 
-import java.util.Map;
-
 public class ItemProducingBuilding extends Building {
     private int turnsPassedSinceCreation;
 
@@ -23,17 +21,12 @@ public class ItemProducingBuilding extends Building {
         turnsPassedSinceCreation++;
     }
 
-    public int produce() {
+    public void produce() {
         //return number of products made
         ItemProducingBuildingType buildingType = (ItemProducingBuildingType) getBuildingType();
-        if (turnsPassedSinceCreation % buildingType.getRate() != 0) return 0;
+        if (turnsPassedSinceCreation % buildingType.getRate() != 0) return;
 
-        int producibleItemCount = buildingType.getItemCountProducedPerProduction();
-        for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeededPerItem().entrySet())
-            producibleItemCount = Math.min(producibleItemCount, getGovernment().getItemCount(entry.getKey()) / entry.getValue());
-        for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeededPerItem().entrySet())
-            getGovernment().changeItemCount(entry.getKey(), -entry.getValue() * producibleItemCount);
-        getGovernment().changeItemCount(buildingType.getItem(), producibleItemCount);
-        return producibleItemCount;
+        for (Item item : buildingType.getItems())
+            item.tryToProduceThisMany(getGovernment(), buildingType.getItemCountProducedPerProduction());
     }
 }
