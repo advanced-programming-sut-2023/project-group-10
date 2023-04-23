@@ -8,6 +8,7 @@ import org.example.model.game.units.unitconstants.RoleName;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Government {
     private final User owner;
@@ -158,5 +159,13 @@ public class Government {
 
     public int getFearRate() {
         return fearRate;
+    }
+    public HashMap<Item,Integer> getFoodList(){
+        HashMap<Item,Integer> foodList=new HashMap<>();
+        for(Map.Entry<Item,Integer> list:itemList.entrySet()){
+            if(list.getKey().isFood())
+                foodList.put(list.getKey(), list.getValue());
+        }
+        return foodList;
     }
 }
