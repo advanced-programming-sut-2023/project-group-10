@@ -156,4 +156,7 @@ public class Government {
         return null;
     }
 
+    public int getFearRate() {
+        return fearRate;
+    }
 }
