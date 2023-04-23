@@ -11,22 +11,19 @@ import org.example.view.enums.messages.SignupMenuMessages;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class SignupMenu extends Menu {
     public static void run() throws ParseException {
         Scanner scanner = new Scanner(System.in);
         String input;
-        Matcher matcher;
         while (true) {
             input = scanner.nextLine();
             if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.CREATE_USER) != null) register(scanner, input);
             else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.USER_LOGIN) != null) {
-                //TODO:Run login menu?
-                break;
-            } else {
-                System.out.println("Invalid command!");
-            }
+                LoginMenu.run();
+                return;
+            } else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.EXIT) != null) return;
+            else System.out.println("Invalid command!");
         }
     }
 
@@ -189,8 +186,5 @@ public class SignupMenu extends Menu {
                 return;
             }
         }
-    }
-
-    private static void goToLoginMenu(Matcher matcher) {
     }
 }
