@@ -1,6 +1,6 @@
 package org.example.view;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.ParseException;
 import org.example.controller.SignupMenuController;
 import org.example.model.SecurityQuestion;
 import org.example.model.utils.InputProcessor;
@@ -132,68 +132,65 @@ public class SignupMenu extends Menu {
     }
 
     private static void securityQuestion(Scanner scanner, String username, String password, String nickname, String email, String slogan) {
-        System.out.println("Pick your security question: " + SecurityQuestion.getAllQuestionsString());
         String input;
-        Matcher matcher;
+        System.out.println("Pick your security question: " + SecurityQuestion.getAllQuestionsString());
         while (true) {
             input = scanner.nextLine();
-            if ((matcher = SignupMenuCommands.getMatcher(input, SignupMenuCommands.PICK_QUESTION)) == null)
+            if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.PICK_QUESTION) == null)
                 System.out.println("invalid command, use \"question pick\" to select the security question");
             else break;
         }
 
-        String questionNumber, answer, answerConfirmation;
-        String arguments = matcher.replaceAll("");
-        String[] args = InputProcessor.separateInput(arguments);
-        Options options = new Options();
-        Option numberOption = Option.builder().argName("q").longOpt("questionNumber").hasArgs().required().desc("question number").build();
-        Option answerOption = Option.builder().argName("a").longOpt("answer").hasArgs().required().desc("answer").build();
-        Option confirmOption = Option.builder().argName("c").longOpt("answerConfirm").hasArgs().required().desc("answer Confirmation").build();
-        options.addOption(numberOption);
-        options.addOption(answerOption);
-        options.addOption(confirmOption);
-        CommandLineParser parser = new DefaultParser(false);
-        try {
-            CommandLine cmd = parser.parse(options, args);
-            if (cmd.getOptionValues(numberOption).length != 1)
-                throw new ParseException("error: number must have only one argument");
-            questionNumber = cmd.getOptionValue(numberOption);
-
-            if (cmd.getOptionValues(answerOption).length != 1)
-                throw new ParseException("error: answer must have only one argument");
-            answer = cmd.getOptionValue(answerOption);
-
-            if (cmd.getOptionValues(confirmOption).length != 1)
-                throw new ParseException("error: answer Confirmation must have only one argument");
-            answerConfirmation = cmd.getOptionValue(confirmOption);
-            SignupMenuMessages securityQuestionMessage = SignupMenuController.pickSecurityQuestion(questionNumber, answer, answerConfirmation, username, password, nickname, slogan, email);
-            while (!securityQuestionMessage.equals(SignupMenuMessages.SUCCESS)) {
-                securityQuestionMessage = SignupMenuController.pickSecurityQuestion(questionNumber, answer, answerConfirmation, username, password, nickname, slogan, email);
-                if (securityQuestionMessage.equals(SignupMenuMessages.REENTER_ANSWER)) {
-                    System.out.println("Please re-enter your answer!");
-                    String confirmation = scanner.nextLine();
-                    while (!confirmation.equals(answer)) {
-                        confirmation = scanner.nextLine();
-                    }
-                    answerConfirmation = confirmation;
-
-
-                } // didn't handle number out of bounds
-                else if (securityQuestionMessage.equals(SignupMenuMessages.SUCCESS)) {
-                    System.out.println("User successfully created");
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String questionNumber = "";
+        String answer = "";
+        String answerConfirmation = "";
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            switch (option.getKey()) {
+                case "-q":
+                    questionNumber = option.getValue();
+                    break;
+                case "-a":
+                    answer = option.getValue();
+                    break;
+                case "-c":
+                    answerConfirmation = option.getValue();
+                    break;
+                default:
+                    System.out.println("invalid option, pick security question again");
+                    securityQuestion(scanner, username, password, nickname, email, slogan);
                     return;
-                } else {
-                    System.out.println("Invalid command!");
-                }
             }
-        } catch (ParseException exception) {
-            printMessage(ExceptionMessages.getMessageFromException(exception));
+        }
+        if (questionNumber == null || answer == null || answerConfirmation == null) {
+            System.out.println("empty field, try again");
+            securityQuestion(scanner, username, password, nickname, email, slogan);
+            return;
+        }
+        if (questionNumber.isEmpty() || answer.isEmpty() || answerConfirmation.isEmpty()) {
+            System.out.println("missing option, try again");
+            securityQuestion(scanner, username, password, nickname, email, slogan);
+            return;
+        }
+
+        SignupMenuMessages securityQuestionMessage;
+        while (true) {
+            securityQuestionMessage = SignupMenuController.pickSecurityQuestionAndCreateUser(questionNumber, answer, answerConfirmation, username, password, nickname, slogan, email);
+            if (securityQuestionMessage.equals(SignupMenuMessages.NUMBER_OUT_OF_BOUNDS)) {
+                System.out.println("question number should be between 1 and 3, try again");
+                securityQuestion(scanner, username, password, nickname, email, slogan);
+                return;
+            } else if (securityQuestionMessage.equals(SignupMenuMessages.REENTER_ANSWER)) {
+                System.out.println("answers don't match, try again");
+                securityQuestion(scanner, username, password, nickname, email, slogan);
+                return;
+            } else if (securityQuestionMessage.equals(SignupMenuMessages.SUCCESS)) {
+                System.out.println("User successfully created");
+                return;
+            }
         }
     }
-    //TODO
 
     private static void goToLoginMenu(Matcher matcher) {
     }
-
-
 }

@@ -38,7 +38,7 @@ public class SignupMenuController {
     }
 
 
-    public static SignupMenuMessages pickSecurityQuestion(String questionNumber, String answer, String answerConfirmation, String username, String
+    public static SignupMenuMessages pickSecurityQuestionAndCreateUser(String questionNumber, String answer, String answerConfirmation, String username, String
             password, String nickname, String slogan, String email) {
         if (Integer.parseInt(questionNumber) > 3 || Integer.parseInt(questionNumber) < 1)
             return SignupMenuMessages.NUMBER_OUT_OF_BOUNDS;
