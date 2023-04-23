@@ -10,16 +10,13 @@ public class MapMenuController {
     private static final int blocksInARow = 50;
     private static final int blocksInAColumn = 50;
 
-    public static String showMap(int x, int y) {
+    public static String showMap(Coordinate origin) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
-        map.setOrigin(new Coordinate(x, y), blocksInARow, blocksInAColumn);
+        map.setOrigin(origin, blocksInARow, blocksInAColumn);
         return generateMapView(map);
     }
 
-    public static String moveMap(String directions) {
-        //TODO: extract horizontal and vertical change from directions String
-        int horizontalChange = 0;
-        int verticalChange = 0;
+    public static String moveMap(int horizontalChange, int verticalChange) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         map.moveOrigin(horizontalChange, verticalChange);
         return generateMapView(map);
@@ -42,7 +39,7 @@ public class MapMenuController {
         return result;
     }
 
-    public static String showDetails(int x, int y) {
+    public static String showDetails(Coordinate position) {
         return null;
     }
 }
