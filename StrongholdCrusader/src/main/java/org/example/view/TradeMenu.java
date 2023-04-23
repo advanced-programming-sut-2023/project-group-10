@@ -11,6 +11,8 @@ import java.util.Scanner;
 
 public class TradeMenu {
     public static void run() {
+        System.out.println("All governments: ");
+        System.out.print(TradeMenuController.showAllUsers());
         //TODO: show notification for trades
         Scanner scanner = new Scanner(System.in);
         String input;
@@ -76,7 +78,7 @@ public class TradeMenu {
             return;
         }
         price = Integer.parseInt(priceString);
-        TradeMenuMessages tradeMessage = TradeMenuController.sendRequest(resourceType, resourceAmount, Integer.parseInt(price), message, recipientId);
+        TradeMenuMessages tradeMessage = TradeMenuController.sendRequest(resourceType, resourceAmount, price, message, recipientId);
         switch (tradeMessage) {
             case INSUFFICIENT_STOCK:
                 System.out.println("You don't have enough resources to donate!");

@@ -3,33 +3,31 @@ package org.example.controller;
 
 import org.example.model.Stronghold;
 import org.example.model.game.Government;
+import org.example.model.game.Item;
 import org.example.model.game.Trade;
 import org.example.view.enums.messages.TradeMenuMessages;
 
 public class TradeMenuController {
-    public String showAllUsers() {
+    //TODO: check functions
+    public static String showAllUsers() {
         String usersOfTheGame = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getNickname() + "(username : " +
                 Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername() + ") : YOU\n";
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
-            if (!government.getOwner().getUsername().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername()))
+            if (government != Stronghold.getCurrentBattle().getGovernmentAboutToPlay())
                 usersOfTheGame = usersOfTheGame.concat(government.getOwner().getNickname() + "(username : " + government.getOwner().getUsername() + ")\n");
         }
         //remember to use .print not .println
         return usersOfTheGame;
     }
 
-
-    //TODO: add remove entity in government after Yasna uploaded them
     public static TradeMenuMessages sendRequest(String resourceType, int resourceAmount, int price, String message, String recipientId) {
-        //TODO: handle if the type was incorrect
-        if(false)
+        Item resource = Item.getItemByName(resourceType);
+        if (resource == null || !resource.isSellable())
             return TradeMenuMessages.INVALID_TYPE;
-        if (Stronghold.getCurrentBattle().getGovernmentByOwnerId(recipientId) == null)
+        Government recipient = Stronghold.getCurrentBattle().getGovernmentByOwnerId(recipientId);
+        if (recipient == null)
             return TradeMenuMessages.INVALID_USER;
-        //TODO: should I add anything to check if there is any items of such?
-        if (price == 0 && Stronghold.getCurrentBattle().getGovernmentByOwnerId(
-                        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername())
-                .getItemFromListByType(resourceType) < resourceAmount)
+        if (price == 0 && Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(resource) < resourceAmount)
             return TradeMenuMessages.INSUFFICIENT_STOCK;
         String senderId = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername();
         if (price == 0) {
@@ -37,28 +35,27 @@ public class TradeMenuController {
             recipientId = senderId;
             senderId = tmp;
         }
-        Stronghold.getCurrentBattle().getGovernmentByOwnerId(Stronghold.getCurrentBattle().
-                getGovernmentAboutToPlay().getOwner().getUsername()).addToTradeList(
-                new Trade(recipientId, senderId, message, resourceType, resourceAmount, price));
+        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().addToTradeList(
+                new Trade(recipientId, senderId, message, resource, resourceAmount, price));
         Stronghold.getCurrentBattle().getGovernmentByOwnerId(recipientId).addToTradeList(
-                new Trade(recipientId, senderId, message, resourceType, resourceAmount, price));
+                new Trade(recipientId, senderId, message, resource, resourceAmount, price));
         return TradeMenuMessages.TRADE_ADDED_TO_TRADELIST;
     }
 
     public static String showTradeList() {
-        String tradeList="Accepted:\n";
+        String tradeList = "Accepted:\n";
         for (Trade trade : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList()) {
-            if(trade.getRecipientId().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername())
-            && trade.isAcceptedStatus())
-                tradeList=tradeList.concat("user [ "+trade.getSenderId()+" ] sent you -- "+trade.getAmount()+ " -- of { "
-                + trade.getType()+" } for price: "+trade.getPrice()+"\n");
+            if (trade.getRecipientId().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername())
+                    && trade.isAcceptedStatus())
+                tradeList = tradeList.concat("user [ " + trade.getSenderId() + " ] sent you -- " + trade.getAmount() + " -- of { "
+                        + trade.getItem() + " } for price: " + trade.getPrice() + "\n");
         }
-        tradeList=tradeList.concat("Sent:\n");
+        tradeList = tradeList.concat("Sent:\n");
         for (Trade trade : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList()) {
-            if(trade.getSenderId().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername()))
-                tradeList=tradeList.concat("You've sent trade:[ "+trade.getId()+" ] request to user :"+
-                        trade.getRecipientId()+" , you suggested "+trade.getPrice()+" golds for ( "+ trade.getAmount() +" )  of type: "+
-                        trade.getType()+"\n");
+            if (trade.getSenderId().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername()))
+                tradeList = tradeList.concat("You've sent trade:[ " + trade.getId() + " ] request to user :" +
+                        trade.getRecipientId() + " , you suggested " + trade.getPrice() + " golds for ( " + trade.getAmount() + " )  of type: " +
+                        trade.getItem() + "\n");
         }
 
         return tradeList;
@@ -66,12 +63,12 @@ public class TradeMenuController {
 
 
     public static String showHistory() {
-        String history="";
+        String history = "";
         for (Trade trade : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList()) {
-            if(trade.getRecipientId().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername())
+            if (trade.getRecipientId().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername())
                     && !trade.isDisplayedInHistory()) {
-                history=history.concat("TradeId: "+trade.getId()+"from user: "+trade.getSenderId()+"; "+trade.getAmount()+
-                        " item/items of type: "+ trade.getType()+" for price of :"+trade.getPrice()+"\n");
+                history = history.concat("TradeId: " + trade.getId() + "from user: " + trade.getSenderId() + "; " + trade.getAmount() +
+                        " item/items of type: " + trade.getItem() + " for price of :" + trade.getPrice() + "\n");
             }
         }
 

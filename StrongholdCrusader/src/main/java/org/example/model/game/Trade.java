@@ -3,7 +3,6 @@ package org.example.model.game;
 import org.example.model.utils.RandomGenerator;
 
 import java.util.HashMap;
-import java.util.Random;
 
 public class Trade {
     private final String id;
@@ -11,20 +10,19 @@ public class Trade {
     private final String senderId;
     private final HashMap<String, String> messages = new HashMap<>();
     private boolean isDisplayedInHistory;
-    //TODO: change this field after we completed items completely(buildings, entities, food and etc)
-    private final String type;
+    private final Item item;
     private final int amount;
     private final int price;
     private boolean acceptedStatus;
 
 
 
-    public Trade(String recipientId, String senderId, String message, String type, int amount, int price) {
+    public Trade(String recipientId, String senderId, String message, Item item, int amount, int price) {
         this.id="trade"+ RandomGenerator.tradeId();
         this.recipientId = recipientId;
         this.senderId = senderId;
         this.messages.put(senderId, message);
-        this.type = type;
+        this.item = item;
         this.amount = amount;
         this.price = price;
         this.acceptedStatus = false;
@@ -55,8 +53,8 @@ public class Trade {
             messages.put(username, message);
     }
 
-    public String getType() {
-        return type;
+    public Item getItem() {
+        return item;
     }
 
     public int getAmount() {

@@ -102,4 +102,8 @@ public enum Item {
         government.changeItemCount(this, count);
         return count;
     }
+
+    public boolean isSellable() {
+        return this != COW && this != HORSE;
+    }
 }

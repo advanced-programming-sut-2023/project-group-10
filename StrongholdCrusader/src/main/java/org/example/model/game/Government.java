@@ -105,23 +105,26 @@ public class Government {
         gold -= item.getBuyPrice() * amount;
 
     }
+
     public void addItem(Trade trade) {
-        Item item=Item.getItemByName(trade.getType());
+        Item item = trade.getItem();
         if (itemList.containsKey(item))
             itemList.put(item, itemList.get(item) + trade.getAmount());
         else itemList.put(item, trade.getAmount());
         gold -= trade.getPrice() * trade.getAmount();
 
     }
+
     public void reduceItem(Trade trade) {
-        Item item=Item.getItemByName(trade.getType());
+        Item item = trade.getItem();
         if (itemList.get(item) >= trade.getAmount())
             itemList.put(item, itemList.get(item) - trade.getAmount());
         else itemList.remove(item);
         gold += trade.getPrice() * trade.getAmount();
 
     }
-    public void reduceItem(Item item, int amount,double price) {
+
+    public void reduceItem(Item item, int amount, double price) {
         if (itemList.get(item) >= amount)
             itemList.put(item, itemList.get(item) - amount);
         else itemList.remove(item);
@@ -143,13 +146,6 @@ public class Government {
 
     public HashMap<String, Integer> getPopularityFactors() {
         return popularityFactors;
-    }
-
-    public int getItemFromListByType(String type) {
-        if (itemList.containsKey(type))
-            return itemList.get(type);
-        else
-            return 0;
     }
 
     public Trade getTradeFromTradeList(String id) {
