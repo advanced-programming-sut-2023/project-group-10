@@ -8,7 +8,9 @@ public enum GameMenuCommands {
     SET_FOOD_RATE(""),
     SET_TAX_RATE(""),
     SHOW_TAX_RATE(""),
-    SET_FEAR_RATE("");
+    SET_FEAR_RATE(""),
+    SHOW_FEAR_RATE("");
+
     public final String regex;
 
     GameMenuCommands(String regex) {

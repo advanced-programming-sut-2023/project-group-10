@@ -89,39 +89,44 @@ public class GameMenuController {
     }
 
 
-    public static void chooseMapSize(int length) {
-
-    }
-
-
-    public static void applyChanges() {
-    }
-
-
     public static GameMenuMessages dropBuilding(int row, int column, String type) {
-        return null;
+        //TODO: check validity of building type
+        if (false)
+            return GameMenuMessages.INVALID_BUILDING_TYPE;
+        //TODO: change the condition
+        if (row < 10000)
+            return GameMenuMessages.INVALID_ROW;
+        if (column < 1000)
+            return GameMenuMessages.INVALID_COLUMN;
+        //TODO: check droppable
+        if (true)
+            return GameMenuMessages.INCOMPATIBLE_LAND;
+        if (true)
+            return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
+
+        return GameMenuMessages.SUCCESSFULL_DROP;
     }
 
     //
     public static GameMenuMessages selectBuilding(int row, int column) {
-        return null;
+
+        //TODO: change the condition
+        if (row < 10000)
+            return GameMenuMessages.INVALID_ROW;
+        if (column < 1000)
+            return GameMenuMessages.INVALID_COLUMN;
+        //TODO: check droppable
+        if (true)
+            return GameMenuMessages.OPPONENT_BUILDING;
+        if (true)
+            return GameMenuMessages.EMPTY_LAND;
+
+
+        return GameMenuMessages.SUCCESSFUL_SELECT;
     }
 
-    // what does "drop unit" do if we already have " create unit"
-    public static GameMenuMessages createUnit(String type, int count) {
-        return null;
-    }
 
-    public GameMenuMessages repair() {
-        return null;
-    }
-
-    // UNIT RELATED
-    public static GameMenuMessages selectUnit(int row, int column) {
-        return null;
-    }
-
-
+// Are these for setting the map?
     public static GameMenuMessages setTexture(String landType, int row, int column) {
         return null;
     }
@@ -150,4 +155,8 @@ public class GameMenuController {
     public static GameMenuMessages leaveGame() {
         return null;
     }
+
+    public static void applyChanges() {
+    }
+
 }
