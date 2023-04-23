@@ -5,16 +5,16 @@ import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 public class SignupMenuController {
-    private static void createUser( String securityQuestionNumber, String securityAnswer,String username, String password,String nickname, String slogan,
-                                    String email) {
+    private static void createUser(String securityQuestionNumber, String securityAnswer, String username, String password, String nickname, String slogan,
+                                   String email) {
         User.addUser(username, password, nickname, email, slogan, securityQuestionNumber, securityAnswer);
     }
 
     public static SignupMenuMessages createUser(String username, String password, String passwordConfirmation, String email,
-                                                 String nickname) {
+                                                String nickname) {
         if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
             return SignupMenuMessages.INVALID_USERNAME_FORMAT;
-        if(!CheckFormatAndEncrypt.checkNicknameFormat(nickname))
+        if (!CheckFormatAndEncrypt.checkNicknameFormat(nickname))
             return SignupMenuMessages.INVALID_NICKNAME_FORMAT;
         if (User.getUserByUsername(username) != null)
             return SignupMenuMessages.USER_EXISTS;
@@ -31,22 +31,20 @@ public class SignupMenuController {
     //TODO: does it work properly?
 
     public static String suggestNewUsername(String username) {
-        for (int i = 1; i <= User.getUsers().size(); i++) {
-            if (User.getUserByUsername(username + (i)) == null) {
-                username = username.concat(Integer.toString(i));
-            }
-        }
+        for (int i = 1; i <= User.getUsers().size(); i++)
+            if (User.getUserByUsername(username + (i)) == null)
+                return username.concat(Integer.toString(i));
         return null;
     }
 
 
-    public static SignupMenuMessages pickSecurityQuestion(String questionNumber, String answer, String answerConfirmation,String username,String
-                                                          password,String nickname,String slogan,String email) {
+    public static SignupMenuMessages pickSecurityQuestion(String questionNumber, String answer, String answerConfirmation, String username, String
+            password, String nickname, String slogan, String email) {
         if (Integer.parseInt(questionNumber) > 3 || Integer.parseInt(questionNumber) < 1)
             return SignupMenuMessages.NUMBER_OUT_OF_BOUNDS;
         if (!answer.equals(answerConfirmation))
             return SignupMenuMessages.REENTER_ANSWER;
-        createUser(questionNumber,answer,username,password,nickname,slogan,email);
+        createUser(questionNumber, answer, username, password, nickname, slogan, email);
         return SignupMenuMessages.SUCCESS;
     }
 
