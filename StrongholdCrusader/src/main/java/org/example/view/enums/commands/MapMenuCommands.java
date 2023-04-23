@@ -9,4 +9,5 @@ public enum MapMenuCommands {
     MapMenuCommands(String regex) {
         this.regex = regex;
     }
+
 }

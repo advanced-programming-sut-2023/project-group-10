@@ -7,7 +7,7 @@ public enum TradeMenuCommands {
 
     TRADE_LIST("^\\s*trade\\s*history\\s*"),
     HISTORY("^\\s*trade\\s*list\\s*"),
-    ACCEPT("^\\s*trade\\s*accept\\s*.+"),
+    ACCEPT("^\\s*trade\\s*accept\\s*-.+$"),
     SEND_REQUEST("^\\s*trade\\s*\\-\\s*.+"),
     BACK("^\\s*trade\\s*back\\s*");
     private final String regex;

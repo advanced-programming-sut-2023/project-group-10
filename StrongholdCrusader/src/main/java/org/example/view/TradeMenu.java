@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class TradeMenu extends Menu {
+public class TradeMenu {
     public static void run() {
         //TODO: show notification for trades
         Scanner scanner = new Scanner(System.in);
@@ -76,8 +76,7 @@ public class TradeMenu extends Menu {
             return;
         }
         price = Integer.parseInt(priceString);
-
-        TradeMenuMessages tradeMessage = TradeMenuController.sendRequest(resourceType, resourceAmount, price, message, recipientId);
+        TradeMenuMessages tradeMessage = TradeMenuController.sendRequest(resourceType, resourceAmount, Integer.parseInt(price), message, recipientId);
         switch (tradeMessage) {
             case INSUFFICIENT_STOCK:
                 System.out.println("You don't have enough resources to donate!");

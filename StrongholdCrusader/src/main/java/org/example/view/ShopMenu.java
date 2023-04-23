@@ -1,40 +1,57 @@
 package org.example.view;
 
 import org.example.controller.ShopMenuController;
+import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.ShopMenuCommands;
 import org.example.view.enums.messages.ShopMenuMessages;
 
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class ShopMenu {
-    public static void run(){
-        Scanner scanner=new Scanner(System.in);
-        Matcher matcher;
+    public static void run() {
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
         while (true) {
-            if ((matcher = ShopMenuCommands.getMatcher(scanner.nextLine(), ShopMenuCommands.SHOW_LIST)) != null)
+            if ((ShopMenuCommands.getMatcher(input, ShopMenuCommands.SHOW_LIST)) != null)
                 showPriceList();
-            else if ((matcher = ShopMenuCommands.getMatcher(scanner.nextLine(),ShopMenuCommands.SELL)) != null)
-                sell(matcher);
-            else if ((matcher = ShopMenuCommands.getMatcher(scanner.nextLine(),ShopMenuCommands.BUY)) != null)
-                buy(matcher);
-            else if ((matcher = ShopMenuCommands.getMatcher(scanner.nextLine(),ShopMenuCommands.BACK)) != null){
+            else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.SELL) != null)
+                sell(input);
+            else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.BUY) != null)
+                buy(input);
+            else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.BACK) != null) {
                 //TODO: go back to game menu
-            }
-            else
+            } else
                 System.out.println("Invalid command!");
 
         }
     }
-    private static void showPriceList(){
+
+    private static void showPriceList() {
         System.out.println(ShopMenuController.showPriceList());
     }
-    private static void buy(Matcher matcher){
-        String itemName = null;
-        int amount=0;
-        ShopMenuMessages message=ShopMenuController.buy(itemName,amount);
-        switch (message){
+
+    private static void buy(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String itemName = "";
+        String itemAmount = "";
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            switch (option.getKey()) {
+                case "-i":
+                    itemName = option.getValue();
+                    break;
+                case "-a":
+                    itemAmount = option.getValue();
+                    break;
+                default:
+                    System.out.println("invalid option");
+                    return;
+            }
+        }
+        int amount = Integer.parseInt(itemAmount);
+        ShopMenuMessages message = ShopMenuController.buy(itemName, amount);
+        switch (message) {
             case INVALID_ITEM:
                 System.out.println("There is no such item in the shop!");
                 break;
@@ -49,12 +66,27 @@ public class ShopMenu {
         }
 
     }
-    private static void sell(Matcher matcher){
 
-        String itemName = null;
-        int amount=0;
-        ShopMenuMessages message=ShopMenuController.sell(itemName,amount);
-        switch (message){
+    private static void sell(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String itemName = "";
+        String itemAmount = "";
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            switch (option.getKey()) {
+                case "-i":
+                    itemName = option.getValue();
+                    break;
+                case "-a":
+                    itemAmount = option.getValue();
+                    break;
+                default:
+                    System.out.println("invalid option");
+                    return;
+            }
+        }
+        int amount = Integer.parseInt(itemAmount);
+        ShopMenuMessages message = ShopMenuController.sell(itemName, amount);
+        switch (message) {
             case INVALID_ITEM:
                 System.out.println("There is no such item!");
                 break;

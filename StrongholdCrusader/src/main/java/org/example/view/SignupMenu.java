@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class SignupMenu extends Menu {
+public class SignupMenu  {
     public static void run() {
         Scanner scanner = new Scanner(System.in);
         String input;
