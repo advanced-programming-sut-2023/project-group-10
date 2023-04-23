@@ -30,8 +30,9 @@ public class TradeMenu extends Menu {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String resourceType = "";
         String resourceAmountString = "";
-        int resourceAmount = 0;
-        String price = "";
+        int resourceAmount;
+        String priceString = "";
+        int price;
         String message = "";
         String recipientId = "";
         for (Map.Entry<String, String> option : options.entrySet()) {
@@ -43,7 +44,7 @@ public class TradeMenu extends Menu {
                     resourceAmountString = option.getValue();
                     break;
                 case "-p":
-                    price = option.getValue();
+                    priceString = option.getValue();
                     break;
                 case "-m":
                     message = option.getValue();
@@ -53,20 +54,28 @@ public class TradeMenu extends Menu {
                     break;
                 default:
                     System.out.println("invalid option");
+                    return;
             }
         }
-        if (resourceType == null | resourceAmountString == null || price == null || message == null || recipientId == null) {
+        if (resourceType == null | resourceAmountString == null || priceString == null || message == null || recipientId == null) {
             System.out.println("empty field");
             return;
         }
-        if (resourceType.isEmpty() || resourceAmountString.isEmpty() || price.isEmpty() || message.isEmpty() || recipientId.isEmpty()) {
+        if (resourceType.isEmpty() || resourceAmountString.isEmpty() || priceString.isEmpty() || message.isEmpty() || recipientId.isEmpty()) {
             System.out.println("missing argument");
             return;
         }
+        // check amount and price validity
         if (!resourceAmountString.matches("\\d+")) {
             System.out.println("invalid amount");
             return;
-        } else resourceAmount = Integer.parseInt(resourceAmountString);
+        }
+        resourceAmount = Integer.parseInt(resourceAmountString);
+        if (!priceString.matches("\\d+")) {
+            System.out.println("invalid price");
+            return;
+        }
+        price = Integer.parseInt(priceString);
 
         TradeMenuMessages tradeMessage = TradeMenuController.sendRequest(resourceType, resourceAmount, price, message, recipientId);
         switch (tradeMessage) {
@@ -86,7 +95,47 @@ public class TradeMenu extends Menu {
     }
 
     private static void acceptRequest(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String id = "";
+        String message = "";
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            switch (option.getKey()) {
+                case "-i":
+                    id = option.getValue();
+                    break;
+                case "-m":
+                    message = option.getValue();
+                    break;
+                default:
+                    System.out.println("invalid option");
+                    return;
+            }
+        }
 
+        if (id == null || message == null) {
+            System.out.println("empty field");
+            return;
+        }
+        if (id.isEmpty() || message.isEmpty()) {
+            System.out.println("missing argument");
+            return;
+        }
+
+        TradeMenuMessages tradeMessage = TradeMenuController.acceptRequest(id, message);
+        switch (tradeMessage) {
+            case INVALID_TRADE_ID:
+                System.out.println("invalid trade id");
+                break;
+            case MISMATCH_OF_TRADERS:
+                System.out.println("you must be the recipient of the trade to accept it");
+                break;
+            case NOT_SUFFICIENT_GOLD:
+                System.out.println("you don't have enough gold");
+                break;
+            case TRADE_SUCCESSFULLY_ACCEPTED:
+                System.out.println("the trade was accepted successfully");
+                break;
+        }
     }
 
     private static void showHistory() {

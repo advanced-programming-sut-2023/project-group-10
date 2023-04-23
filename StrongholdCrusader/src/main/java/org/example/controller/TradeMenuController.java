@@ -88,7 +88,7 @@ public class TradeMenuController {
         if (!recipient.getOwner().getUsername().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername()))
             return TradeMenuMessages.MISMATCH_OF_TRADERS;
         if (trade.getPrice() != 0 && Stronghold.getCurrentBattle().getGovernmentByOwnerId(trade.getRecipientId()).getGold() < trade.getPrice() * trade.getAmount())
-            return TradeMenuMessages.NOT_SUFFICEINT_GOLD;
+            return TradeMenuMessages.NOT_SUFFICIENT_GOLD;
         Stronghold.getCurrentBattle().getGovernmentByOwnerId(Stronghold.getCurrentUser().getUsername())
                 .getTradeFromTradeList(id).setAcceptedStatus(true);
         Stronghold.getCurrentBattle().getGovernmentByOwnerId(Stronghold.getCurrentUser().getUsername()).getTradeFromTradeList(id)
