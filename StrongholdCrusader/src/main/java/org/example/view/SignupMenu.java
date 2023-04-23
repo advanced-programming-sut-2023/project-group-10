@@ -1,6 +1,5 @@
 package org.example.view;
 
-import org.apache.commons.cli.ParseException;
 import org.example.controller.SignupMenuController;
 import org.example.model.SecurityQuestion;
 import org.example.model.utils.InputProcessor;
@@ -13,7 +12,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class SignupMenu extends Menu {
-    public static void run() throws ParseException {
+    public static void run() {
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
@@ -169,22 +168,21 @@ public class SignupMenu extends Menu {
             securityQuestion(scanner, username, password, nickname, email, slogan);
             return;
         }
+        if (!questionNumber.matches("\\d+")) {
+            System.out.println("invalid question number, try again");
+            securityQuestion(scanner, username, password, nickname, email, slogan);
+            return;
+        }
 
         SignupMenuMessages securityQuestionMessage;
-        while (true) {
-            securityQuestionMessage = SignupMenuController.pickSecurityQuestionAndCreateUser(questionNumber, answer, answerConfirmation, username, password, nickname, slogan, email);
-            if (securityQuestionMessage.equals(SignupMenuMessages.NUMBER_OUT_OF_BOUNDS)) {
-                System.out.println("question number should be between 1 and 3, try again");
-                securityQuestion(scanner, username, password, nickname, email, slogan);
-                return;
-            } else if (securityQuestionMessage.equals(SignupMenuMessages.REENTER_ANSWER)) {
-                System.out.println("answers don't match, try again");
-                securityQuestion(scanner, username, password, nickname, email, slogan);
-                return;
-            } else if (securityQuestionMessage.equals(SignupMenuMessages.SUCCESS)) {
-                System.out.println("User successfully created");
-                return;
-            }
-        }
+        securityQuestionMessage = SignupMenuController.pickSecurityQuestionAndCreateUser(questionNumber, answer, answerConfirmation, username, password, nickname, slogan, email);
+        if (securityQuestionMessage.equals(SignupMenuMessages.NUMBER_OUT_OF_BOUNDS)) {
+            System.out.println("question number should be between 1 and 3, try again");
+            securityQuestion(scanner, username, password, nickname, email, slogan);
+        } else if (securityQuestionMessage.equals(SignupMenuMessages.REENTER_ANSWER)) {
+            System.out.println("answers don't match, try again");
+            securityQuestion(scanner, username, password, nickname, email, slogan);
+        } else if (securityQuestionMessage.equals(SignupMenuMessages.SUCCESS))
+            System.out.println("User successfully created");
     }
 }
