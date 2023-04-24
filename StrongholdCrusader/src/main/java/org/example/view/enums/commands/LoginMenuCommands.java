@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 public enum LoginMenuCommands {
     LOGIN("^\\s*user\\s+login\\s+.+$"),
     FORGET_PASSWORD("^\\s*forgot\\s+my\\s+password\\s+.+$"),
-    LOGOUT("^\\s*user\\s+logout\\s*$");
+    LOGOUT("^\\s*user\\s+logout\\s*$"),
+    BACK("^\\s*back\\s*$");
 
     private final String regex;
 
