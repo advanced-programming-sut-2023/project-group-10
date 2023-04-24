@@ -25,6 +25,9 @@ public class LoginMenu {
             else if (LoginMenuCommands.getMatcher(command, LoginMenuCommands.FORGET_PASSWORD) != null)
                 forgetPassword(command);
 
+            else if (LoginMenuCommands.getMatcher(command, LoginMenuCommands.BACK) != null)
+                return;
+
             else
                 System.out.println("invalid command");
         }
