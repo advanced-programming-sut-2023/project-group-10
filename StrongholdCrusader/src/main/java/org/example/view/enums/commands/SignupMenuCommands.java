@@ -7,7 +7,8 @@ public enum SignupMenuCommands {
     CREATE_USER("^\\s*user\\s+create.+"),
     PICK_QUESTION("^\\s*question\\s+pick.+"),
     USER_LOGIN("^\\s*user\\s+login.+"),
-    EXIT("\\s*exit\\s*");
+    EXIT("\\s*exit\\s*"),
+    ENTER_LOGIN_MENU("^\\s*enter\\s+login\\s+menu\\s*$");
 
     public final String regex;
 
