@@ -51,8 +51,8 @@ public class UnitMenu {
             startingPointOptions.put("-y1", options.getOrDefault("-y1", ""));
             Coordinate startPoint = InputProcessor.getCoordinateFromXYInput(startingPointOptions, "-x1", "-y1");
             HashMap<String, String> destinationOptions = new HashMap<>();
-            destinationOptions.put("-x1", options.getOrDefault("-x1", ""));
-            destinationOptions.put("-y1", options.getOrDefault("-y1", ""));
+            destinationOptions.put("-x2", options.getOrDefault("-x2", ""));
+            destinationOptions.put("-y2", options.getOrDefault("-y2", ""));
             Coordinate destination = InputProcessor.getCoordinateFromXYInput(destinationOptions, "-x2", "-y2");
             if (options.size() != 4) {
                 System.out.println("invalid options");
