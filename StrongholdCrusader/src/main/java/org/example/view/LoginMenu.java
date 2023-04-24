@@ -1,34 +1,60 @@
 package org.example.view;
 
 import org.example.controller.LoginMenuController;
+import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.LoginMenuCommands;
 import org.example.view.enums.messages.LoginMenuMessages;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class LoginMenu {
     Scanner scanner = new Scanner(System.in);
-    public static void run(){
-        Scanner scanner = new Scanner(System.in);
-        Matcher matcher;
 
-        while(true){
+    public static void run() {
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
             String command = scanner.nextLine();
 
-            if((matcher = LoginMenuCommands.getMatcher(command, LoginMenuCommands.LOGIN)) != null)
-                login(matcher);
+            if (LoginMenuCommands.getMatcher(command, LoginMenuCommands.LOGIN) != null)
+                login(command);
+
+            else if (LoginMenuCommands.getMatcher(command, LoginMenuCommands.FORGET_PASSWORD) != null)
+                forgetPassword(command);
+
+            else
+                System.out.println("invalid command");
         }
     }
 
-    private static void login(Matcher matcher){
-        String username = matcher.group("username");
-        String password = matcher.group("password");
-        boolean stayLoggedIn=false;
+    private static void login(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String username = "";
+        String password = "";
+        boolean stayLoggedIn = false;
 
-        LoginMenuMessages message = LoginMenuController.login(username, password,stayLoggedIn);
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            switch (option.getKey()) {
+                case "-u":
+                    username = option.getValue();
+                    break;
 
-        switch (message){
+                case "-p":
+                    password = option.getValue();
+                    break;
+
+                default:
+                    System.out.println("invalid option");
+                    return;
+            }
+        }
+
+        LoginMenuMessages message = LoginMenuController.login(username, password, stayLoggedIn);
+
+        switch (message) {
             case USERNAME_NOT_EXIST:
                 System.out.println("Username does not exist!");
                 break;
@@ -43,14 +69,24 @@ public class LoginMenu {
         }
     }
 
-    private static void forgetPassword(Matcher matcher){
+    private static void forgetPassword(String input) {
         Scanner scanner = new Scanner(System.in);
-        String username = matcher.group("username");
         String answer = scanner.nextLine();
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String username = "";
+
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            if (option.getKey().equals("-u")) {
+                username = option.getValue();
+            } else {
+                System.out.println("invalid option");
+                return;
+            }
+        }
 
         LoginMenuMessages message = LoginMenuController.forgetPassword(username, answer);
 
-        switch (message){
+        switch (message) {
             case SECURITY_ANSWER_WRONG:
                 System.out.println("Wrong answer!");
                 break;
@@ -59,9 +95,5 @@ public class LoginMenu {
                 System.out.println("You can now set a new password!");
                 break;
         }
-    }
-
-    private static void goToRegisterMenu(){
-
     }
 }
