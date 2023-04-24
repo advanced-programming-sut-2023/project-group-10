@@ -128,20 +128,48 @@ public class GameMenuController {
 
 // Are these for setting the map?
     public static GameMenuMessages setTexture(String landType, int row, int column) {
-        return null;
+        if(true)
+            return GameMenuMessages.INVALID_ROW;
+        if(true)
+            return GameMenuMessages.INVALID_COLUMN;
+        if(false)
+            return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
+        return GameMenuMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL;
     }
 
     public static GameMenuMessages setTexture(String landType, int row1, int column1, int row2, int column2) {
-        return null;
+        if(true)
+          return GameMenuMessages.INVALID_ROW;
+        if(true)
+            return GameMenuMessages.INVALID_COLUMN;
+        if(false)
+            return GameMenuMessages.BULDING_IN_THE_AREA;
+        return GameMenuMessages.SET_TEXTURE_OF_AREA_SUCCESSFUL;
     }
 
 
     public static GameMenuMessages clear(int row, int column) {
-        return null;
+        if(true)
+            return GameMenuMessages.INVALID_ROW;
+        if(true)
+            return GameMenuMessages.INVALID_COLUMN;
+        if(true)
+            return GameMenuMessages.NO_OWNED_ENTITIY;
+
+        return GameMenuMessages.SUCCESSFUL_CLEAR;
     }
 
     public static GameMenuMessages dropRock(int row, int column, String direction) {
-        return null;
+        if(true)
+            return GameMenuMessages.INVALID_ROW;
+        if(true)
+            return GameMenuMessages.INVALID_COLUMN;
+        if(true)
+            return GameMenuMessages.INVALID_DIRECTION;
+        if(true)
+            return GameMenuMessages.NON_EMPTY_LAND;
+
+        return GameMenuMessages.DROP_ROCK_SUCCESSFUL;
     }
 
     public static GameMenuMessages dropTree(int row, int column, String type) {

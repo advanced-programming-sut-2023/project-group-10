@@ -28,34 +28,6 @@ public class MainMenu {
     }
 
         private static void startGame (String input){
-//            HashMap<String, String> options = InputProcessor.separateInput(input);
-//            String mapSize = "";
-//            String resourceAmountString = "";
-//            int resourceAmount = 0;
-//            String price = "";
-//            String message = "";
-//            String recipientId = "";
-//            for (Map.Entry<String, String> option : options.entrySet()) {
-//                switch (option.getKey()) {
-//                    case "-t":
-//                        resourceType = option.getValue();
-//                        break;
-//                    case "-a":
-//                        resourceAmountString = option.getValue();
-//                        break;
-//                    case "-p":
-//                        price = option.getValue();
-//                        break;
-//                    case "-m":
-//                        message = option.getValue();
-//                        break;
-//                    case "-r":
-//                        recipientId = option.getValue();
-//                        break;
-//                    default:
-//                        System.out.println("invalid option");
-//                }
-//            }
 
         }
 

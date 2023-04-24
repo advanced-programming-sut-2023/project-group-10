@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MainMenuCommands {
-    LOGOUT("logout"),
+    LOGOUT("^\\s*logout\\s*$"),
     START_GAME(""),
     PROFILE_MENU("");
     public final String regex;

@@ -5,7 +5,7 @@ import org.example.view.enums.messages.BuildingMenuMessages;
 
 public class BuildingMenuController {
 
-    private static Building selectedBuilding;
+    public static Building selectedBuilding;
 
     public static void setSelectedBuilding(Building selectedBuilding) {
         BuildingMenuController.selectedBuilding = selectedBuilding;
@@ -32,9 +32,9 @@ public class BuildingMenuController {
 
     }
 
-    public BuildingMenuMessages repair() {
+    public static BuildingMenuMessages repair() {
         if (true)
-            return BuildingMenuMessages.INSUFFIECIENT_STONE;
+            return BuildingMenuMessages.INSUFFICIENT_STONE;
         if (true)
             return BuildingMenuMessages.ENEMIES_FORCES_ARE_CLOSE;
 
@@ -43,8 +43,17 @@ public class BuildingMenuController {
 
 
     // UNIT RELATED
-    public static BuildingMenuMessages selectUnit(int row, int column) {
-        return null;
+    public static BuildingMenuMessages selectUnit(int row, int column)
+    {
+        if(true)
+            return BuildingMenuMessages.INVALID_ROW;
+        if(true)
+            return BuildingMenuMessages.INVALID_COLUMN;
+        if(true)
+            return BuildingMenuMessages.NO_UNITS_IN_THE_BLOCK;
+        if(true)
+            return BuildingMenuMessages.OPPONENTS_UNIT;
+        return BuildingMenuMessages.SELECT_UNIT_SUCCESSFUL;
     }
 
 }
