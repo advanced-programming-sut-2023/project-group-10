@@ -5,7 +5,9 @@ import org.example.model.game.Moat;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.Unit;
+import org.example.model.game.units.unitconstants.MilitaryEquipmentRole;
 import org.example.model.game.units.unitconstants.MilitaryPersonRole;
+import org.example.model.game.units.unitconstants.MilitaryUnitStance;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.enums.messages.UnitMenuMessages;
 
@@ -22,11 +24,15 @@ public class UnitMenuController {
         return null;
     }
 
-    public static UnitMenuMessages setState(int x, int y, String state) {
+    public static UnitMenuMessages setStance(Coordinate position, MilitaryUnitStance stance) {
         return null;
     }
 
-    public static UnitMenuMessages attack(int x, int y) {
+    public static UnitMenuMessages attackEnemy(Coordinate target) {
+        return null;
+    }
+
+    public static UnitMenuMessages airAttack(Coordinate target) {
         return null;
     }
 
@@ -34,13 +40,13 @@ public class UnitMenuController {
         return null;
     }
 
-    public static UnitMenuMessages digTunnel(int x, int y) {
+    public static UnitMenuMessages digTunnel(Coordinate position) {
         return null;
     }
 
-    public static UnitMenuMessages digMoat(int x, int y) {
+    public static UnitMenuMessages digMoat(Coordinate position) {
         UnitMenuMessages moveResult;
-        if ((moveResult = moveUnit(x, y)) != UnitMenuMessages.SUCCESSFUL_MOVE_UNIT) return moveResult;
+        if ((moveResult = moveUnit(position)) != UnitMenuMessages.SUCCESSFUL_MOVE_UNIT) return moveResult;
         boolean canDigMoats = false;
         for (Unit selectedUnit : selectedMilitaryUnits)
             if (selectedUnit instanceof MilitaryPerson && ((MilitaryPersonRole) selectedUnit.getRole()).isCanDigMoats()) {
@@ -48,11 +54,11 @@ public class UnitMenuController {
                 break;
             }
         if (!canDigMoats) return UnitMenuMessages.UNITS_CANT_DIG_MOAT;
-        new Moat(new Coordinate(x, y), Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        new Moat(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         return UnitMenuMessages.SUCCESSFUL_DIG_MOAT;
     }
 
-    public static UnitMenuMessages build(String equipmentName) {
+    public static UnitMenuMessages build(MilitaryEquipmentRole equipmentRole) {
         return null;
     }
 
