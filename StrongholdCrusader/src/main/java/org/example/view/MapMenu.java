@@ -1,7 +1,6 @@
 package org.example.view;
 
 import org.example.controller.MapMenuController;
-import org.example.model.Stronghold;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.MapMenuCommands;
@@ -24,9 +23,12 @@ public class MapMenu {
     }
 
     private static void showMap(String input) {
-        Coordinate origin = getCoordinateFromXYInput(input);
-        if (origin == null) return;
-        System.out.println(MapMenuController.showMap(origin));
+        try {
+            Coordinate origin = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            System.out.println(MapMenuController.showMap(origin));
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
     }
 
     private static void moveMap(String input) {
@@ -73,54 +75,11 @@ public class MapMenu {
     }
 
     private static void showDetails(String input) {
-        Coordinate blockPosition = getCoordinateFromXYInput(input);
-        if (blockPosition == null) return;
-        System.out.println(MapMenuController.showDetails(blockPosition));
-    }
-
-    private static Coordinate getCoordinateFromXYInput(String input) {
-        HashMap<String, String> options = InputProcessor.separateInput(input);
-        String x = "";
-        String y = "";
-        for (Map.Entry<String, String> option : options.entrySet()) {
-            switch (option.getKey()) {
-                case "-x":
-                    x = option.getValue();
-                    break;
-                case "-y":
-                    y = option.getValue();
-                    break;
-                default:
-                    System.out.println("invalid option");
-                    return null;
-            }
+        try {
+            Coordinate blockPosition = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            System.out.println(MapMenuController.showDetails(blockPosition));
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
         }
-        if (x == null || y == null) {
-            System.out.println("empty field");
-            return null;
-        }
-        if (x.isEmpty() || y.isEmpty()) {
-            System.out.println("missing option");
-            return null;
-        }
-        if (!x.matches("\\d+")) {
-            System.out.println("invalid x");
-            return null;
-        }
-        if (!y.matches("\\d+")) {
-            System.out.println("invalid y");
-            return null;
-        }
-        org.example.model.game.envirnmont.Map map = Stronghold.getCurrentBattle().getBattleMap();
-        if (!map.isIndexInBounds(Integer.parseInt(x))) {
-            System.out.println("x out of bounds");
-            return null;
-        }
-        if (!map.isIndexInBounds(Integer.parseInt(y))) {
-            System.out.println("y out of bounds");
-            return null;
-        }
-
-        return new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
     }
 }

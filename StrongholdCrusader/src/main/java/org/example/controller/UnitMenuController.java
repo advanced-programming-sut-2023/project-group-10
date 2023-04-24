@@ -14,11 +14,11 @@ import java.util.ArrayList;
 public class UnitMenuController {
     public static ArrayList<Unit> selectedMilitaryUnits;
 
-    public static UnitMenuMessages moveUnit(int x, int y) {
+    public static UnitMenuMessages moveUnit(Coordinate destination) {
         return null;
     }
 
-    public static UnitMenuMessages patrolUnit(int x1, int y1, int x2, int y2) {
+    public static UnitMenuMessages patrolUnit(Coordinate startPoint, Coordinate destination) {
         return null;
     }
 
