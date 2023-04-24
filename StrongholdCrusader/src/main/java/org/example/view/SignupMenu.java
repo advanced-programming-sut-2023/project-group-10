@@ -11,18 +11,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class SignupMenu  {
+public class SignupMenu {
     public static void run() {
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
             input = scanner.nextLine();
-            if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.CREATE_USER) != null) register(scanner, input);
-            else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.USER_LOGIN) != null) {
-                LoginMenu.run();
+            if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.CREATE_USER) != null)
+                register(scanner, input);
+            else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.ENTER_LOGIN_MENU) != null)
+                LoginMenu.run(); //should I add return statement???
+            else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.EXIT) != null)
                 return;
-            } else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.EXIT) != null) return;
-            else System.out.println("Invalid command!");
+            else
+                System.out.println("Invalid command!");
         }
     }
 
