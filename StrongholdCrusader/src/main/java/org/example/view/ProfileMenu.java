@@ -3,60 +3,72 @@ package org.example.view;
 import org.example.controller.ProfileMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.ProfileMenuCommands;
 import org.example.view.enums.messages.ProfileMenuMessages;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-
-//TODO ask about change password and return to main menu functions
 
 public class ProfileMenu {
-    public static void run(){
+    public static void run() {
         Scanner scanner = new Scanner(System.in);
 
-        while(true){
+        while (true) {
             String command = scanner.nextLine();
-            Matcher matcher;
 
-            if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_USERNAME)) != null)
-                changeUsername(matcher);
+            if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_USERNAME) != null)
+                changeUsername(command);
 
-            else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_NICKNAME)) != null)
-                changeNickname(matcher);
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_NICKNAME) != null)
+                changeNickname(command);
 
-            else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_PASSWORD)) != null)
-                changePassword(matcher);
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_PASSWORD) != null)
+                changePassword(command);
 
-            else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_EMAIL)) != null)
-                changeEmail(matcher);
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_EMAIL) != null)
+                changeEmail(command);
 
-            else if((matcher = ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_SLOGAN)) != null)
-                changeSlogan(matcher);
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.CHANGE_SLOGAN) != null)
+                changeSlogan(command);
 
-            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_HIGHSCORE) != null)
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_HIGHSCORE) != null)
                 showHighscore();
 
-            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_RANK) != null)
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_RANK) != null)
                 showRank();
 
-            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_SLOGAN) != null)
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_SLOGAN) != null)
                 showSlogan();
 
-            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.REMOVE_SLOGAN) != null)
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.REMOVE_SLOGAN) != null)
                 removeSlogan();
 
-            else if(ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_PROFILE) != null)
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_PROFILE) != null)
                 showProfile();
+
+            else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.BACK) != null)
+                return;
         }
     }
 
-    private static void changeUsername(Matcher matcher){
-        String username = matcher.group("username");
+    private static void changeUsername(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String username = "";
+
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            if (option.getKey().equals("-u")) {
+                username = option.getValue();
+            } else {
+                System.out.println("invalid option");
+                return;
+            }
+        }
 
         ProfileMenuMessages message = ProfileMenuController.changeUsername(username);
 
-        switch (message){
+        switch (message) {
             case NO_USERNAME_PROVIDED:
                 System.out.println("No username provided!");
                 break;
@@ -75,12 +87,22 @@ public class ProfileMenu {
         }
     }
 
-    private static void changeNickname(Matcher matcher){
-        String nickname = matcher.group("nickname");
+    private static void changeNickname(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String nickname = "";
+
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            if (option.getKey().equals("-n")) {
+                nickname = option.getValue();
+            } else {
+                System.out.println("invalid option");
+                return;
+            }
+        }
 
         ProfileMenuMessages message = ProfileMenuController.changeNickname(nickname);
 
-        switch (message){
+        switch (message) {
             case NO_NICKNAME_PROVIDED:
                 System.out.println("No nickname provided!");
                 break;
@@ -94,13 +116,30 @@ public class ProfileMenu {
         }
     }
 
-    private static void changePassword(Matcher matcher){
-        String oldPassword = matcher.group("oldpass");
-        String newPassword = matcher.group("newpass");
+    private static void changePassword(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String oldPassword = "";
+        String newPassword = "";
+
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            switch (option.getKey()) {
+                case "-n":
+                    newPassword = option.getValue();
+                    break;
+
+                case "-o":
+                    oldPassword = option.getValue();
+                    break;
+
+                default:
+                    System.out.println("invalid option");
+                    return;
+            }
+        }
 
         ProfileMenuMessages message = ProfileMenuController.changePassword(oldPassword, newPassword);
 
-        switch (message){
+        switch (message) {
             case INCORRECT_CAPTCHA:
                 System.out.println("Incorrect captcha!");
                 break;
@@ -123,12 +162,22 @@ public class ProfileMenu {
         }
     }
 
-    private static void changeEmail(Matcher matcher){
-        String email = matcher.group("email");
+    private static void changeEmail(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String email = "";
+
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            if (option.getKey().equals("-e")) {
+                email = option.getValue();
+            } else {
+                System.out.println("invalid option");
+                return;
+            }
+        }
 
         ProfileMenuMessages message = ProfileMenuController.changeEmail(email);
 
-        switch (message){
+        switch (message) {
             case NO_EMAIL_PROVIDED:
                 System.out.println("No email provided!");
                 break;
@@ -147,12 +196,22 @@ public class ProfileMenu {
         }
     }
 
-    private static void changeSlogan(Matcher matcher){
-        String slogan = matcher.group("slogan");
+    private static void changeSlogan(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String slogan = "";
+
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            if (option.getKey().equals("-s")) {
+                slogan = option.getValue();
+            } else {
+                System.out.println("invalid option");
+                return;
+            }
+        }
 
         ProfileMenuMessages message = ProfileMenuController.changeSlogan(slogan);
 
-        switch (message){
+        switch (message) {
             case NO_SLOGAN_PROVIDED:
                 System.out.println("No slogan provided!");
                 break;
@@ -163,42 +222,38 @@ public class ProfileMenu {
         }
     }
 
-    private static void showHighscore(){
+    private static void showHighscore() {
         System.out.println("Highscore: " + Stronghold.getCurrentUser().getHighScore());
     }
 
-    private static void showRank(){
+    private static void showRank() {
         System.out.println("Rank: " + Stronghold.getCurrentUser().getRank());
     }
 
-    private static void showSlogan(){
-        if(Stronghold.getCurrentUser().getSlogan() == null)
+    private static void showSlogan() {
+        if (Stronghold.getCurrentUser().getSlogan() == null)
             System.out.println("Slogan is empty!");
 
         else
             System.out.println("Slogan: " + Stronghold.getCurrentUser().getSlogan());
     }
 
-    private static void removeSlogan(){
+    private static void removeSlogan() {
         Stronghold.getCurrentUser().setSlogan(null);
         System.out.println("Slogan removed successfully");
     }
 
-    private static void showProfile(){
+    private static void showProfile() {
         User user = Stronghold.getCurrentUser();
 
         System.out.println("Username: " + user.getUsername());
         System.out.println("Nickname: " + user.getNickname());
         System.out.println("Email: " + user.getEmail());
 
-        if(user.getSlogan() != null)
+        if (user.getSlogan() != null)
             System.out.println("Slogan: " + user.getSlogan());
 
         System.out.println("Highscore:" + user.getHighScore());
         System.out.println("Rank: " + user.getRank());
-    }
-
-    private static void goToMainMenu(){
-
     }
 }
