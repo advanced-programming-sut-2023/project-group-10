@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum BuildingMenuCommands {
-    CRATE_UNIT(""),
+    CREATE_UNIT(""),
     REPAIR(""),
     SELECT_UNIT(""),
     BACK("");

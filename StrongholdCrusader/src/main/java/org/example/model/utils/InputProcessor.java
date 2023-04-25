@@ -49,11 +49,23 @@ public class InputProcessor {
         flag2 = flag2.replaceAll("^-", "");
         if (x == null || y == null) throw new Exception("empty field");
         if (x.isEmpty() || y.isEmpty()) throw new Exception("missing argument");
-        if (!x.matches("\\d+")) throw new Exception("invalid " + flag1);
-        if (!y.matches("\\d+")) throw new Exception("invalid " + flag2);
+        if (!x.matches("-?\\d+")) throw new Exception("invalid " + flag1);
+        if (!y.matches("-?\\d+")) throw new Exception("invalid " + flag2);
         org.example.model.game.envirnmont.Map map = Stronghold.getCurrentBattle().getBattleMap();
         if (!map.isIndexInBounds(Integer.parseInt(x))) throw new Exception(flag1 + " out of bounds");
         if (!map.isIndexInBounds(Integer.parseInt(y))) throw new Exception(flag2 + " out of bounds");
         return new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
+    }
+
+    public static Integer rateInputProcessor(String input) throws Exception {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String rate = "";
+        for (Map.Entry<String, String> option : options.entrySet()) {
+            if (option.getKey().equals("-r")) {
+                rate = option.getValue();
+            } else throw new Exception("invalid option");
+        }
+        if (!rate.matches("-?\\d+")) throw new Exception("You should enter a number for rate!");
+        return Integer.parseInt(rate);
     }
 }

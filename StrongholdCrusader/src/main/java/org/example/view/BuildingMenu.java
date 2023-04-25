@@ -13,7 +13,7 @@ public class BuildingMenu {
     public static void run(String input){
         System.out.println("hitpoints: "+BuildingMenuController.selectedBuilding.getHitPoint());
         while (true) {
-            if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.CRATE_UNIT) != null)
+            if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.CREATE_UNIT) != null)
                 createUnit(input);
             if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.SELECT_UNIT) != null) {
                 selectUnit(input);

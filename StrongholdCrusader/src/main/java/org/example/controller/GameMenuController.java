@@ -29,14 +29,6 @@ public class GameMenuController {
         return Stronghold.getCurrentBattle().getTurnsPassed();
     }
 
-    public static String showPlayers() {
-        String players = "";
-        for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
-            players = players.concat("player: " + government.getOwner().getNickname() + "is playing (username: " + government.getOwner().getUsername() + " )\n");
-        }
-        return players;
-    }
-
     public static int showPopularity() {
         return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity();
     }
@@ -90,15 +82,10 @@ public class GameMenuController {
     }
 
 
-    public static GameMenuMessages dropBuilding(int row, int column, String type) {
+    public static GameMenuMessages dropBuilding(Coordinate position, String type) {
         //TODO: check validity of building type
         if (false)
             return GameMenuMessages.INVALID_BUILDING_TYPE;
-        //TODO: change the condition
-        if (row < 10000)
-            return GameMenuMessages.INVALID_ROW;
-        if (column < 1000)
-            return GameMenuMessages.INVALID_COLUMN;
         //TODO: check droppable
         if (true)
             return GameMenuMessages.INCOMPATIBLE_LAND;
@@ -120,47 +107,29 @@ public class GameMenuController {
         return GameMenuMessages.SUCCESSFUL_SELECT;
     }
 
+    public static GameMenuMessages selectUnit(Coordinate position) {
+        return null;
+    }
 
 // Are these for setting the map?
-    public static GameMenuMessages setTexture(String landType, int row, int column) {
-        if(true)
-            return GameMenuMessages.INVALID_ROW;
-        if(true)
-            return GameMenuMessages.INVALID_COLUMN;
+    public static GameMenuMessages setTexture(String landType, Coordinate position) {
         if(false)
             return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
         return GameMenuMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL;
     }
 
-    public static GameMenuMessages setTexture(String landType, int row1, int column1, int row2, int column2) {
-        if(true)
-          return GameMenuMessages.INVALID_ROW;
-        if(true)
-            return GameMenuMessages.INVALID_COLUMN;
+    public static GameMenuMessages setTexture(String landType, Coordinate point1, Coordinate point2) {
         if(false)
             return GameMenuMessages.BUILDING_IN_THE_AREA;
         return GameMenuMessages.SET_TEXTURE_OF_AREA_SUCCESSFUL;
     }
 
 
-    public static GameMenuMessages clear(int row, int column) {
-        if(true)
-            return GameMenuMessages.INVALID_ROW;
-        if(true)
-            return GameMenuMessages.INVALID_COLUMN;
-        if(true)
-            return GameMenuMessages.NO_OWNED_ENTITY;
-
+    public static GameMenuMessages clear(Coordinate position) {
         return GameMenuMessages.SUCCESSFUL_CLEAR;
     }
 
-    public static GameMenuMessages dropRock(int row, int column, String direction) {
-        if(true)
-            return GameMenuMessages.INVALID_ROW;
-        if(true)
-            return GameMenuMessages.INVALID_COLUMN;
-        if(true)
-            return GameMenuMessages.INVALID_DIRECTION;
+    public static GameMenuMessages dropRock(Coordinate position, String direction) {
         if(true)
             return GameMenuMessages.NON_EMPTY_LAND;
 
@@ -173,6 +142,11 @@ public class GameMenuController {
 
     public static GameMenuMessages endTurn() {
         return null;
+    }
+
+    private static void showCurrentPlayer() {
+        User player = GameMenuController.currentPlayer();
+        System.out.println("player \" " + player.getNickname() + "\" with username : " + player.getUsername() + "is about to play!");
     }
 
     public static GameMenuMessages leaveGame() {
