@@ -1,6 +1,8 @@
 package org.example.view;
 
 import org.example.controller.LoginMenuController;
+import org.example.model.Stronghold;
+import org.example.model.User;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.LoginMenuCommands;
 import org.example.view.enums.messages.LoginMenuMessages;
@@ -68,6 +70,7 @@ public class LoginMenu {
 
             case LOGIN_SUCCESSFUL:
                 System.out.println("User logged in successfully!");
+                MainMenu.run();
                 break;
         }
     }
@@ -77,6 +80,7 @@ public class LoginMenu {
         String answer = scanner.nextLine();
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String username = "";
+        String newPassword = scanner.nextLine();
 
         for (Map.Entry<String, String> option : options.entrySet()) {
             if (option.getKey().equals("-u")) {
@@ -87,15 +91,19 @@ public class LoginMenu {
             }
         }
 
-        LoginMenuMessages message = LoginMenuController.forgetPassword(username, answer);
+        LoginMenuMessages message = LoginMenuController.forgetPassword(username, answer, newPassword);
 
         switch (message) {
             case SECURITY_ANSWER_WRONG:
                 System.out.println("Wrong answer!");
                 break;
 
-            case SECURITY_ANSWER_CORRECT:
-                System.out.println("You can now set a new password!");
+            case WEAK_PASSWORD:
+                System.out.println("Weak new password!");
+                break;
+
+            default:
+                System.out.println("Password changed successfully!");
                 break;
         }
     }

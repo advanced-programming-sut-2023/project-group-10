@@ -2,7 +2,11 @@ package org.example.controller;
 
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.LoginMenuMessages;
+import org.example.view.enums.messages.ProfileMenuMessages;
+
+import java.util.Scanner;
 
 public class LoginMenuController {
     public static LoginMenuMessages login(String username, String password,boolean stayLoggedIn){
@@ -19,13 +23,19 @@ public class LoginMenuController {
             Stronghold.addUserToFile(User.getUserByUsername(null));
 
         //login user
+        Stronghold.setCurrentUser(User.getUserByUsername(username));
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 
-    public static LoginMenuMessages forgetPassword(String username, String answer){
+    public static LoginMenuMessages forgetPassword(String username, String answer, String newPassword){
         if(!User.getUserByUsername(username).getQuestionAnswer().equals(answer))
             return LoginMenuMessages.SECURITY_ANSWER_WRONG;
 
-        else return null;
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword))
+            return LoginMenuMessages.WEAK_PASSWORD;
+
+        Stronghold.getCurrentUser().setPassword(newPassword);
+        User.saveUsersToFile();
+        return LoginMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 }
