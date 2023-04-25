@@ -5,25 +5,18 @@ import org.example.model.User;
 import org.example.model.game.Color;
 import org.example.view.enums.messages.MainMenuMessages;
 
-public class MainMenuController {
-    public static MainMenuMessages startGame(int mapSize, int governmentCount, String[] usernames, Color[] colors) {
-        if (mapSize != 200 && mapSize != 400)
-            return MainMenuMessages.INVALID_MAP_SIZE;
-        if (governmentCount < 2 || governmentCount > 8)
-            return MainMenuMessages.INVALID_GOVERNMENT_COUNT;
-        //TODO: implement it in a way which tells which id is incorrect
-        for (String username : usernames) {
-            if (User.getUserByUsername(username) == null)
-                return MainMenuMessages.INVALID_USERNAME;
-        }
-        //TODO: check it
-        for (Color color : colors) {
-            for (Color value : Color.values()) {
-                if (false)
-                    return MainMenuMessages.INVALID_COLOR;
-            }
-        }
+import java.util.HashMap;
 
+public class MainMenuController {
+    public static void startGame(HashMap<User,Color> players) {
+
+        return MainMenuMessages.SUCCESS;
+    }
+    public static MainMenuMessages checkMapAndGovernmentsCount(int mapSize,int governmentCount){
+        if(mapSize != 200 && mapSize!= 400)
+            return MainMenuMessages.INVALID_MAP_SIZE;
+        if(governmentCount<2 || governmentCount>8 || governmentCount>User.getUsers().size())
+            return MainMenuMessages.INVALID_GOVERNMENT_COUNT;
         return MainMenuMessages.SUCCESS;
     }
 
@@ -36,6 +29,17 @@ public class MainMenuController {
             Stronghold.addUserToFile(null);
 
         return MainMenuMessages.SUCCESSFUL_LOGOUT;
+    }
+    public static MainMenuMessages getPlayers(String username,String color){
+        User myUser = User.getUserByUsername(username);
+        if (myUser == null)
+            return MainMenuMessages.INVALID_USERNAME;
+
+        Color myColor = MainMenuController.isColorValid(color);
+        if (myColor == null) {
+            return MainMenuMessages.INVALID_COLOR;
+        }
+        return MainMenuMessages.SUCCESS;
     }
 
     public static Color isColorValid(String color) {

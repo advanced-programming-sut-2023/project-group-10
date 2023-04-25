@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.controller.BuildingMenuController;
+import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.BuildingMenuCommands;
 import org.example.view.enums.messages.BuildingMenuMessages;
@@ -10,26 +11,21 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class BuildingMenu {
-    public static void run(String input){
-        System.out.println("hitpoints: "+BuildingMenuController.selectedBuilding.getHitPoint());
+    public static void run(Coordinate coordinate) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("hitpoints: " + BuildingMenuController.selectedBuilding.getHitPoint());
         while (true) {
+            String input = scanner.nextLine();
             if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.CREATE_UNIT) != null)
                 createUnit(input);
-            if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.SELECT_UNIT) != null) {
-                selectUnit(input);
-                //run unit menu?
-                break;// not sure!
-            }
             if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.REPAIR) != null)
                 repair();
-            if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.BACK) != null) {
-                //back to game menu
-            }
-            Scanner scanner = new Scanner(System.in);
-            input = scanner.nextLine();
+            if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.BACK) != null)
+                return;
         }
     }
-    private static void createUnit(String input){
+
+    private static void createUnit(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String type = "";
         String c = "";
@@ -50,9 +46,9 @@ public class BuildingMenu {
 
         if (!c.matches("\\d+"))
             System.out.println("You should enter a number for row!");
-        int count=Integer.parseInt(c);
-        BuildingMenuMessages message= BuildingMenuController.createUnit(type,count);
-        switch (message){
+        int count = Integer.parseInt(c);
+        BuildingMenuMessages message = BuildingMenuController.createUnit(type, count);
+        switch (message) {
             case INVALID_ROW:
                 System.out.println("You've entered invalid row");
                 break;
@@ -71,14 +67,15 @@ public class BuildingMenu {
                 System.out.println("A mismatch of types accord");
                 break;
             case CREATE_UNIT_SUCCESSFUL:
-                System.out.println("you successfully created unit with type "+type);
+                System.out.println("you successfully created unit with type " + type);
                 break;
 
         }
     }
-    private static void repair(){
-        BuildingMenuMessages message= BuildingMenuController.repair();
-        switch (message){
+
+    private static void repair() {
+        BuildingMenuMessages message = BuildingMenuController.repair();
+        switch (message) {
             case INSUFFICIENT_STONE:
                 System.out.println("You don't have enough stone to repair this building");
                 break;
@@ -88,9 +85,6 @@ public class BuildingMenu {
             case REPAIR_SUCCESSFUL:
                 System.out.println("You've successfully repaired this building");
         }
-    }
-    private static void selectUnit(String input){
-
     }
 
 }

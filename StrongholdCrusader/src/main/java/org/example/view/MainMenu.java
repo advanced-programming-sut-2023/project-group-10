@@ -65,19 +65,32 @@ public class MainMenu {
             return;
         } else
             governmentCount = Integer.parseInt(count);
+        MainMenuMessages message=MainMenuController.checkMapAndGovernmentsCount(mapSize,governmentCount);
+        switch (message){
+            case SUCCESS:
+                System.out.println("Enter usernames of players you wish to play with: ");
+                break;
+            case INVALID_GOVERNMENT_COUNT:
+                System.out.println("You should enter a number between 2 and 8 for count of governments!");
+                return;
+            case INVALID_MAP_SIZE:
+                System.out.println("You should enter 200 or 400 for map size!");
+                return;
+        }
+
         int enteredCount = 0;
         // input format : -p <player's username> -c <selected color>
         Scanner scanner = new Scanner(System.in);
-        HashMap<User, Color> players = new HashMap<>();
+        HashMap<String , Color> players = new HashMap<>();
         while (enteredCount < governmentCount) {
-            if (getUsersForGame(players))
+            if (getUsersForGame())
                 enteredCount++;
         }
         org.example.model.game.envirnmont.Map map = CustomizeMapMenu.run(mapSize);
         GameMenu.run(players, map);
     }
 
-    private static boolean getUsersForGame(HashMap<User, Color> usernames) {
+    private static boolean getUsersForGame() {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         HashMap<String, String> options = InputProcessor.separateInput(input);
@@ -101,18 +114,19 @@ public class MainMenu {
             System.out.println("missing option!");
             return false;
         }
-        User myUser = User.getUserByUsername(username);
-        if (myUser == null) {
-            System.out.println("user not found!");
-            return false;
+        MainMenuMessages message=MainMenuController.getPlayers(username,color);
+        switch (message){
+            case SUCCESS:
+                System.out.println("player with username " + username + " added to the game successfully with color " + color);
+                break;
+            case INVALID_USERNAME:
+                System.out.println("Player with "+username+" doesn't seem to exist!");
+                return false;
+            case INVALID_COLOR:
+                System.out.println("You've entered an invalid color name!");
+                return false;
         }
-        Color myColor = MainMenuController.isColorValid(color);
-        if (myColor == null) {
-            System.out.println("Enter a valid color name!");
-            return false;
-        }
-        usernames.put(myUser, myColor);
-        System.out.println("player with username " + username + " added to the game successfully with color " + color);
+
 
         return true;
 

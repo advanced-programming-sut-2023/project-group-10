@@ -164,7 +164,10 @@ public class GameMenu {
                 System.out.println("This building doesn't belong to you!");
             else if (result == GameMenuMessages.EMPTY_LAND)
                 System.out.println("There are no buildings in this location!");
-            else if (result == GameMenuMessages.SUCCESSFUL_SELECT) System.out.println("building selected");
+            else if (result == GameMenuMessages.SUCCESSFUL_SELECT) {
+                System.out.println("building selected");
+                BuildingMenu.run(destination);
+            }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }

@@ -22,8 +22,7 @@ public class CustomizeMapMenu {
             else if (CustomizeMapCommands.getMatcher(input, CustomizeMapCommands.DROP_ROCK) != null) dropRock(input);
             else if (CustomizeMapCommands.getMatcher(input, CustomizeMapCommands.DROP_TREE) != null) dropTree(input);
             else if (CustomizeMapCommands.getMatcher(input, CustomizeMapCommands.END_CUSTOMIZATION) != null) {
-                // TODO: import battle data from game menu and customize map menu to currentBattle in Stronghold
-                GameMenu.run();
+
                 return CustomizeMapController.getMap();
             }
         }
