@@ -31,12 +31,16 @@ public class MainMenuController {
         if (Stronghold.getCurrentBattle() != null &&
                 Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().equals(Stronghold.getCurrentUser()))
             return MainMenuMessages.USER_IN_THE_BATTLE;
+        if (Stronghold.getLoggedInUserFromFile() != null &&
+                Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername()))
+            Stronghold.addUserToFile(null);
 
         return MainMenuMessages.SUCCESSFUL_LOGOUT;
     }
-    public static Color isColorValid(String color){
+
+    public static Color isColorValid(String color) {
         for (Color color1 : Color.values()) {
-            if(color1.getName().equals(color))
+            if (color1.getName().equals(color))
                 return color1;
         }
         return null;
