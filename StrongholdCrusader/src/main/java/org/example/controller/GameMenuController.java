@@ -111,35 +111,6 @@ public class GameMenuController {
         return null;
     }
 
-// Are these for setting the map?
-    public static GameMenuMessages setTexture(String landType, Coordinate position) {
-        if(false)
-            return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
-        return GameMenuMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL;
-    }
-
-    public static GameMenuMessages setTexture(String landType, Coordinate point1, Coordinate point2) {
-        if(false)
-            return GameMenuMessages.BUILDING_IN_THE_AREA;
-        return GameMenuMessages.SET_TEXTURE_OF_AREA_SUCCESSFUL;
-    }
-
-
-    public static GameMenuMessages clear(Coordinate position) {
-        return GameMenuMessages.SUCCESSFUL_CLEAR;
-    }
-
-    public static GameMenuMessages dropRock(Coordinate position, String direction) {
-        if(true)
-            return GameMenuMessages.NON_EMPTY_LAND;
-
-        return GameMenuMessages.DROP_ROCK_SUCCESSFUL;
-    }
-
-    public static GameMenuMessages dropTree(int row, int column, String type) {
-        return null;
-    }
-
     public static GameMenuMessages endTurn() {
         return null;
     }
@@ -155,5 +126,4 @@ public class GameMenuController {
 
     public static void applyChanges() {
     }
-
 }

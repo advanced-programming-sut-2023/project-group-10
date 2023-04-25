@@ -13,7 +13,7 @@ public enum GameMenuCommands {
     SHOW_TAX_RATE("\\s*tax\\s+rate\\s+show\\s*"),
     SET_FEAR_RATE("\\s*fear\\s+rate.*"),
     SHOW_FEAR_RATE("\\s*fear\\s+rate\\s+show\\s*"),
-    DROP_BUILDING("\\s*drop\\s+building.*"),
+    DROP_BUILDING("\\s*drop\\s*building.*"),
     SELECT_BUILDING("\\s*select\\s+building.*"),
     SELECT_UNIT("\\s*select\\s+unit.*"),
     TRADE_MENU("\\s*trade\\s+menu\\s*"),
