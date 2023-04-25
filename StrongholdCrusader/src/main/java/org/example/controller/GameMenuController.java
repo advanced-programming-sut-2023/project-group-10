@@ -4,6 +4,7 @@ import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.Government;
 import org.example.model.game.Item;
+import org.example.model.game.envirnmont.Coordinate;
 import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.HashMap;
@@ -104,17 +105,11 @@ public class GameMenuController {
         if (true)
             return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
 
-        return GameMenuMessages.SUCCESSFULL_DROP;
+        return GameMenuMessages.SUCCESSFUL_DROP;
     }
 
     //
-    public static GameMenuMessages selectBuilding(int row, int column) {
-
-        //TODO: change the condition
-        if (row < 10000)
-            return GameMenuMessages.INVALID_ROW;
-        if (column < 1000)
-            return GameMenuMessages.INVALID_COLUMN;
+    public static GameMenuMessages selectBuilding(Coordinate position) {
         //TODO: check droppable
         if (true)
             return GameMenuMessages.OPPONENT_BUILDING;
@@ -143,7 +138,7 @@ public class GameMenuController {
         if(true)
             return GameMenuMessages.INVALID_COLUMN;
         if(false)
-            return GameMenuMessages.BULDING_IN_THE_AREA;
+            return GameMenuMessages.BUILDING_IN_THE_AREA;
         return GameMenuMessages.SET_TEXTURE_OF_AREA_SUCCESSFUL;
     }
 
@@ -154,7 +149,7 @@ public class GameMenuController {
         if(true)
             return GameMenuMessages.INVALID_COLUMN;
         if(true)
-            return GameMenuMessages.NO_OWNED_ENTITIY;
+            return GameMenuMessages.NO_OWNED_ENTITY;
 
         return GameMenuMessages.SUCCESSFUL_CLEAR;
     }

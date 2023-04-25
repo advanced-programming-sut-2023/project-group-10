@@ -2,6 +2,7 @@ package org.example.view;
 
 import org.example.controller.GameMenuController;
 import org.example.model.User;
+import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.messages.GameMenuMessages;
 
@@ -175,7 +176,7 @@ public class GameMenu {
             case BUILDING_EXISTS_IN_THE_BLOCK:
                 System.out.println("There's already a building in this location!");
                 break;
-            case SUCCESSFULL_DROP:
+            case SUCCESSFUL_DROP:
                 System.out.println(" Building dropped successfully");
             default:
                 System.out.println("Invalid input!");
@@ -186,55 +187,17 @@ public class GameMenu {
     }
 
     private static void selectBuilding(String input) {
-        HashMap<String, String> options = InputProcessor.separateInput(input);
-        String x = "";
-        String y = "";
-        for (Map.Entry<String, String> option : options.entrySet()) {
-            switch (option.getKey()) {
-
-                case "-x":
-                    x = option.getValue();
-                    break;
-                case "-y":
-                    y = option.getValue();
-                    break;
-                default:
-                    System.out.println("invalid option");
-                    return;
-
-            }
-        }
-
-        if (!x.matches("-?\\d+"))
-            System.out.println("You should enter a number for row!");
-
-        if (!y.matches("-?\\d+"))
-            System.out.println("You should enter a number for column!");
-        int row = Integer.parseInt(x);
-        int column = Integer.parseInt(y);
-        GameMenuMessages message = GameMenuController.selectBuilding(row, column);
-        switch (message) {
-            case INVALID_ROW:
-                System.out.println("You've entered invalid row value!");
-                break;
-            case INVALID_COLUMN:
-                System.out.println("You've entered invalid column value!");
-                break;
-            case EMPTY_LAND:
-                System.out.println("There are no buildings in this location!");
-                break;
-            case OPPONENT_BUILDING:
+        try {
+            Coordinate destination = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            GameMenuMessages result = GameMenuController.selectBuilding(destination);
+            if (result == GameMenuMessages.OPPONENT_BUILDING)
                 System.out.println("This building doesn't belong to you!");
-                break;
-            case SUCCESSFUL_SELECT:
-                System.out.println("You've successfully selected the buiding at row :" + row
-                        + " column : " + column);
-            default:
-                System.out.println("Invalid input!");
-                break;
-
+            else if (result == GameMenuMessages.EMPTY_LAND)
+                System.out.println("There are no buildings in this location!");
+            else if (result == GameMenuMessages.SUCCESSFUL_SELECT) System.out.println("building selected");
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
         }
-
     }
 
 
@@ -300,7 +263,7 @@ public class GameMenu {
             case INVALID_COLUMN:
                 System.out.println("You've entered invalid column!");
                 return;
-            case BULDING_IN_THE_AREA:
+            case BUILDING_IN_THE_AREA:
                 System.out.println("There's a building in the area you selected!");
                 return;
             case BUILDING_EXISTS_IN_THE_BLOCK:
@@ -350,7 +313,7 @@ public class GameMenu {
             case INVALID_COLUMN:
                 System.out.println("You've entered invalid column!");
                 return;
-            case NO_OWNED_ENTITIY:
+            case NO_OWNED_ENTITY:
                 System.out.println("You don't have anything to be cleared in this block");
                 return;
             case SUCCESSFUL_CLEAR:
@@ -401,7 +364,7 @@ public class GameMenu {
 
         int row = Integer.parseInt(x);
         int column = Integer.parseInt(y);
-        GameMenuMessages message = GameMenuController.dropRock(row, column,direction);
+        GameMenuMessages message = GameMenuController.dropRock(row, column, direction);
         switch (message) {
             case INVALID_ROW:
                 System.out.println("You've entered invalid row!");
@@ -415,7 +378,7 @@ public class GameMenu {
             case NON_EMPTY_LAND:
                 System.out.println("You can't drop a rock here!");
                 return;
-            case SUCCESSFULL_DROP:
+            case SUCCESSFUL_DROP:
                 System.out.println("You dropped a rock successfully");
                 break;
 
@@ -465,7 +428,7 @@ public class GameMenu {
             case INCOMPATIBLE_LAND:
                 System.out.println("You cant drop a this type of building on this type of texture!");
                 break;
-            case SUCCESSFULL_DROP:
+            case SUCCESSFUL_DROP:
                 System.out.println(" Building dropped successfully");
             default:
                 System.out.println("Invalid input!");
