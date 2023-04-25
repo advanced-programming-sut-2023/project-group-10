@@ -1,9 +1,20 @@
 package org.example.controller;
 
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.Map;
 import org.example.view.enums.messages.CustomizeMapMessages;
 
 public class CustomizeMapController {
+    private static Map map;
+
+    public static Map getMap() {
+        return map;
+    }
+
+    public static void newMap(int size) {
+        map = new Map(size);
+    }
+
     public static CustomizeMapMessages setTexture(String landType, Coordinate position) {
         if (false) return CustomizeMapMessages.BUILDING_EXISTS_IN_THE_BLOCK;
         return CustomizeMapMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL;

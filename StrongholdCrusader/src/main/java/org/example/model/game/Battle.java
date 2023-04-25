@@ -8,9 +8,9 @@ public class Battle {
     private int currentPlayerIndex;
     private int turnsPassed;
 
-    public Battle(int mapSize, Government... governments) {
+    public Battle(Map map, Government... governments) {
         this.governments = governments;
-        battleMap = new Map(mapSize);
+        battleMap = map;
         turnsPassed = currentPlayerIndex = 0;
     }
 

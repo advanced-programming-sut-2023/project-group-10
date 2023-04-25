@@ -2,6 +2,7 @@ package org.example.view;
 
 import org.example.controller.CustomizeMapController;
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.Map;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.CustomizeMapCommands;
 import org.example.view.enums.messages.CustomizeMapMessages;
@@ -10,7 +11,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class CustomizeMapMenu {
-    public void run() {
+    public static Map run(int size) {
+        CustomizeMapController.newMap(size);
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
@@ -22,7 +24,7 @@ public class CustomizeMapMenu {
             else if (CustomizeMapCommands.getMatcher(input, CustomizeMapCommands.END_CUSTOMIZATION) != null) {
                 // TODO: import battle data from game menu and customize map menu to currentBattle in Stronghold
                 GameMenu.run();
-                return;
+                return CustomizeMapController.getMap();
             }
         }
     }

@@ -1,7 +1,10 @@
 package org.example.view;
 
 import org.example.controller.GameMenuController;
+import org.example.model.User;
+import org.example.model.game.Color;
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.Map;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.GameMenuCommands;
 import org.example.view.enums.messages.GameMenuMessages;
@@ -10,7 +13,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class GameMenu {
-    public static void run() {
+    public static void run(HashMap<User, Color> players, Map map) {
+        GameMenuController.initializeGame(players, map);
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {

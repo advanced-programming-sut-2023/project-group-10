@@ -13,7 +13,6 @@ import java.util.Scanner;
 
 public class MainMenu {
     public static void run() {
-
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
@@ -21,7 +20,10 @@ public class MainMenu {
             if (MainMenuCommands.getMatcher(input, MainMenuCommands.START_GAME) != null)
                 startGame(input);
             if (MainMenuCommands.getMatcher(input, MainMenuCommands.LOGOUT) != null)
+            {
                 logout();
+                return;
+            }
             if (MainMenuCommands.getMatcher(input, MainMenuCommands.PROFILE_MENU) != null)
                 goToProfileMenu();
 
@@ -71,8 +73,8 @@ public class MainMenu {
             if (getUsersForGame(players))
                 enteredCount++;
         }
-       GameMenu.run();
-
+        org.example.model.game.envirnmont.Map map = CustomizeMapMenu.run(mapSize);
+        GameMenu.run(players, map);
     }
 
     private static boolean getUsersForGame(HashMap<User, Color> usernames) {

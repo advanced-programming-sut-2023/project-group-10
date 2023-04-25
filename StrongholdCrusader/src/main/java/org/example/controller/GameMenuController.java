@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.game.Color;
 import org.example.model.game.Government;
 import org.example.model.game.Item;
 import org.example.model.game.envirnmont.Coordinate;
@@ -125,5 +126,8 @@ public class GameMenuController {
     }
 
     public static void applyChanges() {
+    }
+
+    public static void initializeGame(HashMap<User, Color> players, org.example.model.game.envirnmont.Map map) {
     }
 }
