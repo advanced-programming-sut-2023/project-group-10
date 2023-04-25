@@ -1,8 +1,6 @@
 package org.example.view;
 
 import org.example.controller.LoginMenuController;
-import org.example.model.Stronghold;
-import org.example.model.User;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.LoginMenuCommands;
 import org.example.view.enums.messages.LoginMenuMessages;
@@ -10,7 +8,6 @@ import org.example.view.enums.messages.LoginMenuMessages;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.regex.Matcher;
 
 public class LoginMenu {
     Scanner scanner = new Scanner(System.in);

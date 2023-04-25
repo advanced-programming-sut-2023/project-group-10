@@ -1,10 +1,10 @@
 package org.example.model.game;
 
 public enum mapDirections {
-    UP("up",0,1),
-    DOWN("down",0,-1),
-    RIGHT("up",1,0),
-    LEFT("up",-1,0);
+    UP("up", 0, 1),
+    DOWN("down", 0, -1),
+    RIGHT("up", 1, 0),
+    LEFT("up", -1, 0);
 
 
     public final String name;

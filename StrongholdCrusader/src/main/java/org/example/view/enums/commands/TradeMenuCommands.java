@@ -11,13 +11,14 @@ public enum TradeMenuCommands {
     SEND_REQUEST("^\\s*trade\\s*\\-\\s*.+"),
     BACK("^\\s*trade\\s*back\\s*");
     private final String regex;
-    TradeMenuCommands(String  regex){
-        this.regex=regex;
+
+    TradeMenuCommands(String regex) {
+        this.regex = regex;
     }
 
-    public static Matcher getMatcher(String input, TradeMenuCommands command){
+    public static Matcher getMatcher(String input, TradeMenuCommands command) {
         Matcher matcher = Pattern.compile(command.regex).matcher(input);
-        if(matcher.matches()) return matcher;
+        if (matcher.matches()) return matcher;
         else return null;
     }
 }

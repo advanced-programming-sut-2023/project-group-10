@@ -29,12 +29,14 @@ public class Stronghold {
     public static void setCurrentBattle(Battle newBattle) {
         currentBattle = newBattle;
     }
-    public static User getLoggedInUserFromFile()  {
 
-        try { String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/LoggedInUser.json")));
+    public static User getLoggedInUserFromFile() {
+
+        try {
+            String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/LoggedInUser.json")));
             User loggedInUser = gson.fromJson(json, new TypeToken<User>() {
             }.getType());
-            if(loggedInUser!=null)
+            if (loggedInUser != null)
                 return loggedInUser;
         } catch (IOException exception) {
             exception.printStackTrace();
@@ -42,7 +44,7 @@ public class Stronghold {
         return null;
     }
 
-    public static void addUserToFile(User user){
+    public static void addUserToFile(User user) {
         try {
             FileWriter fileWriter = new FileWriter("./src/main/resources/LoggedInUser.json");
             fileWriter.write(gson.toJson(user));

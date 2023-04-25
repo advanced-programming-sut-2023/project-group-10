@@ -121,7 +121,7 @@ public class User {
     public static User getUserByEmail(String email) {
         if (users.size() == 0)
             return null;
-        email=email.toLowerCase();
+        email = email.toLowerCase();
         for (User user : users) {
             if (user.email.toLowerCase().equals(email))
                 return user;

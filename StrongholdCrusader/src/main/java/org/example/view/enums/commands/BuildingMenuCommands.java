@@ -4,10 +4,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum BuildingMenuCommands {
-    CREATE_UNIT(""),
-    REPAIR(""),
-    SELECT_UNIT(""),
-    BACK("");
+    CREATE_UNIT("^\\s*create\\s+unit\\s*-.+$"),
+    REPAIR("^\\s*repair\\s*$"),
+    BACK("^\\s*back\\s*$");
 
 
     public final String regex;

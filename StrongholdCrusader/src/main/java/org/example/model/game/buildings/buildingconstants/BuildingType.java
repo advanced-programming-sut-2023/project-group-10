@@ -19,12 +19,12 @@ public class BuildingType {
         //TODO: initialize building types
         new BuildingType(BuildingTypeName.SMALL_STONE_GATEHOUSE, defaultHitPoint * 6, 0, null);
         new BuildingType(BuildingTypeName.LARGE_STONE_GATEHOUSE, defaultHitPoint * 6, 0, (HashMap<Item, Integer>) Map.of(Item.STONE, 20));
-        new BuildingType(BuildingTypeName.DRAWBRIDGE, defaultHitPoint*2, 0, (HashMap<Item, Integer>) Map.of(Item.WOOD, 10));
+        new BuildingType(BuildingTypeName.DRAWBRIDGE, defaultHitPoint * 2, 0, (HashMap<Item, Integer>) Map.of(Item.WOOD, 10));
         new BuildingType(BuildingTypeName.KILLING_PIT, defaultHitPoint, 0, (HashMap<Item, Integer>) Map.of(Item.WOOD, 6));
-        new BuildingType(BuildingTypeName.MARKET, defaultHitPoint*3, 0, (HashMap<Item, Integer>) Map.of(Item.WOOD, 5),1);
-        new BuildingType(BuildingTypeName.OX_TETHER, defaultHitPoint, 0, (HashMap<Item, Integer>) Map.of(Item.WOOD, 5),1);
-        new BuildingType(BuildingTypeName.HOVEL, defaultHitPoint*3, 0, (HashMap<Item, Integer>) Map.of(Item.WOOD, 6),0);
-        new BuildingType(BuildingTypeName.CAGED_WAR_DOGS, defaultHitPoint*3, 100, (HashMap<Item, Integer>) Map.of(Item.WOOD, 10),0);
+        new BuildingType(BuildingTypeName.MARKET, defaultHitPoint * 3, 0, (HashMap<Item, Integer>) Map.of(Item.WOOD, 5), 1);
+        new BuildingType(BuildingTypeName.OX_TETHER, defaultHitPoint, 0, (HashMap<Item, Integer>) Map.of(Item.WOOD, 5), 1);
+        new BuildingType(BuildingTypeName.HOVEL, defaultHitPoint * 3, 0, (HashMap<Item, Integer>) Map.of(Item.WOOD, 6), 0);
+        new BuildingType(BuildingTypeName.CAGED_WAR_DOGS, defaultHitPoint * 3, 100, (HashMap<Item, Integer>) Map.of(Item.WOOD, 10), 0);
         new BuildingType(BuildingTypeName.SIEGE_TENT, defaultHitPoint, 0, new HashMap<>(), 1);
     }
 

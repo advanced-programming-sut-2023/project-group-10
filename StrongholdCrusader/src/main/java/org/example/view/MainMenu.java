@@ -1,8 +1,6 @@
 package org.example.view;
 
 import org.example.controller.MainMenuController;
-import org.example.model.User;
-import org.example.model.game.Color;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.MainMenuCommands;
 import org.example.view.enums.messages.MainMenuMessages;
@@ -19,8 +17,7 @@ public class MainMenu {
             input = scanner.nextLine();
             if (MainMenuCommands.getMatcher(input, MainMenuCommands.START_GAME) != null)
                 startGame(input);
-            if (MainMenuCommands.getMatcher(input, MainMenuCommands.LOGOUT) != null)
-            {
+            if (MainMenuCommands.getMatcher(input, MainMenuCommands.LOGOUT) != null) {
                 logout();
                 return;
             }
@@ -65,8 +62,8 @@ public class MainMenu {
             return;
         } else
             governmentCount = Integer.parseInt(count);
-        MainMenuMessages message=MainMenuController.checkMapAndGovernmentsCount(mapSize,governmentCount);
-        switch (message){
+        MainMenuMessages message = MainMenuController.checkMapAndGovernmentsCount(mapSize, governmentCount);
+        switch (message) {
             case SUCCESS:
                 System.out.println("Enter usernames of players you wish to play with: ");
                 break;
@@ -81,17 +78,17 @@ public class MainMenu {
         int enteredCount = 0;
         // input format : -p <player's username> -c <selected color>
         Scanner scanner = new Scanner(System.in);
-        HashMap<String , String > players = new HashMap<>();
+        HashMap<String, String> players = new HashMap<>();
         while (enteredCount < governmentCount) {
             if (getUsersForGame(players))
                 enteredCount++;
 
         }
         org.example.model.game.envirnmont.Map map = CustomizeMapMenu.run(mapSize);
-        GameMenu.run(players,map);
+        GameMenu.run(players, map);
     }
 
-    private static boolean getUsersForGame(HashMap<String ,String> players) {
+    private static boolean getUsersForGame(HashMap<String, String> players) {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         HashMap<String, String> options = InputProcessor.separateInput(input);
@@ -115,19 +112,19 @@ public class MainMenu {
             System.out.println("missing option!");
             return false;
         }
-        MainMenuMessages message=MainMenuController.getPlayers(username,color);
-        switch (message){
+        MainMenuMessages message = MainMenuController.getPlayers(username, color);
+        switch (message) {
             case SUCCESS:
                 System.out.println("player with username " + username + " added to the game successfully with color " + color);
                 break;
             case INVALID_USERNAME:
-                System.out.println("Player with "+username+" doesn't seem to exist!");
+                System.out.println("Player with " + username + " doesn't seem to exist!");
                 return false;
             case INVALID_COLOR:
                 System.out.println("You've entered an invalid color name!");
                 return false;
         }
-        players.put(username,color);
+        players.put(username, color);
         return true;
 
 
@@ -136,15 +133,7 @@ public class MainMenu {
     private static void logout() {
 
         MainMenuMessages message = MainMenuController.logout();
-        switch (message) {
-            case SUCCESSFUL_LOGOUT:
-                System.out.println("user logged out successfully!");
-                LoginMenu.run();
-                break;
-            case USER_IN_THE_BATTLE:
-                System.out.println("You're in a battle,You can't logout");
-                break;
-        }
+        System.out.println("user logged out successfully!");
     }
 
     private static void goToProfileMenu() {

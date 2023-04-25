@@ -9,7 +9,6 @@ public enum SignupMenuMessages {
     WEAK_PASSWORD,
     WRONG_PASSWORD_CONFIRMATION,
     SHOW_QUESTIONS,
-    //Security questions
     REENTER_ANSWER,
     INVALID_NICKNAME_FORMAT, NUMBER_OUT_OF_BOUNDS
 

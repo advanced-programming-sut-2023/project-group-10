@@ -16,9 +16,8 @@ public class Trade {
     private boolean acceptedStatus;
 
 
-
     public Trade(String recipientId, String senderId, String message, Item item, int amount, int price) {
-        this.id="trade"+ RandomGenerator.tradeId();
+        this.id = "trade" + RandomGenerator.tradeId();
         this.recipientId = recipientId;
         this.senderId = senderId;
         this.messages.put(senderId, message);
@@ -26,7 +25,7 @@ public class Trade {
         this.amount = amount;
         this.price = price;
         this.acceptedStatus = false;
-        this.isDisplayedInHistory=false;
+        this.isDisplayedInHistory = false;
     }
 
     public String getId() {
@@ -50,7 +49,7 @@ public class Trade {
     }
 
     public void addMessage(String username, String message) {
-            messages.put(username, message);
+        messages.put(username, message);
     }
 
     public Item getItem() {

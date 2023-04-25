@@ -15,7 +15,7 @@ public enum TreeType {
 
     public static TreeType getTreeTypeByName(String name) {
         for (TreeType treeType : TreeType.values())
-            if(treeType.name.equals(name)) return treeType;
+            if (treeType.name.equals(name)) return treeType;
         return null;
     }
 }

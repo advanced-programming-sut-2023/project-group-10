@@ -1,7 +1,5 @@
 package org.example.model.game.units.unitconstants;
 
-import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
-
 public enum RoleName {
     //normal people
     LADY,

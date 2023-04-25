@@ -1,7 +1,7 @@
 package org.example.view.enums.messages;
 
 public enum UnitMenuMessages {
-    INVALID_DESTINATION, /*out of bounds is checked in menu (check other problems in controller)*/
+    INVALID_DESTINATION,
     SUCCESSFUL_MOVE_UNIT,
     TOUR_BLOCKED,
     SUCCESSFUL_PATROL,

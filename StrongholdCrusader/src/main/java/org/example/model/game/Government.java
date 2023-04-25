@@ -160,10 +160,11 @@ public class Government {
     public int getFearRate() {
         return fearRate;
     }
-    public HashMap<Item,Integer> getFoodList(){
-        HashMap<Item,Integer> foodList=new HashMap<>();
-        for(Map.Entry<Item,Integer> list:itemList.entrySet()){
-            if(list.getKey().isFood())
+
+    public HashMap<Item, Integer> getFoodList() {
+        HashMap<Item, Integer> foodList = new HashMap<>();
+        for (Map.Entry<Item, Integer> list : itemList.entrySet()) {
+            if (list.getKey().isFood())
                 foodList.put(list.getKey(), list.getValue());
         }
         return foodList;
