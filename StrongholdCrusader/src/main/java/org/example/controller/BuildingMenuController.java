@@ -42,18 +42,6 @@ public class BuildingMenuController {
     }
 
 
-    // UNIT RELATED
-    public static BuildingMenuMessages selectUnit(int row, int column)
-    {
-        if(true)
-            return BuildingMenuMessages.INVALID_ROW;
-        if(true)
-            return BuildingMenuMessages.INVALID_COLUMN;
-        if(true)
-            return BuildingMenuMessages.NO_UNITS_IN_THE_BLOCK;
-        if(true)
-            return BuildingMenuMessages.OPPONENTS_UNIT;
-        return BuildingMenuMessages.SELECT_UNIT_SUCCESSFUL;
-    }
+
 
 }

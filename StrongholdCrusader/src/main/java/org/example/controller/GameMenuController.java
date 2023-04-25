@@ -2,8 +2,6 @@ package org.example.controller;
 
 import org.example.model.Stronghold;
 import org.example.model.User;
-import org.example.model.game.Color;
-import org.example.model.game.Government;
 import org.example.model.game.Item;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.view.enums.messages.GameMenuMessages;
@@ -128,6 +126,6 @@ public class GameMenuController {
     public static void applyChanges() {
     }
 
-    public static void initializeGame(HashMap<User, Color> players, org.example.model.game.envirnmont.Map map) {
+    public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {
     }
 }

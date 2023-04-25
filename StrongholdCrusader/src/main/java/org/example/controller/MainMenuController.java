@@ -8,10 +8,7 @@ import org.example.view.enums.messages.MainMenuMessages;
 import java.util.HashMap;
 
 public class MainMenuController {
-    public static void startGame(HashMap<User,Color> players) {
 
-        return MainMenuMessages.SUCCESS;
-    }
     public static MainMenuMessages checkMapAndGovernmentsCount(int mapSize,int governmentCount){
         if(mapSize != 200 && mapSize!= 400)
             return MainMenuMessages.INVALID_MAP_SIZE;

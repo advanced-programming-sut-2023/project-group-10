@@ -81,16 +81,17 @@ public class MainMenu {
         int enteredCount = 0;
         // input format : -p <player's username> -c <selected color>
         Scanner scanner = new Scanner(System.in);
-        HashMap<String , Color> players = new HashMap<>();
+        HashMap<String , String > players = new HashMap<>();
         while (enteredCount < governmentCount) {
-            if (getUsersForGame())
+            if (getUsersForGame(players))
                 enteredCount++;
+
         }
         org.example.model.game.envirnmont.Map map = CustomizeMapMenu.run(mapSize);
-        GameMenu.run(players, map);
+        GameMenu.run(players,map);
     }
 
-    private static boolean getUsersForGame() {
+    private static boolean getUsersForGame(HashMap<String ,String> players) {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         HashMap<String, String> options = InputProcessor.separateInput(input);
@@ -126,8 +127,7 @@ public class MainMenu {
                 System.out.println("You've entered an invalid color name!");
                 return false;
         }
-
-
+        players.put(username,color);
         return true;
 
 

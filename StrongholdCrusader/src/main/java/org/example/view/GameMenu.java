@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class GameMenu {
-    public static void run(HashMap<User, Color> players, Map map) {
+    public static void run(HashMap<String , String> players, Map map) {
         GameMenuController.initializeGame(players, map);
         Scanner scanner = new Scanner(System.in);
         String input;
