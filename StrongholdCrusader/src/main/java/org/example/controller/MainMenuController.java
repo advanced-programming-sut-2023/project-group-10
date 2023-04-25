@@ -34,4 +34,11 @@ public class MainMenuController {
 
         return MainMenuMessages.SUCCESSFUL_LOGOUT;
     }
+    public static Color isColorValid(String color){
+        for (Color color1 : Color.values()) {
+            if(color1.getName().equals(color))
+                return color1;
+        }
+        return null;
+    }
 }
