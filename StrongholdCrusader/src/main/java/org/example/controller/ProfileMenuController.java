@@ -50,7 +50,7 @@ public class ProfileMenuController {
             return ProfileMenuMessages.WEAK_PASSWORD;
 
         if (!Stronghold.getCurrentUser().getPassword().equals(oldPassword))
-            return ProfileMenuMessages.INCORRECT_PASSWORD; //TODO check with mehrazin
+            return ProfileMenuMessages.INCORRECT_PASSWORD; //TODO check with Mehrazin
 
         while (oldPassword.equals(newPassword)) {
             System.out.println("Please enter a new password!");

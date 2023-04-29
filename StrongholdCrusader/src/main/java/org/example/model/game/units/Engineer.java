@@ -3,6 +3,7 @@ package org.example.model.game.units;
 import org.example.model.game.Government;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.unitconstants.MilitaryUnitRole;
+import org.example.model.game.units.unitconstants.MilitaryUnitStance;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 
@@ -28,4 +29,5 @@ public class Engineer extends MilitaryUnit {
         if (siegeEquipmentType.numberOfUnitsThatCanBeSpawned(getGovernment()) == 0) return null;
         return new SiegeEquipment(getPosition(), siegeEquipmentName, getGovernment());
     }
+
 }

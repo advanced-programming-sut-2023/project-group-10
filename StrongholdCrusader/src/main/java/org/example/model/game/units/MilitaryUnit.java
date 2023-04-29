@@ -7,7 +7,7 @@ import org.example.model.game.units.unitconstants.RoleName;
 
 import java.util.ArrayList;
 
-public abstract class MilitaryUnit extends Unit {
+public  abstract  class MilitaryUnit extends Unit {
     private MilitaryUnitStance stance;
     private final ArrayList<Coordinate> path;
 

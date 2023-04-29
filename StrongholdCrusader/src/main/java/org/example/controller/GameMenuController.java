@@ -120,6 +120,7 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages leaveGame() {
+
         return null;
     }
 

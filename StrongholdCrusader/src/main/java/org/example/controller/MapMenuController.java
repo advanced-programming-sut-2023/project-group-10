@@ -38,7 +38,7 @@ public class MapMenuController {
         }
         return result;
     }
-
+//TODO:
     public static String showDetails(Coordinate position) {
         return null;
     }
