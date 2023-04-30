@@ -38,7 +38,7 @@ public abstract class MilitaryUnitRole extends Role {
     public int numberOfUnitsThatCanBeSpawned(Government government) {
         return ((int) government.getGold()) / cost;
     }
-
+//TODO: Current location?
     public int tryToProduceThisMany(Government government, Coordinate position, int count) {
         count = Math.min(count, numberOfUnitsThatCanBeSpawned(government));
         government.changeGold(this.getCost() * count);

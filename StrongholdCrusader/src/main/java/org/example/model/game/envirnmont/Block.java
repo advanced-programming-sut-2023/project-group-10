@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Block {
     private BlockTexture texture;
     private Droppable droppable;
-    private final ArrayList<Unit> units;
+    private ArrayList<Unit> units;
 
     Block(BlockTexture texture) {
         this.texture = texture;
@@ -86,4 +86,16 @@ public class Block {
     public boolean removeUnit(Unit unit) {
         return units.remove(unit);
     }
+// TODO: maybe units being final makes us trouble
+    public void clearForces(){
+        ArrayList<Unit> newUnits=new ArrayList<>();
+        for (Unit unit : units) {
+            if (unit instanceof MilitaryUnit)
+                continue;
+            else
+                newUnits.add(unit);
+        }
+        units=newUnits;
+    }
+
 }

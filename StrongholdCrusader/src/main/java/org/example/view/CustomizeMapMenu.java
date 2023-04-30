@@ -1,5 +1,6 @@
 package org.example.view;
 
+import org.checkerframework.checker.units.qual.C;
 import org.example.controller.CustomizeMapController;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
@@ -46,6 +47,9 @@ public class CustomizeMapMenu {
         else System.out.println("You haven't entered your inputs in a valid format");
         if (message == null) return;
         switch (message) {
+            case INVALID_LAND_TYPE:
+                System.out.println("You've entered invalid type for texture!");
+                break;
             case BUILDING_IN_THE_AREA:
                 System.out.println("There's a building in the area you selected!");
                 return;
@@ -100,8 +104,13 @@ public class CustomizeMapMenu {
         try {
             Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             CustomizeMapMessages message = CustomizeMapController.clear(position);
-            if (message == CustomizeMapMessages.SUCCESSFUL_CLEAR)
+              if (message == CustomizeMapMessages.INDEX_OUT_OF_BOUNDS){
+                System.out.println("You've entered numbers less than 0 or grater than the size");
+                return;
+            }
+           else if (message == CustomizeMapMessages.SUCCESSFUL_CLEAR)
                 System.out.println("You successfully cleared the block");
+
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }

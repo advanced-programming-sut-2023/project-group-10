@@ -28,6 +28,7 @@ public enum BlockTexture {
     private final ASCIIColor color;
 
     BlockTexture(boolean fertile, boolean buildable, boolean walkable, ASCIIColor color) {
+
         this.fertile = fertile;
         this.buildable = buildable;
         this.walkable = walkable;
@@ -48,5 +49,13 @@ public enum BlockTexture {
 
     public ASCIIColor getColor() {
         return color;
+    }
+
+    public static BlockTexture getTypeByName(String landType) {
+        landType = landType.replaceAll("[\\s_-]", "");
+        for (BlockTexture blockTexture : BlockTexture.values())
+            if (blockTexture.toString().replaceAll("_", "").equalsIgnoreCase(landType))
+                return blockTexture;
+        return null;
     }
 }
