@@ -17,10 +17,25 @@ public class CheckFormatAndEncrypt {
         return !Pattern.compile("[a-zA-Z0-9_]+").matcher(username).matches();
     }
 
-    public static boolean isPasswordWeak(String password) {
+    public static String isPasswordWeak(String password) {
         //TODO: you should check if the fields are w/ spaces before even checking their formats
-        return (password.length() < 6) || !password.matches(".*[a-z].*") || !password.matches(".*[A-Z].*")
-                || !password.matches(".*[0-9].*") || !password.matches(".*[^A-Za-z0-9].*");
+        if (password.length() < 6)
+            return "short password";
+
+        if (!password.matches(".*[a-z].*"))
+            return "no lowercase letter";
+
+        if (!password.matches(".*[A-Z].*"))
+            return "no uppercase letter";
+
+        if (!password.matches(".*[0-9].*"))
+            return "no number";
+
+        if (!password.matches(".*[^A-Za-z0-9].*"))
+            return "no special character";
+
+        else
+            return "strong password";
     }
 
     public static boolean isEmailFormatInvalid(String email) {

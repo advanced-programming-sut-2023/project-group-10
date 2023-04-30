@@ -86,9 +86,26 @@ public class SignupMenu {
             case WRONG_PASSWORD_CONFIRMATION:
                 System.out.println("passwords doesn't match, try to signup again");
                 return;
-            case WEAK_PASSWORD:
-                System.out.println("Your password is weak!");
-                return;
+            case SHORT_PASSWORD:
+                System.out.println("Short new password!\nYou must provide at least 6 characters!");
+                break;
+
+            case NO_LOWERCASE_LETTER:
+                System.out.println("Your password must contain a lowercase letter!");
+                break;
+
+            case NO_UPPERCASE_LETTER:
+                System.out.println("Your password must contain an uppercase letter!");
+                break;
+
+            case NO_NUMBER:
+                System.out.println("Your password must contain at least one digit!");
+                break;
+
+            case NO_SPECIAL_CHARACTER:
+                System.out.println("Your password must contain at least one special character!");
+                break;
+
             case USER_EXISTS:
                 System.out.println("There is already a user registered with username: " + username);
                 if ((username = suggestNewUsername(scanner, username)) == null) {

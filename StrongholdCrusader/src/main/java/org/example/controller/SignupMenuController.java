@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
+import org.example.view.enums.messages.LoginMenuMessages;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 public class SignupMenuController {
@@ -14,8 +15,9 @@ public class SignupMenuController {
         if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username)) return SignupMenuMessages.INVALID_USERNAME_FORMAT;
         if (!CheckFormatAndEncrypt.checkNicknameFormat(nickname)) return SignupMenuMessages.INVALID_NICKNAME_FORMAT;
         if (User.getUserByUsername(username) != null) return SignupMenuMessages.USER_EXISTS;
-        if (!password.equals("random") && CheckFormatAndEncrypt.isPasswordWeak(password))
-            return SignupMenuMessages.WEAK_PASSWORD;
+        SignupMenuMessages message = checkPassword(password);
+        if (!password.equals("random") && !message.equals(SignupMenuMessages.STRONG_PASSWORD))
+            return message;
         if (!password.equals("random") && !password.equals(passwordConfirmation))
             return SignupMenuMessages.WRONG_PASSWORD_CONFIRMATION;
         if (User.getUserByEmail(email) != null) return SignupMenuMessages.EMAIL_EXISTS;
@@ -35,5 +37,24 @@ public class SignupMenuController {
         if (!answer.equals(answerConfirmation)) return SignupMenuMessages.REENTER_ANSWER;
         createUser(questionNumber, answer, username, password, nickname, slogan, email);
         return SignupMenuMessages.SUCCESS;
+    }
+
+    private static SignupMenuMessages checkPassword (String newPassword){
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("short password"))
+            return SignupMenuMessages.SHORT_PASSWORD;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no lowercase letter"))
+            return SignupMenuMessages.NO_LOWERCASE_LETTER;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no uppercase letter"))
+            return SignupMenuMessages.NO_UPPERCASE_LETTER;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no number"))
+            return SignupMenuMessages.NO_NUMBER;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no special character"))
+            return SignupMenuMessages.NO_SPECIAL_CHARACTER;
+
+        else return SignupMenuMessages.STRONG_PASSWORD;
     }
 }

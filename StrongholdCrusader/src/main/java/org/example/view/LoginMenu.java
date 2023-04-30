@@ -95,8 +95,24 @@ public class LoginMenu {
                 System.out.println("Wrong answer!");
                 break;
 
-            case WEAK_PASSWORD:
-                System.out.println("Weak new password!");
+            case SHORT_PASSWORD:
+                System.out.println("Short new password!\nYou must provide at least 6 characters!");
+                break;
+
+            case NO_LOWERCASE_LETTER:
+                System.out.println("Your password must contain a lowercase letter!");
+                break;
+
+            case NO_UPPERCASE_LETTER:
+                System.out.println("Your password must contain an uppercase letter!");
+                break;
+
+            case NO_NUMBER:
+                System.out.println("Your password must contain at least one digit!");
+                break;
+
+            case NO_SPECIAL_CHARACTER:
+                System.out.println("Your password must contain at least one special character!");
                 break;
 
             default:

@@ -3,6 +3,7 @@ package org.example.controller;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
+import org.example.view.enums.messages.LoginMenuMessages;
 import org.example.view.enums.messages.ProfileMenuMessages;
 
 import java.util.Scanner;
@@ -46,8 +47,9 @@ public class ProfileMenuController {
         if (oldPassword.matches("\\s*") || newPassword.matches("\\s*"))
             return ProfileMenuMessages.NO_PASSWORD_PROVIDED;
 
-        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword))
-            return ProfileMenuMessages.WEAK_PASSWORD;
+        ProfileMenuMessages message = checkPassword(newPassword);
+        if(!message.equals(ProfileMenuMessages.STRONG_PASSWORD))
+            return message;
 
         if (!Stronghold.getCurrentUser().getPassword().equals(oldPassword))
             return ProfileMenuMessages.INCORRECT_PASSWORD; //TODO check with Mehrazin
@@ -88,5 +90,24 @@ public class ProfileMenuController {
             User.saveUsersToFile();
             return ProfileMenuMessages.CHANGE_SLOGAN_SUCCESSFUL;
         }
+    }
+
+    private static ProfileMenuMessages checkPassword (String newPassword){
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("short password"))
+            return ProfileMenuMessages.SHORT_PASSWORD;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no lowercase letter"))
+            return ProfileMenuMessages.NO_LOWERCASE_LETTER;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no uppercase letter"))
+            return ProfileMenuMessages.NO_UPPERCASE_LETTER;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no number"))
+            return ProfileMenuMessages.NO_NUMBER;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no special character"))
+            return ProfileMenuMessages.NO_SPECIAL_CHARACTER;
+
+        else return ProfileMenuMessages.STRONG_PASSWORD;
     }
 }

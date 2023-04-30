@@ -28,11 +28,31 @@ public class LoginMenuController {
         if (!User.getUserByUsername(username).getQuestionAnswer().equals(answer))
             return LoginMenuMessages.SECURITY_ANSWER_WRONG;
 
-        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword))
-            return LoginMenuMessages.WEAK_PASSWORD;
+        LoginMenuMessages message = checkPassword(newPassword);
+        if(!message.equals(LoginMenuMessages.STRONG_PASSWORD))
+            return message;
 
         Stronghold.getCurrentUser().setPassword(newPassword);
         User.saveUsersToFile();
         return LoginMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
+    }
+
+    private static LoginMenuMessages checkPassword (String newPassword){
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("short password"))
+            return LoginMenuMessages.SHORT_PASSWORD;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no lowercase letter"))
+            return LoginMenuMessages.NO_LOWERCASE_LETTER;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no uppercase letter"))
+            return LoginMenuMessages.NO_UPPERCASE_LETTER;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no number"))
+            return LoginMenuMessages.NO_NUMBER;
+
+        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no special character"))
+            return LoginMenuMessages.NO_SPECIAL_CHARACTER;
+
+        else return LoginMenuMessages.STRONG_PASSWORD;
     }
 }

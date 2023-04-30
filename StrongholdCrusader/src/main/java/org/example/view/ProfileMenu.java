@@ -122,23 +122,19 @@ public class ProfileMenu {
         String newPassword = "";
 
         for (Map.Entry<String, String> option : options.entrySet()) {
-            switch (option.getKey()) {
-                case "-n":
-                    newPassword = option.getValue();
-                    break;
+            if(option.getKey().equals("-n"))
+                newPassword = option.getValue();
 
-                case "-o":
-                    oldPassword = option.getValue();
-                    break;
+            else if(option.getKey().equals("-o"))
+                oldPassword = option.getValue();
 
-                default:
-                    System.out.println("invalid option");
-                    return;
+            else{
+                System.out.println("invalid command");
+                return;
             }
         }
 
         ProfileMenuMessages message = ProfileMenuController.changePassword(oldPassword, newPassword);
-
         switch (message) {
             case INCORRECT_CAPTCHA:
                 System.out.println("Incorrect captcha!");
@@ -148,8 +144,24 @@ public class ProfileMenu {
                 System.out.println("No new Password provided!");
                 break;
 
-            case WEAK_PASSWORD:
-                System.out.println("Weak new password!");
+            case SHORT_PASSWORD:
+                System.out.println("Short new password!\nYou must provide at least 6 characters!");
+                break;
+
+            case NO_LOWERCASE_LETTER:
+                System.out.println("Your password must contain a lowercase letter!");
+                break;
+
+            case NO_UPPERCASE_LETTER:
+                System.out.println("Your password must contain an uppercase letter!");
+                break;
+
+            case NO_NUMBER:
+                System.out.println("Your password must contain at least one digit!");
+                break;
+
+            case NO_SPECIAL_CHARACTER:
+                System.out.println("Your password must contain at least one special character!");
                 break;
 
             case INCORRECT_PASSWORD:
