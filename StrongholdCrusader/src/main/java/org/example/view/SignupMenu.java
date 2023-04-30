@@ -2,6 +2,7 @@ package org.example.view;
 
 import org.example.controller.SignupMenuController;
 import org.example.model.SecurityQuestion;
+import org.example.model.utils.CaptchaGenerator;
 import org.example.model.utils.InputProcessor;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.commands.SignupMenuCommands;
@@ -20,7 +21,7 @@ public class SignupMenu {
             if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.CREATE_USER) != null)
                 register(scanner, input);
             else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.ENTER_LOGIN_MENU) != null)
-                LoginMenu.run(); //should I add return statement???
+                LoginMenu.run();
             else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.EXIT) != null)
                 return;
             else
@@ -123,6 +124,8 @@ public class SignupMenu {
             return;
         }
         securityQuestion(scanner, username, password, nickname, email, slogan);
+        CaptchaGenerator.run();
+        System.out.println("User successfully created");
     }
 
     private static String suggestNewUsername(Scanner scanner, String oldUsername) {
@@ -202,6 +205,6 @@ public class SignupMenu {
             System.out.println("answers don't match, try again");
             securityQuestion(scanner, username, password, nickname, email, slogan);
         } else if (securityQuestionMessage.equals(SignupMenuMessages.SUCCESS))
-            System.out.println("User successfully created");
+            System.out.println("Please complete captcha");
     }
 }

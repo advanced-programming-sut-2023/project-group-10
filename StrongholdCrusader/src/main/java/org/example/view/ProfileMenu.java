@@ -3,6 +3,7 @@ package org.example.view;
 import org.example.controller.ProfileMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.utils.CaptchaGenerator;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.ProfileMenuCommands;
 import org.example.view.enums.messages.ProfileMenuMessages;
@@ -169,6 +170,7 @@ public class ProfileMenu {
                 break;
 
             default:
+                CaptchaGenerator.run();
                 System.out.println("Password changed successfully!");
                 break;
         }

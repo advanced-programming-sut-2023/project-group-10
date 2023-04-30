@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.controller.LoginMenuController;
+import org.example.model.utils.CaptchaGenerator;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.LoginMenuCommands;
 import org.example.view.enums.messages.LoginMenuMessages;
@@ -66,6 +67,7 @@ public class LoginMenu {
                 break;
 
             case LOGIN_SUCCESSFUL:
+                CaptchaGenerator.run();
                 System.out.println("User logged in successfully!");
                 MainMenu.run();
                 break;

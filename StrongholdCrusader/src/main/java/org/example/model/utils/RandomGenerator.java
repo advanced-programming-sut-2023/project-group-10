@@ -26,10 +26,6 @@ public class RandomGenerator {
         return slogans[random.nextInt() - 1];
     }
 
-    public static String randomCaptchaCode() {
-        return null;
-    }
-
     //TODO: are all of these compatible with my teammates?
     public static String generateSecurePassword() {
         String upperCaseStr = RandomStringUtils.random(2, 65, 90, true, true);
