@@ -18,10 +18,10 @@ public class UnitMenuController {
     public static ArrayList<Unit> selectedMilitaryUnits;
 
     public static UnitMenuMessages moveUnit(Coordinate destination) {
-        if(Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(destination.column) ||
-        Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(destination.row))
+        if (Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(destination.column) ||
+                Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(destination.row))
             return UnitMenuMessages.INDEX_OUT_OF_BOUNDS;
-        if(!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination.row, destination.column)
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination.row, destination.column)
                 .getTexture().isWalkable())
             return UnitMenuMessages.INVALID_DESTINATION;
         //TODO: how to implement speed?
@@ -31,7 +31,7 @@ public class UnitMenuController {
 
 
     public static UnitMenuMessages setStance(Coordinate position, MilitaryUnitStance stance) {
-        if(Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(position.column) ||
+        if (Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(position.column) ||
                 Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(position.row))
             return UnitMenuMessages.INDEX_OUT_OF_BOUNDS;
         //TODO: check and complete doc:pg.23
@@ -40,22 +40,38 @@ public class UnitMenuController {
         }
         return UnitMenuMessages.SUCCESSFUL_SET_STANCE;
     }
+    //TODO: decide to put it here or in the model
+
+    private static boolean lookForEngineer(ArrayList<Unit> units) {
+        for (Unit unit : units) {
+            if (unit.getRole().equals(MilitaryPersonRole.getRoleByName(RoleName.ENGINEER)))
+                return true;
+        }
+        return false;
+    }
+
+    public static UnitMenuMessages build(MilitaryEquipmentRole equipmentRole) {
+        if (!lookForEngineer(selectedMilitaryUnits))
+            return UnitMenuMessages.UNITS_CANT_BUILD;
+        //TODO: implement building items
+        return null;
+    }
 
     public static UnitMenuMessages attackEnemy(Coordinate target) {
         return null;
     }
 
     public static UnitMenuMessages airAttack(Coordinate target) {
+
         return null;
     }
 
     public static UnitMenuMessages pourOil(String direction) {
+
         return null;
     }
 
-    public static UnitMenuMessages build(MilitaryEquipmentRole equipmentRole) {
-        return null;
-    }
+
     // TODO
     public static UnitMenuMessages patrolUnit(Coordinate startPoint, Coordinate destination) {
 

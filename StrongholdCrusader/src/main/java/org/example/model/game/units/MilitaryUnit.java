@@ -7,15 +7,35 @@ import org.example.model.game.units.unitconstants.RoleName;
 
 import java.util.ArrayList;
 
-public  abstract  class MilitaryUnit extends Unit {
+public abstract class MilitaryUnit extends Unit {
     private MilitaryUnitStance stance;
     private final ArrayList<Coordinate> path;
+    private Coordinate destination;
+    private Coordinate currentLocation;
 
-    public MilitaryUnit(Coordinate position, RoleName role, Government government) {
+    public MilitaryUnit(Coordinate position, RoleName role, Government government, Coordinate currentLocation) {
         //TODO: check if required resources are available
         super(position, role, government);
         stance = MilitaryUnitStance.STAND_GROUND;
         path = new ArrayList<>();
+        this.currentLocation = currentLocation;
+        this.destination = null;
+    }
+
+    public void changeDestination(Coordinate destination) {
+        this.destination = destination;
+    }
+
+    public void changeCurrentLocation(Coordinate currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public Coordinate getDestination() {
+        return destination;
+    }
+
+    public Coordinate getCurrentLocation() {
+        return currentLocation;
     }
 
     public MilitaryUnitStance getStance() {

@@ -21,6 +21,7 @@ public class GameMenu {
             input = scanner.nextLine();
             if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_POPULARITY_FACTORS) != null)
                 showPopularityFactors();
+
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_POPULARITY) != null) showPopularity();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FOOD_LIST) != null) showFoodList();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FOOD_RATE) != null) setFoodRate(input);
@@ -43,6 +44,7 @@ public class GameMenu {
             }
         }
     }
+
 
     private static void showPopularityFactors() {
         System.out.println(GameMenuController.showPopularityFactors());

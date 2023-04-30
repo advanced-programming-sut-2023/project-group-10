@@ -22,9 +22,8 @@ public class GameMenuController {
         }
         return show;
     }
-
+// TODO: add this to the menu
     public static int roundsPlayed() {
-
         return Stronghold.getCurrentBattle().getTurnsPassed();
     }
 

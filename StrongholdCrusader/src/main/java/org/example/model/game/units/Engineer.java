@@ -10,8 +10,8 @@ import org.example.model.game.units.unitconstants.RoleName;
 public class Engineer extends MilitaryUnit {
     private boolean onBoilingDuty;
 
-    public Engineer(Coordinate position, RoleName role, Government government) {
-        super(position, role, government);
+    public Engineer(Coordinate position, RoleName role, Government government,Coordinate currentLocation) {
+        super(position, role, government,currentLocation);
         onBoilingDuty = false;
     }
 
@@ -27,7 +27,8 @@ public class Engineer extends MilitaryUnit {
         if (!(Role.getRoleByName(siegeEquipmentName) instanceof MilitaryUnitRole)) return null;
         MilitaryUnitRole siegeEquipmentType = (MilitaryUnitRole) Role.getRoleByName(siegeEquipmentName);
         if (siegeEquipmentType.numberOfUnitsThatCanBeSpawned(getGovernment()) == 0) return null;
-        return new SiegeEquipment(getPosition(), siegeEquipmentName, getGovernment());
+        //TODO: check
+        return new SiegeEquipment(getPosition(), siegeEquipmentName, getGovernment(),getCurrentLocation());
     }
 
 }

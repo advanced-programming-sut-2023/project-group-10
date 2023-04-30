@@ -10,7 +10,6 @@ import org.example.model.game.units.unitconstants.RoleName;
 public class Unit extends Droppable {
     private final Role role;
     private int hitPoint;
-
     public Unit(Coordinate position, RoleName roleName, Government government) {
         super(position, government);
         this.role = Role.getRoleByName(roleName);
