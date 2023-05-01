@@ -1,8 +1,6 @@
 package org.example.view;
 
 import org.example.controller.GameMenuController;
-import org.example.model.User;
-import org.example.model.game.Color;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.utils.InputProcessor;
@@ -13,7 +11,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class GameMenu {
-    public static void run(HashMap<String , String> players, Map map) {
+    public static void run(HashMap<String, String> players, Map map) {
         GameMenuController.initializeGame(players, map);
         Scanner scanner = new Scanner(System.in);
         String input;
@@ -21,6 +19,10 @@ public class GameMenu {
             input = scanner.nextLine();
             if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_POPULARITY_FACTORS) != null)
                 showPopularityFactors();
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.ROUNDS_PLAYED) != null)
+                showRoundsPlayed();
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_PLAYER) != null)
+                getCurrentPlayer();
 
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_POPULARITY) != null) showPopularity();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FOOD_LIST) != null) showFoodList();
@@ -45,7 +47,13 @@ public class GameMenu {
         }
     }
 
-
+    private static void showRoundsPlayed(){
+        System.out.println(GameMenuController.showRoundsPlayed()+" rounds are played!");
+    }
+    private static void getCurrentPlayer(){
+        System.out.println(GameMenuController.currentPlayer().getNickname()+" is playing now!"+
+                "(username : "+GameMenuController.currentPlayer().getUsername()+")");
+    }
     private static void showPopularityFactors() {
         System.out.println(GameMenuController.showPopularityFactors());
     }
@@ -82,7 +90,7 @@ public class GameMenu {
     private static void setTaxRate(String input) {
         try {
             Integer taxRate = InputProcessor.rateInputProcessor(input);
-            GameMenuMessages message = GameMenuController.setFoodRate(taxRate);
+            GameMenuMessages message = GameMenuController.setTaxRate(taxRate);
             switch (message) {
                 case INVALID_TAX_RATE:
                     System.out.println("Enter a number from -3 to 8!");
@@ -108,7 +116,7 @@ public class GameMenu {
     private static void setFearRate(String input) {
         try {
             Integer fearRate = InputProcessor.rateInputProcessor(input);
-            GameMenuMessages message = GameMenuController.setFoodRate(fearRate);
+            GameMenuMessages message = GameMenuController.setFearRate(fearRate);
             switch (message) {
                 case INVALID_TAX_RATE:
                     System.out.println("Enter a number from -5 to 5!");

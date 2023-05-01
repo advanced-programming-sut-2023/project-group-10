@@ -18,6 +18,8 @@ public enum GameMenuCommands {
     SELECT_UNIT("\\s*select\\s+unit.*"),
     TRADE_MENU("\\s*trade\\s+menu\\s*"),
     SHOP_MENU("\\s*shop\\s+menu\\s*"),
+    ROUNDS_PLAYED("\\s*show\\s+rounds\\s*"),
+    SHOW_PLAYER("\\s*show\\s+currnet\\splayer\\s*"),
     NEXT_TURN("\\s*next\\s+turn\\s*"),
     LEAVE_GAME("\\s*leave\\s+game\\s*");
 

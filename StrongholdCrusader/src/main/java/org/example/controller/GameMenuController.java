@@ -4,6 +4,8 @@ import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.Government;
 import org.example.model.game.Item;
+import org.example.model.game.buildings.Building;
+import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
@@ -16,6 +18,10 @@ public class GameMenuController {
         return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner();
     }
 
+    public static int showPopularity() {
+        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity();
+    }
+
     public static String showPopularityFactors() {
         String show = "";
         HashMap<String, Integer> popularityFactors = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularityFactors();
@@ -23,15 +29,6 @@ public class GameMenuController {
             show = show.concat(factors.getKey() + " : " + factors.getValue() + "\n");
         }
         return show;
-    }
-
-    // TODO: add this to the menu
-    public static int roundsPlayed() {
-        return Stronghold.getCurrentBattle().getTurnsPassed();
-    }
-
-    public static int showPopularity() {
-        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity();
     }
 
     public static String showFoodList() {
@@ -43,7 +40,19 @@ public class GameMenuController {
         return foodList;
     }
 
-    //ATTENTION: I gave the modified rate to gov
+    public static int showTaxRate() {
+        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTaxRate();
+    }
+
+    public static int showFoodRate() {
+        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFoodRate();
+    }
+
+    public static int showFearRate() {
+        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFearRate();
+    }
+
+    //TODO: I gave the modified rate to gov/ change it
     public static GameMenuMessages setFoodRate(int foodRate) {
         if (foodRate < -2 || foodRate > 2) return GameMenuMessages.INVALID_FOOD_RATE;
         //TODO: feed people by foodRate+2
@@ -67,45 +76,21 @@ public class GameMenuController {
     }
 
 
-    public static int showTaxRate() {
-        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTaxRate();
-    }
-
-    public static int showFoodRate() {
-        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFoodRate();
-    }
-
-    public static int showFearRate() {
-        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFearRate();
-    }
-
-
     public static GameMenuMessages dropBuilding(Coordinate position, String type) {
-        //TODO: check validity of building type
-        if (false) return GameMenuMessages.INVALID_BUILDING_TYPE;
-        //TODO: check droppable
-        if (true) return GameMenuMessages.INCOMPATIBLE_LAND;
-        if (true) return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
-
+        if (BuildingTypeName.getBuildingTypeNameByNameString(type) == null)
+            return GameMenuMessages.INVALID_BUILDING_TYPE;
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getTexture().isBuildable())
+            return GameMenuMessages.INCOMPATIBLE_LAND;
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() != null)
+            return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
+        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).setDroppable(new Building(position,
+                Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), BuildingTypeName.getBuildingTypeNameByNameString(type)));
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 
-    //
-    public static GameMenuMessages selectBuilding(Coordinate position) {
-        //TODO: check droppable
-        if (true) return GameMenuMessages.OPPONENT_BUILDING;
-        if (true) return GameMenuMessages.EMPTY_LAND;
-
-
-        return GameMenuMessages.SUCCESSFUL_SELECT;
-    }
-
-    public static GameMenuMessages selectUnit(Coordinate position) {
-        return null;
-    }
-
-    public static GameMenuMessages endTurn() {
-        return null;
+    // TODO: add this to the menu
+    public static int showRoundsPlayed() {
+        return Stronghold.getCurrentBattle().getTurnsPassed();
     }
 
     private static void showCurrentPlayer() {
@@ -113,15 +98,32 @@ public class GameMenuController {
         System.out.println("player \" " + player.getNickname() + "\" with username : " + player.getUsername() + "is about to play!");
     }
 
-    public static GameMenuMessages leaveGame() {
+    public static GameMenuMessages selectBuilding(Coordinate position) {
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() == null)
+            return GameMenuMessages.EMPTY_LAND;
 
-        return null;
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
+                getBuilding().getGovernment().getOwner().getUsername().
+                equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername()))
+            return GameMenuMessages.OPPONENT_BUILDING;
+
+        return GameMenuMessages.SUCCESSFUL_SELECT;
     }
 
-    public static void applyChanges() {
+    public static GameMenuMessages selectUnit(Coordinate position) {
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getMilitaryUnitsByGovernment(
+                Stronghold.getCurrentBattle().getGovernmentAboutToPlay()) == null)
+            return GameMenuMessages.NO_UNITS_FOUND;
+        UnitMenuController.selectedMilitaryUnits.clear();
+        UnitMenuController.selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap()
+                .getBlockByRowAndColumn(position).getMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        return GameMenuMessages.SUCCESSFUL_SELECT;
     }
 
+
+    // TODO: what's this?
     public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {
+
     }
 
     public void goToNextPlayer() {
@@ -144,7 +146,7 @@ public class GameMenuController {
 
     private void moveUnit(MilitaryUnit unit, int moveCount) {
         ArrayList<Coordinate> path = findPath(new Node(unit.getPosition()), new Node(unit.getDestination()));
-        if (path==null) return;
+        if (path == null) return;
         int movesLeft;
         unit.setPosition(path.get((movesLeft = Math.min(moveCount, path.size())) - 1));
         if (unit.getDestination().equals(unit.getPosition())) unit.updateDestination();
@@ -157,7 +159,6 @@ public class GameMenuController {
         LinkedList<Node> queue = new LinkedList<>();
         queue.add(start);
         start.visited = true;
-
         Node currentNode;
         while (!queue.isEmpty()) {
             currentNode = queue.pollFirst();
@@ -189,6 +190,13 @@ public class GameMenuController {
         return path;
     }
 
+
+    public static GameMenuMessages leaveGame() {
+
+        return null;
+    }
+
+
     private void attackAllUnits(Government government) {
 
     }
@@ -207,4 +215,6 @@ public class GameMenuController {
 
     private void updatePopularity(Government government) {
     }
+
+
 }

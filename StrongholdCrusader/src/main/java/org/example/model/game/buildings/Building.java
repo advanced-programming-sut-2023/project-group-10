@@ -1,12 +1,13 @@
 package org.example.model.game.buildings;
 
 import org.example.model.game.Droppable;
+import org.example.model.game.Entity;
 import org.example.model.game.Government;
 import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 
-public class Building extends Droppable {
+public class Building extends Entity {
     private final BuildingType buildingType;
     private int hitPoint;
 
