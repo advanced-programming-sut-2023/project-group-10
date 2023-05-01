@@ -87,16 +87,20 @@ public class Block {
     public boolean removeUnit(Unit unit) {
         return units.remove(unit);
     }
-// TODO: maybe units being final makes us trouble
-    public void clearForces(){
-        ArrayList<Unit> newUnits=new ArrayList<>();
+
+    // TODO: maybe units being final makes us trouble
+    public void clearForces() {
+        ArrayList<Unit> newUnits = new ArrayList<>();
         for (Unit unit : units) {
             if (unit instanceof MilitaryUnit)
                 continue;
             else
                 newUnits.add(unit);
         }
-        units=newUnits;
+        units = newUnits;
     }
 
+    public boolean canUnitsGoHere() {
+        return texture.isWalkable() && droppable == null;
+    }
 }
