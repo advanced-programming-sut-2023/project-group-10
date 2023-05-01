@@ -129,7 +129,7 @@ public class Government {
         if (itemList.get(item) >= amount)
             itemList.put(item, itemList.get(item) - amount);
         else itemList.remove(item);
-        gold -= price * amount;
+        gold += price * amount;
     }
 
     public void changeItemCount(Item item, int change) {

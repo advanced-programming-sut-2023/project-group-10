@@ -30,44 +30,17 @@ public class Battle {
         return turnsPassed;
     }
 
-    public void goToNextPlayer() {
-        moveAllUnits(governments[currentPlayerIndex]);
-        attackAllUnits(governments[currentPlayerIndex]);
-        produceItems(governments[currentPlayerIndex]);
-        collectTaxes(governments[currentPlayerIndex]);
-        producePeasants(governments[currentPlayerIndex]);
-        updateFoodCount(governments[currentPlayerIndex]);
-        updatePopularity(governments[currentPlayerIndex]);
-        currentPlayerIndex++;
-    }
-
-    private void moveAllUnits(Government government) {
-    }
-
-    private void attackAllUnits(Government government) {
-    }
-
-    private void produceItems(Government government) {
-    }
-
-    private void collectTaxes(Government government) {
-    }
-
-    private void producePeasants(Government government) {
-    }
-
-    private void updateFoodCount(Government government) {
-    }
-
-    private void updatePopularity(Government government) {
-    }
-
-
     public Government getGovernmentByOwnerId(String id) {
-        for (Government government : governments) {
-            if (government.getOwner().getUsername().equals(id))
-                return government;
-        }
+        for (Government government : governments)
+            if (government.getOwner().getUsername().equals(id)) return government;
         return null;
+    }
+
+    public void goToNextPlayer() {
+        currentPlayerIndex += 1;
+        if (currentPlayerIndex == governments.length) {
+            currentPlayerIndex = 0;
+            turnsPassed++;
+        }
     }
 }

@@ -5,35 +5,30 @@ import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.unitconstants.MilitaryUnitStance;
 import org.example.model.game.units.unitconstants.RoleName;
 
-import java.util.ArrayList;
-
 public abstract class MilitaryUnit extends Unit {
     private MilitaryUnitStance stance;
-    private final ArrayList<Coordinate> path;
-    private Coordinate destination;
+    private Coordinate startingPoint;
+    private Coordinate endPoint;
+    private DestinationIndicator destination;
+    private boolean onPatrol;
 
     public MilitaryUnit(Coordinate position, RoleName role, Government government) {
         //TODO: check if required resources are available
         super(position, role, government);
         stance = MilitaryUnitStance.STAND_GROUND;
-        path = new ArrayList<>();
-        this.destination = null;
-    }
-
-    public void changeDestination(Coordinate destination) {
-        this.destination = destination;
-    }
-
-    public Coordinate getDestination() {
-        return destination;
+        destination = DestinationIndicator.NONE;
     }
 
     public MilitaryUnitStance getStance() {
         return stance;
     }
 
-    public ArrayList<Coordinate> getPath() {
-        return path;
+    public Coordinate getEndPoint() {
+        return endPoint;
+    }
+
+    public boolean isOnPatrol() {
+        return onPatrol;
     }
 
     public void changeStance(MilitaryUnitStance newStance) {
@@ -46,17 +41,33 @@ public abstract class MilitaryUnit extends Unit {
     public void attackHere(Coordinate target) {
     }
 
-    public void moveUnit(Coordinate startingPoint, Coordinate endPoint) {
+    public void moveUnit(Coordinate endPoint) {
+        destination = DestinationIndicator.END_POINT;
+        startingPoint = null;
+        this.endPoint = endPoint;
+        onPatrol = false;
     }
 
     public void patrol(Coordinate startingPoint, Coordinate endPoint) {
+        this.startingPoint = startingPoint;
+        this.endPoint = endPoint;
+        this.destination = DestinationIndicator.STARTING_POINT;
+        onPatrol = true;
     }
 
-    public Coordinate getNextPointOnPath() {
-        return path.get(0);
+    public Coordinate getDestination() {
+        if (destination == DestinationIndicator.STARTING_POINT) return startingPoint;
+        if (destination == DestinationIndicator.END_POINT) return endPoint;
+        return null;
     }
 
-    public void removeFirstElementOfPath() {
-        path.remove(0);
+    public void updateDestination() {
+        if (onPatrol) {
+            if (destination == DestinationIndicator.STARTING_POINT) destination = DestinationIndicator.END_POINT;
+            else if (destination == DestinationIndicator.END_POINT) destination = DestinationIndicator.STARTING_POINT;
+        } else {
+            destination = DestinationIndicator.NONE;
+            startingPoint = endPoint = null;
+        }
     }
 }

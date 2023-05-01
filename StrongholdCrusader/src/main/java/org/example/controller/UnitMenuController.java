@@ -15,44 +15,44 @@ import org.example.view.enums.messages.UnitMenuMessages;
 import java.util.ArrayList;
 
 public class UnitMenuController {
-    public static ArrayList<Unit> selectedMilitaryUnits;
+    public static ArrayList<MilitaryUnit> selectedMilitaryUnits;
 
     public static UnitMenuMessages moveUnit(Coordinate destination) {
-        if (Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(destination.column) ||
-                Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(destination.row))
-            return UnitMenuMessages.INDEX_OUT_OF_BOUNDS;
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination.row, destination.column)
-                .getTexture().isWalkable())
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination.row, destination.column).getTexture().isWalkable())
             return UnitMenuMessages.INVALID_DESTINATION;
-        //TODO: how to implement speed?
-
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
+            selectedMilitaryUnit.moveUnit(destination);
         return UnitMenuMessages.SUCCESSFUL_MOVE_UNIT;
     }
 
+    // TODO
+    public static UnitMenuMessages patrolUnit(Coordinate startPoint, Coordinate destination) {
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(startPoint.row, startPoint.column).getTexture().isWalkable() ||
+                !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination.row, destination.column).getTexture().isWalkable())
+            return UnitMenuMessages.INVALID_DESTINATION;
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
+            selectedMilitaryUnit.patrol(startPoint, destination);
+        return UnitMenuMessages.SUCCESSFUL_MOVE_UNIT;
+    }
 
     public static UnitMenuMessages setStance(Coordinate position, MilitaryUnitStance stance) {
-        if (Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(position.column) ||
-                Stronghold.getCurrentBattle().getBattleMap().isIndexInBounds(position.row))
-            return UnitMenuMessages.INDEX_OUT_OF_BOUNDS;
         //TODO: check and complete doc:pg.23
-        for (Unit selectedMilitaryUnit : selectedMilitaryUnits) {
-            ((MilitaryUnit) selectedMilitaryUnit).changeStance(stance);
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits) {
+            selectedMilitaryUnit.changeStance(stance);
         }
         return UnitMenuMessages.SUCCESSFUL_SET_STANCE;
     }
     //TODO: decide to put it here or in the model
 
-    private static boolean lookForEngineer(ArrayList<Unit> units) {
-        for (Unit unit : units) {
-            if (unit.getRole().equals(MilitaryPersonRole.getRoleByName(RoleName.ENGINEER)))
-                return true;
+    private static boolean lookForEngineer(ArrayList<MilitaryUnit> units) {
+        for (MilitaryUnit unit : units) {
+            if (unit.getRole().equals(MilitaryPersonRole.getRoleByName(RoleName.ENGINEER))) return true;
         }
         return false;
     }
 
     public static UnitMenuMessages build(MilitaryEquipmentRole equipmentRole) {
-        if (!lookForEngineer(selectedMilitaryUnits))
-            return UnitMenuMessages.UNITS_CANT_BUILD;
+        if (!lookForEngineer(selectedMilitaryUnits)) return UnitMenuMessages.UNITS_CANT_BUILD;
         //TODO: implement building items
         return null;
     }
@@ -67,13 +67,6 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages pourOil(String direction) {
-
-        return null;
-    }
-
-
-    // TODO
-    public static UnitMenuMessages patrolUnit(Coordinate startPoint, Coordinate destination) {
 
         return null;
     }
@@ -94,7 +87,7 @@ public class UnitMenuController {
 
 
     public static UnitMenuMessages disband() {
-        for (Unit selectedUnit : selectedMilitaryUnits) {
+        for (MilitaryUnit selectedUnit : selectedMilitaryUnits) {
             new Unit(selectedUnit.getPosition(), RoleName.PEASANT, selectedUnit.getGovernment());
             selectedUnit.getGovernment().deleteUnit(selectedUnit);
         }
