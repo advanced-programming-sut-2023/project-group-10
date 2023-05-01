@@ -79,13 +79,14 @@ public class UnitMenuController {
         UnitMenuMessages moveResult;
         if ((moveResult = moveUnit(position)) != UnitMenuMessages.SUCCESSFUL_MOVE_UNIT) return moveResult;
         boolean canDigMoats = false;
-        for (Unit selectedUnit : selectedMilitaryUnits)
-            if (selectedUnit instanceof MilitaryPerson && ((MilitaryPersonRole) selectedUnit.getRole()).isCanDigMoats()) {
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
+            if (selectedMilitaryUnit instanceof MilitaryPerson && ((MilitaryPersonRole) selectedMilitaryUnit.getRole()).isCanDigMoats()) {
                 canDigMoats = true;
                 break;
             }
         if (!canDigMoats) return UnitMenuMessages.UNITS_CANT_DIG_MOAT;
-        new Moat(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        //TODO: wait until unit get to the target then add moat to map
+        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).setDroppable(new Moat(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
         return UnitMenuMessages.SUCCESSFUL_DIG_MOAT;
     }
 
