@@ -144,11 +144,12 @@ public class GameMenuController {
 
     private void moveUnit(MilitaryUnit unit, int moveCount) {
         ArrayList<Coordinate> path = findPath(new Node(unit.getPosition()), new Node(unit.getDestination()));
-        int ableToMoveCount;
-        unit.setPosition(path.get((ableToMoveCount = Math.min(moveCount, path.size())) - 1));
+        if (path==null) return;
+        int movesLeft;
+        unit.setPosition(path.get((movesLeft = Math.min(moveCount, path.size())) - 1));
         if (unit.getDestination().equals(unit.getPosition())) unit.updateDestination();
         if (!unit.isOnPatrol()) return;
-        moveCount = moveCount - ableToMoveCount;
+        moveCount = moveCount - movesLeft;
         if (moveCount > 0) moveUnit(unit, moveCount);
     }
 
@@ -179,11 +180,12 @@ public class GameMenuController {
         if (end.previousNode == null) return null;
         ArrayList<Coordinate> path = new ArrayList<>();
         Node node = end;
-        while (node != null) {
+        while (node.previousNode != null) {
             path.add(node.coordinate);
             node = node.previousNode;
         }
         Collections.reverse(path);
+        if (path.size() == 0) return null;
         return path;
     }
 
