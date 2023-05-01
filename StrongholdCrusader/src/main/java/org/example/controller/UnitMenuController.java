@@ -5,6 +5,7 @@ import org.example.model.game.Moat;
 import org.example.model.game.NumericalEnums;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.units.Engineer;
 import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
@@ -25,8 +26,8 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages patrolUnit(Coordinate startPoint, Coordinate destination) {
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(startPoint.row, startPoint.column).canUnitsGoHere() ||
-                !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination.row, destination.column).canUnitsGoHere())
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(startPoint).canUnitsGoHere() ||
+                !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination).canUnitsGoHere())
             return UnitMenuMessages.INVALID_DESTINATION;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             selectedMilitaryUnit.patrol(startPoint, destination);
@@ -88,17 +89,18 @@ public class UnitMenuController {
         return UnitMenuMessages.SUCCESSFUL_DIG_MOAT;
     }
 
-    private static boolean lookForEngineer(ArrayList<MilitaryUnit> units) {
-        for (MilitaryUnit unit : units) {
-            if (unit.getRole().equals(MilitaryPersonRole.getRoleByName(RoleName.ENGINEER))) return true;
-        }
-        return false;
-    }
-
     public static UnitMenuMessages build(MilitaryEquipmentRole equipmentRole) {
-        if (!lookForEngineer(selectedMilitaryUnits)) return UnitMenuMessages.UNITS_CANT_BUILD;
-        //TODO: implement building items
-        return null;
+        Engineer firstEngineerSelected = null;
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits) {
+            if (selectedMilitaryUnit instanceof Engineer) {
+                firstEngineerSelected = (Engineer) selectedMilitaryUnit;
+                break;
+            }
+        }
+        if (firstEngineerSelected == null) return UnitMenuMessages.UNITS_CANT_BUILD;
+        if (equipmentRole.tryToProduceThisMany(firstEngineerSelected.getGovernment(), firstEngineerSelected.getPosition(), 1) == 0)
+            return UnitMenuMessages.INSUFFICIENT_RESOURCES;
+        return UnitMenuMessages.SUCCESSFUL_BUILD;
     }
 
     public static UnitMenuMessages disband() {
