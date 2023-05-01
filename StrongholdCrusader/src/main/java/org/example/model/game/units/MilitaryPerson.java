@@ -5,7 +5,7 @@ import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.unitconstants.RoleName;
 
 public class MilitaryPerson extends MilitaryUnit {
-    public MilitaryPerson(Coordinate position, RoleName role, Government government, Coordinate currentLocation) {
-        super(position, role, government, currentLocation);
+    public MilitaryPerson(Coordinate position, RoleName role, Government government) {
+        super(position, role, government);
     }
 }

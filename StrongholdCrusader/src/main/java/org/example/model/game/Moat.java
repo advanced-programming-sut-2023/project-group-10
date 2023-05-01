@@ -2,7 +2,7 @@ package org.example.model.game;
 
 import org.example.model.game.envirnmont.Coordinate;
 
-public class Moat extends Droppable {
+public class Moat extends Entity {
     private boolean isFilled;
 
     public Moat(Coordinate position, Government government) {

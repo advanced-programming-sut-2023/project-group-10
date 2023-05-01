@@ -1,13 +1,13 @@
 package org.example.model.game.units;
 
-import org.example.model.game.Droppable;
+import org.example.model.game.Entity;
 import org.example.model.game.Government;
 import org.example.model.game.NumericalEnums;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 
-public class Unit extends Droppable {
+public class Unit extends Entity {
     private final Role role;
     private int hitPoint;
     public Unit(Coordinate position, RoleName roleName, Government government) {

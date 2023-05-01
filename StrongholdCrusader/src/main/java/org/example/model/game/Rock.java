@@ -2,11 +2,10 @@ package org.example.model.game;
 
 import org.example.model.game.envirnmont.Coordinate;
 
-public class Rock extends Droppable {
+public class Rock implements Droppable {
     private final mapDirections direction;
 
-    public Rock(Coordinate position, Government government, mapDirections direction) {
-        super(position, government);
+    public Rock(mapDirections direction) {
         this.direction = direction;
     }
 

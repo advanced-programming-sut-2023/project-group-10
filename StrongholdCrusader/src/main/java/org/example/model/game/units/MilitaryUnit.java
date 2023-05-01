@@ -11,14 +11,12 @@ public abstract class MilitaryUnit extends Unit {
     private MilitaryUnitStance stance;
     private final ArrayList<Coordinate> path;
     private Coordinate destination;
-    private Coordinate currentLocation;
 
-    public MilitaryUnit(Coordinate position, RoleName role, Government government, Coordinate currentLocation) {
+    public MilitaryUnit(Coordinate position, RoleName role, Government government) {
         //TODO: check if required resources are available
         super(position, role, government);
         stance = MilitaryUnitStance.STAND_GROUND;
         path = new ArrayList<>();
-        this.currentLocation = currentLocation;
         this.destination = null;
     }
 
@@ -26,16 +24,8 @@ public abstract class MilitaryUnit extends Unit {
         this.destination = destination;
     }
 
-    public void changeCurrentLocation(Coordinate currentLocation) {
-        this.currentLocation = currentLocation;
-    }
-
     public Coordinate getDestination() {
         return destination;
-    }
-
-    public Coordinate getCurrentLocation() {
-        return currentLocation;
     }
 
     public MilitaryUnitStance getStance() {

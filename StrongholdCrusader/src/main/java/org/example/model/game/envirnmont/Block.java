@@ -68,6 +68,7 @@ public class Block {
         units.clear();
     }
 
+    //TODO: change if's to handle rock, pond, tree
     public boolean setDroppable(Droppable droppable) {
         if (this.droppable != null) return false;
         if (!texture.isBuildable()) return false;
