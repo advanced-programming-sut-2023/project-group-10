@@ -46,6 +46,12 @@ public class CustomizeMapMenu {
         else System.out.println("You haven't entered your inputs in a valid format");
         if (message == null) return;
         switch (message) {
+            case INDEX_OUT_OF_BOUNDS:
+                System.out.println("You've entered numbers less than 0 or grater than the size!");
+                break;
+            case POND_ENTERED:
+                System.out.println("For setting texture to ponds you must only enter one block's coordinates!");
+                break;
             case INVALID_LAND_TYPE:
                 System.out.println("You've entered invalid type for texture!");
                 break;

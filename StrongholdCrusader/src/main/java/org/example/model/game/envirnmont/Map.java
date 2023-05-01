@@ -26,6 +26,10 @@ public class Map {
         if (!isIndexInBounds(row) || !isIndexInBounds(column)) return null;
         else return blocks[row][column];
     }
+    public Block getBlockByRowAndColumn(Coordinate position) {
+        if (!isIndexInBounds(position) ) return null;
+        else return blocks[position.row][position.column];
+    }
 
     public Coordinate getTopLeftBlockCoordinate() {
         return topLeftBlockCoordinate;
@@ -67,4 +71,9 @@ public class Map {
     public boolean isIndexInBounds(int index) {
         return index >= 0 && index < size;
     }
+
+    public boolean isIndexInBounds(Coordinate position) {
+        return position.column >= 0 && position.row >= 0 && position.row < size && position.column < size;
+    }
+
 }

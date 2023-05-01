@@ -22,19 +22,23 @@ public class CustomizeMapController {
     }
 
     public static CustomizeMapMessages setTexture(String landType, Coordinate position) {
+        if(!map.isIndexInBounds(position))
+            return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
         if (BlockTexture.getTypeByName(landType) == null)
             return CustomizeMapMessages.INVALID_LAND_TYPE;
-        if (map.getBlockByRowAndColumn(position.row, position.column).getBuilding() != null)
+        if (map.getBlockByRowAndColumn(position).getBuilding() != null)
             return CustomizeMapMessages.BUILDING_EXISTS_IN_THE_BLOCK;
-        map.getBlockByRowAndColumn(position.row, position.column).setTexture(BlockTexture.getTypeByName(landType));
+        map.getBlockByRowAndColumn(position).setTexture(BlockTexture.getTypeByName(landType));
         return CustomizeMapMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL;
     }
 
     public static CustomizeMapMessages setTexture(String landType, Coordinate point1, Coordinate point2) {
         // TODO: change here
-        if (BlockTexture.getTypeByName(landType) == null || BlockTexture.getTypeByName(landType).name().equals("SMALL_POND")
-        ||  BlockTexture.getTypeByName(landType).name().equals("LARGE_POND"))
+        if (BlockTexture.getTypeByName(landType) == null)
             return CustomizeMapMessages.INVALID_LAND_TYPE;
+        if(  BlockTexture.getTypeByName(landType).equals(BlockTexture.LARGE_POND)
+                ||  BlockTexture.getTypeByName(landType).equals(BlockTexture.SMALL_POND))
+            return CustomizeMapMessages.POND_ENTERED;
         // I assumed point 1 is at the left of point 2
         for (int i = point1.row; i <= point2.row; i++) {
             for (int j = point1.column; j <= point2.column; j++) {
@@ -52,27 +56,27 @@ public class CustomizeMapController {
 
 
     public static CustomizeMapMessages clear(Coordinate position) {
-        if (!map.isIndexInBounds(position.row) || !map.isIndexInBounds(position.column))
+        if (!map.isIndexInBounds(position) )
             return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
-        map.getBlockByRowAndColumn(position.row, position.column).clearForces();
+        map.getBlockByRowAndColumn(position).clearForces();
         return CustomizeMapMessages.SUCCESSFUL_CLEAR;
     }
 
     public static CustomizeMapMessages dropRock(Coordinate position, String direction) {
-        if (map.getBlockByRowAndColumn(position.row, position.column).getDroppable() != null)
+        if (map.getBlockByRowAndColumn(position).getDroppable() != null)
             return CustomizeMapMessages.NON_EMPTY_LAND;
-        map.getBlockByRowAndColumn(position.row,position.column).setDroppable(new Rock(MapDirections.getByName(direction)));
+        map.getBlockByRowAndColumn(position).setDroppable(new Rock(MapDirections.getByName(direction)));
         return CustomizeMapMessages.DROP_ROCK_SUCCESSFUL;
     }
 
     public static CustomizeMapMessages dropTree(Coordinate position, String type) {
-        if(!map.isIndexInBounds(position.column) || !map.isIndexInBounds(position.row))
+        if(!map.isIndexInBounds(position) )
             return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
         if(TreeType.getTreeTypeByName(type) == null)
             return CustomizeMapMessages.INVALID_TREE_TYPE;
-        if(!map.getBlockByRowAndColumn(position.row,position.column).getTexture().isPlantable())
+        if(!map.getBlockByRowAndColumn(position).getTexture().isPlantable())
             return CustomizeMapMessages.INCOMPATIBLE_LAND;
-        map.getBlockByRowAndColumn(position.row,position.column).setDroppable(new Tree(TreeType.getTreeTypeByName(type)));
+        map.getBlockByRowAndColumn(position).setDroppable(new Tree(TreeType.getTreeTypeByName(type)));
         return CustomizeMapMessages.SUCCESSFUL_TREE_DROP;
     }
 }
