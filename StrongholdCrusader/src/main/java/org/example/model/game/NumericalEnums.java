@@ -3,7 +3,8 @@ package org.example.model.game;
 public enum NumericalEnums {
     INITIAL_POPULARITY_VALUE(100),
     SPEED_COEFFICIENT(1),
-    BLOCKS_IN_A_ROW(20);
+    RANGE_COEFFICIENT(3),
+    DAMAGE_COEFFICIENT(10);
     private final int value;
 
     NumericalEnums(int value) {

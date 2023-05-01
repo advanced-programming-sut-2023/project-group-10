@@ -1,7 +1,11 @@
 package org.example.model.game.units;
 
+import org.example.model.Stronghold;
 import org.example.model.game.Government;
+import org.example.model.game.buildings.Building;
+import org.example.model.game.buildings.buildingconstants.AttackingBuildingType;
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.unitconstants.MilitaryUnitStance;
 import org.example.model.game.units.unitconstants.RoleName;
 
@@ -69,5 +73,16 @@ public abstract class MilitaryUnit extends Unit {
             destination = DestinationIndicator.NONE;
             startingPoint = endPoint = null;
         }
+    }
+
+    public void setOnPatrol(boolean onPatrol) {
+        this.onPatrol = onPatrol;
+    }
+
+    public int getBoostInFireRange() {
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        Building building = map.getBlockByRowAndColumn(getPosition()).getBuilding();
+        if (building == null || !(building.getBuildingType() instanceof AttackingBuildingType)) return 0;
+        return ((AttackingBuildingType) building.getBuildingType()).getBoostInFireRange();
     }
 }

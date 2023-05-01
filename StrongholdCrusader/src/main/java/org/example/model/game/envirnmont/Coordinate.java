@@ -22,6 +22,10 @@ public class Coordinate {
         return coordinate;
     }
 
+    public int getDistanceFrom(Coordinate point) {
+        return Math.abs(this.row - point.row) + Math.abs(this.column - point.column);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Coordinate)) return false;

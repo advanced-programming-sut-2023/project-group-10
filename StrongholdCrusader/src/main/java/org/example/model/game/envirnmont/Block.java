@@ -92,15 +92,13 @@ public class Block {
     public void clearForces() {
         ArrayList<Unit> newUnits = new ArrayList<>();
         for (Unit unit : units) {
-            if (unit instanceof MilitaryUnit)
-                continue;
-            else
-                newUnits.add(unit);
+            if (unit instanceof MilitaryUnit) continue;
+            else newUnits.add(unit);
         }
         units = newUnits;
     }
 
     public boolean canUnitsGoHere() {
-        return texture.isWalkable() && droppable == null;
+        return texture.isWalkable() && (droppable == null || droppable instanceof Building && ((Building) droppable).isClimbable());
     }
 }

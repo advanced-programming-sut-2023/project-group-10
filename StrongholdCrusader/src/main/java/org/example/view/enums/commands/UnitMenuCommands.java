@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public enum UnitMenuCommands {
     MOVE_UNIT("\\s*move\\s+unit\\s+to.*"),
     PATROL_UNIT("\\s*patrol\\s+unit.*"),
-    SET_STATE("\\s*set.*"),
+    SET_STANCE("\\s*set.*"),
     ATTACK("\\s*attack.*"),
     POUR_OIL("\\s*pour\\s+oil.*"),
     DIG_TUNNEL("\\s*dig\\s+tunnel.*"),

@@ -22,7 +22,7 @@ public class UnitMenu {
             input = scanner.nextLine();
             if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.MOVE_UNIT) != null) moveUnit(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.PATROL_UNIT) != null) patrolUnit(input);
-            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.SET_STATE) != null) setStance(input);
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.SET_STANCE) != null) setStance(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.ATTACK) != null) attack(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.POUR_OIL) != null) pourOil(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_TUNNEL) != null) digTunnel(input);
@@ -102,7 +102,7 @@ public class UnitMenu {
             UnitMenuMessages result = UnitMenuController.airAttack(target);
             if (result == UnitMenuMessages.TARGET_OUT_OF_RANGE)
                 System.out.println("can't attack there, it's too far away");
-            else if (result == UnitMenuMessages.SUCCESSFUL_AIR_ATTACK)
+            else if (result == UnitMenuMessages.SUCCESSFUL_ENEMY_ATTACK)
                 System.out.println("units are attacking the target");
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
@@ -114,6 +114,8 @@ public class UnitMenu {
             Coordinate target = InputProcessor.getCoordinateFromXYInput(input, "-ex", "-ey");
             UnitMenuMessages result = UnitMenuController.attackEnemy(target);
             if (result == UnitMenuMessages.NO_ENEMY_HERE) System.out.println("enemy not found");
+            else if (result == UnitMenuMessages.TARGET_OUT_OF_RANGE)
+                System.out.println("none of the selected units can reach the enemy");
             else if (result == UnitMenuMessages.SUCCESSFUL_ENEMY_ATTACK)
                 System.out.println("units are attacking the target");
         } catch (Exception exception) {
