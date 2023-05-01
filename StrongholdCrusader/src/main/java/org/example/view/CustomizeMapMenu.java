@@ -1,6 +1,5 @@
 package org.example.view;
 
-import org.checkerframework.checker.units.qual.C;
 import org.example.controller.CustomizeMapController;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
@@ -104,12 +103,11 @@ public class CustomizeMapMenu {
         try {
             Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             CustomizeMapMessages message = CustomizeMapController.clear(position);
-              if (message == CustomizeMapMessages.INDEX_OUT_OF_BOUNDS){
-                System.out.println("You've entered numbers less than 0 or grater than the size");
+            if (message == CustomizeMapMessages.INDEX_OUT_OF_BOUNDS) {
+                System.out.println("You've entered numbers less than 0 or grater than the size!");
                 return;
-            }
-           else if (message == CustomizeMapMessages.SUCCESSFUL_CLEAR)
-                System.out.println("You successfully cleared the block");
+            } else if (message == CustomizeMapMessages.SUCCESSFUL_CLEAR)
+                System.out.println("You successfully cleared the block!");
 
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
@@ -120,7 +118,7 @@ public class CustomizeMapMenu {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String direction = options.getOrDefault("-d", "");
         if (direction == null) {
-            System.out.println("empty direction field");
+            System.out.println("empty direction field!");
             return;
         }
         if (direction.isEmpty()) {
@@ -140,7 +138,7 @@ public class CustomizeMapMenu {
                     System.out.println("You can't drop a rock here!");
                     break;
                 case SUCCESSFUL_DROP:
-                    System.out.println("You dropped a rock successfully");
+                    System.out.println("You dropped a rock successfully!");
                     break;
             }
         } catch (Exception exception) {
@@ -164,11 +162,17 @@ public class CustomizeMapMenu {
             Coordinate position = InputProcessor.getCoordinateFromXYInput(options, "-x", "-y");
             CustomizeMapMessages message = CustomizeMapController.dropTree(position, type);
             switch (message) {
-                case INCOMPATIBLE_LAND:
-                    System.out.println("You cant drop a this type of building on this type of texture!");
+                case INDEX_OUT_OF_BOUNDS:
+                    System.out.println("You've entered numbers less than 0 or grater than the size!");
                     break;
-                case SUCCESSFUL_DROP:
-                    System.out.println(" Building dropped successfully");
+                case INVALID_TREE_TYPE:
+                    System.out.println("You've entered invalid type for tree!");
+                    break;
+                case INCOMPATIBLE_LAND:
+                    System.out.println("You cant drop a this type of Tree on this type of texture!");
+                    break;
+                case SUCCESSFUL_TREE_DROP:
+                    System.out.println("Tree dropped successfully");
             }
 
         } catch (Exception exception) {

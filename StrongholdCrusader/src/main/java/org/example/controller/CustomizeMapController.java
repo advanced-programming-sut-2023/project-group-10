@@ -1,8 +1,13 @@
 package org.example.controller;
 
+import org.checkerframework.checker.units.qual.C;
+import org.example.model.game.Rock;
+import org.example.model.game.Tree;
+import org.example.model.game.TreeType;
 import org.example.model.game.envirnmont.BlockTexture;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
+import org.example.model.game.MapDirections;
 import org.example.view.enums.messages.CustomizeMapMessages;
 
 public class CustomizeMapController {
@@ -26,7 +31,9 @@ public class CustomizeMapController {
     }
 
     public static CustomizeMapMessages setTexture(String landType, Coordinate point1, Coordinate point2) {
-        if (BlockTexture.getTypeByName(landType) == null)
+        // TODO: change here
+        if (BlockTexture.getTypeByName(landType) == null || BlockTexture.getTypeByName(landType).name().equals("SMALL_POND")
+        ||  BlockTexture.getTypeByName(landType).name().equals("LARGE_POND"))
             return CustomizeMapMessages.INVALID_LAND_TYPE;
         // I assumed point 1 is at the left of point 2
         for (int i = point1.row; i <= point2.row; i++) {
@@ -52,12 +59,20 @@ public class CustomizeMapController {
     }
 
     public static CustomizeMapMessages dropRock(Coordinate position, String direction) {
-        if (true) return CustomizeMapMessages.NON_EMPTY_LAND;
-
+        if (map.getBlockByRowAndColumn(position.row, position.column).getDroppable() != null)
+            return CustomizeMapMessages.NON_EMPTY_LAND;
+        map.getBlockByRowAndColumn(position.row,position.column).setDroppable(new Rock(MapDirections.getByName(direction)));
         return CustomizeMapMessages.DROP_ROCK_SUCCESSFUL;
     }
 
     public static CustomizeMapMessages dropTree(Coordinate position, String type) {
-        return null;
+        if(!map.isIndexInBounds(position.column) || !map.isIndexInBounds(position.row))
+            return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
+        if(TreeType.getTreeTypeByName(type) == null)
+            return CustomizeMapMessages.INVALID_TREE_TYPE;
+        if(!map.getBlockByRowAndColumn(position.row,position.column).getTexture().isPlantable())
+            return CustomizeMapMessages.INCOMPATIBLE_LAND;
+        map.getBlockByRowAndColumn(position.row,position.column).setDroppable(new Tree(TreeType.getTreeTypeByName(type)));
+        return CustomizeMapMessages.SUCCESSFUL_TREE_DROP;
     }
 }

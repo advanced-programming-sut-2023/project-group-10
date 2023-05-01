@@ -6,7 +6,7 @@ import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.utils.ASCIIColor;
 
-public class MapMenuController {
+public class  MapMenuController {
     private static final int blocksInARow = 50;
     private static final int blocksInAColumn = 50;
 
@@ -38,7 +38,8 @@ public class MapMenuController {
         }
         return result;
     }
-//TODO:
+
+    //TODO:
     public static String showDetails(Coordinate position) {
         return null;
     }
