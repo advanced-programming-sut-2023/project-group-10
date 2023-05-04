@@ -111,4 +111,8 @@ public class Block {
     public boolean canUnitsGoHere() {
         return texture.isWalkable() && (droppable == null || droppable instanceof Building && ((Building) droppable).isClimbable());
     }
+
+    public boolean canDigMoatHere() {
+        return droppable == null && !onFire && texture.isBuildable();
+    }
 }

@@ -10,6 +10,7 @@ public enum UnitMenuCommands {
     ATTACK("\\s*attack.*"),
     POUR_OIL("\\s*pour\\s+oil.*"),
     DIG_TUNNEL("\\s*dig\\s+tunnel.*"),
+    DIG_MOAT("\\s*dig\\s+moat.*"),
     BUILD("\\s*build.*"),
     DISBAND("\\s*disband\\s+unit\\s*"),
     BACK("\\s*back\\s*");

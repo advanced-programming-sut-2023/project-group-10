@@ -104,8 +104,8 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages digMoat(Coordinate position) {
-        UnitMenuMessages moveResult;
-        if ((moveResult = moveUnit(position)) != UnitMenuMessages.SUCCESSFUL_MOVE_UNIT) return moveResult;
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canDigMoatHere())
+            return UnitMenuMessages.CANT_DIG_MOAT_HERE;
         boolean canDigMoats = false;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             if (selectedMilitaryUnit instanceof MilitaryPerson && ((MilitaryPersonRole) selectedMilitaryUnit.getRole()).isCanDigMoats()) {
@@ -113,11 +113,17 @@ public class UnitMenuController {
                 break;
             }
         if (!canDigMoats) return UnitMenuMessages.UNITS_CANT_DIG_MOAT;
+        UnitMenuMessages moveResult;
+        if ((moveResult = moveUnit(position)) != UnitMenuMessages.SUCCESSFUL_MOVE_UNIT) return moveResult;
         Moat moat = new Moat(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             if (selectedMilitaryUnit instanceof MilitaryPerson && ((MilitaryPersonRole) selectedMilitaryUnit.getRole()).isCanDigMoats())
                 selectedMilitaryUnit.setMoatAboutToBeDug(moat);
         return UnitMenuMessages.SUCCESSFUL_DIG_MOAT;
+    }
+
+    public static UnitMenuMessages digTunnel(Coordinate position) {
+        return null;
     }
 
     public static UnitMenuMessages build(MilitaryEquipmentRole equipmentRole) {
