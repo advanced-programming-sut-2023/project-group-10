@@ -1,5 +1,11 @@
 package org.example.model.game.envirnmont;
 
+import org.example.model.Stronghold;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+
 public class Map {
     int size;
     Block[][] blocks;
@@ -74,5 +80,40 @@ public class Map {
 
     public boolean isIndexInBounds(Coordinate position) {
         return isIndexInBounds(position.row) && isIndexInBounds(position.column);
+    }
+
+    public ArrayList<Coordinate> findPath(Node start, Node end) {
+        LinkedList<Node> queue = new LinkedList<>();
+        queue.add(start);
+        start.visited = true;
+        Node currentNode;
+        while (!queue.isEmpty()) {
+            currentNode = queue.pollFirst();
+            for (Node neighbor : currentNode.getNeighbors(this)) {
+                if (neighbor.visited) continue;
+                neighbor.visited = true;
+                queue.add(neighbor);
+                neighbor.previousNode = currentNode;
+                if (neighbor == end) {
+                    queue.clear();
+                    break;
+                }
+            }
+        }
+
+        return traceRoute(end);
+    }
+
+    private ArrayList<Coordinate> traceRoute(Node end) {
+        if (end.previousNode == null) return null;
+        ArrayList<Coordinate> path = new ArrayList<>();
+        Node node = end;
+        while (node.previousNode != null) {
+            path.add(node.coordinate);
+            node = node.previousNode;
+        }
+        Collections.reverse(path);
+        if (path.size() == 0) return null;
+        return path;
     }
 }

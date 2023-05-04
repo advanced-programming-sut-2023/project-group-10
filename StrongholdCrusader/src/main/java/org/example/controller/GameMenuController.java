@@ -8,12 +8,14 @@ import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.ItemProducingBuilding;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.Node;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
-import org.example.view.ProfileMenu;
 import org.example.view.enums.messages.GameMenuMessages;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameMenuController {
     public static User currentPlayer() {
@@ -136,7 +138,7 @@ public class GameMenuController {
     }
 
     private void moveUnit(MilitaryUnit unit, int moveCount) {
-        ArrayList<Coordinate> path = findPath(new Node(unit.getPosition()), new Node(unit.getDestination()));
+        ArrayList<Coordinate> path = Stronghold.getCurrentBattle().getBattleMap().findPath(new Node(unit.getPosition()), new Node(unit.getDestination()));
         if (path == null) return;
         int movesLeft;
         unit.setPosition(path.get((movesLeft = Math.min(moveCount, path.size())) - 1));
@@ -146,44 +148,8 @@ public class GameMenuController {
         if (moveCount > 0) moveUnit(unit, moveCount);
     }
 
-    private static ArrayList<Coordinate> findPath(Node start, Node end) {
-        LinkedList<Node> queue = new LinkedList<>();
-        queue.add(start);
-        start.visited = true;
-        Node currentNode;
-        while (!queue.isEmpty()) {
-            currentNode = queue.pollFirst();
-            for (Node neighbor : currentNode.getNeighbors(Stronghold.getCurrentBattle().getBattleMap())) {
-                if (neighbor.visited) continue;
-                neighbor.visited = true;
-                queue.add(neighbor);
-                neighbor.previousNode = currentNode;
-                if (neighbor == end) {
-                    queue.clear();
-                    break;
-                }
-            }
-        }
-
-        return traceRoute(end);
-    }
-
-    private static ArrayList<Coordinate> traceRoute(Node end) {
-        if (end.previousNode == null) return null;
-        ArrayList<Coordinate> path = new ArrayList<>();
-        Node node = end;
-        while (node.previousNode != null) {
-            path.add(node.coordinate);
-            node = node.previousNode;
-        }
-        Collections.reverse(path);
-        if (path.size() == 0) return null;
-        return path;
-    }
-
-
     public static GameMenuMessages leaveGame() {
-        if(Stronghold.getCurrentBattle().getNumberOfActivePlayers()==2)
+        if (Stronghold.getCurrentBattle().getNumberOfActivePlayers() == 2)
             return GameMenuMessages.CANT_LEAVE;
         Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         removeAllUnits(currentGovernment);
@@ -191,11 +157,12 @@ public class GameMenuController {
         Stronghold.getCurrentBattle().removeGovernment(currentGovernment);
         return GameMenuMessages.LEAVE_GAME_SUCCESSFUL;
     }
+
     //Can some part of land be owned by someone?
-    private static void removeAllUnits(Government government){
-        for(int i=0; i<Stronghold.getCurrentBattle().getBattleMap().getSize();i++){
-            for (int j=0; j<Stronghold.getCurrentBattle().getBattleMap().getSize(); j++){
-                if(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i,j).getAllUnits()!=null) {
+    private static void removeAllUnits(Government government) {
+        for (int i = 0; i < Stronghold.getCurrentBattle().getBattleMap().getSize(); i++) {
+            for (int j = 0; j < Stronghold.getCurrentBattle().getBattleMap().getSize(); j++) {
+                if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getAllUnits() != null) {
                     ArrayList<Unit> units = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getAllUnits();
                     for (Unit unit : units) {
                         if (unit.getGovernment().equals(government))
@@ -206,12 +173,13 @@ public class GameMenuController {
             }
         }
     }
-    private static void removeAllBuildings(Government government){
-        for(int i=0; i<Stronghold.getCurrentBattle().getBattleMap().getSize();i++){
-            for (int j=0; j<Stronghold.getCurrentBattle().getBattleMap().getSize(); j++){
-                Building building=Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i,j).getBuilding();
-                if(building!= null && building.getGovernment().equals(government))
-                    Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i,j).setDroppable(null);
+
+    private static void removeAllBuildings(Government government) {
+        for (int i = 0; i < Stronghold.getCurrentBattle().getBattleMap().getSize(); i++) {
+            for (int j = 0; j < Stronghold.getCurrentBattle().getBattleMap().getSize(); j++) {
+                Building building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getBuilding();
+                if (building != null && building.getGovernment().equals(government))
+                    Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).setDroppable(null);
             }
         }
     }
@@ -242,7 +210,7 @@ public class GameMenuController {
 
     private void producePeasants(Government government) {
         for (Building building : government.getBuildings()) {
-            if(building instanceof ItemProducingBuilding){
+            if (building instanceof ItemProducingBuilding) {
                 ((ItemProducingBuilding) building).produce();
             }
         }

@@ -112,7 +112,7 @@ public class Block {
         return texture.isWalkable() && (droppable == null || droppable instanceof Building && ((Building) droppable).isClimbable());
     }
 
-    public boolean canDigMoatHere() {
+    public boolean canDigHere() {
         return droppable == null && !onFire && texture.isBuildable();
     }
 }

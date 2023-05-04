@@ -1,14 +1,11 @@
-package org.example.controller;
-
-import org.example.model.game.envirnmont.Coordinate;
-import org.example.model.game.envirnmont.Map;
+package org.example.model.game.envirnmont;
 
 import java.util.ArrayList;
 
 public class Node {
-    Coordinate coordinate;
-    Node previousNode;
-    boolean visited;
+    public Coordinate coordinate;
+    public Node previousNode;
+    public boolean visited;
 
     public Node(Coordinate coordinate) {
         this.coordinate = coordinate;

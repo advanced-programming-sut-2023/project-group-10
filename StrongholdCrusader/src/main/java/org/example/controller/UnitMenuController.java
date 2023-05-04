@@ -6,10 +6,7 @@ import org.example.model.game.NumericalEnums;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
-import org.example.model.game.units.Engineer;
-import org.example.model.game.units.MilitaryPerson;
-import org.example.model.game.units.MilitaryUnit;
-import org.example.model.game.units.Unit;
+import org.example.model.game.units.*;
 import org.example.model.game.units.unitconstants.*;
 import org.example.view.enums.messages.UnitMenuMessages;
 
@@ -104,7 +101,7 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages digMoat(Coordinate position) {
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canDigMoatHere())
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canDigHere())
             return UnitMenuMessages.CANT_DIG_MOAT_HERE;
         boolean canDigMoats = false;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
@@ -123,6 +120,10 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages digTunnel(Coordinate position) {
+        Tunneler tunneler = firstTunnelerSelected();
+        if(tunneler==null) return UnitMenuMessages.INVALID_TUNNEL_UNIT;
+        Block target=Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position);
+        if(!target.canDigHere()) return UnitMenuMessages.INVALID_TUNNEL_COORDINATES;
         return null;
     }
 
@@ -147,6 +148,13 @@ public class UnitMenuController {
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             if (selectedMilitaryUnit instanceof Engineer)
                 return (Engineer) selectedMilitaryUnit;
+        return null;
+    }
+
+    private static Tunneler firstTunnelerSelected() {
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
+            if (selectedMilitaryUnit instanceof Tunneler)
+                return (Tunneler) selectedMilitaryUnit;
         return null;
     }
 }
