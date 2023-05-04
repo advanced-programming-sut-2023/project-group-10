@@ -43,8 +43,9 @@ public class CheckFormatAndEncrypt {
                 || !Pattern.compile(".+@.+\\..+").matcher(email).matches();
     }
 
-    public static boolean checkNicknameFormat(String nickname) {
-        return true;
+    public static boolean isNicknameFormatInvalid(String nickname) {
+
+        return !Pattern.compile("[a-zA-Z]\\S+").matcher(nickname).matches() || !Pattern.compile("[a-zA-Z0-9_\\-]+").matcher(nickname).matches();
     }
 
 

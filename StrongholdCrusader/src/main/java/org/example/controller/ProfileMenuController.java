@@ -3,7 +3,6 @@ package org.example.controller;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
-import org.example.view.enums.messages.LoginMenuMessages;
 import org.example.view.enums.messages.ProfileMenuMessages;
 
 import java.util.Scanner;
@@ -32,7 +31,7 @@ public class ProfileMenuController {
         if (nickname.matches("\\s*"))
             return ProfileMenuMessages.NO_NICKNAME_PROVIDED;
 
-        if (!CheckFormatAndEncrypt.checkNicknameFormat(nickname))
+        if (CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
             return ProfileMenuMessages.INVALID_NICKNAME;
 
         else {

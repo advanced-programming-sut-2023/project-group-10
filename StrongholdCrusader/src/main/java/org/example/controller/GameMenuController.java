@@ -148,15 +148,6 @@ public class GameMenuController {
         if (moveCount > 0) moveUnit(unit, moveCount);
     }
 
-    public static GameMenuMessages leaveGame() {
-        if (Stronghold.getCurrentBattle().getNumberOfActivePlayers() == 2)
-            return GameMenuMessages.CANT_LEAVE;
-        Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
-        removeAllUnits(currentGovernment);
-        removeAllBuildings(currentGovernment);
-        Stronghold.getCurrentBattle().removeGovernment(currentGovernment);
-        return GameMenuMessages.LEAVE_GAME_SUCCESSFUL;
-    }
 
     //Can some part of land be owned by someone?
     private static void removeAllUnits(Government government) {
