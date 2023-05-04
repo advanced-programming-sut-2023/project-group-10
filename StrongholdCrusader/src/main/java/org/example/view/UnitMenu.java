@@ -26,6 +26,7 @@ public class UnitMenu {
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.ATTACK) != null) attack(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.POUR_OIL) != null) pourOil(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_TUNNEL) != null) digTunnel(input);
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_MOAT) != null) digMoat(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BUILD) != null) build(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) disband();
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BACK) != null) return;
@@ -135,11 +136,12 @@ public class UnitMenu {
         }
         if (direction == null) System.out.println("empty field");
         else if (direction.isEmpty()) System.out.println("missing option -d");
-        else if (!direction.matches("[udlr]")) System.out.println("invalid direction. choose u, d, l, or r");
         else {
             UnitMenuMessages result = UnitMenuController.pourOil(direction);
-            if (result == UnitMenuMessages.UNITS_CANT_POUR_OIL)
+            if (result == UnitMenuMessages.INVALID_DIRECTION) System.out.println("invalid direction");
+            else if (result == UnitMenuMessages.UNITS_CANT_POUR_OIL)
                 System.out.println("only engineers on oil duty can pour oil");
+            else if (result == UnitMenuMessages.TARGET_OUT_OF_MAP) System.out.println("target must be inside the map");
             else if (result == UnitMenuMessages.SUCCESSFUL_POUR_OIL) System.out.println("oil was poured successfully");
         }
     }
@@ -147,12 +149,26 @@ public class UnitMenu {
     private static void digTunnel(String input) {
         try {
             Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
-            UnitMenuMessages result = UnitMenuController.moveUnit(position);
+            UnitMenuMessages result = UnitMenuController.digTunnel(position);
             if (result == UnitMenuMessages.INVALID_TUNNEL_COORDINATES) System.out.println("can't dig a tunnel there");
             else if (result == UnitMenuMessages.INVALID_TUNNEL_UNIT)
                 System.out.println("these units can't dig a tunnel");
             else if (result == UnitMenuMessages.SUCCESSFUL_DIG_TUNNEL)
                 System.out.println("units are on their way to dig a tunnel");
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private static void digMoat(String input) {
+        try {
+            Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            UnitMenuMessages result = UnitMenuController.digMoat(position);
+            if (result == UnitMenuMessages.CANT_DIG_MOAT_HERE) System.out.println("can't dig a moat here");
+            else if (result == UnitMenuMessages.UNITS_CANT_DIG_MOAT)
+                System.out.println("none of these units can dig a moat");
+            else if (result == UnitMenuMessages.SUCCESSFUL_DIG_MOAT)
+                System.out.println("units are on their way to dig a moat");
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }

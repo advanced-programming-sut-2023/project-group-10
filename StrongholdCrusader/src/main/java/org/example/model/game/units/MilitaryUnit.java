@@ -2,6 +2,7 @@ package org.example.model.game.units;
 
 import org.example.model.Stronghold;
 import org.example.model.game.Government;
+import org.example.model.game.Moat;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.buildingconstants.AttackingBuildingType;
 import org.example.model.game.envirnmont.Coordinate;
@@ -15,6 +16,7 @@ public abstract class MilitaryUnit extends Unit {
     private Coordinate endPoint;
     private DestinationIndicator destination;
     private boolean onPatrol;
+    private Moat moatAboutToBeDug;
 
     public MilitaryUnit(Coordinate position, RoleName role, Government government) {
         //TODO: check if required resources are available
@@ -37,12 +39,6 @@ public abstract class MilitaryUnit extends Unit {
 
     public void changeStance(MilitaryUnitStance newStance) {
         stance = newStance;
-    }
-
-    public void attackEnemy(Unit enemy) {
-    }
-
-    public void attackHere(Coordinate target) {
     }
 
     public void moveUnit(Coordinate endPoint) {
@@ -70,6 +66,10 @@ public abstract class MilitaryUnit extends Unit {
             if (destination == DestinationIndicator.STARTING_POINT) destination = DestinationIndicator.END_POINT;
             else if (destination == DestinationIndicator.END_POINT) destination = DestinationIndicator.STARTING_POINT;
         } else {
+            if (moatAboutToBeDug != null) {
+                Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(endPoint).setDroppable(moatAboutToBeDug);
+                moatAboutToBeDug = null;
+            }
             destination = DestinationIndicator.NONE;
             startingPoint = endPoint = null;
         }
@@ -84,5 +84,13 @@ public abstract class MilitaryUnit extends Unit {
         Building building = map.getBlockByRowAndColumn(getPosition()).getBuilding();
         if (building == null || !(building.getBuildingType() instanceof AttackingBuildingType)) return 0;
         return ((AttackingBuildingType) building.getBuildingType()).getBoostInFireRange();
+    }
+
+    public Moat getMoatAboutToBeDug() {
+        return moatAboutToBeDug;
+    }
+
+    public void setMoatAboutToBeDug(Moat moatAboutToBeDug) {
+        this.moatAboutToBeDug = moatAboutToBeDug;
     }
 }

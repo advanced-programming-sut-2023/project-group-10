@@ -14,11 +14,13 @@ public class Block {
     private BlockTexture texture;
     private Droppable droppable;
     private ArrayList<Unit> units;
+    private boolean onFire;
 
     Block(BlockTexture texture) {
         this.texture = texture;
         droppable = null;
         units = new ArrayList<>();
+        onFire = false;
     }
 
     public BlockTexture getTexture() {
@@ -59,6 +61,10 @@ public class Block {
         return result;
     }
 
+    public boolean isOnFire() {
+        return onFire;
+    }
+
     public void setTexture(BlockTexture texture) {
         this.texture = texture;
     }
@@ -76,6 +82,10 @@ public class Block {
             return false;
         this.droppable = droppable;
         return true;
+    }
+
+    public void setOnFire(boolean onFire) {
+        this.onFire = onFire;
     }
 
     public boolean addUnit(Unit unit) {
@@ -100,5 +110,9 @@ public class Block {
 
     public boolean canUnitsGoHere() {
         return texture.isWalkable() && (droppable == null || droppable instanceof Building && ((Building) droppable).isClimbable());
+    }
+
+    public boolean canDigMoatHere() {
+        return droppable == null && !onFire && texture.isBuildable();
     }
 }
