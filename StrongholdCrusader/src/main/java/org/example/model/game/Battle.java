@@ -18,6 +18,13 @@ public class Battle {
         return governments;
     }
 
+    public void removeGovernment(Government government) {
+        for (int i = 0; i < governments.length; i++) {
+            if (governments[i].equals(government))
+                governments[i] = null;
+        }
+    }
+
     public Map getBattleMap() {
         return battleMap;
     }
@@ -38,9 +45,25 @@ public class Battle {
 
     public void goToNextPlayer() {
         currentPlayerIndex += 1;
+
         if (currentPlayerIndex == governments.length) {
             currentPlayerIndex = 0;
-            turnsPassed++;
         }
+        while (true) {
+            if (governments[currentPlayerIndex] == null)
+                currentPlayerIndex = (currentPlayerIndex + 1) % governments.length;
+            else
+                break;
+        }
+        turnsPassed++;
+    }
+
+    public int getNumberOfActivePlayers() {
+        int count = 0;
+        for (Government government : governments) {
+            if (government != null)
+                count += 1;
+        }
+        return count;
     }
 }

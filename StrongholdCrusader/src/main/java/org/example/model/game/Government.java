@@ -1,6 +1,7 @@
 package org.example.model.game;
 
 import org.example.model.User;
+import org.example.model.game.buildings.Building;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.Unit;
@@ -10,15 +11,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Government {
+public class Government{
     private final User owner;
     private final MilitaryPerson lord;
     private final ArrayList<Unit> units = new ArrayList<>();
+    private  ArrayList<Building> buildings=new ArrayList<>();
     private final HashMap<Item, Integer> itemList = new HashMap<>();
     private int popularity;
     private final HashMap<String, Integer> popularityFactors = new HashMap<>();
     private double gold;
-    // TODO: check the fields name with Rozhin
     private final Color color;
     private int foodRate;
     private int taxRate;
@@ -50,12 +51,14 @@ public class Government {
         popularity += value;
     }
 
-    public void setTaxRate(int value) {
-        taxRate = value;
+    public void setTaxRate(int taxRate) {
+        this.taxRate = taxRate;
+        popularityFactors.put("tax",popularityFactors.get("tax")+taxRate);
     }
 
     public void setFearRate(int fearRate) {
         this.fearRate = fearRate;
+        popularityFactors.put("fear",popularityFactors.get("fear")+fearRate);
     }
 
     public void addReligion() {
@@ -65,6 +68,7 @@ public class Government {
 
     public void setFoodRate(int foodRate) {
         this.foodRate = foodRate;
+        popularityFactors.put("food",popularityFactors.get("food")+foodRate);
     }
 
     public int getFoodRate() {
@@ -103,6 +107,7 @@ public class Government {
         if (itemList.containsKey(item))
             itemList.put(item, itemList.get(item) + amount);
         else itemList.put(item, amount);
+
         gold -= item.getBuyPrice() * amount;
 
     }
@@ -168,5 +173,28 @@ public class Government {
                 foodList.put(list.getKey(), list.getValue());
         }
         return foodList;
+    }
+
+    public void getBuildings(org.example.model.game.envirnmont.Map  gameMap){
+        buildings=new ArrayList<>();
+        for(int i=0; i<gameMap.getSize(); i++){
+            for (int j=0; j<gameMap.getSize(); j++){
+                if(gameMap.getBlockByRowAndColumn(i,j).getBuilding().getGovernment().equals(this)){
+                    buildings.add(gameMap.getBlockByRowAndColumn(i,j).getBuilding());
+                }
+            }
+        }
+    }
+
+    public ArrayList<Building> getBuildings() {
+        return buildings;
+    }
+
+    public HashMap<Item, Integer> getItemList() {
+        return itemList;
+    }
+
+    public boolean equals(Government government){
+        return government.getOwner().getUsername().equals(this.getOwner().getUsername());
     }
 }

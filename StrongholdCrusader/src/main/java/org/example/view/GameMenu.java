@@ -118,11 +118,11 @@ public class GameMenu {
             Integer fearRate = InputProcessor.rateInputProcessor(input);
             GameMenuMessages message = GameMenuController.setFearRate(fearRate);
             switch (message) {
-                case INVALID_TAX_RATE:
+                case INVALID_FEAR_RATE:
                     System.out.println("Enter a number from -5 to 5!");
                     break;
                 case SET_FOOD_TAX_SUCCESSFUL:
-                    System.out.println("Food rate is set to " + fearRate);
+                    System.out.println("Fear rate is set to " + fearRate);
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());

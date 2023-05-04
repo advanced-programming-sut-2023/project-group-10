@@ -5,10 +5,12 @@ import org.example.model.User;
 import org.example.model.game.Government;
 import org.example.model.game.Item;
 import org.example.model.game.buildings.Building;
+import org.example.model.game.buildings.ItemProducingBuilding;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
+import org.example.view.ProfileMenu;
 import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.*;
@@ -70,8 +72,8 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages setFearRate(int fearRate) {
-        if (fearRate < -5 || fearRate > 5) return GameMenuMessages.INVALID_TAX_RATE;
-        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setTaxRate(fearRate);
+        if (fearRate < -5 || fearRate > 5) return GameMenuMessages.INVALID_FEAR_RATE;
+        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFearRate(fearRate);
         return GameMenuMessages.SET_FOOD_TAX_SUCCESSFUL;
     }
 
@@ -121,22 +123,11 @@ public class GameMenuController {
     }
 
 
-    // TODO: what's this?
+    //TODO: what's this?
     public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {
 
     }
 
-    public void goToNextPlayer() {
-        Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
-        moveAllUnits(currentGovernment);
-        attackAllUnits(currentGovernment);
-        produceItems(currentGovernment);
-        collectTaxes(currentGovernment);
-        producePeasants(currentGovernment);
-        updateFoodCount(currentGovernment);
-        updatePopularity(currentGovernment);
-        Stronghold.getCurrentBattle().goToNextPlayer();
-    }
 
     private void moveAllUnits(Government government) {
         for (Unit unit : government.getUnits())
@@ -192,28 +183,89 @@ public class GameMenuController {
 
 
     public static GameMenuMessages leaveGame() {
+        if(Stronghold.getCurrentBattle().getNumberOfActivePlayers()==2)
+            return GameMenuMessages.CANT_LEAVE;
+        Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
+        removeAllUnits(currentGovernment);
+        removeAllBuildings(currentGovernment);
+        Stronghold.getCurrentBattle().removeGovernment(currentGovernment);
+        return GameMenuMessages.LEAVE_GAME_SUCCESSFUL;
+    }
+    //Can some part of land be owned by someone?
+    private static void removeAllUnits(Government government){
+        for(int i=0; i<Stronghold.getCurrentBattle().getBattleMap().getSize();i++){
+            for (int j=0; j<Stronghold.getCurrentBattle().getBattleMap().getSize(); j++){
+                if(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i,j).getAllUnits()!=null) {
+                    ArrayList<Unit> units = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getAllUnits();
+                    for (Unit unit : units) {
+                        if (unit.getGovernment().equals(government))
+                            Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).removeUnit(unit);
 
-        return null;
+                    }
+                }
+            }
+        }
+    }
+    private static void removeAllBuildings(Government government){
+        for(int i=0; i<Stronghold.getCurrentBattle().getBattleMap().getSize();i++){
+            for (int j=0; j<Stronghold.getCurrentBattle().getBattleMap().getSize(); j++){
+                Building building=Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i,j).getBuilding();
+                if(building!= null && building.getGovernment().equals(government))
+                    Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i,j).setDroppable(null);
+            }
+        }
     }
 
-
-    private void attackAllUnits(Government government) {
-
+    public void goToNextPlayer() {
+        Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
+        moveAllUnits(currentGovernment);
+        attackAllUnits(currentGovernment);
+        //farms and etc. should produce at every turn(if their rates matches)
+        for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
+            produceItems(government);
+        }
+        collectTaxes(currentGovernment);
+        producePeasants(currentGovernment);
+        updateFoodCount(currentGovernment);
+        updatePopularity(currentGovernment);
+        Stronghold.getCurrentBattle().goToNextPlayer();
     }
 
     private void produceItems(Government government) {
+        for (Building building : government.getBuildings()) {
+            if (building instanceof ItemProducingBuilding) {
+                ((ItemProducingBuilding) building).produce();
+            }
+        }
     }
 
-    private void collectTaxes(Government government) {
-    }
 
     private void producePeasants(Government government) {
+        for (Building building : government.getBuildings()) {
+            if(building instanceof ItemProducingBuilding){
+                ((ItemProducingBuilding) building).produce();
+            }
+        }
     }
 
     private void updateFoodCount(Government government) {
+        for (Map.Entry<Item, Integer> itemIntegerEntry : government.getItemList().entrySet()) {
+            if (itemIntegerEntry.getValue() != 0 && itemIntegerEntry.getKey().isFood()) {
+                //TODO
+            }
+        }
     }
 
     private void updatePopularity(Government government) {
+
+    }
+
+    private void collectTaxes(Government government) {
+
+    }
+
+    private void attackAllUnits(Government government) {
+
     }
 
 

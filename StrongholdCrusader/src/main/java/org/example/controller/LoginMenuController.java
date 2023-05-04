@@ -12,7 +12,7 @@ public class LoginMenuController {
     public static LoginMenuMessages login(String username, String password, boolean stayLoggedIn) {
         if (User.getUserByUsername(username) == null)
             return LoginMenuMessages.USERNAME_NOT_EXIST;
-        //TODO: a function for checking password exists in user,Mehrazin would probably modifies it, but try to use that function
+        //TODO: a function for checking password exists in user,Mehrazin would probably modify it, but try to use that function
 
         loginPassword(username, password);
 

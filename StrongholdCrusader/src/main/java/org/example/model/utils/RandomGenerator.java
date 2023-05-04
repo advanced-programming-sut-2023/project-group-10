@@ -28,8 +28,9 @@ public class RandomGenerator {
 
     //TODO: are all of these compatible with my teammates?
     public static String generateSecurePassword() {
-        String upperCaseStr = RandomStringUtils.random(2, 65, 90, true, true);
-        String lowerCaseStr = RandomStringUtils.random(2, 97, 122, true, true);
+        Random randomNumberOfLetters=new Random();
+        String upperCaseStr = RandomStringUtils.random(randomNumberOfLetters.nextInt(4)+2, 65, 90, true, true);
+        String lowerCaseStr = RandomStringUtils.random(randomNumberOfLetters.nextInt(4)+2, 97, 122, true, true);
         String numbersStr = RandomStringUtils.randomNumeric(2);
         String specialCharStr = RandomStringUtils.random(2, 33, 47, false, false);
         String totalCharsStr = RandomStringUtils.randomAlphanumeric(2);
