@@ -12,10 +12,11 @@ public class CaptchaGenerator {
         while(true){
             String key = randomNumberGenerator();
             captchaGenerator(key);
-            String answer = scanner.next();
+            String answer = scanner.nextLine();
             if(answer.equals(key))
                 break;
-            else System.out.println("Wrong! Complete captcha again");
+            if(answer.equals("change captcha")) continue;
+            System.out.println("Wrong! Complete captcha again");
         }
     }
 
