@@ -135,11 +135,12 @@ public class UnitMenu {
         }
         if (direction == null) System.out.println("empty field");
         else if (direction.isEmpty()) System.out.println("missing option -d");
-        else if (!direction.matches("[udlr]")) System.out.println("invalid direction. choose u, d, l, or r");
         else {
             UnitMenuMessages result = UnitMenuController.pourOil(direction);
-            if (result == UnitMenuMessages.UNITS_CANT_POUR_OIL)
+            if (result == UnitMenuMessages.INVALID_DIRECTION) System.out.println("invalid direction");
+            else if (result == UnitMenuMessages.UNITS_CANT_POUR_OIL)
                 System.out.println("only engineers on oil duty can pour oil");
+            else if(result==UnitMenuMessages.TARGET_OUT_OF_MAP) System.out.println("target must be inside the map");
             else if (result == UnitMenuMessages.SUCCESSFUL_POUR_OIL) System.out.println("oil was poured successfully");
         }
     }

@@ -5,6 +5,7 @@ import org.example.model.game.Moat;
 import org.example.model.game.NumericalEnums;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.Engineer;
 import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.MilitaryUnit;
@@ -34,6 +35,7 @@ public class UnitMenuController {
         return UnitMenuMessages.SUCCESSFUL_PATROL;
     }
 
+    // TODO: move to game menu
     public static UnitMenuMessages setStance(Coordinate position, MilitaryUnitStance stance) {
         //TODO: check and complete doc:pg.23
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
@@ -71,8 +73,34 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages pourOil(String direction) {
+        int verticalChange = 0;
+        int horizontalChange = 0;
+        switch (direction) {
+            case "up":
+                verticalChange = -1;
+                break;
+            case "down":
+                verticalChange = 1;
+                break;
+            case "left":
+                horizontalChange = -1;
+                break;
+            case "right":
+                horizontalChange = 1;
+                break;
+            default:
+                return UnitMenuMessages.INVALID_DIRECTION;
+        }
 
-        return null;
+        Engineer selectedEngineer = firstEngineerSelected();
+        if (selectedEngineer == null) return UnitMenuMessages.UNITS_CANT_POUR_OIL;
+        Coordinate targetPosition = selectedEngineer.getPosition();
+        targetPosition.row += verticalChange;
+        targetPosition.column += horizontalChange;
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        if (!map.isIndexInBounds(targetPosition)) return UnitMenuMessages.TARGET_OUT_OF_MAP;
+        map.getBlockByRowAndColumn(targetPosition).setOnFire(true);
+        return UnitMenuMessages.SUCCESSFUL_POUR_OIL;
     }
 
     public static UnitMenuMessages digMoat(Coordinate position) {
@@ -85,21 +113,17 @@ public class UnitMenuController {
                 break;
             }
         if (!canDigMoats) return UnitMenuMessages.UNITS_CANT_DIG_MOAT;
-        //TODO: wait until unit get to the target then add moat to map
-        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).setDroppable(new Moat(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
+        Moat moat = new Moat(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
+            if (selectedMilitaryUnit instanceof MilitaryPerson && ((MilitaryPersonRole) selectedMilitaryUnit.getRole()).isCanDigMoats())
+                selectedMilitaryUnit.setMoatAboutToBeDug(moat);
         return UnitMenuMessages.SUCCESSFUL_DIG_MOAT;
     }
 
     public static UnitMenuMessages build(MilitaryEquipmentRole equipmentRole) {
-        Engineer firstEngineerSelected = null;
-        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits) {
-            if (selectedMilitaryUnit instanceof Engineer) {
-                firstEngineerSelected = (Engineer) selectedMilitaryUnit;
-                break;
-            }
-        }
-        if (firstEngineerSelected == null) return UnitMenuMessages.UNITS_CANT_BUILD;
-        if (equipmentRole.tryToProduceThisMany(firstEngineerSelected.getGovernment(), firstEngineerSelected.getPosition(), 1) == 0)
+        Engineer selectedEngineer = firstEngineerSelected();
+        if (selectedEngineer == null) return UnitMenuMessages.UNITS_CANT_BUILD;
+        if (equipmentRole.tryToProduceThisMany(selectedEngineer.getGovernment(), selectedEngineer.getPosition(), 1) == 0)
             return UnitMenuMessages.INSUFFICIENT_RESOURCES;
         return UnitMenuMessages.SUCCESSFUL_BUILD;
     }
@@ -111,5 +135,12 @@ public class UnitMenuController {
         }
         selectedMilitaryUnits = null;
         return UnitMenuMessages.SUCCESSFUL_DISBAND;
+    }
+
+    private static Engineer firstEngineerSelected() {
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
+            if (selectedMilitaryUnit instanceof Engineer)
+                return (Engineer) selectedMilitaryUnit;
+        return null;
     }
 }

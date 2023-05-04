@@ -9,10 +9,12 @@ import org.example.model.game.units.unitconstants.RoleName;
 
 public class Engineer extends MilitaryUnit {
     private boolean onBoilingDuty;
+    private boolean hasOil;
 
     public Engineer(Coordinate position, RoleName role, Government government) {
         super(position, role, government);
         onBoilingDuty = false;
+        hasOil=false;
     }
 
     public boolean isOnBoilingDuty() {
@@ -21,6 +23,14 @@ public class Engineer extends MilitaryUnit {
 
     public void assignToBoilingOilDuty() {
         onBoilingDuty = true;
+    }
+
+    public boolean hasOil() {
+        return hasOil;
+    }
+
+    public void setHasOil(boolean hasOil) {
+        this.hasOil = hasOil;
     }
 
     public SiegeEquipment buildSiegeEquipment(RoleName siegeEquipmentName) {

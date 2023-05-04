@@ -23,11 +23,11 @@ public class Map {
     }
 
     public Block getBlockByRowAndColumn(int row, int column) {
-        if (!isIndexInBounds(row) || !isIndexInBounds(column)) return null;
-        else return blocks[row][column];
+        return getBlockByRowAndColumn(new Coordinate(row, column));
     }
+
     public Block getBlockByRowAndColumn(Coordinate position) {
-        if (!isIndexInBounds(position) ) return null;
+        if (!isIndexInBounds(position)) return null;
         else return blocks[position.row][position.column];
     }
 
@@ -73,7 +73,6 @@ public class Map {
     }
 
     public boolean isIndexInBounds(Coordinate position) {
-        return position.column >= 0 && position.row >= 0 && position.row < size && position.column < size;
+        return isIndexInBounds(position.row) && isIndexInBounds(position.column);
     }
-
 }
