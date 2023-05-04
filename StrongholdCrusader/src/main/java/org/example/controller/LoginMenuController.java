@@ -64,7 +64,7 @@ public class LoginMenuController {
 
         while (!User.getUserByUsername(username).checkPassword(password)){
             System.out.println("Wrong password!");
-            System.out.println("You have to wait " + wrongPassword*5 + " seconds to retry!");
+            System.out.println("You have to wait " + wrongPassword*5 + " seconds to enter another password!");
             StopWatch watch = new StopWatch();
             watch.start();
 
@@ -73,8 +73,7 @@ public class LoginMenuController {
             long time;
 
             while((time = watch.getTime()) < wrongPassword * 5000L){
-                //System.out.println(time);
-                System.out.println("You have to wait " + (wrongPassword*5 - time/1000) + " seconds to retry!");
+                System.out.println("You have to wait " + (wrongPassword*5 - time/1000) + " seconds to enter another password!");
                 password = scanner.nextLine();
             }
             watch.stop();
