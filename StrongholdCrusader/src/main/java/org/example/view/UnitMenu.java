@@ -30,8 +30,10 @@ public class UnitMenu {
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_TUNNEL) != null) digTunnel(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_MOAT) != null) digMoat(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BUILD) != null) build(input);
-            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) disband();
-            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BACK) != null) return;
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) {
+                disband();
+                if (UnitMenuController.selectedMilitaryUnits == null) return;
+            } else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BACK) != null) return;
         }
     }
 
@@ -129,11 +131,13 @@ public class UnitMenu {
     private void assignToOilDuty(String input) {
         try {
             Coordinate location = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
-            UnitMenuMessages result=UnitMenuController.assignToOilDuty(location);
-            if(result==UnitMenuMessages.INVALID_TARGET) System.out.println("no oil smelter here");
-            else if(result==UnitMenuMessages.UNITS_CANT_POUR_OIL) System.out.println("no engineers on oil duty found");
-            else if(result==UnitMenuMessages.ALREADY_HAS_OIL) System.out.println("the engineer's pot is full");
-            else if(result==UnitMenuMessages.SUCCESSFUL_ASSIGN_TO_OIL_DUTY) System.out.println("the engineer is going to the oil smelter");
+            UnitMenuMessages result = UnitMenuController.assignToOilDuty(location);
+            if (result == UnitMenuMessages.INVALID_TARGET) System.out.println("no oil smelter here");
+            else if (result == UnitMenuMessages.UNITS_CANT_POUR_OIL)
+                System.out.println("no engineers on oil duty found");
+            else if (result == UnitMenuMessages.ALREADY_HAS_OIL) System.out.println("the engineer's pot is full");
+            else if (result == UnitMenuMessages.SUCCESSFUL_ASSIGN_TO_OIL_DUTY)
+                System.out.println("the engineer is going to the oil smelter");
 
         } catch (Exception exception) {
             System.out.println(exception.getMessage());

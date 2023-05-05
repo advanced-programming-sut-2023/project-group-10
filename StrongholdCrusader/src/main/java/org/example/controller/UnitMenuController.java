@@ -18,7 +18,8 @@ public class UnitMenuController {
     public static ArrayList<MilitaryUnit> selectedMilitaryUnits;
 
     public static UnitMenuMessages moveUnit(Coordinate destination) {
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination.row, destination.column).canUnitsGoHere())
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        if (!map.getBlockByRowAndColumn(destination).canUnitsGoHere() || map.findPath(selectedMilitaryUnits.get(0).getPosition(), destination) == null)
             return UnitMenuMessages.INVALID_DESTINATION;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             selectedMilitaryUnit.moveUnit(destination);
@@ -27,7 +28,8 @@ public class UnitMenuController {
 
     public static UnitMenuMessages patrolUnit(Coordinate startPoint, Coordinate destination) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
-        if (!map.getBlockByRowAndColumn(startPoint).canUnitsGoHere() || !map.getBlockByRowAndColumn(destination).canUnitsGoHere())
+        if (!map.getBlockByRowAndColumn(startPoint).canUnitsGoHere() || !map.getBlockByRowAndColumn(destination).canUnitsGoHere() ||
+                map.findPath(selectedMilitaryUnits.get(0).getPosition(), startPoint) == null || map.findPath(startPoint, destination) == null)
             return UnitMenuMessages.INVALID_DESTINATION;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             selectedMilitaryUnit.patrol(startPoint, destination);
@@ -56,7 +58,7 @@ public class UnitMenuController {
         ArrayList<Unit> deadUnits = new ArrayList<>();
         for (Unit unit : targetBlock.getAllUnits()) {
             if (unit.getGovernment().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay())) continue;
-            unit.setHitPoint(unit.getHitPoint() - totalDamage);
+            unit.changeHitPoint(-totalDamage);
             if (unit.isDead()) deadUnits.add(unit);
         }
         for (Unit deadUnit : deadUnits) {
@@ -139,6 +141,7 @@ public class UnitMenuController {
         if (tunneler == null) return UnitMenuMessages.INVALID_TUNNEL_UNIT;
         Block target = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position);
         if (!target.canDigHere()) return UnitMenuMessages.INVALID_TARGET;
+        //TODO: select target castle and find path + add state to tunnelers
         return null;
     }
 
@@ -152,8 +155,8 @@ public class UnitMenuController {
 
     public static UnitMenuMessages disband() {
         for (MilitaryUnit selectedUnit : selectedMilitaryUnits) {
-            new Unit(selectedUnit.getPosition(), RoleName.PEASANT, selectedUnit.getGovernment());
-            selectedUnit.getGovernment().deleteUnit(selectedUnit);
+            new Unit(selectedUnit.getPosition(), RoleName.PEASANT, selectedUnit.getGovernment()).addToGovernmentAndBlock();
+            selectedUnit.deleteUnitFromGovernmentAndMap();
         }
         selectedMilitaryUnits = null;
         return UnitMenuMessages.SUCCESSFUL_DISBAND;

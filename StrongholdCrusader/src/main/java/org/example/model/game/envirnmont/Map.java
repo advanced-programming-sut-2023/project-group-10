@@ -1,7 +1,5 @@
 package org.example.model.game.envirnmont;
 
-import org.example.model.Stronghold;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -82,6 +80,10 @@ public class Map {
         return isIndexInBounds(position.row) && isIndexInBounds(position.column);
     }
 
+    public ArrayList<Coordinate> findPath(Coordinate startCoordinate, Coordinate endCoordinate) {
+        return findPath(new Node(startCoordinate), new Node(endCoordinate));
+    }
+
     public ArrayList<Coordinate> findPath(Node start, Node end) {
         LinkedList<Node> queue = new LinkedList<>();
         queue.add(start);
@@ -100,7 +102,6 @@ public class Map {
                 }
             }
         }
-
         return traceRoute(end);
     }
 

@@ -1,5 +1,6 @@
 package org.example.model.game.units;
 
+import org.example.model.Stronghold;
 import org.example.model.game.Entity;
 import org.example.model.game.Government;
 import org.example.model.game.NumericalEnums;
@@ -13,9 +14,8 @@ public class Unit extends Entity {
 
     public Unit(Coordinate position, RoleName roleName, Government government) {
         super(position, government);
-        this.role = Role.getRoleByName(roleName);
-        hitPoint = this.role.getMaxHitPoint();
-        government.addUnit(this);
+        role = Role.getRoleByName(roleName);
+        hitPoint = role.getMaxHitPoint();
     }
 
     public Role getRole() {
@@ -30,15 +30,23 @@ public class Unit extends Entity {
         return role.getSpeed().getValue() * NumericalEnums.SPEED_COEFFICIENT.getValue();
     }
 
-    public void setHitPoint(int hitPoint) {
-        this.hitPoint = hitPoint;
-    }
-
-    public void reduceHitPoint(int damage) {
-        hitPoint -= damage;
+    public void changeHitPoint(int change) {
+        hitPoint += change;
     }
 
     public boolean isDead() {
         return hitPoint <= 0;
+    }
+
+    public void deleteUnitFromGovernmentAndMap() {
+        this.getGovernment().deleteUnit(this);
+        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).removeUnit(this);
+    }
+
+    public boolean addToGovernmentAndBlock() {
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).addUnit(this))
+            return false;
+        this.getGovernment().addUnit(this);
+        return true;
     }
 }

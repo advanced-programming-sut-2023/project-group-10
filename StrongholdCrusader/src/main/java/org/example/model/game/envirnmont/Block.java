@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Block {
     private BlockTexture texture;
     private Droppable droppable;
-    private ArrayList<Unit> units;
+    private final ArrayList<Unit> units;
     private boolean onFire;
 
     Block(BlockTexture texture) {
@@ -71,14 +71,17 @@ public class Block {
 
     public void clearBlock() {
         droppable = null;
-        units.clear();
+        for (Unit unit : units)
+            unit.deleteUnitFromGovernmentAndMap();
+        setOnFire(false);
     }
 
     //TODO: change if's to handle rock, pond, tree
     public boolean setDroppable(Droppable droppable) {
         if (this.droppable != null) return false;
         if (!texture.isBuildable()) return false;
-        if (!texture.isFertile() && droppable instanceof ItemProducingBuilding && ((ItemProducingBuildingType) ((ItemProducingBuilding) droppable).getBuildingType()).isFarm())
+        if (onFire) return false;
+        if (!texture.isFertile() && droppable instanceof ItemProducingBuilding && ((ItemProducingBuildingType) ((Building) droppable).getBuildingType()).isFarm())
             return false;
         this.droppable = droppable;
         return true;
@@ -89,23 +92,21 @@ public class Block {
     }
 
     public boolean addUnit(Unit unit) {
-        if (!texture.isWalkable()) return false;
+        if (!canUnitsGoHere()) return false;
         units.add(unit);
         return true;
     }
 
-    public boolean removeUnit(Unit unit) {
-        return units.remove(unit);
+    public void removeUnit(Unit unit) {
+        units.remove(unit);
     }
 
-    // TODO: maybe units being final makes us trouble
     public void clearForces() {
-        ArrayList<Unit> newUnits = new ArrayList<>();
-        for (Unit unit : units) {
-            if (unit instanceof MilitaryUnit) continue;
-            else newUnits.add(unit);
-        }
-        units = newUnits;
+        ArrayList<Unit> militaryUnits = new ArrayList<>();
+        for (Unit unit : units)
+            if (unit instanceof MilitaryUnit) militaryUnits.add(unit);
+        for (Unit militaryUnit : militaryUnits)
+            militaryUnit.deleteUnitFromGovernmentAndMap();
     }
 
     public boolean canUnitsGoHere() {
