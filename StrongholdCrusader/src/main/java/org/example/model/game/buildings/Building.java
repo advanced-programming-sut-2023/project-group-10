@@ -1,6 +1,6 @@
 package org.example.model.game.buildings;
 
-import org.example.model.game.Droppable;
+import org.example.model.Stronghold;
 import org.example.model.game.Entity;
 import org.example.model.game.Government;
 import org.example.model.game.buildings.buildingconstants.BuildingType;
@@ -37,5 +37,17 @@ public class Building extends Entity {
 
     public void setClimbable(boolean climbable) {
         this.climbable = climbable;
+    }
+
+    public boolean addToGovernmentAndBlock() {
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).setDroppable(this))
+            return false;
+        this.getGovernment().addBuilding(this);
+        return true;
+    }
+
+    public void deleteBuildingFromMapAndGovernment() {
+        this.getGovernment().deleteBuilding(this);
+        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).setDroppable(null);
     }
 }

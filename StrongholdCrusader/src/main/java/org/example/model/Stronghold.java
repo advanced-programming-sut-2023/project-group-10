@@ -13,6 +13,7 @@ import static org.example.model.User.gson;
 public class Stronghold {
     private static User currentUser;
     private static Battle currentBattle;
+    public static DataBase dataBase=new DataBase();
 
     public static User getCurrentUser() {
         return currentUser;

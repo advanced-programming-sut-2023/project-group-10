@@ -17,6 +17,7 @@ public abstract class MilitaryUnit extends Unit {
     private DestinationIndicator destination;
     private boolean onPatrol;
     private Moat moatAboutToBeDug;
+    private Moat moatAboutToBeFilled;
 
     public MilitaryUnit(Coordinate position, RoleName role, Government government) {
         //TODO: check if required resources are available
@@ -46,6 +47,8 @@ public abstract class MilitaryUnit extends Unit {
         startingPoint = null;
         this.endPoint = endPoint;
         onPatrol = false;
+        moatAboutToBeDug = null;
+        moatAboutToBeFilled=null;
     }
 
     public void patrol(Coordinate startingPoint, Coordinate endPoint) {
@@ -53,6 +56,7 @@ public abstract class MilitaryUnit extends Unit {
         this.endPoint = endPoint;
         this.destination = DestinationIndicator.STARTING_POINT;
         onPatrol = true;
+        moatAboutToBeDug = null;
     }
 
     public Coordinate getDestination() {
@@ -66,9 +70,14 @@ public abstract class MilitaryUnit extends Unit {
             if (destination == DestinationIndicator.STARTING_POINT) destination = DestinationIndicator.END_POINT;
             else if (destination == DestinationIndicator.END_POINT) destination = DestinationIndicator.STARTING_POINT;
         } else {
+            Map map = Stronghold.getCurrentBattle().getBattleMap();
             if (moatAboutToBeDug != null) {
-                Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(endPoint).setDroppable(moatAboutToBeDug);
+                map.getBlockByRowAndColumn(endPoint).setDroppable(moatAboutToBeDug);
                 moatAboutToBeDug = null;
+            }
+            if (moatAboutToBeFilled != null) {
+                map.getBlockByRowAndColumn(moatAboutToBeFilled.getPosition()).setDroppable(null);
+                moatAboutToBeFilled = null;
             }
             destination = DestinationIndicator.NONE;
             startingPoint = endPoint = null;
@@ -86,11 +95,15 @@ public abstract class MilitaryUnit extends Unit {
         return ((AttackingBuildingType) building.getBuildingType()).getBoostInFireRange();
     }
 
-    public Moat getMoatAboutToBeDug() {
-        return moatAboutToBeDug;
-    }
-
     public void setMoatAboutToBeDug(Moat moatAboutToBeDug) {
         this.moatAboutToBeDug = moatAboutToBeDug;
+    }
+
+    public void setMoatAboutToBeFilled(Moat moatAboutToBeFilled) {
+        this.moatAboutToBeFilled = moatAboutToBeFilled;
+    }
+
+    public boolean isSelectable() {
+        return moatAboutToBeDug == null;
     }
 }

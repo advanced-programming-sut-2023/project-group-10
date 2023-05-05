@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Government{
+public class Government {
     private final User owner;
     private final MilitaryPerson lord;
     private final ArrayList<Unit> units = new ArrayList<>();
-    private  ArrayList<Building> buildings=new ArrayList<>();
+    private ArrayList<Building> buildings = new ArrayList<>();
     private final HashMap<Item, Integer> itemList = new HashMap<>();
     private int popularity;
     private final HashMap<String, Integer> popularityFactors = new HashMap<>();
@@ -53,12 +53,12 @@ public class Government{
 
     public void setTaxRate(int taxRate) {
         this.taxRate = taxRate;
-        popularityFactors.put("tax",popularityFactors.get("tax")+taxRate);
+        popularityFactors.put("tax", popularityFactors.get("tax") + taxRate);
     }
 
     public void setFearRate(int fearRate) {
         this.fearRate = fearRate;
-        popularityFactors.put("fear",popularityFactors.get("fear")+fearRate);
+        popularityFactors.put("fear", popularityFactors.get("fear") + fearRate);
     }
 
     public void addReligion() {
@@ -68,7 +68,7 @@ public class Government{
 
     public void setFoodRate(int foodRate) {
         this.foodRate = foodRate;
-        popularityFactors.put("food",popularityFactors.get("food")+foodRate);
+        popularityFactors.put("food", popularityFactors.get("food") + foodRate);
     }
 
     public int getFoodRate() {
@@ -175,12 +175,12 @@ public class Government{
         return foodList;
     }
 
-    public void getBuildings(org.example.model.game.envirnmont.Map  gameMap){
-        buildings=new ArrayList<>();
-        for(int i=0; i<gameMap.getSize(); i++){
-            for (int j=0; j<gameMap.getSize(); j++){
-                if(gameMap.getBlockByRowAndColumn(i,j).getBuilding().getGovernment().equals(this)){
-                    buildings.add(gameMap.getBlockByRowAndColumn(i,j).getBuilding());
+    public void getBuildings(org.example.model.game.envirnmont.Map gameMap) {
+        buildings = new ArrayList<>();
+        for (int i = 0; i < gameMap.getSize(); i++) {
+            for (int j = 0; j < gameMap.getSize(); j++) {
+                if (gameMap.getBlockByRowAndColumn(i, j).getBuilding().getGovernment().equals(this)) {
+                    buildings.add(gameMap.getBlockByRowAndColumn(i, j).getBuilding());
                 }
             }
         }
@@ -190,11 +190,20 @@ public class Government{
         return buildings;
     }
 
+
+    public void addBuilding(Building building) {
+        buildings.add(building);
+    }
+
+    public boolean deleteBuilding(Building building) {
+        return buildings.remove(building);
+    }
+
     public HashMap<Item, Integer> getItemList() {
         return itemList;
     }
 
-    public boolean equals(Government government){
+    public boolean equals(Government government) {
         return government.getOwner().getUsername().equals(this.getOwner().getUsername());
     }
 }

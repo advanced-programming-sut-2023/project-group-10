@@ -1,9 +1,9 @@
 package org.example.controller;
 
+import org.example.model.DataBase;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
-import org.example.view.enums.messages.LoginMenuMessages;
 import org.example.view.enums.messages.ProfileMenuMessages;
 
 import java.util.Scanner;
@@ -23,7 +23,7 @@ public class ProfileMenuController {
 
         else {
             Stronghold.getCurrentUser().setUsername(username);
-            User.saveUsersToFile();
+            Stronghold.dataBase.saveUsersToFile();
             return ProfileMenuMessages.CHANGE_USERNAME_SUCCESSFUL;
         }
     }
@@ -32,7 +32,7 @@ public class ProfileMenuController {
         if (nickname.matches("\\s*"))
             return ProfileMenuMessages.NO_NICKNAME_PROVIDED;
 
-        if (!CheckFormatAndEncrypt.checkNicknameFormat(nickname))
+        if (CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
             return ProfileMenuMessages.INVALID_NICKNAME;
 
         else {
@@ -60,8 +60,7 @@ public class ProfileMenuController {
         }
 
         Stronghold.getCurrentUser().setPassword(newPassword);
-        User.saveUsersToFile();
-        return ProfileMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
+        Stronghold.dataBase.saveUsersToFile();        return ProfileMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 
     public static ProfileMenuMessages changeEmail(String email) {
@@ -76,8 +75,7 @@ public class ProfileMenuController {
 
         else {
             Stronghold.getCurrentUser().setEmail(email);
-            User.saveUsersToFile();
-            return ProfileMenuMessages.CHANGE_EMAIL_SUCCESSFUL;
+            Stronghold.dataBase.saveUsersToFile();            return ProfileMenuMessages.CHANGE_EMAIL_SUCCESSFUL;
         }
     }
 
@@ -87,8 +85,7 @@ public class ProfileMenuController {
 
         else {
             Stronghold.getCurrentUser().setSlogan(slogan);
-            User.saveUsersToFile();
-            return ProfileMenuMessages.CHANGE_SLOGAN_SUCCESSFUL;
+            Stronghold.dataBase.saveUsersToFile();            return ProfileMenuMessages.CHANGE_SLOGAN_SUCCESSFUL;
         }
     }
 

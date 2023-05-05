@@ -38,13 +38,13 @@ public abstract class MilitaryUnitRole extends Role {
     public int numberOfUnitsThatCanBeSpawned(Government government) {
         return ((int) government.getGold()) / cost;
     }
-//TODO: Current location?
+
     public int tryToProduceThisMany(Government government, Coordinate position, int count) {
         count = Math.min(count, numberOfUnitsThatCanBeSpawned(government));
         government.changeGold(this.getCost() * count);
         for (int i = 0; i < count; i++)
-            if (this instanceof MilitaryPersonRole) new MilitaryPerson(position, this.getName(), government);
-            else new SiegeEquipment(position, this.getName(), government);
+            if (this instanceof MilitaryPersonRole) new MilitaryPerson(position, this.getName(), government).addToGovernmentAndBlock();
+            else new SiegeEquipment(position, this.getName(), government).addToGovernmentAndBlock();
         return count;
     }
 }

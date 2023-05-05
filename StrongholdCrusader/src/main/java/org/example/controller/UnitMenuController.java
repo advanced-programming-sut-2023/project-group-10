@@ -1,8 +1,10 @@
 package org.example.controller;
 
 import org.example.model.Stronghold;
-import org.example.model.game.Moat;
-import org.example.model.game.NumericalEnums;
+import org.example.model.game.*;
+import org.example.model.game.buildings.Building;
+import org.example.model.game.buildings.buildingconstants.BuildingType;
+import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
@@ -11,12 +13,14 @@ import org.example.model.game.units.unitconstants.*;
 import org.example.view.enums.messages.UnitMenuMessages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class UnitMenuController {
     public static ArrayList<MilitaryUnit> selectedMilitaryUnits;
 
     public static UnitMenuMessages moveUnit(Coordinate destination) {
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination.row, destination.column).canUnitsGoHere())
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        if (!map.getBlockByRowAndColumn(destination).canUnitsGoHere() || map.findPath(selectedMilitaryUnits.get(0).getPosition(), destination) == null)
             return UnitMenuMessages.INVALID_DESTINATION;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             selectedMilitaryUnit.moveUnit(destination);
@@ -24,9 +28,11 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages patrolUnit(Coordinate startPoint, Coordinate destination) {
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(startPoint).canUnitsGoHere() ||
-                !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination).canUnitsGoHere())
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        if (!map.getBlockByRowAndColumn(startPoint).canUnitsGoHere() || !map.getBlockByRowAndColumn(destination).canUnitsGoHere())
             return UnitMenuMessages.INVALID_DESTINATION;
+        if (map.findPath(selectedMilitaryUnits.get(0).getPosition(), startPoint) == null || map.findPath(startPoint, destination) == null)
+            return UnitMenuMessages.TOUR_BLOCKED;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             selectedMilitaryUnit.patrol(startPoint, destination);
         return UnitMenuMessages.SUCCESSFUL_PATROL;
@@ -50,23 +56,33 @@ public class UnitMenuController {
         }
         if (totalDamage == 0) return UnitMenuMessages.TARGET_OUT_OF_RANGE;
         Block targetBlock = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(target);
-        if (targetBlock.getAllUnits().size() == 0) return UnitMenuMessages.NO_ENEMY_HERE;
+        ArrayList<Unit> enemyUnits = targetBlock.getAllAttackableEnemyUnits(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        if (enemyUnits.size() == 0) return UnitMenuMessages.NO_ENEMY_HERE;
         ArrayList<Unit> deadUnits = new ArrayList<>();
-        for (Unit unit : targetBlock.getAllUnits()) {
-            if (unit.getGovernment().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay())) continue;
-            unit.setHitPoint(unit.getHitPoint() - totalDamage);
+        for (Unit unit : enemyUnits) {
+            unit.changeHitPoint(-totalDamage);
             if (unit.isDead()) deadUnits.add(unit);
         }
-        for (Unit deadUnit : deadUnits) {
-            deadUnit.getGovernment().deleteUnit(deadUnit);
-            targetBlock.removeUnit(deadUnit);
-        }
+        for (Unit deadUnit : deadUnits)
+            deadUnit.deleteUnitFromGovernmentAndMap();
         return UnitMenuMessages.SUCCESSFUL_ENEMY_ATTACK;
     }
 
     public static UnitMenuMessages airAttack(Coordinate target) {
         //TODO: difference between air attack and enemy attack?
         return attackEnemy(target);
+    }
+
+    public static UnitMenuMessages assignToOilDuty(Coordinate location) {
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        if (map.getBlockByRowAndColumn(location).getBuilding().getBuildingType() != BuildingType.getBuildingTypeByName(BuildingTypeName.OIL_SMELTER))
+            return UnitMenuMessages.INVALID_TARGET;
+        Engineer engineer = firstEngineerSelected(true);
+        if (engineer == null) return UnitMenuMessages.UNITS_CANT_POUR_OIL;
+        if (engineer.hasOil()) return UnitMenuMessages.ALREADY_HAS_OIL;
+        engineer.assignToBoilingOilDuty();
+        engineer.moveUnit(location);
+        return UnitMenuMessages.SUCCESSFUL_ASSIGN_TO_OIL_DUTY;
     }
 
     public static UnitMenuMessages pourOil(String direction) {
@@ -89,7 +105,7 @@ public class UnitMenuController {
                 return UnitMenuMessages.INVALID_DIRECTION;
         }
 
-        Engineer selectedEngineer = firstEngineerSelected();
+        Engineer selectedEngineer = firstEngineerSelected(false);
         if (selectedEngineer == null) return UnitMenuMessages.UNITS_CANT_POUR_OIL;
         Coordinate targetPosition = selectedEngineer.getPosition();
         targetPosition.row += verticalChange;
@@ -97,12 +113,29 @@ public class UnitMenuController {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         if (!map.isIndexInBounds(targetPosition)) return UnitMenuMessages.TARGET_OUT_OF_MAP;
         map.getBlockByRowAndColumn(targetPosition).setOnFire(true);
+        selectedEngineer.setHasOil(false);
+        selectedEngineer.moveUnit(getNearestOilSmelterCoordinate(selectedEngineer.getPosition()));
         return UnitMenuMessages.SUCCESSFUL_POUR_OIL;
+    }
+
+    private static Coordinate getNearestOilSmelterCoordinate(Coordinate position) {
+        Battle battle = Stronghold.getCurrentBattle();
+        Coordinate nearestOilSmelterPosition = null;
+        int pathLength = Integer.MAX_VALUE;
+        for (Building building : battle.getGovernmentAboutToPlay().getBuildings()) {
+            if (building.getBuildingType().getName() != BuildingTypeName.OIL_SMELTER) continue;
+            ArrayList<Coordinate> path = battle.getBattleMap().findPath(position, building.getPosition());
+            if (path != null && path.size() < pathLength) {
+                pathLength = path.size();
+                nearestOilSmelterPosition = building.getPosition();
+            }
+        }
+        return nearestOilSmelterPosition;
     }
 
     public static UnitMenuMessages digMoat(Coordinate position) {
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canDigHere())
-            return UnitMenuMessages.CANT_DIG_MOAT_HERE;
+            return UnitMenuMessages.INVALID_TARGET;
         boolean canDigMoats = false;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             if (selectedMilitaryUnit instanceof MilitaryPerson && ((MilitaryPersonRole) selectedMilitaryUnit.getRole()).isCanDigMoats()) {
@@ -119,16 +152,58 @@ public class UnitMenuController {
         return UnitMenuMessages.SUCCESSFUL_DIG_MOAT;
     }
 
+    public static UnitMenuMessages fillMoat(Coordinate position) {
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        Droppable moat = map.getBlockByRowAndColumn(position).getDroppable();
+        if (!(moat instanceof Moat)) return UnitMenuMessages.INVALID_TARGET;
+        if (!map.getBlockByRowAndColumn(position).getTexture().isWalkable() || map.findPath(selectedMilitaryUnits.get(0).getPosition(), position) == null)
+            return UnitMenuMessages.INVALID_DESTINATION;
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
+            if (selectedMilitaryUnit instanceof MilitaryPerson) {
+                selectedMilitaryUnit.moveUnit(position);
+                selectedMilitaryUnit.setMoatAboutToBeFilled((Moat) moat);
+            }
+        return UnitMenuMessages.SUCCESSFUL_FILL_MOAT;
+    }
+
     public static UnitMenuMessages digTunnel(Coordinate position) {
         Tunneler tunneler = firstTunnelerSelected();
-        if(tunneler==null) return UnitMenuMessages.INVALID_TUNNEL_UNIT;
-        Block target=Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position);
-        if(!target.canDigHere()) return UnitMenuMessages.INVALID_TUNNEL_COORDINATES;
-        return null;
+        if (tunneler == null) return UnitMenuMessages.INVALID_TUNNEL_UNIT;
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        if (!map.getBlockByRowAndColumn(position).canDigHere() || map.findPath(tunneler.getPosition(), position) == null)
+            return UnitMenuMessages.INVALID_TARGET;
+        //TODO: select target castle and find path + add state to tunnelers
+        Building nearestEnemyCastle = getNearestEnemyCastle(position);
+        if (nearestEnemyCastle == null) return UnitMenuMessages.NO_ENEMY_CASTLE;
+        tunneler.setTunnelerState(TunnelerState.GOING_TO_DIG_TUNNEL);
+        tunneler.setTargetBuilding(nearestEnemyCastle);
+        tunneler.moveUnit(position);
+        return UnitMenuMessages.SUCCESSFUL_DIG_TUNNEL;
+    }
+
+    private static Building getNearestEnemyCastle(Coordinate position) {
+        Battle battle = Stronghold.getCurrentBattle();
+        BuildingTypeName[] attackableBuildingTypes = {BuildingTypeName.WALL, BuildingTypeName.LOOKOUT_TOWER, BuildingTypeName.SMALL_STONE_GATEHOUSE, BuildingTypeName.LARGE_STONE_GATEHOUSE};
+        Building nearestEnemyCastle = null;
+        int pathLength = Integer.MAX_VALUE;
+
+        for (Government government : battle.getGovernments()) {
+            if (government == battle.getGovernmentAboutToPlay()) continue;
+            for (Building building : government.getBuildings())
+                if (Arrays.asList(attackableBuildingTypes).contains(building.getBuildingType().getName())) {
+                    ArrayList<Coordinate> path = battle.getBattleMap().findPath(position, building.getPosition());
+                    if (path == null) continue;
+                    if (path.size() < pathLength) {
+                        pathLength = path.size();
+                        nearestEnemyCastle = building;
+                    }
+                }
+        }
+        return nearestEnemyCastle;
     }
 
     public static UnitMenuMessages build(MilitaryEquipmentRole equipmentRole) {
-        Engineer selectedEngineer = firstEngineerSelected();
+        Engineer selectedEngineer = firstEngineerSelected(false);
         if (selectedEngineer == null) return UnitMenuMessages.UNITS_CANT_BUILD;
         if (equipmentRole.tryToProduceThisMany(selectedEngineer.getGovernment(), selectedEngineer.getPosition(), 1) == 0)
             return UnitMenuMessages.INSUFFICIENT_RESOURCES;
@@ -137,24 +212,23 @@ public class UnitMenuController {
 
     public static UnitMenuMessages disband() {
         for (MilitaryUnit selectedUnit : selectedMilitaryUnits) {
-            new Unit(selectedUnit.getPosition(), RoleName.PEASANT, selectedUnit.getGovernment());
-            selectedUnit.getGovernment().deleteUnit(selectedUnit);
+            new Unit(selectedUnit.getPosition(), RoleName.PEASANT, selectedUnit.getGovernment()).addToGovernmentAndBlock();
+            selectedUnit.deleteUnitFromGovernmentAndMap();
         }
         selectedMilitaryUnits = null;
         return UnitMenuMessages.SUCCESSFUL_DISBAND;
     }
 
-    private static Engineer firstEngineerSelected() {
+    private static Engineer firstEngineerSelected(boolean hasToBeOnOilDuty) {
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
-            if (selectedMilitaryUnit instanceof Engineer)
+            if (selectedMilitaryUnit instanceof Engineer && (!hasToBeOnOilDuty || ((Engineer) selectedMilitaryUnit).isOnBoilingDuty()))
                 return (Engineer) selectedMilitaryUnit;
         return null;
     }
 
     private static Tunneler firstTunnelerSelected() {
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
-            if (selectedMilitaryUnit instanceof Tunneler)
-                return (Tunneler) selectedMilitaryUnit;
+            if (selectedMilitaryUnit instanceof Tunneler) return (Tunneler) selectedMilitaryUnit;
         return null;
     }
 }

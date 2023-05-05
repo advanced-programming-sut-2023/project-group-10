@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.example.model.DataBase;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 public class LoginMenuController {
     public static LoginMenuMessages login(String username, String password, boolean stayLoggedIn) {
         if (User.getUserByUsername(username) == null)
-            return LoginMenuMessages.USERNAME_NOT_EXIST;
+            return LoginMenuMessages.USERNAME_DOESNT_EXIST;
         //TODO: a function for checking password exists in user,Mehrazin would probably modify it, but try to use that function
 
         loginPassword(username, password);
@@ -28,7 +29,8 @@ public class LoginMenuController {
     }
 
     public static LoginMenuMessages forgetPassword(String username, String answer, String newPassword) {
-        if (!User.getUserByUsername(username).getQuestionAnswer().equals(answer))
+        Stronghold.dataBase.loadUsersFromFile();
+        if (!User.checkSecurityAnswer(username,answer))
             return LoginMenuMessages.SECURITY_ANSWER_WRONG;
 
         LoginMenuMessages message = checkPassword(newPassword);
@@ -36,8 +38,7 @@ public class LoginMenuController {
             return message;
 
         Stronghold.getCurrentUser().setPassword(newPassword);
-        User.saveUsersToFile();
-        return LoginMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
+        Stronghold.dataBase.saveUsersToFile();        return LoginMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 
     private static LoginMenuMessages checkPassword (String newPassword){

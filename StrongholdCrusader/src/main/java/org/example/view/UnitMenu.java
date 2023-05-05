@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class UnitMenu {
-    public void run() {
+    public static void run() {
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
@@ -24,12 +24,17 @@ public class UnitMenu {
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.PATROL_UNIT) != null) patrolUnit(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.SET_STANCE) != null) setStance(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.ATTACK) != null) attack(input);
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.ASSIGN_TO_OIL_DUTY) != null)
+                assignToOilDuty(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.POUR_OIL) != null) pourOil(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_TUNNEL) != null) digTunnel(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_MOAT) != null) digMoat(input);
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.FILL_MOAT) != null) fillMoat(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BUILD) != null) build(input);
-            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) disband();
-            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BACK) != null) return;
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) {
+                disband();
+                if (UnitMenuController.selectedMilitaryUnits == null) return;
+            } else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BACK) != null) return;
         }
     }
 
@@ -124,6 +129,22 @@ public class UnitMenu {
         }
     }
 
+    private static void assignToOilDuty(String input) {
+        try {
+            Coordinate location = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            UnitMenuMessages result = UnitMenuController.assignToOilDuty(location);
+            if (result == UnitMenuMessages.INVALID_TARGET) System.out.println("no oil smelter here");
+            else if (result == UnitMenuMessages.UNITS_CANT_POUR_OIL)
+                System.out.println("no engineers on oil duty found");
+            else if (result == UnitMenuMessages.ALREADY_HAS_OIL) System.out.println("the engineer's pot is full");
+            else if (result == UnitMenuMessages.SUCCESSFUL_ASSIGN_TO_OIL_DUTY)
+                System.out.println("the engineer is going to the oil smelter");
+
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
     private static void pourOil(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String direction = "";
@@ -150,9 +171,11 @@ public class UnitMenu {
         try {
             Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             UnitMenuMessages result = UnitMenuController.digTunnel(position);
-            if (result == UnitMenuMessages.INVALID_TUNNEL_COORDINATES) System.out.println("can't dig a tunnel there");
+            if (result == UnitMenuMessages.INVALID_TARGET) System.out.println("can't dig a tunnel there");
             else if (result == UnitMenuMessages.INVALID_TUNNEL_UNIT)
                 System.out.println("these units can't dig a tunnel");
+            else if (result == UnitMenuMessages.NO_ENEMY_CASTLE)
+                System.out.println("no enemy castle is accessible from this location");
             else if (result == UnitMenuMessages.SUCCESSFUL_DIG_TUNNEL)
                 System.out.println("units are on their way to dig a tunnel");
         } catch (Exception exception) {
@@ -164,11 +187,24 @@ public class UnitMenu {
         try {
             Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             UnitMenuMessages result = UnitMenuController.digMoat(position);
-            if (result == UnitMenuMessages.CANT_DIG_MOAT_HERE) System.out.println("can't dig a moat here");
+            if (result == UnitMenuMessages.INVALID_TARGET) System.out.println("can't dig a moat here");
             else if (result == UnitMenuMessages.UNITS_CANT_DIG_MOAT)
                 System.out.println("none of these units can dig a moat");
             else if (result == UnitMenuMessages.SUCCESSFUL_DIG_MOAT)
                 System.out.println("units are on their way to dig a moat");
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private static void fillMoat(String input) {
+        try {
+            Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            UnitMenuMessages result = UnitMenuController.fillMoat(position);
+            if (result == UnitMenuMessages.INVALID_TARGET) System.out.println("no moats here");
+            else if(result==UnitMenuMessages.INVALID_DESTINATION) System.out.println("can't get there");
+            else if (result == UnitMenuMessages.SUCCESSFUL_DIG_MOAT)
+                System.out.println("units are on their way to fill the moat");
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
@@ -199,6 +235,8 @@ public class UnitMenu {
         }
         UnitMenuMessages result = UnitMenuController.build((MilitaryEquipmentRole) equipmentRole);
         if (result == UnitMenuMessages.UNITS_CANT_BUILD) System.out.println("only engineers can build equipment");
+        else if (result == UnitMenuMessages.INSUFFICIENT_RESOURCES)
+            System.out.println("you don't have the required resources");
         else if (result == UnitMenuMessages.SUCCESSFUL_BUILD) System.out.println("engineer started building equipment");
     }
 

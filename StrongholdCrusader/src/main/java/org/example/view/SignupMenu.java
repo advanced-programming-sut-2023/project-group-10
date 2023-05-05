@@ -29,8 +29,9 @@ public class SignupMenu {
         }
     }
 
-    private static void register(Scanner scanner, String input) {
+    public static String register(Scanner scanner, String input) {
         // process input
+        String result;
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String username = "";
         String password = "";
@@ -59,59 +60,74 @@ public class SignupMenu {
                     slogan = option.getValue();
                     break;
                 default:
-                    System.out.println("invalid option");
-                    return;
+                    result = "invalid option";
+                    System.out.println(result);
+                    return result;
             }
         }
         if (username == null || password == null || passwordConfirmation == null || nickname == null || email == null || slogan == null) {
-            System.out.println("empty field");
-            return;
+            result = "empty field";
+            System.out.println(result);
+            return result;
         }
-        if (username.isEmpty() || password.isEmpty() || (!password.equals("random") && passwordConfirmation.isEmpty()) || nickname.isEmpty() || email.isEmpty()) {
-            System.out.println("missing option");
-            return;
+        if (username.isEmpty() || password.isEmpty() || (!password.equals("random") && passwordConfirmation.isEmpty())
+                || nickname.isEmpty() || email.isEmpty()) {
+
+            result = "missing option";
+            System.out.println(result);
+            return result;
         }
 
         // process controller's response
         SignupMenuMessages registerMessage = SignupMenuController.createUser(username, password, passwordConfirmation, email, nickname);
         switch (registerMessage) {
             case INVALID_USERNAME_FORMAT:
-                System.out.println("Invalid format for username");
-                return;
+                result = "Invalid format for username";
+                System.out.println(result);
+                return result;
             case INVALID_EMAIL_FORMAT:
-                System.out.println("Invalid format for email");
-                return;
+                result = "Invalid format for email";
+                System.out.println(result);
+                return result;
             case EMAIL_EXISTS:
-                System.out.println("There is a user who is registered with this email address!");
-                return;
+                result = "There is a user who is registered with this email address!";
+                System.out.println(result);
+                return result;
             case WRONG_PASSWORD_CONFIRMATION:
-                System.out.println("passwords doesn't match, try to signup again");
-                return;
+                result = "passwords doesn't match, try to signup again";
+                System.out.println(result);
+                return result;
             case SHORT_PASSWORD:
-                System.out.println("Short new password!\nYou must provide at least 6 characters!");
-                break;
+                result = "Short password!,You must provide at least 6 characters!";
+                System.out.println(result);
+                return result;
 
             case NO_LOWERCASE_LETTER:
-                System.out.println("Your password must contain a lowercase letter!");
-                break;
+                result = "Your password must contain a lowercase letter!";
+                System.out.println(result);
+                return result;
 
             case NO_UPPERCASE_LETTER:
-                System.out.println("Your password must contain an uppercase letter!");
-                break;
+                result = "Your password must contain an uppercase letter!";
+                System.out.println(result);
+                return result;
 
             case NO_NUMBER:
-                System.out.println("Your password must contain at least one digit!");
-                break;
+                result = "Your password must contain at least one digit!";
+                System.out.println(result);
+                return result;
 
             case NO_SPECIAL_CHARACTER:
-                System.out.println("Your password must contain at least one special character!");
-                break;
+                result = "Your password must contain at least one special character!";
+                System.out.println(result);
+                return result;
 
             case USER_EXISTS:
                 System.out.println("There is already a user registered with username: " + username);
                 if ((username = suggestNewUsername(scanner, username)) == null) {
-                    System.out.println("try to sign up again with a different username");
-                    return;
+                    result = "try to sign up again with a different username";
+                    System.out.println(result);
+                    return result;
                 }
                 break;
         }
@@ -120,24 +136,28 @@ public class SignupMenu {
             System.out.println("your slogan is: \"" + slogan + "\"");
         }
         if (password.equals("random") && (password = generateRandomPassword(scanner)) == null) {
-            System.out.println("You've entered the suggested password incorrectly, try to signup again");
-            return;
+            result = "You've entered the suggested password incorrectly, try to signup again";
+            System.out.println(result);
+            return result;
         }
         securityQuestion(scanner, username, password, nickname, email, slogan);
         CaptchaGenerator.run();
-        System.out.println("User successfully created");
+        result = "User successfully created";
+        System.out.println(result);
+        return result;
     }
 
     private static String suggestNewUsername(Scanner scanner, String oldUsername) {
         String suggestedUsername = SignupMenuController.suggestNewUsername(oldUsername);
         System.out.println("Do you want \"" + suggestedUsername + "\" as your new username? " + "[ Y : yes / N : no ]");
         String userAnswer;
-        while (true) {
+        for (int i = 0; i < 2; i++) {
             userAnswer = scanner.nextLine();
             if (userAnswer.matches("\\s*N\\s*")) return null;
             if (userAnswer.matches("\\s*Y\\s*")) return suggestedUsername;
             System.out.println("invalid response, please enter Y (yes) or N (no)");
         }
+        return null;
     }
 
     private static String generateRandomPassword(Scanner scanner) {
@@ -149,7 +169,7 @@ public class SignupMenu {
         else return null;
     }
 
-    private static void securityQuestion(Scanner scanner, String username, String password, String nickname, String email, String slogan) {
+    public static String pickQuestion(Scanner scanner) {
         String input;
         System.out.println("Pick your security question: " + SecurityQuestion.getAllQuestionsString());
         while (true) {
@@ -158,7 +178,13 @@ public class SignupMenu {
                 System.out.println("invalid command, use \"question pick\" to select the security question");
             else break;
         }
+        return input;
+    }
 
+    public static String securityQuestion(Scanner scanner, String username, String password, String nickname, String email, String slogan) {
+        String input;
+        String result;
+        input = pickQuestion(scanner);
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String questionNumber = "";
         String answer = "";
@@ -175,36 +201,44 @@ public class SignupMenu {
                     answerConfirmation = option.getValue();
                     break;
                 default:
-                    System.out.println("invalid option, pick security question again");
+                    result = "invalid option, pick security question again";
+                    System.out.println(result);
                     securityQuestion(scanner, username, password, nickname, email, slogan);
-                    return;
+                    return result;
             }
         }
         if (questionNumber == null || answer == null || answerConfirmation == null) {
-            System.out.println("empty field, try again");
+            result = "empty field, try again";
+            System.out.println(result);
             securityQuestion(scanner, username, password, nickname, email, slogan);
-            return;
+            return result;
         }
         if (questionNumber.isEmpty() || answer.isEmpty() || answerConfirmation.isEmpty()) {
-            System.out.println("missing option, try again");
+            result = "missing option, try again";
+            System.out.println(result);
             securityQuestion(scanner, username, password, nickname, email, slogan);
-            return;
+            return result;
         }
         if (!questionNumber.matches("\\d+")) {
-            System.out.println("invalid question number, try again");
+            result = "invalid question number, try again";
+            System.out.println(result);
             securityQuestion(scanner, username, password, nickname, email, slogan);
-            return;
+            return result;
         }
 
         SignupMenuMessages securityQuestionMessage;
-        securityQuestionMessage = SignupMenuController.pickSecurityQuestionAndCreateUser(questionNumber, answer, answerConfirmation, username, password, nickname, slogan, email);
+        securityQuestionMessage = SignupMenuController.pickSecurityQuestionAndCreateUser
+                (questionNumber, answer, answerConfirmation, username, password, nickname, slogan, email);
         if (securityQuestionMessage.equals(SignupMenuMessages.NUMBER_OUT_OF_BOUNDS)) {
-            System.out.println("question number should be between 1 and 3, try again");
+            result = "question number should be between 1 and 3, try again";
             securityQuestion(scanner, username, password, nickname, email, slogan);
         } else if (securityQuestionMessage.equals(SignupMenuMessages.REENTER_ANSWER)) {
-            System.out.println("answers don't match, try again");
+            result = "answers don't match, try again";
+
             securityQuestion(scanner, username, password, nickname, email, slogan);
-        } else if (securityQuestionMessage.equals(SignupMenuMessages.SUCCESS))
-            System.out.println("Please complete captcha");
+        } else
+            result = "Please complete captcha";
+        System.out.println(result);
+        return result;
     }
 }

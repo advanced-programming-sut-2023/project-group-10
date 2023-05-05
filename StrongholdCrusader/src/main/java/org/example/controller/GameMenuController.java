@@ -85,10 +85,9 @@ public class GameMenuController {
             return GameMenuMessages.INVALID_BUILDING_TYPE;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getTexture().isBuildable())
             return GameMenuMessages.INCOMPATIBLE_LAND;
-        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() != null)
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getDroppable() != null)
             return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
-        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).setDroppable(new Building(position,
-                Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), BuildingTypeName.getBuildingTypeNameByNameString(type)));
+        new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), BuildingTypeName.getBuildingTypeNameByNameString(type)).addToGovernmentAndBlock();
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 
@@ -115,15 +114,12 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages selectUnit(Coordinate position) {
-        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getMilitaryUnitsByGovernment(
-                Stronghold.getCurrentBattle().getGovernmentAboutToPlay()) == null)
+        ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        if (selectedMilitaryUnits == null)
             return GameMenuMessages.NO_UNITS_FOUND;
-        UnitMenuController.selectedMilitaryUnits.clear();
-        UnitMenuController.selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap()
-                .getBlockByRowAndColumn(position).getMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        UnitMenuController.selectedMilitaryUnits = selectedMilitaryUnits;
         return GameMenuMessages.SUCCESSFUL_SELECT;
     }
-
 
     //TODO: what's this?
     public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {
@@ -148,15 +144,6 @@ public class GameMenuController {
         if (moveCount > 0) moveUnit(unit, moveCount);
     }
 
-    public static GameMenuMessages leaveGame() {
-        if (Stronghold.getCurrentBattle().getNumberOfActivePlayers() == 2)
-            return GameMenuMessages.CANT_LEAVE;
-        Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
-        removeAllUnits(currentGovernment);
-        removeAllBuildings(currentGovernment);
-        Stronghold.getCurrentBattle().removeGovernment(currentGovernment);
-        return GameMenuMessages.LEAVE_GAME_SUCCESSFUL;
-    }
 
     //Can some part of land be owned by someone?
     private static void removeAllUnits(Government government) {

@@ -152,7 +152,7 @@ public class GameMenu {
                     System.out.println("You cant drop a this type of building on this type of texture!");
                     break;
                 case BUILDING_EXISTS_IN_THE_BLOCK:
-                    System.out.println("There's already a building in this location!");
+                    System.out.println("This location is full!");
                     break;
                 case SUCCESSFUL_DROP:
                     System.out.println(" Building dropped successfully");
@@ -188,7 +188,10 @@ public class GameMenu {
             Coordinate destination = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             GameMenuMessages result = GameMenuController.selectUnit(destination);
             if (result == GameMenuMessages.NO_UNITS_FOUND) System.out.println("there aren't any units here");
-            else if (result == GameMenuMessages.SUCCESSFUL_SELECT) System.out.println("units selected");
+            else if (result == GameMenuMessages.SUCCESSFUL_SELECT) {
+                System.out.println("units selected");
+                UnitMenu.run();
+            }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
