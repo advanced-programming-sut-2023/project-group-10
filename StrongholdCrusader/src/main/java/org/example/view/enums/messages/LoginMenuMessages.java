@@ -1,7 +1,7 @@
 package org.example.view.enums.messages;
 
 public enum LoginMenuMessages {
-    USERNAME_NOT_EXIST,
+    USERNAME_DOESNT_EXIST,
     WRONG_PASSWORD,
     LOGIN_SUCCESSFUL,
     SECURITY_ANSWER_WRONG,

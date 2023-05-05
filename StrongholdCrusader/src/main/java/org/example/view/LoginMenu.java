@@ -58,7 +58,7 @@ public class LoginMenu {
         LoginMenuMessages message = LoginMenuController.login(username, password, stayLoggedIn);
 
         switch (message) {
-            case USERNAME_NOT_EXIST:
+            case USERNAME_DOESNT_EXIST:
                 System.out.println("Username does not exist!");
                 break;
 

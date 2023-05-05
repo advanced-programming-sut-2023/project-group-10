@@ -68,6 +68,10 @@ public class User {
         }
     }
 
+    public static boolean checkSecurityAnswer(String username, String answer) {
+        return CheckFormatAndEncrypt.encryptString(answer).equals(getUserByUsername(username).getQuestionAnswer());
+    }
+
     public String getUsername() {
         return username;
     }
@@ -140,6 +144,7 @@ public class User {
     }
 
     public String getQuestionAnswer() {
+
         return questionAnswer;
     }
 

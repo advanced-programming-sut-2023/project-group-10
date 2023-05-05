@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 
-public class SignUpMenuTest {
+public class SignUpMenuControllerTest {
 
     @Test
     public void testUsernameFormat() {
@@ -136,7 +136,26 @@ public class SignUpMenuTest {
         Assertions.assertEquals(SignupMenuMessages.REENTER_ANSWER, signupMenuMessage);
     }
 
-
-
+    //there's a minor problem, It writes to the Database
+    @Test
+    public void testUserExists() throws Exception {
+        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController.pickSecurityQuestionAndCreateUser
+                ("1", "Father's name", "Father's name",
+                        "mehrazin001", "MEHR@azin001", "Mehrazin_M", "My moto is:Don't have a moto!", "mehrazin@mail.com");
+        SignupMenuMessages signupMenuMessage = signupMenuController.createUser
+                ("mehrazin001", "password", "password", "slogan", "email");
+        Assertions.assertEquals(SignupMenuMessages.USER_EXISTS, signupMenuMessage);
+    }
+    @Test
+    public void testTakenEmail() throws Exception {
+        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController.pickSecurityQuestionAndCreateUser
+                ("1", "Father's name", "Father's name",
+                        "rozhin001", "R0zhin001", "RozhTagh", "noSlogan", "rozhin@mail.com");
+        SignupMenuMessages signupMenuMessage = signupMenuController.createUser
+                ("rozhin002", "valid@Passw0rd", "valid@Passw0rd", "rozhin@mail.com", "nickname");
+        Assertions.assertEquals(SignupMenuMessages.EMAIL_EXISTS, signupMenuMessage);
+    }
 
 }

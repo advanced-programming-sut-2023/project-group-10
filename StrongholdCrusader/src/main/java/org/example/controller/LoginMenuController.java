@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class LoginMenuController {
     public static LoginMenuMessages login(String username, String password, boolean stayLoggedIn) {
         if (User.getUserByUsername(username) == null)
-            return LoginMenuMessages.USERNAME_NOT_EXIST;
+            return LoginMenuMessages.USERNAME_DOESNT_EXIST;
         //TODO: a function for checking password exists in user,Mehrazin would probably modify it, but try to use that function
 
         loginPassword(username, password);
@@ -28,7 +28,8 @@ public class LoginMenuController {
     }
 
     public static LoginMenuMessages forgetPassword(String username, String answer, String newPassword) {
-        if (!User.getUserByUsername(username).getQuestionAnswer().equals(answer))
+        User.loadUsersFromFile();
+        if (!User.checkSecurityAnswer(username,answer))
             return LoginMenuMessages.SECURITY_ANSWER_WRONG;
 
         LoginMenuMessages message = checkPassword(newPassword);
