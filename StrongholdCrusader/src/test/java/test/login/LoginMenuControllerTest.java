@@ -1,9 +1,7 @@
-package test;
+package test.login;
 
 import org.example.controller.LoginMenuController;
-import org.example.controller.SignupMenuController;
 import org.example.view.enums.messages.LoginMenuMessages;
-import org.example.view.enums.messages.SignupMenuMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,7 +70,8 @@ public class LoginMenuControllerTest {
         LoginMenuController loginMenuController = Mockito.mock(LoginMenuController.class);
 
         LoginMenuMessages response= LoginMenuController.forgetPassword("mehrazin001","Father's name","PASSword123");
-        Assertions.assertEquals(LoginMenuMessages.NO_SPECIAL_CHARACTER, response);
+        Assertions.assertEquals(LoginMenuMessages
+                .NO_SPECIAL_CHARACTER, response);
     }
 
 

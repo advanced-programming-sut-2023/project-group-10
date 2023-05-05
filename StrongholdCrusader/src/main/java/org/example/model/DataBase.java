@@ -1,0 +1,40 @@
+package org.example.model;
+
+import com.google.gson.reflect.TypeToken;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.example.model.User.getUsers;
+import static org.example.model.User.gson;
+
+public class DataBase {
+    public static void loadUsersFromFile() {
+        try {
+            String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/UserDatabase.json")));
+            ArrayList<User> createdUsers;
+            createdUsers = gson.fromJson(json, new TypeToken<List<User>>() {
+            }.getType());
+            if (createdUsers != null) {
+                User.clearUsers();
+                User.updateUsers(createdUsers);
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static void saveUsersToFile() {
+        try {
+            FileWriter fileWriter = new FileWriter("./src/main/resources/UserDatabase.json");
+            fileWriter.write(gson.toJson(getUsers()));
+            fileWriter.close();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+}

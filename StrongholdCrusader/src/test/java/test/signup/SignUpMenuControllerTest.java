@@ -1,10 +1,13 @@
-package test;
+package test.signup;
 
 import org.example.controller.SignupMenuController;
+import org.example.model.DataBase;
 import org.example.view.enums.messages.SignupMenuMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -12,9 +15,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 public class SignUpMenuControllerTest {
 
+    @Mock
+    DataBase dataBase;
+
+    @InjectMocks
+    SignupMenuController signupMenuController;
+
     @Test
     public void testUsernameFormat() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("user%name", "password",
                 "password", "email", "nickname");
@@ -23,7 +32,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testNicknameFormat() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "password",
                 "confirmation", "email", "NICK@name");
@@ -33,7 +42,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testPasswordLength() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "aaaa",
                 "aaaa", "email.email@email.email", "nickname");
@@ -42,7 +51,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testPasswordUpperCaseUse() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "uppercase",
                 "confirmation", "email", "nickname");
@@ -51,7 +60,8 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testPasswordLowerCaseUse() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "LOWERCASE",
                 "confirmation", "email", "nickname");
@@ -60,7 +70,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testPasswordContainsNumber() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "lower&Upper",
                 "confirmation", "email", "nickname");
@@ -69,7 +79,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testPasswordForSpecialCharacters() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username1", "lowerUpper123",
                 "confirmation", "email", "nickname");
@@ -78,7 +88,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testPasswordConfirmation() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "lower&Upper123",
                 "confirmation",
@@ -88,7 +98,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testForSuccessfulCreation() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("mehrazin", "mehrAZIN@123",
                 "mehrAZIN@123", "mehrazin.m@gmail.com", "mehrazin");
@@ -99,7 +109,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testEmailFormat1() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("mehrazin", "mehrAZIN@123",
                 "mehrAZIN@123", "mehrazin.m@gmail", "mehrazin");
@@ -108,7 +118,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testEmailFormat2() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser("mehrazin", "mehrAZIN@123",
                 "mehrAZIN@123", "@gmail.com", "mehrazin");
@@ -117,7 +127,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testBoundsForQuestion() {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
         SignupMenuMessages signupMenuMessage = signupMenuController.pickSecurityQuestionAndCreateUser
                 ("10", "answer", "confirm",
@@ -127,7 +137,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testConfirmationForQuestion() throws Exception {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
 
 
         SignupMenuMessages signupMenuMessage = signupMenuController.pickSecurityQuestionAndCreateUser
@@ -139,7 +149,7 @@ public class SignUpMenuControllerTest {
     //there's a minor problem, It writes to the Database
     @Test
     public void testUserExists() throws Exception {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
         signupMenuController.pickSecurityQuestionAndCreateUser
                 ("1", "Father's name", "Father's name",
                         "mehrazin001", "MEHR@azin001", "Mehrazin_M", "My moto is:Don't have a moto!", "mehrazin@mail.com");
@@ -147,9 +157,10 @@ public class SignUpMenuControllerTest {
                 ("mehrazin001", "password", "password", "slogan", "email");
         Assertions.assertEquals(SignupMenuMessages.USER_EXISTS, signupMenuMessage);
     }
+
     @Test
     public void testTakenEmail() throws Exception {
-        SignupMenuController signupMenuController = Mockito.mock(SignupMenuController.class);
+         signupMenuController = Mockito.mock(SignupMenuController.class);
         signupMenuController.pickSecurityQuestionAndCreateUser
                 ("1", "Father's name", "Father's name",
                         "rozhin001", "R0zhin001", "RozhTagh", "noSlogan", "rozhin@mail.com");

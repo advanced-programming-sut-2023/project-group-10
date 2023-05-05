@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.example.model.DataBase;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
@@ -28,7 +29,7 @@ public class LoginMenuController {
     }
 
     public static LoginMenuMessages forgetPassword(String username, String answer, String newPassword) {
-        User.loadUsersFromFile();
+        Stronghold.dataBase.loadUsersFromFile();
         if (!User.checkSecurityAnswer(username,answer))
             return LoginMenuMessages.SECURITY_ANSWER_WRONG;
 
@@ -37,8 +38,7 @@ public class LoginMenuController {
             return message;
 
         Stronghold.getCurrentUser().setPassword(newPassword);
-        User.saveUsersToFile();
-        return LoginMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
+        Stronghold.dataBase.saveUsersToFile();        return LoginMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 
     private static LoginMenuMessages checkPassword (String newPassword){

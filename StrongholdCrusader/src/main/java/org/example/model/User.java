@@ -39,37 +39,22 @@ public class User {
 
     public static void addUser(String username, String password, String nickname, String email, String slogan,
                                String questionNumber, String securityAnswer) {
-        loadUsersFromFile();
+        Stronghold.dataBase.loadUsersFromFile();
         users.add(new User(username, password, nickname, email, slogan, questionNumber, securityAnswer));
-        saveUsersToFile();
-    }
+        Stronghold.dataBase.saveUsersToFile();    }
 
-    public static void loadUsersFromFile() {
-        try {
-            String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/UserDatabase.json")));
-            ArrayList<User> createdUsers;
-            createdUsers = gson.fromJson(json, new TypeToken<List<User>>() {
-            }.getType());
-            if (createdUsers != null) {
-                users = createdUsers;
-            }
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
 
-    public static void saveUsersToFile() {
-        try {
-            FileWriter fileWriter = new FileWriter("./src/main/resources/UserDatabase.json");
-            fileWriter.write(gson.toJson(users));
-            fileWriter.close();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
 
     public static boolean checkSecurityAnswer(String username, String answer) {
         return CheckFormatAndEncrypt.encryptString(answer).equals(getUserByUsername(username).getQuestionAnswer());
+    }
+
+    public static void clearUsers() {
+        users.clear();
+    }
+
+    public static void updateUsers(ArrayList<User> createdUsers) {
+        users.addAll(createdUsers);
     }
 
     public String getUsername() {
