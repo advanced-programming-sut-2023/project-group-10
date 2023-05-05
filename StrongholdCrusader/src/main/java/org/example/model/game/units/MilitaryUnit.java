@@ -75,9 +75,6 @@ public abstract class MilitaryUnit extends Unit {
                 map.getBlockByRowAndColumn(endPoint).setDroppable(moatAboutToBeDug);
                 moatAboutToBeDug = null;
             }
-            if (this instanceof Engineer && ((Engineer) this).isOnBoilingDuty() &&
-                    map.getBlockByRowAndColumn(endPoint).getBuilding().getBuildingType() == BuildingType.getBuildingTypeByName(BuildingTypeName.OIL_SMELTER))
-                ((Engineer) this).setHasOil(true);
             destination = DestinationIndicator.NONE;
             startingPoint = endPoint = null;
         }

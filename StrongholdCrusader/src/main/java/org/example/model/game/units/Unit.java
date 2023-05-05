@@ -49,4 +49,8 @@ public class Unit extends Entity {
         this.getGovernment().addUnit(this);
         return true;
     }
+
+    public boolean isAttackable() {
+        return true;
+    }
 }

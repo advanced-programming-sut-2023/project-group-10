@@ -173,6 +173,8 @@ public class UnitMenu {
             if (result == UnitMenuMessages.INVALID_TARGET) System.out.println("can't dig a tunnel there");
             else if (result == UnitMenuMessages.INVALID_TUNNEL_UNIT)
                 System.out.println("these units can't dig a tunnel");
+            else if (result == UnitMenuMessages.NO_ENEMY_CASTLE)
+                System.out.println("no enemy castle is accessible from this location");
             else if (result == UnitMenuMessages.SUCCESSFUL_DIG_TUNNEL)
                 System.out.println("units are on their way to dig a tunnel");
         } catch (Exception exception) {
@@ -219,6 +221,8 @@ public class UnitMenu {
         }
         UnitMenuMessages result = UnitMenuController.build((MilitaryEquipmentRole) equipmentRole);
         if (result == UnitMenuMessages.UNITS_CANT_BUILD) System.out.println("only engineers can build equipment");
+        else if (result == UnitMenuMessages.INSUFFICIENT_RESOURCES)
+            System.out.println("you don't have the required resources");
         else if (result == UnitMenuMessages.SUCCESSFUL_BUILD) System.out.println("engineer started building equipment");
     }
 

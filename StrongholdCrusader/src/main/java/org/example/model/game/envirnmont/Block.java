@@ -116,4 +116,11 @@ public class Block {
     public boolean canDigHere() {
         return droppable == null && !onFire && texture.isBuildable();
     }
+
+    public ArrayList<Unit> getAllAttackableEnemyUnits(Government government) {
+        ArrayList<Unit> result = new ArrayList<>();
+        for (Unit unit : units)
+            if (unit.getGovernment() != government && unit.isAttackable()) result.add(unit);
+        return result;
+    }
 }
