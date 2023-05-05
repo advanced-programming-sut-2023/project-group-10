@@ -49,11 +49,8 @@ public class BuildingMenu {
         int count = Integer.parseInt(c);
         BuildingMenuMessages message = BuildingMenuController.createUnit(type, count);
         switch (message) {
-            case INVALID_ROW:
-                System.out.println("You've entered invalid row");
-                break;
-            case INVALID_COLUMN:
-                System.out.println("You've entered invalid column");
+            case INVALID_BUILDING:
+                System.out.println("You building should be barracks or engineers guild or mercenary post!");
                 break;
             case INSUFFICIENT_RESOURCES:
                 //should we  mention which resource?
@@ -76,6 +73,9 @@ public class BuildingMenu {
     private static void repair() {
         BuildingMenuMessages message = BuildingMenuController.repair();
         switch (message) {
+            case NOT_CASTLE_BUILDING:
+                System.out.println("You must select a castle building to repair!");
+                break;
             case INSUFFICIENT_STONE:
                 System.out.println("You don't have enough stone to repair this building");
                 break;
