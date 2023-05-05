@@ -5,6 +5,8 @@ import org.example.model.game.Government;
 import org.example.model.game.Moat;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.buildingconstants.AttackingBuildingType;
+import org.example.model.game.buildings.buildingconstants.BuildingType;
+import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.unitconstants.MilitaryUnitStance;
@@ -46,6 +48,7 @@ public abstract class MilitaryUnit extends Unit {
         startingPoint = null;
         this.endPoint = endPoint;
         onPatrol = false;
+        moatAboutToBeDug = null;
     }
 
     public void patrol(Coordinate startingPoint, Coordinate endPoint) {
@@ -53,6 +56,7 @@ public abstract class MilitaryUnit extends Unit {
         this.endPoint = endPoint;
         this.destination = DestinationIndicator.STARTING_POINT;
         onPatrol = true;
+        moatAboutToBeDug = null;
     }
 
     public Coordinate getDestination() {
@@ -66,10 +70,14 @@ public abstract class MilitaryUnit extends Unit {
             if (destination == DestinationIndicator.STARTING_POINT) destination = DestinationIndicator.END_POINT;
             else if (destination == DestinationIndicator.END_POINT) destination = DestinationIndicator.STARTING_POINT;
         } else {
+            Map map = Stronghold.getCurrentBattle().getBattleMap();
             if (moatAboutToBeDug != null) {
-                Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(endPoint).setDroppable(moatAboutToBeDug);
+                map.getBlockByRowAndColumn(endPoint).setDroppable(moatAboutToBeDug);
                 moatAboutToBeDug = null;
             }
+            if (this instanceof Engineer && ((Engineer) this).isOnBoilingDuty() &&
+                    map.getBlockByRowAndColumn(endPoint).getBuilding().getBuildingType() == BuildingType.getBuildingTypeByName(BuildingTypeName.OIL_SMELTER))
+                ((Engineer) this).setHasOil(true);
             destination = DestinationIndicator.NONE;
             startingPoint = endPoint = null;
         }

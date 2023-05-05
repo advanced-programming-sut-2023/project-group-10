@@ -3,6 +3,8 @@ package org.example.controller;
 import org.example.model.Stronghold;
 import org.example.model.game.Moat;
 import org.example.model.game.NumericalEnums;
+import org.example.model.game.buildings.buildingconstants.BuildingType;
+import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
@@ -24,8 +26,8 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages patrolUnit(Coordinate startPoint, Coordinate destination) {
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(startPoint).canUnitsGoHere() ||
-                !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination).canUnitsGoHere())
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        if (!map.getBlockByRowAndColumn(startPoint).canUnitsGoHere() || !map.getBlockByRowAndColumn(destination).canUnitsGoHere())
             return UnitMenuMessages.INVALID_DESTINATION;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             selectedMilitaryUnit.patrol(startPoint, destination);
@@ -69,6 +71,18 @@ public class UnitMenuController {
         return attackEnemy(target);
     }
 
+    public static UnitMenuMessages assignToOilDuty(Coordinate location) {
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        if (map.getBlockByRowAndColumn(location).getBuilding().getBuildingType() != BuildingType.getBuildingTypeByName(BuildingTypeName.OIL_SMELTER))
+            return UnitMenuMessages.INVALID_TARGET;
+        Engineer engineer = firstEngineerSelected(true);
+        if (engineer == null) return UnitMenuMessages.UNITS_CANT_POUR_OIL;
+        if (engineer.hasOil()) return UnitMenuMessages.ALREADY_HAS_OIL;
+        engineer.assignToBoilingOilDuty();
+        engineer.moveUnit(location);
+        return UnitMenuMessages.SUCCESSFUL_ASSIGN_TO_OIL_DUTY;
+    }
+
     public static UnitMenuMessages pourOil(String direction) {
         int verticalChange = 0;
         int horizontalChange = 0;
@@ -89,7 +103,7 @@ public class UnitMenuController {
                 return UnitMenuMessages.INVALID_DIRECTION;
         }
 
-        Engineer selectedEngineer = firstEngineerSelected();
+        Engineer selectedEngineer = firstEngineerSelected(false);
         if (selectedEngineer == null) return UnitMenuMessages.UNITS_CANT_POUR_OIL;
         Coordinate targetPosition = selectedEngineer.getPosition();
         targetPosition.row += verticalChange;
@@ -97,12 +111,13 @@ public class UnitMenuController {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         if (!map.isIndexInBounds(targetPosition)) return UnitMenuMessages.TARGET_OUT_OF_MAP;
         map.getBlockByRowAndColumn(targetPosition).setOnFire(true);
+
         return UnitMenuMessages.SUCCESSFUL_POUR_OIL;
     }
 
     public static UnitMenuMessages digMoat(Coordinate position) {
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canDigHere())
-            return UnitMenuMessages.CANT_DIG_MOAT_HERE;
+            return UnitMenuMessages.INVALID_TARGET;
         boolean canDigMoats = false;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             if (selectedMilitaryUnit instanceof MilitaryPerson && ((MilitaryPersonRole) selectedMilitaryUnit.getRole()).isCanDigMoats()) {
@@ -121,14 +136,14 @@ public class UnitMenuController {
 
     public static UnitMenuMessages digTunnel(Coordinate position) {
         Tunneler tunneler = firstTunnelerSelected();
-        if(tunneler==null) return UnitMenuMessages.INVALID_TUNNEL_UNIT;
-        Block target=Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position);
-        if(!target.canDigHere()) return UnitMenuMessages.INVALID_TUNNEL_COORDINATES;
+        if (tunneler == null) return UnitMenuMessages.INVALID_TUNNEL_UNIT;
+        Block target = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position);
+        if (!target.canDigHere()) return UnitMenuMessages.INVALID_TARGET;
         return null;
     }
 
     public static UnitMenuMessages build(MilitaryEquipmentRole equipmentRole) {
-        Engineer selectedEngineer = firstEngineerSelected();
+        Engineer selectedEngineer = firstEngineerSelected(false);
         if (selectedEngineer == null) return UnitMenuMessages.UNITS_CANT_BUILD;
         if (equipmentRole.tryToProduceThisMany(selectedEngineer.getGovernment(), selectedEngineer.getPosition(), 1) == 0)
             return UnitMenuMessages.INSUFFICIENT_RESOURCES;
@@ -144,17 +159,16 @@ public class UnitMenuController {
         return UnitMenuMessages.SUCCESSFUL_DISBAND;
     }
 
-    private static Engineer firstEngineerSelected() {
+    private static Engineer firstEngineerSelected(boolean hasToBeOnOilDuty) {
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
-            if (selectedMilitaryUnit instanceof Engineer)
+            if (selectedMilitaryUnit instanceof Engineer && (!hasToBeOnOilDuty || ((Engineer) selectedMilitaryUnit).isOnBoilingDuty()))
                 return (Engineer) selectedMilitaryUnit;
         return null;
     }
 
     private static Tunneler firstTunnelerSelected() {
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
-            if (selectedMilitaryUnit instanceof Tunneler)
-                return (Tunneler) selectedMilitaryUnit;
+            if (selectedMilitaryUnit instanceof Tunneler) return (Tunneler) selectedMilitaryUnit;
         return null;
     }
 }
