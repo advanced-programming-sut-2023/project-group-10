@@ -123,4 +123,13 @@ public class Block {
             if (unit.getGovernment() != government && unit.isAttackable()) result.add(unit);
         return result;
     }
+
+    public ArrayList<MilitaryUnit> getSelectableMilitaryUnitsByGovernment(Government government) {
+        ArrayList<MilitaryUnit> units = getMilitaryUnitsByGovernment(government);
+        for (int i = 0; i < units.size(); ) {
+            if (!units.get(i).isSelectable()) units.remove(i);
+            else i++;
+        }
+        return units;
+    }
 }

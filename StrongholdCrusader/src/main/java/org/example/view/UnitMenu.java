@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class UnitMenu {
-    public void run() {
+    public static void run() {
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
@@ -128,7 +128,7 @@ public class UnitMenu {
         }
     }
 
-    private void assignToOilDuty(String input) {
+    private static void assignToOilDuty(String input) {
         try {
             Coordinate location = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             UnitMenuMessages result = UnitMenuController.assignToOilDuty(location);

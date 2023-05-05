@@ -114,15 +114,12 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages selectUnit(Coordinate position) {
-        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getMilitaryUnitsByGovernment(
-                Stronghold.getCurrentBattle().getGovernmentAboutToPlay()) == null)
+        ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        if (selectedMilitaryUnits == null)
             return GameMenuMessages.NO_UNITS_FOUND;
-        UnitMenuController.selectedMilitaryUnits.clear();
-        UnitMenuController.selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap()
-                .getBlockByRowAndColumn(position).getMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        UnitMenuController.selectedMilitaryUnits = selectedMilitaryUnits;
         return GameMenuMessages.SUCCESSFUL_SELECT;
     }
-
 
     //TODO: what's this?
     public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {

@@ -188,7 +188,10 @@ public class GameMenu {
             Coordinate destination = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             GameMenuMessages result = GameMenuController.selectUnit(destination);
             if (result == GameMenuMessages.NO_UNITS_FOUND) System.out.println("there aren't any units here");
-            else if (result == GameMenuMessages.SUCCESSFUL_SELECT) System.out.println("units selected");
+            else if (result == GameMenuMessages.SUCCESSFUL_SELECT) {
+                System.out.println("units selected");
+                UnitMenu.run();
+            }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }

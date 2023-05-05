@@ -5,8 +5,6 @@ import org.example.model.game.Government;
 import org.example.model.game.Moat;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.buildingconstants.AttackingBuildingType;
-import org.example.model.game.buildings.buildingconstants.BuildingType;
-import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.unitconstants.MilitaryUnitStance;
@@ -97,5 +95,9 @@ public abstract class MilitaryUnit extends Unit {
 
     public void setMoatAboutToBeDug(Moat moatAboutToBeDug) {
         this.moatAboutToBeDug = moatAboutToBeDug;
+    }
+
+    public boolean isSelectable() {
+        return moatAboutToBeDug == null;
     }
 }

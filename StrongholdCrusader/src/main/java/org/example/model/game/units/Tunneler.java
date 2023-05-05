@@ -48,4 +48,9 @@ public class Tunneler extends MilitaryUnit {
             this.deleteUnitFromGovernmentAndMap();
         }
     }
+
+    @Override
+    public boolean isSelectable() {
+        return super.isSelectable() && tunnelerState == TunnelerState.NONE;
+    }
 }
