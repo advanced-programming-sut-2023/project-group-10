@@ -29,6 +29,7 @@ public class UnitMenu {
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.POUR_OIL) != null) pourOil(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_TUNNEL) != null) digTunnel(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_MOAT) != null) digMoat(input);
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.FILL_MOAT) != null) fillMoat(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BUILD) != null) build(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) {
                 disband();
@@ -191,6 +192,19 @@ public class UnitMenu {
                 System.out.println("none of these units can dig a moat");
             else if (result == UnitMenuMessages.SUCCESSFUL_DIG_MOAT)
                 System.out.println("units are on their way to dig a moat");
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private static void fillMoat(String input) {
+        try {
+            Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            UnitMenuMessages result = UnitMenuController.fillMoat(position);
+            if (result == UnitMenuMessages.INVALID_TARGET) System.out.println("no moats here");
+            else if(result==UnitMenuMessages.INVALID_DESTINATION) System.out.println("can't get there");
+            else if (result == UnitMenuMessages.SUCCESSFUL_DIG_MOAT)
+                System.out.println("units are on their way to fill the moat");
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }

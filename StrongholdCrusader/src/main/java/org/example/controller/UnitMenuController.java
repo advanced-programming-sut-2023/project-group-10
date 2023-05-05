@@ -1,10 +1,7 @@
 package org.example.controller;
 
 import org.example.model.Stronghold;
-import org.example.model.game.Battle;
-import org.example.model.game.Government;
-import org.example.model.game.Moat;
-import org.example.model.game.NumericalEnums;
+import org.example.model.game.*;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
@@ -117,8 +114,23 @@ public class UnitMenuController {
         if (!map.isIndexInBounds(targetPosition)) return UnitMenuMessages.TARGET_OUT_OF_MAP;
         map.getBlockByRowAndColumn(targetPosition).setOnFire(true);
         selectedEngineer.setHasOil(false);
-        //TODO: add going back to oil smelter
+        selectedEngineer.moveUnit(getNearestOilSmelterCoordinate(selectedEngineer.getPosition()));
         return UnitMenuMessages.SUCCESSFUL_POUR_OIL;
+    }
+
+    private static Coordinate getNearestOilSmelterCoordinate(Coordinate position) {
+        Battle battle = Stronghold.getCurrentBattle();
+        Coordinate nearestOilSmelterPosition = null;
+        int pathLength = Integer.MAX_VALUE;
+        for (Building building : battle.getGovernmentAboutToPlay().getBuildings()) {
+            if (building.getBuildingType().getName() != BuildingTypeName.OIL_SMELTER) continue;
+            ArrayList<Coordinate> path = battle.getBattleMap().findPath(position, building.getPosition());
+            if (path != null && path.size() < pathLength) {
+                pathLength = path.size();
+                nearestOilSmelterPosition = building.getPosition();
+            }
+        }
+        return nearestOilSmelterPosition;
     }
 
     public static UnitMenuMessages digMoat(Coordinate position) {
@@ -138,6 +150,20 @@ public class UnitMenuController {
             if (selectedMilitaryUnit instanceof MilitaryPerson && ((MilitaryPersonRole) selectedMilitaryUnit.getRole()).isCanDigMoats())
                 selectedMilitaryUnit.setMoatAboutToBeDug(moat);
         return UnitMenuMessages.SUCCESSFUL_DIG_MOAT;
+    }
+
+    public static UnitMenuMessages fillMoat(Coordinate position) {
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        Droppable moat = map.getBlockByRowAndColumn(position).getDroppable();
+        if (!(moat instanceof Moat)) return UnitMenuMessages.INVALID_TARGET;
+        if (!map.getBlockByRowAndColumn(position).getTexture().isWalkable() || map.findPath(selectedMilitaryUnits.get(0).getPosition(), position) == null)
+            return UnitMenuMessages.INVALID_DESTINATION;
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
+            if (selectedMilitaryUnit instanceof MilitaryPerson) {
+                selectedMilitaryUnit.moveUnit(position);
+                selectedMilitaryUnit.setMoatAboutToBeFilled((Moat) moat);
+            }
+        return UnitMenuMessages.SUCCESSFUL_FILL_MOAT;
     }
 
     public static UnitMenuMessages digTunnel(Coordinate position) {

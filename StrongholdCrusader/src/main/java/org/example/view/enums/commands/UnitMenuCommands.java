@@ -12,6 +12,7 @@ public enum UnitMenuCommands {
     ASSIGN_TO_OIL_DUTY("\\s*assign\\s+to\\s+boiling\\s+oil\\s+duty.*"),
     DIG_TUNNEL("\\s*dig\\s+tunnel.*"),
     DIG_MOAT("\\s*dig\\s+moat.*"),
+    FILL_MOAT("\\s*fill\\s+moat.*"),
     BUILD("\\s*build.*"),
     DISBAND("\\s*disband\\s+unit\\s*"),
     BACK("\\s*back\\s*");
