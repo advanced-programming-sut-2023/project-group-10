@@ -85,10 +85,9 @@ public class GameMenuController {
             return GameMenuMessages.INVALID_BUILDING_TYPE;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getTexture().isBuildable())
             return GameMenuMessages.INCOMPATIBLE_LAND;
-        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() != null)
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getDroppable() != null)
             return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
-        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).setDroppable(new Building(position,
-                Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), BuildingTypeName.getBuildingTypeNameByNameString(type)));
+        new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), BuildingTypeName.getBuildingTypeNameByNameString(type)).addToGovernmentAndBlock();
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 

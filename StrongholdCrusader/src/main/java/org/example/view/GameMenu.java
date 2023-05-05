@@ -152,7 +152,7 @@ public class GameMenu {
                     System.out.println("You cant drop a this type of building on this type of texture!");
                     break;
                 case BUILDING_EXISTS_IN_THE_BLOCK:
-                    System.out.println("There's already a building in this location!");
+                    System.out.println("This location is full!");
                     break;
                 case SUCCESSFUL_DROP:
                     System.out.println(" Building dropped successfully");
