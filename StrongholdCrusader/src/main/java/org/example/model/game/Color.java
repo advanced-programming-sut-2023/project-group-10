@@ -18,4 +18,12 @@ public enum Color {
     public String getName() {
         return name;
     }
+
+    public static Color getColorByName(String name){
+        for(Color color : Color.values()){
+            if(color.getName().equals(name))
+                return color;
+        }
+        return null;
+    }
 }

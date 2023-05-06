@@ -2,6 +2,8 @@ package org.example.controller;
 
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.game.Battle;
+import org.example.model.game.Color;
 import org.example.model.game.Government;
 import org.example.model.game.Item;
 import org.example.model.game.buildings.Building;
@@ -123,7 +125,19 @@ public class GameMenuController {
 
     //TODO: what's this? first String is username --> battle
     public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {
+        Government[] governments = new Government[players.size()];
+        int x = 0;
 
+        for(Map.Entry<String, String> player : players.entrySet()){
+            User owner = User.getUserByUsername(player.getKey());
+            Color color = Color.getColorByName(player.getValue());
+            Government gov = new Government(owner, color);
+            governments[x] = gov;
+            x++;
+        }
+
+        Battle battle = new Battle(map, governments);
+        Stronghold.setCurrentBattle(battle);
     }
 
 
