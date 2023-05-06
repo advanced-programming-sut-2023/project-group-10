@@ -57,12 +57,12 @@ public class BuildingMenuController {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         User owner = selectedBuilding.getGovernment().getOwner();
 
-        int[] rowMove = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
-        int[] columnMove = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+        int[] rowMove = {-1, 0, 0, 0, 1};
+        int[] columnMove = {0, -1, 0, 1, 0};
 
         //TODO should i check if blocks are valid?
-        for(int i = 0; i < 9; i++){
-            for(int j = 0; j < 9; j++){
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 5; j++){
                 ArrayList<Unit> units = map.getBlockByRowAndColumn(row + rowMove[i], column + columnMove[j]).getAllUnits();
                 for(Unit unit : units){
                     if(!unit.getGovernment().getOwner().equals(owner))
