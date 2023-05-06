@@ -6,8 +6,6 @@ import org.example.model.User;
 import org.example.view.MainMenu;
 import org.example.view.SignupMenu;
 
-import org.apache.commons.lang3.time.StopWatch;
-
 import java.io.IOException;
 
 public class Main {
