@@ -19,8 +19,8 @@ public class Stronghold {
         return currentUser;
     }
 
-    public static void setCurrentUser(User newUser) {
-        currentUser = newUser;
+    public static void setCurrentUser(User user) {
+        currentUser = user;
     }
 
     public static Battle getCurrentBattle() {

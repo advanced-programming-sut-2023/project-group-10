@@ -53,17 +53,22 @@ public class MapMenuController {
         String details = "";
         details = details.concat("Texture : " + map.getBlockByRowAndColumn(position).getTexture().name().toLowerCase() + "\n");
         details = details.concat("Building : " + map.getBlockByRowAndColumn(position).getBuilding().getBuildingType().getName() + "\n");
-        if (map.getBlockByRowAndColumn(position).getBuilding() instanceof ItemProducingBuilding) {
-            String resources = "";
-            for (java.util.Map.Entry<Item, Integer> itemIntegerEntry : map.getBlockByRowAndColumn(position).
-                    getBuilding().getBuildingType().getResourcesNeeded().entrySet()) {
-                if (itemIntegerEntry.getValue() != 0)
-                    resources = resources.concat(itemIntegerEntry.getValue() + " of item \" " + itemIntegerEntry.getKey() + " \" is needed!," +
-                            "You own " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(itemIntegerEntry.getKey()) + " of this item!\n");
+        if (!map.getBlockByRowAndColumn(position).getBuilding().getGovernment().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
+            details = details.concat("The owner is user \" " + map.getBlockByRowAndColumn(position).getBuilding().getGovernment().getOwner().getNickname()
+                    + " \" with username : " + map.getBlockByRowAndColumn(position).getBuilding().getGovernment().getOwner().getUsername() + "\n");
+        else {
+            if (map.getBlockByRowAndColumn(position).getBuilding() instanceof ItemProducingBuilding) {
+                String resources = "";
+                for (java.util.Map.Entry<Item, Integer> itemIntegerEntry : map.getBlockByRowAndColumn(position).
+                        getBuilding().getBuildingType().getResourcesNeeded().entrySet()) {
+                    if (itemIntegerEntry.getValue() != 0)
+                        resources = resources.concat(itemIntegerEntry.getValue() + " of item \" " + itemIntegerEntry.getKey() + " \" is needed!," +
+                                "The owner owns " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(itemIntegerEntry.getKey()) + " of this item!\n");
+                }
+                if (resources.length() == 0)
+                    resources = "This building doesn't require any resources\n";
+                details = details.concat(resources);
             }
-            if (resources.length() == 0)
-                resources = "This building doesn't require any resources\n";
-            details = details.concat(resources);
         }
         ArrayList<MilitaryUnit> militaryUnits = map.getBlockByRowAndColumn(position).getAllMilitaryUnits();
         ArrayList<MilitaryPerson> militaryPeople = new ArrayList<>();

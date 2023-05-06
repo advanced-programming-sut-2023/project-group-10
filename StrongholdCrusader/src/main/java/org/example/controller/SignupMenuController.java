@@ -19,7 +19,9 @@ public class SignupMenuController {
             return message;
         if (!password.equals("random") && !password.equals(passwordConfirmation))
             return SignupMenuMessages.WRONG_PASSWORD_CONFIRMATION;
-        if (User.getUserByEmail(email) != null) return SignupMenuMessages.EMAIL_EXISTS;
+        if (User.getUserByEmail(email) != null) {
+            return SignupMenuMessages.EMAIL_EXISTS;
+        }
         if (CheckFormatAndEncrypt.isEmailFormatInvalid(email)) return SignupMenuMessages.INVALID_EMAIL_FORMAT;
         return SignupMenuMessages.SHOW_QUESTIONS;
     }
@@ -38,20 +40,20 @@ public class SignupMenuController {
         return SignupMenuMessages.SUCCESS;
     }
 
-    private static SignupMenuMessages checkPassword (String newPassword){
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("short password"))
+    private static SignupMenuMessages checkPassword(String newPassword) {
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("short password"))
             return SignupMenuMessages.SHORT_PASSWORD;
 
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no lowercase letter"))
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no lowercase letter"))
             return SignupMenuMessages.NO_LOWERCASE_LETTER;
 
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no uppercase letter"))
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no uppercase letter"))
             return SignupMenuMessages.NO_UPPERCASE_LETTER;
 
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no number"))
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no number"))
             return SignupMenuMessages.NO_NUMBER;
 
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no special character"))
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no special character"))
             return SignupMenuMessages.NO_SPECIAL_CHARACTER;
 
         else return SignupMenuMessages.STRONG_PASSWORD;

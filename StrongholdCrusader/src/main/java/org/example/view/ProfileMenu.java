@@ -54,16 +54,17 @@ public class ProfileMenu {
         }
     }
 
-    private static void changeUsername(String input) {
+    public static String changeUsername(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String username = "";
-
+        String result;
         for (Map.Entry<String, String> option : options.entrySet()) {
             if (option.getKey().equals("-u")) {
                 username = option.getValue();
             } else {
-                System.out.println("invalid option");
-                return;
+                result = "invalid option";
+                System.out.println(result);
+                return result;
             }
         }
 
@@ -71,33 +72,43 @@ public class ProfileMenu {
 
         switch (message) {
             case NO_USERNAME_PROVIDED:
-                System.out.println("No username provided!");
-                break;
+                result = "No username provided!";
+                System.out.println(result);
+                return result;
 
             case INVALID_USERNAME:
-                System.out.println("Username format is invalid!");
-                break;
+                result = "Username format is invalid!";
+                System.out.println(result);
+                return result;
+            case OLD_USERNAME_ENTERED:
+                result = "You have to enter a new username!";
+                System.out.println(result);
+                return result;
 
             case USERNAME_EXISTS:
-                System.out.println("Username already exists!");
-                break;
+                result = "Username already exists!";
+                System.out.println(result);
+                return result;
 
             default:
-                System.out.println("Username changed successfully");
+                result = "Username changed successfully";
+                System.out.println(result);
                 break;
         }
+        return result;
     }
 
-    private static void changeNickname(String input) {
+    public static String changeNickname(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String nickname = "";
-
+        String result;
         for (Map.Entry<String, String> option : options.entrySet()) {
             if (option.getKey().equals("-n")) {
                 nickname = option.getValue();
             } else {
-                System.out.println("invalid option");
-                return;
+                result = "invalid option";
+                System.out.println(result);
+                return result;
             }
         }
 
@@ -105,32 +116,35 @@ public class ProfileMenu {
 
         switch (message) {
             case NO_NICKNAME_PROVIDED:
-                System.out.println("No nickname provided!");
+                result = "No nickname provided!";
                 break;
 
             case INVALID_NICKNAME:
-                System.out.println("Nickname format is invalid!");
+                result = "Nickname format is invalid!";
+                break;
 
             default:
-                System.out.println("Nickname changed successfully!");
+                result = "Nickname changed successfully!";
                 break;
         }
+        System.out.println(result);
+        return result;
     }
 
-    private static void changePassword(String input) {
+    public static void changePassword(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String oldPassword = "";
         String newPassword = "";
 
         for (Map.Entry<String, String> option : options.entrySet()) {
-            if(option.getKey().equals("-n"))
+            if (option.getKey().equals("-n"))
                 newPassword = option.getValue();
 
-            else if(option.getKey().equals("-o"))
+            else if (option.getKey().equals("-o"))
                 oldPassword = option.getValue();
 
-            else{
-                System.out.println("invalid command");
+            else {
+                System.out.println("invalid option");
                 return;
             }
         }
@@ -176,7 +190,7 @@ public class ProfileMenu {
         }
     }
 
-    private static void changeEmail(String input) {
+    public static void changeEmail(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String email = "";
 
@@ -210,7 +224,7 @@ public class ProfileMenu {
         }
     }
 
-    private static void changeSlogan(String input) {
+    public static void changeSlogan(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String slogan = "";
 
@@ -236,15 +250,15 @@ public class ProfileMenu {
         }
     }
 
-    private static void showHighscore() {
+    public static void showHighscore() {
         System.out.println("Highscore: " + Stronghold.getCurrentUser().getHighScore());
     }
 
-    private static void showRank() {
+    public static void showRank() {
         System.out.println("Rank: " + Stronghold.getCurrentUser().getRank());
     }
 
-    private static void showSlogan() {
+    public static void showSlogan() {
         if (Stronghold.getCurrentUser().getSlogan() == null)
             System.out.println("Slogan is empty!");
 
@@ -252,22 +266,23 @@ public class ProfileMenu {
             System.out.println("Slogan: " + Stronghold.getCurrentUser().getSlogan());
     }
 
-    private static void removeSlogan() {
+    public static void removeSlogan() {
         Stronghold.getCurrentUser().setSlogan(null);
         System.out.println("Slogan removed successfully");
     }
 
-    private static void showProfile() {
+    public static String showProfile() {
         User user = Stronghold.getCurrentUser();
-
-        System.out.println("Username: " + user.getUsername());
-        System.out.println("Nickname: " + user.getNickname());
-        System.out.println("Email: " + user.getEmail());
+        String result = "";
+        result = result.concat("Username: " + user.getUsername() + "\n");
+        result = result.concat("Nickname: " + user.getNickname() + "\n");
+        result = result.concat("Email: " + user.getEmail());
 
         if (user.getSlogan() != null)
-            System.out.println("Slogan: " + user.getSlogan());
-
-        System.out.println("Highscore:" + user.getHighScore());
-        System.out.println("Rank: " + user.getRank());
+            result = result.concat("Slogan: " + user.getSlogan() + "\n");
+        result = result.concat("Highscore:" + user.getHighScore() + "\n");
+        result = result.concat("Rank: " + user.getRank() + "\n");
+        System.out.println(result);
+        return result;
     }
 }

@@ -45,7 +45,9 @@ public class CheckFormatAndEncrypt {
 
     public static boolean isNicknameFormatInvalid(String nickname) {
 
-        return !Pattern.compile("[a-zA-Z]\\S+").matcher(nickname).matches() || !Pattern.compile("[a-zA-Z0-9_\\-]+").matcher(nickname).matches();
+        return !Pattern.compile("[a-zA-Z]\\S+").matcher(nickname).matches() ||
+                !Pattern.compile("[a-zA-Z0-9_\\-.]+").matcher(nickname).matches() ||
+                !Pattern.compile("[a-zA-z][a-zA-Z0-9_\\-]*\\.?[a-zA-Z0-9_\\-]*").matcher(nickname).matches();
     }
 
 
