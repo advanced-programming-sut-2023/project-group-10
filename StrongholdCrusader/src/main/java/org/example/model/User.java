@@ -83,6 +83,7 @@ public class User {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+        Stronghold.dataBase.saveUsersToFile();
     }
 
     public String getNickname() {
@@ -98,6 +99,7 @@ public class User {
     }
 
     public static User getUserByUsername(String username) {
+        Stronghold.dataBase.loadUsersFromFile();
         if (users.size() == 0)
             return null;
         for (User user : users) {
@@ -108,10 +110,12 @@ public class User {
     }
 
     public static User getUserByEmail(String email) {
+        Stronghold.dataBase.loadUsersFromFile();
         if (users.size() == 0)
             return null;
         email = email.toLowerCase();
         for (User user : users) {
+
             if (user.email.toLowerCase().equals(email))
                 return user;
         }

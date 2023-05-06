@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import org.example.model.DataBase;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
@@ -12,13 +11,16 @@ import java.util.Scanner;
 
 public class ProfileMenuController {
     public static ProfileMenuMessages changeUsername(String username) {
-        if (username.matches("\\s*"))
+        if (username == null || username.matches("\\s*") || username.length() == 0)
             return ProfileMenuMessages.NO_USERNAME_PROVIDED;
 
-        if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
+        else if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
             return ProfileMenuMessages.INVALID_USERNAME;
 
-        if (User.getUserByUsername(username) != null)
+        else if (username.equals(Stronghold.getCurrentUser().getUsername()))
+            return ProfileMenuMessages.OLD_USERNAME_ENTERED;
+
+        else if (User.getUserByUsername(username) != null)
             return ProfileMenuMessages.USERNAME_EXISTS;
 
         else {
@@ -29,7 +31,7 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages changeNickname(String nickname) {
-        if (nickname.matches("\\s*"))
+        if (nickname== null || nickname.length()==0 ||nickname.matches("\\s*"))
             return ProfileMenuMessages.NO_NICKNAME_PROVIDED;
 
         if (CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
@@ -48,7 +50,7 @@ public class ProfileMenuController {
             return ProfileMenuMessages.NO_PASSWORD_PROVIDED;
 
         ProfileMenuMessages message = checkPassword(newPassword);
-        if(!message.equals(ProfileMenuMessages.STRONG_PASSWORD))
+        if (!message.equals(ProfileMenuMessages.STRONG_PASSWORD))
             return message;
 
         if (!Stronghold.getCurrentUser().getPassword().equals(oldPassword))
@@ -60,7 +62,8 @@ public class ProfileMenuController {
         }
 
         Stronghold.getCurrentUser().setPassword(newPassword);
-        Stronghold.dataBase.saveUsersToFile();        return ProfileMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
+        Stronghold.dataBase.saveUsersToFile();
+        return ProfileMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 
     public static ProfileMenuMessages changeEmail(String email) {
@@ -75,7 +78,8 @@ public class ProfileMenuController {
 
         else {
             Stronghold.getCurrentUser().setEmail(email);
-            Stronghold.dataBase.saveUsersToFile();            return ProfileMenuMessages.CHANGE_EMAIL_SUCCESSFUL;
+            Stronghold.dataBase.saveUsersToFile();
+            return ProfileMenuMessages.CHANGE_EMAIL_SUCCESSFUL;
         }
     }
 
@@ -85,24 +89,25 @@ public class ProfileMenuController {
 
         else {
             Stronghold.getCurrentUser().setSlogan(slogan);
-            Stronghold.dataBase.saveUsersToFile();            return ProfileMenuMessages.CHANGE_SLOGAN_SUCCESSFUL;
+            Stronghold.dataBase.saveUsersToFile();
+            return ProfileMenuMessages.CHANGE_SLOGAN_SUCCESSFUL;
         }
     }
 
-    private static ProfileMenuMessages checkPassword (String newPassword){
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("short password"))
+    private static ProfileMenuMessages checkPassword(String newPassword) {
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("short password"))
             return ProfileMenuMessages.SHORT_PASSWORD;
 
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no lowercase letter"))
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no lowercase letter"))
             return ProfileMenuMessages.NO_LOWERCASE_LETTER;
 
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no uppercase letter"))
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no uppercase letter"))
             return ProfileMenuMessages.NO_UPPERCASE_LETTER;
 
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no number"))
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no number"))
             return ProfileMenuMessages.NO_NUMBER;
 
-        if(CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no special character"))
+        if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("no special character"))
             return ProfileMenuMessages.NO_SPECIAL_CHARACTER;
 
         else return ProfileMenuMessages.STRONG_PASSWORD;

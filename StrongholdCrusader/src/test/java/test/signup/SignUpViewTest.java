@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Scanner;
 
 @ExtendWith(MockitoExtension.class)
@@ -85,9 +87,45 @@ public class SignUpViewTest {
         String response = signupMenu.register(scanner, "user create -u username -p PASSword123 -c passwordConfirmation -e email -n nickname");
         Assertions.assertEquals("Your password must contain at least one special character!", response);
     }
-    @Test
-    public void testSecurityQuestion(){
 
+    @Test
+    public void testEmailFormat() {
+
+        SignupMenu signupMenu = Mockito.mock(SignupMenu.class);
+        Scanner scanner = Mockito.mock(Scanner.class);
+        String response = SignupMenu.register(scanner, "user create -u username -p P@SSword123 -c P@SSword123 -e email -n nickname");
+
+        Assertions.assertEquals("Invalid format for email", response);
+    }
+
+    @Test
+    public void testTakenEmail() {
+
+        SignupMenu signupMenu = Mockito.mock(SignupMenu.class);
+        Scanner scanner = Mockito.mock(Scanner.class);
+        String response = SignupMenu.register(scanner, "user create -u username -p P@SSword123 -c P@SSword123 -e rozhin@mail.com -n nickname");
+        Assertions.assertEquals("There is a user who is registered with this email address!", response);
+    }
+
+    @Test
+    public void testPasswordConfirmation() {
+
+        SignupMenu signupMenu = Mockito.mock(SignupMenu.class);
+        Scanner scanner = Mockito.mock(Scanner.class);
+        String response = SignupMenu.register(scanner, "user create -u username -p P@SSword123 -c confirmation -e rozhin@mail.com -n nickname");
+        Assertions.assertEquals("passwords doesn't match, try to signup again", response);
+    }
+
+    @Test
+    public void testRandomPassword() throws IOException {
+
+        SignupMenu signupMenu = Mockito.mock(SignupMenu.class);
+        Scanner scanner = Mockito.mock(Scanner.class);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("random".getBytes());
+        System.setIn(byteArrayInputStream);
+        String response = SignupMenu.register(scanner, "user create -u username -p random -e mail@mail.com -n nickname");
+        Assertions.assertEquals("You've entered the suggested password incorrectly, try to signup again", response);
+        byteArrayInputStream.close();
     }
 
 

@@ -143,6 +143,7 @@ public class Government {
 
 
     public void addToTradeList(Trade trade) {
+        tradeList.add(trade);
     }
 
     public ArrayList<Trade> getTradeList() {
