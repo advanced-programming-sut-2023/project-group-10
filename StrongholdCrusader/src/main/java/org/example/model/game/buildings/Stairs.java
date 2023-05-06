@@ -12,11 +12,13 @@ public class Stairs extends Building {
         makeNeighborsClimbable();
     }
 
-    private void makeNeighborsClimbable() {
+    public void makeNeighborsClimbable() {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
-        for (int i = -1; i <= 1; i++)
-            for (int j = -1; j <= 1; j++)
-                if (map.isIndexInBounds(getPosition().row + i) && map.isIndexInBounds(getPosition().column + j))
-                    map.getBlockByRowAndColumn(getPosition().row + i, getPosition().column + j).getBuilding().setClimbable(true);
+        int[] rowMove = {-1, 0, 0, 1};
+        int[] columnMove = {0, -1, 1, 0};
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                if (map.isIndexInBounds(getPosition().row + rowMove[i]) && map.isIndexInBounds(getPosition().column + columnMove[j]))
+                    map.getBlockByRowAndColumn(getPosition().row + rowMove[i], getPosition().column + columnMove[j]).getBuilding().setClimbable(true);
     }
 }

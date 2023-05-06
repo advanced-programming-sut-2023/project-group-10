@@ -59,13 +59,15 @@ public class BuildingMenuController {
         int[] rowMove = {-1, 0, 0, 0, 1};
         int[] columnMove = {0, -1, 0, 1, 0};
 
-        //TODO should i check if blocks are valid?
         for(int i = 0; i < 5; i++){
             for(int j = 0; j < 5; j++){
-                ArrayList<Unit> units = map.getBlockByRowAndColumn(row + rowMove[i], column + columnMove[j]).getAllUnits();
-                for(Unit unit : units){
-                    if(!unit.getGovernment().getOwner().equals(owner))
-                        return true;
+                if (map.isIndexInBounds(selectedBuilding.getPosition().row + rowMove[i]) &&
+                    map.isIndexInBounds(selectedBuilding.getPosition().column + columnMove[j])) {
+                    ArrayList<Unit> units = map.getBlockByRowAndColumn(row + rowMove[i], column + columnMove[j]).getAllUnits();
+                    for (Unit unit : units) {
+                        if (!unit.getGovernment().getOwner().equals(owner))
+                            return true;
+                    }
                 }
             }
         }
