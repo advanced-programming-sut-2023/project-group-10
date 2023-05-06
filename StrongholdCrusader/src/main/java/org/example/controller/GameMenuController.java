@@ -96,9 +96,9 @@ public class GameMenuController {
         return Stronghold.getCurrentBattle().getTurnsPassed();
     }
 
-    private static void showCurrentPlayer() {
+    private String   showCurrentPlayer() {
         User player = GameMenuController.currentPlayer();
-        System.out.println("player \" " + player.getNickname() + "\" with username : " + player.getUsername() + "is about to play!");
+        return ("player \" " + player.getNickname() + "\" with username : " + player.getUsername() + "is about to play!");
     }
 
     public static GameMenuMessages selectBuilding(Coordinate position) {
@@ -121,7 +121,7 @@ public class GameMenuController {
         return GameMenuMessages.SUCCESSFUL_SELECT;
     }
 
-    //TODO: what's this?
+    //TODO: what's this? first String is username --> battle
     public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {
 
     }
