@@ -2,10 +2,9 @@ package org.example.controller;
 
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.game.Item;
 import org.example.model.game.buildings.Building;
-import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
-import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.MilitaryPersonRole;
@@ -27,10 +26,10 @@ public class BuildingMenuController {
         if(!canBuildingCreateUnit())
             return BuildingMenuMessages.INVALID_BUILDING;
 
-        if (true)
+        if (true) //TODO complete
             return BuildingMenuMessages.INSUFFICIENT_RESOURCES;
 
-        if (true)
+        if (selectedBuilding.getGovernment().getPeasant() < count)
             return BuildingMenuMessages.INSUFFICIENT_POPULATION;
 
         if (isTypeCompatible(type))
@@ -42,7 +41,7 @@ public class BuildingMenuController {
     public static BuildingMenuMessages repair() {
         if(!selectedBuilding.getBuildingType().isRepairable())
             return BuildingMenuMessages.NOT_CASTLE_BUILDING;
-        if (true)
+        if (stoneCounter() > selectedBuilding.getGovernment().getItemCount(Item.STONE))
             return BuildingMenuMessages.INSUFFICIENT_STONE;
         if (enemiesForceClose())
             return BuildingMenuMessages.ENEMIES_FORCES_ARE_CLOSE;
@@ -86,6 +85,10 @@ public class BuildingMenuController {
         if(militaryRole != null)
             return militaryRole.getProducingBuilding().equals(buildingTypeName);
         return false;
+    }
+
+    private static int stoneCounter(){
+        return (selectedBuilding.getBuildingType().getMaxHitPoint() - selectedBuilding.getHitPoint()) / 2;
     }
 
 }

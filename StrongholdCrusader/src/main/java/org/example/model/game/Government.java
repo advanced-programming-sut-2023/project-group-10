@@ -5,6 +5,7 @@ import org.example.model.game.buildings.Building;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.Unit;
+import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 
 import java.util.ArrayList;
@@ -206,5 +207,14 @@ public class Government {
 
     public boolean equals(Government government) {
         return government.getOwner().getUsername().equals(this.getOwner().getUsername());
+    }
+
+    public int getPeasant(){
+        int peasant = 0;
+        for(Unit unit : units){
+            if(unit.getRole().equals(Role.getRoleByName(RoleName.PEASANT)))
+                peasant++;
+        }
+        return peasant;
     }
 }
