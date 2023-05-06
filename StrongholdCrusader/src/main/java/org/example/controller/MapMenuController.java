@@ -1,16 +1,16 @@
 package org.example.controller;
 
 import org.example.model.Stronghold;
-import org.example.model.game.Item;
 import org.example.model.game.Tree;
-import org.example.model.game.buildings.ItemProducingBuilding;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.MilitaryUnit;
+import org.example.model.game.units.unitconstants.MilitaryPersonRole;
 import org.example.model.utils.ASCIIColor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MapMenuController {
     private static final int blocksInARow = 50;
@@ -52,33 +52,26 @@ public class MapMenuController {
             return "You've entered invalid index!";
         String details = "";
         details = details.concat("Texture : " + map.getBlockByRowAndColumn(position).getTexture().name().toLowerCase() + "\n");
-        details = details.concat("Building : " + map.getBlockByRowAndColumn(position).getBuilding().getBuildingType().getName() + "\n");
-        if (!map.getBlockByRowAndColumn(position).getBuilding().getGovernment().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
-            details = details.concat("The owner is user \" " + map.getBlockByRowAndColumn(position).getBuilding().getGovernment().getOwner().getNickname()
-                    + " \" with username : " + map.getBlockByRowAndColumn(position).getBuilding().getGovernment().getOwner().getUsername() + "\n");
-        else {
-            if (map.getBlockByRowAndColumn(position).getBuilding() instanceof ItemProducingBuilding) {
-                String resources = "";
-                for (java.util.Map.Entry<Item, Integer> itemIntegerEntry : map.getBlockByRowAndColumn(position).
-                        getBuilding().getBuildingType().getResourcesNeeded().entrySet()) {
-                    if (itemIntegerEntry.getValue() != 0)
-                        resources = resources.concat(itemIntegerEntry.getValue() + " of item \" " + itemIntegerEntry.getKey() + " \" is needed!," +
-                                "The owner owns " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(itemIntegerEntry.getKey()) + " of this item!\n");
-                }
-                if (resources.length() == 0)
-                    resources = "This building doesn't require any resources\n";
-                details = details.concat(resources);
+        if(map.getBlockByRowAndColumn(position).getDroppable() instanceof Tree){
+           details= details.concat("Tree of type : "+ ((Tree) map.getBlockByRowAndColumn(position).getDroppable())
+                   .getType().getName()+"with storage : "+ ((Tree) map.getBlockByRowAndColumn(position).getDroppable()).getWoodStorage());
+        }
+        int count = 0;
+        ArrayList<MilitaryUnit> militaryUnits = map.getBlockByRowAndColumn(position).getAllMilitaryUnits();
+        HashMap<MilitaryPersonRole, Integer> militaryPeople = new HashMap<>();
+        for (MilitaryUnit militaryUnit : militaryUnits) {
+            if ((militaryUnit instanceof MilitaryPerson)) {
+                if (militaryPeople.containsKey(militaryUnit.getRole()))
+                    militaryPeople.put((MilitaryPersonRole) militaryUnit.getRole(), militaryPeople.get(militaryUnit.getRole()) + 1);
+                else
+                    militaryPeople.put((MilitaryPersonRole) militaryUnit.getRole(), 1);
+
+                count++;
             }
         }
-        ArrayList<MilitaryUnit> militaryUnits = map.getBlockByRowAndColumn(position).getAllMilitaryUnits();
-        ArrayList<MilitaryPerson> militaryPeople = new ArrayList<>();
-        for (MilitaryUnit militaryUnit : militaryUnits) {
-            if (militaryUnit instanceof MilitaryPerson)
-                militaryPeople.add((MilitaryPerson) militaryUnit);
-        }
-        details = details.concat("Military People count : " + militaryPeople.size() + "\n");
-        for (int i = 1; i <= militaryPeople.size(); i++) {
-            details = details.concat(i + "." + militaryPeople.get(i).getRole() + "\n");
+        details = details.concat("Military People count : " + count + "\n");
+        for (java.util.Map.Entry<MilitaryPersonRole, Integer> militaryPersonRoleIntegerEntry : militaryPeople.entrySet()) {
+            details = details.concat(militaryPersonRoleIntegerEntry.getValue() + "of" + militaryPersonRoleIntegerEntry.getKey() + "\n");
         }
         return details;
     }
