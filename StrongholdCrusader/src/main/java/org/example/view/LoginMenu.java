@@ -41,6 +41,9 @@ public class LoginMenu {
 
         for (Map.Entry<String, String> option : options.entrySet()) {
             switch (option.getKey()) {
+                case "--stay-logged-in":
+                    stayLoggedIn=true;
+                    break;
                 case "-u":
                     username = option.getValue();
                     break;

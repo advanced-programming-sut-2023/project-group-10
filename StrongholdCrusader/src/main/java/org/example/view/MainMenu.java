@@ -21,6 +21,9 @@ public class MainMenu {
                 logout();
                 return;
             }
+
+            if (MainMenuCommands.getMatcher(input, MainMenuCommands.EXIT) != null)
+                System.exit(0);
             if (MainMenuCommands.getMatcher(input, MainMenuCommands.PROFILE_MENU) != null)
                 goToProfileMenu();
 

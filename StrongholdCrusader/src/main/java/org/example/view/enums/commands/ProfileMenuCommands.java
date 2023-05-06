@@ -4,10 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum ProfileMenuCommands {
-    CHANGE_USERNAME("^\\s*profile\\s+change\\s+.+$"),
-    CHANGE_NICKNAME("^\\s*profile\\s+change\\s+.+$"),
-    CHANGE_PASSWORD("^\\s*profile\\s+change\\s+password\\s+.+*$"),
-    CHANGE_EMAIL("^\\s*profile\\s+change\\s+.+$"),
+    CHANGE_USERNAME("^\\s*profile\\s+change\\s+-u\\s*.*$"),
+    CHANGE_NICKNAME("^\\s*profile\\s+change\\s+-n\\s*.*$"),
+    CHANGE_PASSWORD("^\\s*profile\\s+change\\s+password\\s+.*$"),
+    CHANGE_EMAIL("^\\s*profile\\s+change\\s+-e\\s*.*$"),
     CHANGE_SLOGAN("^\\s*profile\\s+change\\s+slogan\\s+.+$"),
     REMOVE_SLOGAN("^\\s*profile\\s+remove\\s+slogan\\s*$"),
     DISPLAY_HIGHSCORE("^\\s*profile\\s+display\\s+highscore\\s*$"),
