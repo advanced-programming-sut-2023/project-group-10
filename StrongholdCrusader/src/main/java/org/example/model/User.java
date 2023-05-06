@@ -63,6 +63,7 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+        Stronghold.dataBase.saveUsersToFile();
     }
 
     public String getPassword() {
@@ -71,6 +72,7 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+        Stronghold.dataBase.saveUsersToFile();
     }
 
     public String getEmail() {
@@ -79,6 +81,7 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+        Stronghold.dataBase.saveUsersToFile();
     }
 
     public void setNickname(String nickname) {

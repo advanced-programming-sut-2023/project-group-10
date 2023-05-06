@@ -31,7 +31,7 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages changeNickname(String nickname) {
-        if (nickname== null || nickname.length()==0 ||nickname.matches("\\s*"))
+        if (nickname == null || nickname.length() == 0 || nickname.matches("\\s*"))
             return ProfileMenuMessages.NO_NICKNAME_PROVIDED;
 
         if (CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
@@ -55,30 +55,31 @@ public class ProfileMenuController {
 
         if (!Stronghold.getCurrentUser().getPassword().equals(oldPassword))
             return ProfileMenuMessages.INCORRECT_PASSWORD; //TODO check with Mehrazin
-
+// TODO: take it out from Controller!!!!
         while (oldPassword.equals(newPassword)) {
             System.out.println("Please enter a new password!");
             newPassword = new Scanner(System.in).nextLine();
         }
 
         Stronghold.getCurrentUser().setPassword(newPassword);
-        Stronghold.dataBase.saveUsersToFile();
         return ProfileMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 
     public static ProfileMenuMessages changeEmail(String email) {
-        if (email.matches("\\s*"))
+        if (email == null || email.length() == 0 || email.matches("\\s*"))
             return ProfileMenuMessages.NO_EMAIL_PROVIDED;
 
-        if (CheckFormatAndEncrypt.isEmailFormatInvalid(email))
+       else if (CheckFormatAndEncrypt.isEmailFormatInvalid(email))
             return ProfileMenuMessages.INVALID_EMAIL;
 
-        if (User.getUserByEmail(email) != null)
+       else if(email.equals(Stronghold.getCurrentUser().getEmail()))
+            return ProfileMenuMessages.OLD_EMAIL_ENTERED;
+
+        else if (User.getUserByEmail(email) != null)
             return ProfileMenuMessages.EMAIL_EXISTS;
 
         else {
             Stronghold.getCurrentUser().setEmail(email);
-            Stronghold.dataBase.saveUsersToFile();
             return ProfileMenuMessages.CHANGE_EMAIL_SUCCESSFUL;
         }
     }

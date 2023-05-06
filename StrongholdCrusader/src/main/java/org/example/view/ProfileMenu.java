@@ -190,16 +190,17 @@ public class ProfileMenu {
         }
     }
 
-    public static void changeEmail(String input) {
+    public static String changeEmail(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String email = "";
-
+        String result;
         for (Map.Entry<String, String> option : options.entrySet()) {
             if (option.getKey().equals("-e")) {
                 email = option.getValue();
             } else {
-                System.out.println("invalid option");
-                return;
+                result = "invalid option";
+                System.out.println(result);
+                return result;
             }
         }
 
@@ -207,21 +208,26 @@ public class ProfileMenu {
 
         switch (message) {
             case NO_EMAIL_PROVIDED:
-                System.out.println("No email provided!");
+                result = "No email provided!";
+                break;
+            case OLD_EMAIL_ENTERED:
+                result = "You have to enter a new email!";
                 break;
 
             case EMAIL_EXISTS:
-                System.out.println("Email already exists!");
+                result = "Email already exists!";
                 break;
 
             case INVALID_EMAIL:
-                System.out.println("Invalid email format!");
+                result = "Invalid email format!";
                 break;
 
             default:
-                System.out.println("Email changed successfully!");
+                result = "Email changed successfully!";
                 break;
         }
+        System.out.println(result);
+        return result;
     }
 
     public static void changeSlogan(String input) {
