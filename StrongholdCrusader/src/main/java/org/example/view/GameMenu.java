@@ -53,8 +53,7 @@ public class GameMenu {
         System.out.println(GameMenuController.showRoundsPlayed()+" rounds are played!");
     }
     private static void getCurrentPlayer(){
-        System.out.println(GameMenuController.currentPlayer().getNickname()+" is playing now!"+
-                "(username : "+GameMenuController.currentPlayer().getUsername()+")");
+        System.out.println(GameMenuController.currentPlayer());
     }
     private static void showPopularityFactors() {
         System.out.println(GameMenuController.showPopularityFactors());
