@@ -25,6 +25,8 @@ public class CustomizeMapMenu {
 
                 return CustomizeMapController.getMap();
             }
+            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("customize map menu");
+            else System.out.println("invalid command!");
         }
     }
 

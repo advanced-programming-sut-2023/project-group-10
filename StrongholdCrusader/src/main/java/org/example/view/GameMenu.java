@@ -44,6 +44,8 @@ public class GameMenu {
                 leaveGame();
                 return;
             }
+            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("game menu");
+            else System.out.println("invalid command!");
         }
     }
 

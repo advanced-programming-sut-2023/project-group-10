@@ -17,15 +17,17 @@ public class MainMenu {
             input = scanner.nextLine();
             if (MainMenuCommands.getMatcher(input, MainMenuCommands.START_GAME) != null)
                 startGame(input);
-            if (MainMenuCommands.getMatcher(input, MainMenuCommands.LOGOUT) != null) {
+            else if (MainMenuCommands.getMatcher(input, MainMenuCommands.LOGOUT) != null) {
                 logout();
                 return;
             }
 
-            if (MainMenuCommands.getMatcher(input, MainMenuCommands.EXIT) != null)
+            else if (MainMenuCommands.getMatcher(input, MainMenuCommands.EXIT) != null)
                 System.exit(0);
-            if (MainMenuCommands.getMatcher(input, MainMenuCommands.PROFILE_MENU) != null)
+            else if (MainMenuCommands.getMatcher(input, MainMenuCommands.PROFILE_MENU) != null)
                 goToProfileMenu();
+            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+                System.out.println("main menu");
 
             else System.out.println("Invalid command!");
         }

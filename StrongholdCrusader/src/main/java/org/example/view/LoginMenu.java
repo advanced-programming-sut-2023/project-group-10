@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.controller.LoginMenuController;
+import org.example.model.Stronghold;
 import org.example.model.utils.CaptchaGenerator;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.LoginMenuCommands;
@@ -28,6 +29,9 @@ public class LoginMenu {
             else if (LoginMenuCommands.getMatcher(command, LoginMenuCommands.BACK) != null)
                 return;
 
+            else if(command.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+                System.out.println("login menu");
+
             else
                 System.out.println("invalid command");
         }
@@ -44,6 +48,7 @@ public class LoginMenu {
                 case "--stay-logged-in":
                     stayLoggedIn=true;
                     break;
+
                 case "-u":
                     username = option.getValue();
                     break;

@@ -19,6 +19,8 @@ public class MapMenu {
             else if (MapMenuCommands.getMatcher(input, MapMenuCommands.MOVE_MAP) != null) moveMap(input);
             else if (MapMenuCommands.getMatcher(input, MapMenuCommands.SHOW_DETAILS) != null) showDetails(input);
             else if (MapMenuCommands.getMatcher(input, MapMenuCommands.BACK) != null) return;
+            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("map menu");
+            else System.out.println("invalid command!");
         }
     }
 

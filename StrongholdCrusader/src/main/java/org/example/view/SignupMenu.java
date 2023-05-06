@@ -24,6 +24,8 @@ public class SignupMenu {
                 LoginMenu.run();
             else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.EXIT) != null)
                 return;
+            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+                System.out.println("signup menu");
             else
                 System.out.println("Invalid command!");
         }

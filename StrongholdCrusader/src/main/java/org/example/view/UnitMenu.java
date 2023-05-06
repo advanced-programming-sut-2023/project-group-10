@@ -34,7 +34,10 @@ public class UnitMenu {
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) {
                 disband();
                 if (UnitMenuController.selectedMilitaryUnits == null) return;
-            } else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BACK) != null) return;
+            } else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+                System.out.println("unit menu");
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BACK) != null) return;
+            else System.out.println("invalid command!");
         }
     }
 

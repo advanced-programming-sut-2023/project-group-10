@@ -22,7 +22,10 @@ public class ShopMenu {
                 buy(input);
             else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.BACK) != null) {
                 //TODO: go back to game menu
-            } else
+            }
+            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+                System.out.println("shop menu");
+            else
                 System.out.println("Invalid command!");
 
         }

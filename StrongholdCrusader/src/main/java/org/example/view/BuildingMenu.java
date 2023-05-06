@@ -18,10 +18,14 @@ public class BuildingMenu {
             String input = scanner.nextLine();
             if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.CREATE_UNIT) != null)
                 createUnit(input);
-            if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.REPAIR) != null)
+            else if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.REPAIR) != null)
                 repair();
-            if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.BACK) != null)
+            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+                System.out.println("building menu");
+            else if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.BACK) != null)
                 return;
+            else
+                System.out.println("invalid command!");
         }
     }
     private static void createUnit(String input) {
