@@ -26,26 +26,28 @@ public class BuildingMenuController {
     public static BuildingMenuMessages createUnit(String type, int count) {
         if(!canBuildingCreateUnit())
             return BuildingMenuMessages.INVALID_BUILDING;
-        if (true) {
-            return BuildingMenuMessages.INSUFFICIENT_RESOURCES;
-        }
-        if (true) {
-            return BuildingMenuMessages.INSUFFICIENT_POPULATION;
-        }
-        if (isTypeCompatible(type)) {
-            return BuildingMenuMessages.INCOMPATIBLE_TYPES;
-        }
-        return BuildingMenuMessages.CREATE_UNIT_SUCCESSFUL;
 
+        if (true)
+            return BuildingMenuMessages.INSUFFICIENT_RESOURCES;
+
+        if (true)
+            return BuildingMenuMessages.INSUFFICIENT_POPULATION;
+
+        if (isTypeCompatible(type))
+            return BuildingMenuMessages.INCOMPATIBLE_TYPES;
+
+        return BuildingMenuMessages.CREATE_UNIT_SUCCESSFUL;
     }
 
     public static BuildingMenuMessages repair() {
-        //TODO insert if castle building
+        if(!selectedBuilding.getBuildingType().isRepairable())
+            return BuildingMenuMessages.NOT_CASTLE_BUILDING;
         if (true)
             return BuildingMenuMessages.INSUFFICIENT_STONE;
         if (enemiesForceClose())
             return BuildingMenuMessages.ENEMIES_FORCES_ARE_CLOSE;
 
+        selectedBuilding.setHitPoint(selectedBuilding.getBuildingType().getMaxHitPoint());
         return BuildingMenuMessages.REPAIR_SUCCESSFUL;
     }
 

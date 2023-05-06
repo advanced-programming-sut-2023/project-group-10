@@ -24,7 +24,6 @@ public class BuildingMenu {
                 return;
         }
     }
-
     private static void createUnit(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String type = "";

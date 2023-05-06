@@ -71,4 +71,8 @@ public class BuildingType {
     public int getEmployeeCount() {
         return employeeCount;
     }
+
+    public boolean isRepairable() {
+        return isRepairable;
+    }
 }

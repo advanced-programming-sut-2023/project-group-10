@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 public enum BuildingMenuCommands {
     CREATE_UNIT("^\\s*create\\s+unit\\s*-.+$"),
+    SELECT_BUILDING("^\\s*select\\s+building\\s*-.+$"),
     REPAIR("^\\s*repair\\s*$"),
     BACK("^\\s*back\\s*$");
 

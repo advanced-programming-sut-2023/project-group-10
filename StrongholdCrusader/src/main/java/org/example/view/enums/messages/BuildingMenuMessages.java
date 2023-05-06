@@ -10,5 +10,4 @@ public enum BuildingMenuMessages {
     ENEMIES_FORCES_ARE_CLOSE,
     REPAIR_SUCCESSFUL,
 
-
 }
