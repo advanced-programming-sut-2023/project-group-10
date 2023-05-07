@@ -5,6 +5,8 @@ import org.example.model.User;
 import org.example.model.game.Color;
 import org.example.view.enums.messages.MainMenuMessages;
 
+import java.util.HashMap;
+
 public class MainMenuController {
 
     public static MainMenuMessages checkMapAndGovernmentsCount(int mapSize, int governmentCount) {
@@ -25,15 +27,20 @@ public class MainMenuController {
         return MainMenuMessages.SUCCESSFUL_LOGOUT;
     }
 
-    public static MainMenuMessages getPlayers(String username, String color) {
+    public static MainMenuMessages getPlayers(String username, String color, HashMap<String,String> players) {
         User myUser = User.getUserByUsername(username);
         if (myUser == null)
             return MainMenuMessages.INVALID_USERNAME;
+        if(players.containsKey(username))
+            return MainMenuMessages.USER_IN_THE_BATTLE;
 
         Color myColor = MainMenuController.isColorValid(color);
         if (myColor == null) {
             return MainMenuMessages.INVALID_COLOR;
         }
+        if(players.containsValue(myColor.getName()))
+            return MainMenuMessages.TAKEN_COLOR;
+
         return MainMenuMessages.SUCCESS;
     }
 

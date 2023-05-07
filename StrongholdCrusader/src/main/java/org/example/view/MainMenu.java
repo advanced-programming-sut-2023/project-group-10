@@ -1,6 +1,8 @@
 package org.example.view;
 
 import org.example.controller.MainMenuController;
+import org.example.model.Stronghold;
+import org.example.model.game.Color;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.MainMenuCommands;
 import org.example.view.enums.messages.MainMenuMessages;
@@ -20,13 +22,11 @@ public class MainMenu {
             else if (MainMenuCommands.getMatcher(input, MainMenuCommands.LOGOUT) != null) {
                 logout();
                 return;
-            }
-
-            else if (MainMenuCommands.getMatcher(input, MainMenuCommands.EXIT) != null)
+            } else if (MainMenuCommands.getMatcher(input, MainMenuCommands.EXIT) != null)
                 System.exit(0);
             else if (MainMenuCommands.getMatcher(input, MainMenuCommands.PROFILE_MENU) != null)
                 goToProfileMenu();
-            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+            else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
                 System.out.println("main menu");
 
             else System.out.println("Invalid command!");
@@ -87,7 +87,28 @@ public class MainMenu {
         // input format : -p <player's username> -c <selected color>
         Scanner scanner = new Scanner(System.in);
         HashMap<String, String> players = new HashMap<>();
-        while (enteredCount < governmentCount) {
+        System.out.println("pick a color for your own government [color name]");
+        String colors = "";
+        for (Color value : Color.values()) {
+            colors = colors.concat(value.getName() + " - ");
+        }
+        System.out.println(colors.substring(0, colors.length() - 1));
+        String myOwnColor = null;
+        for (int i = 0; i < 10; i++) {
+            myOwnColor = scanner.nextLine();
+            if (Color.getColorByName(myOwnColor) != null)
+                break;
+            else
+                myOwnColor = "";
+
+        }
+        if (myOwnColor.length() == 0) {
+            System.out.println("You've taken all your chances,If you wish to start a new game, try again!");
+            return;
+        }
+        players.put(Stronghold.getCurrentUser().getUsername(), myOwnColor);
+
+        while (enteredCount < governmentCount - 1) {
             if (getUsersForGame(players))
                 enteredCount++;
 
@@ -120,10 +141,16 @@ public class MainMenu {
             System.out.println("missing option!");
             return false;
         }
-        MainMenuMessages message = MainMenuController.getPlayers(username, color);
+        MainMenuMessages message = MainMenuController.getPlayers(username, color, players);
         switch (message) {
             case SUCCESS:
                 System.out.println("player with username " + username + " added to the game successfully with color " + color);
+                break;
+            case USER_IN_THE_BATTLE:
+                System.out.println("Player with username " + username + " is already added!");
+                break;
+            case TAKEN_COLOR:
+                System.out.println("You've already assigned this color to a player, choose a new color!");
                 break;
             case INVALID_USERNAME:
                 System.out.println("Player with " + username + " doesn't seem to exist!");
