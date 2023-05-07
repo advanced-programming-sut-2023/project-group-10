@@ -81,6 +81,7 @@ public class GameMenu {
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
+
     }
 
     private static void showFoodRate() {
@@ -96,8 +97,8 @@ public class GameMenu {
                 case INVALID_TAX_RATE:
                     System.out.println("Enter a number from -3 to 8!");
                     break;
-                case SET_FOOD_TAX_SUCCESSFUL:
-                    System.out.println("Food rate is set to " + taxRate);
+                case SET_TAX_RATE_SUCCESSFUL:
+                    System.out.println("Tax rate is set to " + taxRate);
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
@@ -122,7 +123,7 @@ public class GameMenu {
                 case INVALID_FEAR_RATE:
                     System.out.println("Enter a number from -5 to 5!");
                     break;
-                case SET_FOOD_TAX_SUCCESSFUL:
+                case SET_FEAR_RATE_SUCCESSFUL:
                     System.out.println("Fear rate is set to " + fearRate);
             }
         } catch (Exception exception) {
@@ -150,7 +151,7 @@ public class GameMenu {
                     System.out.println("You've entered invalid building type!");
                     break;
                 case INCOMPATIBLE_LAND:
-                    System.out.println("You cant drop a this type of building on this type of texture!");
+                    System.out.println("You cant drop this type of building on this type of texture!");
                     break;
                 case BUILDING_EXISTS_IN_THE_BLOCK:
                     System.out.println("This location is full!");

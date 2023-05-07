@@ -58,7 +58,7 @@ public class GameMenuController {
         return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFearRate();
     }
 
-    //TODO: I gave the modified rate to gov/ change it
+
     public static GameMenuMessages setFoodRate(int foodRate) {
         if (foodRate < -2 || foodRate > 2) return GameMenuMessages.INVALID_FOOD_RATE;
         //TODO: feed people by foodRate+2
@@ -71,14 +71,14 @@ public class GameMenuController {
     public static GameMenuMessages setTaxRate(int taxRate) {
         if (taxRate < -3 || taxRate > 8) return GameMenuMessages.INVALID_TAX_RATE;
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setTaxRate(taxRate);
-        return GameMenuMessages.SET_FOOD_TAX_SUCCESSFUL;
+        return GameMenuMessages.SET_TAX_RATE_SUCCESSFUL;
 
     }
 
     public static GameMenuMessages setFearRate(int fearRate) {
         if (fearRate < -5 || fearRate > 5) return GameMenuMessages.INVALID_FEAR_RATE;
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFearRate(fearRate);
-        return GameMenuMessages.SET_FOOD_TAX_SUCCESSFUL;
+        return GameMenuMessages.SET_FEAR_RATE_SUCCESSFUL;
     }
 
 
@@ -98,7 +98,7 @@ public class GameMenuController {
         return Stronghold.getCurrentBattle().getTurnsPassed();
     }
 
-    private String   showCurrentPlayer() {
+    private String showCurrentPlayer() {
         User player = GameMenuController.currentPlayer();
         return ("player \" " + player.getNickname() + "\" with username : " + player.getUsername() + "is about to play!");
     }
@@ -128,7 +128,7 @@ public class GameMenuController {
         Government[] governments = new Government[players.size()];
         int x = 0;
 
-        for(Map.Entry<String, String> player : players.entrySet()){
+        for (Map.Entry<String, String> player : players.entrySet()) {
             User owner = User.getUserByUsername(player.getKey());
             Color color = Color.getColorByName(player.getValue());
             Government gov = new Government(owner, color);
@@ -235,6 +235,10 @@ public class GameMenuController {
 
     private void attackAllUnits(Government government) {
 
+    }
+
+    private void cutWoods(Government government) {
+//??
     }
 
 

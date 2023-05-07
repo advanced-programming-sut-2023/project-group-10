@@ -33,7 +33,8 @@ public class Tree implements Droppable {
         for(int i=0; i< map.getSize();i++){
             if(map.getBlockByRowAndColumn(i, position.column).getBuilding().getBuildingType().getName().equals(BuildingTypeName.WOODCUTTER))
                 count++;
-            if(map.getBlockByRowAndColumn(position.row,i).getBuilding().getBuildingType().getName().equals(BuildingTypeName.WOODCUTTER));
+            if(map.getBlockByRowAndColumn(position.row,i).getBuilding().getBuildingType().getName().equals(BuildingTypeName.WOODCUTTER))
+                count++;
         }
 
         return count;

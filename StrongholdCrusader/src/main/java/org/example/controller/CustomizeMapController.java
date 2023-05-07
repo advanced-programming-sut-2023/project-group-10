@@ -1,9 +1,7 @@
 package org.example.controller;
 
-import org.example.model.game.MapDirections;
-import org.example.model.game.Rock;
-import org.example.model.game.Tree;
-import org.example.model.game.TreeType;
+import org.example.model.Stronghold;
+import org.example.model.game.*;
 import org.example.model.game.envirnmont.BlockTexture;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
@@ -72,5 +70,9 @@ public class CustomizeMapController {
             return CustomizeMapMessages.INCOMPATIBLE_LAND;
         map.getBlockByRowAndColumn(position).setDroppable(new Tree(TreeType.getTreeTypeByName(type)));
         return CustomizeMapMessages.SUCCESSFUL_TREE_DROP;
+    }
+
+    public static boolean isIndexInBounds(int index) {
+        return index>=0 && index< map.getSize();
     }
 }

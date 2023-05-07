@@ -42,9 +42,10 @@ public class CustomizeMapMenu {
             return;
         }
         CustomizeMapMessages message = null;
-        if (input.contains("-x") && input.contains("-y")) message = setTextureSingleBlock(options);
-        else if (input.contains("-x1") && input.contains("-y1") && input.contains("-x2") && input.contains("-y2"))
+        if (input.contains("-x1") && input.contains("-y1") && input.contains("-x2") && input.contains("-y2"))
             message = setTextureRectangleOfBlocks(options);
+       else if (input.contains("-x") && input.contains("-y")) message = setTextureSingleBlock(options);
+
         else System.out.println("You haven't entered your inputs in a valid format");
         if (message == null) return;
         switch (message) {
@@ -177,7 +178,7 @@ public class CustomizeMapMenu {
                     System.out.println("You've entered invalid type for tree!");
                     break;
                 case INCOMPATIBLE_LAND:
-                    System.out.println("You cant drop a this type of Tree on this type of texture!");
+                    System.out.println("You cant drop  this type of Tree on this type of texture!");
                     break;
                 case SUCCESSFUL_TREE_DROP:
                     System.out.println("Tree dropped successfully");

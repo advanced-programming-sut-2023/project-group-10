@@ -10,8 +10,10 @@ public class MainMenuController {
     public static MainMenuMessages checkMapAndGovernmentsCount(int mapSize, int governmentCount) {
         if (mapSize != 200 && mapSize != 400)
             return MainMenuMessages.INVALID_MAP_SIZE;
-        if (governmentCount < 2 || governmentCount > 8 || governmentCount > User.getUsers().size())
+        if (governmentCount < 2 || governmentCount > 8 )
             return MainMenuMessages.INVALID_GOVERNMENT_COUNT;
+        if( governmentCount > User.getUsers().size())
+            return MainMenuMessages.INSUFFICIENT_GlOBAL_USERS;
         return MainMenuMessages.SUCCESS;
     }
 

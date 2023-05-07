@@ -2,6 +2,7 @@ package test.signup;
 
 import org.example.controller.SignupMenuController;
 import org.example.model.DataBase;
+import org.example.model.Stronghold;
 import org.example.view.enums.messages.SignupMenuMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,11 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 
 public class SignUpMenuControllerTest {
-
-    @Mock
-    DataBase dataBase;
-
-    @InjectMocks
+@Mock
+        DataBase dataBase;
+@InjectMocks
     SignupMenuController signupMenuController;
 
     @Test

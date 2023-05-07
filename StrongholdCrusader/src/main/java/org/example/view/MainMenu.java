@@ -61,7 +61,7 @@ public class MainMenu {
             System.out.println("You should enter a number(200 or 400) for size");
             return;
         } else
-            mapSize = Integer.parseInt(count);
+            mapSize = Integer.parseInt(size);
         if (!count.matches("\\d+")) {
             System.out.println("You should enter a number(between 2 and 8) for count");
             return;
@@ -74,6 +74,9 @@ public class MainMenu {
                 break;
             case INVALID_GOVERNMENT_COUNT:
                 System.out.println("You should enter a number between 2 and 8 for count of governments!");
+                return;
+            case INSUFFICIENT_GlOBAL_USERS:
+                System.out.println("There isn't enough registered users!");
                 return;
             case INVALID_MAP_SIZE:
                 System.out.println("You should enter 200 or 400 for map size!");
@@ -102,7 +105,7 @@ public class MainMenu {
 
         for (Map.Entry<String, String> option : options.entrySet()) {
             switch (option.getKey()) {
-                case "-s":
+                case "-u":
                     username = option.getValue();
                     break;
                 case "-c":

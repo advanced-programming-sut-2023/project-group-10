@@ -16,6 +16,7 @@ public class Main {
         if (Stronghold.getLoggedInUserFromFile() != null) {
             Stronghold.setCurrentUser(Stronghold.getLoggedInUserFromFile());
             MainMenu.run();
+            SignupMenu.run();
         } else SignupMenu.run();
     }
 }
