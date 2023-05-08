@@ -19,9 +19,10 @@ public enum GameMenuCommands {
     TRADE_MENU("\\s*trade\\s+menu\\s*"),
     SHOP_MENU("\\s*shop\\s+menu\\s*"),
     ROUNDS_PLAYED("\\s*show\\s+rounds\\s*"),
-    SHOW_PLAYER("\\s*show\\s+currnet\\splayer\\s*"),
+    SHOW_PLAYER("\\s*show\\s+current\\s*player\\s*"),
     NEXT_TURN("\\s*next\\s+turn\\s*"),
-    LEAVE_GAME("\\s*leave\\s+game\\s*");
+    LEAVE_GAME("\\s*leave\\s+game\\s*"),
+    DROP_UNIT("\\s*drop\\s*unit.*");
 
     public final String regex;
 

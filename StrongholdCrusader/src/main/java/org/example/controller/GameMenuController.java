@@ -13,6 +13,8 @@ import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Node;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
+import org.example.model.game.units.unitconstants.Role;
+import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.ArrayList;
@@ -158,8 +160,20 @@ public class GameMenuController {
         if (moveCount > 0) moveUnit(unit, moveCount);
     }
 
+    public static GameMenuMessages dropUnit(Coordinate position, String type, int count) {
+        if (Role.getRoleByName(RoleName.getRoleNameByNameString(type)) == null)
+            return GameMenuMessages.INVALID_UNIT_TYPE;
 
-    //Can some part of land be owned by someone?
+        if (count < 0)
+            return GameMenuMessages.INVALID_UNIT_COUNT;
+        for (int i = 0; i < count; i++) {
+            Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).addUnit(new Unit(position,
+                    RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
+        }
+        return GameMenuMessages.SUCCESSFUL_DROP;
+    }
+
+
     private static void removeAllUnits(Government government) {
         for (int i = 0; i < Stronghold.getCurrentBattle().getBattleMap().getSize(); i++) {
             for (int j = 0; j < Stronghold.getCurrentBattle().getBattleMap().getSize(); j++) {
@@ -228,6 +242,7 @@ public class GameMenuController {
     private void updatePopularity(Government government) {
 
     }
+
 
     private void collectTaxes(Government government) {
 

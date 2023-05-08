@@ -9,6 +9,7 @@ import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class GameMenu {
     public static void run(HashMap<String, String> players, Map map) {
@@ -33,6 +34,7 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FEAR_RATE) != null) setFearRate(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FEAR_RATE) != null) showFearRate();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING) != null) dropBuilding(input);
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_UNIT) != null) dropUnit(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_BUILDING) != null)
                 selectBuilding(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_UNIT) != null) selectUnit(input);
@@ -43,18 +45,19 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.LEAVE_GAME) != null) {
                 leaveGame();
                 return;
-            }
-            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("game menu");
+            } else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("game menu");
             else System.out.println("invalid command!");
         }
     }
 
-    private static void showRoundsPlayed(){
-        System.out.println(GameMenuController.showRoundsPlayed()+" rounds are played!");
+    private static void showRoundsPlayed() {
+        System.out.println(GameMenuController.showRoundsPlayed() + " rounds are played!");
     }
-    private static void getCurrentPlayer(){
+
+    private static void getCurrentPlayer() {
         System.out.println(GameMenuController.currentPlayer());
     }
+
     private static void showPopularityFactors() {
         System.out.println(GameMenuController.showPopularityFactors());
     }
@@ -125,6 +128,53 @@ public class GameMenu {
                     break;
                 case SET_FEAR_RATE_SUCCESSFUL:
                     System.out.println("Fear rate is set to " + fearRate);
+            }
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    public static void dropUnit(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String type = options.getOrDefault("-t", "");
+        String countAsString = options.getOrDefault("-c", "");
+        if (type == null) {
+            System.out.println("empty type field");
+            return;
+        }
+        options.remove("-t");
+
+        if (countAsString == null) {
+            System.out.println("empty count field");
+            return;
+        }
+        if (type.isEmpty()) {
+            System.out.println("missing unit type");
+            return;
+        }
+        if (!Pattern.compile("-?\\d+").matcher(countAsString).matches()) {
+            System.out.println("You should enter number for count(-c)");
+            return;
+        }
+        options.remove("-c");
+        int count = Integer.parseInt(countAsString);
+
+        try {
+            Coordinate position = InputProcessor.getCoordinateFromXYInput(options, "-x", "-y");
+            GameMenuMessages message = GameMenuController.dropBuilding(position, type);
+            switch (message) {
+                case INVALID_UNIT_TYPE:
+                    System.out.println("You've entered invalid unit type!");
+                    break;
+                case INVALID_UNIT_COUNT:
+                    System.out.println("You cant drop 0 or negative amount of units!");
+                    break;
+                case SUCCESSFUL_DROP:
+                    System.out.println(" Building dropped successfully");
+                default:
+                    System.out.println("Invalid input!");
+                    break;
+
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
