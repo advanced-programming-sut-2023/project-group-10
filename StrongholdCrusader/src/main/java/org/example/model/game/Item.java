@@ -10,34 +10,34 @@ public enum Item {
     PITCH("pitch", new HashMap<>(), 4, 2, false),
     //essentials for foods
     WHEAT("wheat", new HashMap<>(), 18, 1, false),
-    FLOUR("flour", (HashMap<Item, Integer>) Map.of(WHEAT, 1), 24, 1, false),
+    FLOUR("flour", Map.of(WHEAT, 1), 24, 1, false),
     HOPS("hops", new HashMap<>(), 4, 1, false),
     //foods
     MEAT("meat", new HashMap<>(), 2, 1, true),
     CHEESE("cheese", new HashMap<>(), 2, 1, true),
     APPLE("apple", new HashMap<>(), 2, 1, true),
-    BREAD("bread", (HashMap<Item, Integer>) Map.of(Item.FLOUR, 1), 3, 1, true),
-    ALE("ale", (HashMap<Item, Integer>) Map.of(Item.HOPS, 1), 6, 2, true),
+    BREAD("bread", Map.of(Item.FLOUR, 1), 3, 1, true),
+    ALE("ale", Map.of(Item.HOPS, 1), 6, 2, true),
     //animals (shouldn't appear in shop or trade)
     HORSE("horse", new HashMap<>(), 0, 0, false),
     COW("cow", new HashMap<>(), 0, 0, false),
     //weapons
-    BOW("bow", (HashMap<Item, Integer>) Map.of(WOOD, 2), 16, 8, false),
-    CROSSBOW("crossbow", (HashMap<Item, Integer>) Map.of(WOOD, 3), 16, 8, false),
-    SPEAR("spear", (HashMap<Item, Integer>) Map.of(WOOD, 1), 12, 6, false),
-    PIKE("pike", (HashMap<Item, Integer>) Map.of(WOOD, 2), 24, 12, false),
-    MACE("mace", (HashMap<Item, Integer>) Map.of(IRON, 1), 32, 16, false),
-    SWORD("swords", (HashMap<Item, Integer>) Map.of(IRON, 1), 32, 16, false),
-    LEATHER_ARMOR("Leather armor", (HashMap<Item, Integer>) Map.of(COW, 1), 24, 12, false),
-    METAL_ARMOR("metal armor", (HashMap<Item, Integer>) Map.of(IRON, 1), 32, 16, false);
+    BOW("bow", Map.of(WOOD, 2), 16, 8, false),
+    CROSSBOW("crossbow", Map.of(WOOD, 3), 16, 8, false),
+    SPEAR("spear", Map.of(WOOD, 1), 12, 6, false),
+    PIKE("pike", Map.of(WOOD, 2), 24, 12, false),
+    MACE("mace", Map.of(IRON, 1), 32, 16, false),
+    SWORD("swords", Map.of(IRON, 1), 32, 16, false),
+    LEATHER_ARMOR("Leather armor", Map.of(COW, 1), 24, 12, false),
+    METAL_ARMOR("metal armor", Map.of(IRON, 1), 32, 16, false);
 
     private final String name;
-    private final HashMap<Item, Integer> resourcesNeeded;
+    private final Map<Item, Integer> resourcesNeeded;
     private final double buyPrice;
     private final double sellPrice;
     private final boolean isFood;
 
-    Item(String name, HashMap<Item, Integer> resourcesNeeded, double buyPrice, double sellPrice, boolean isFood) {
+    Item(String name, Map<Item, Integer> resourcesNeeded, double buyPrice, double sellPrice, boolean isFood) {
         this.name = name;
         this.resourcesNeeded = resourcesNeeded;
         this.buyPrice = buyPrice;
@@ -68,7 +68,7 @@ public enum Item {
         return name;
     }
 
-    public HashMap<Item, Integer> getAllResourcesNeeded() {
+    public Map<Item, Integer> getAllResourcesNeeded() {
         return resourcesNeeded;
     }
 

@@ -2,6 +2,11 @@ package org.example.model;
 
 import com.google.gson.reflect.TypeToken;
 import org.example.model.game.Battle;
+import org.example.model.game.buildings.buildingconstants.*;
+import org.example.model.game.units.unitconstants.MilitaryEquipmentRole;
+import org.example.model.game.units.unitconstants.MilitaryPersonRole;
+import org.example.model.game.units.unitconstants.Role;
+import org.example.model.game.units.unitconstants.WorkerRole;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,7 +18,7 @@ import static org.example.model.User.gson;
 public class Stronghold {
     private static User currentUser;
     private static Battle currentBattle;
-    public static DataBase dataBase=new DataBase();
+    public static DataBase dataBase = new DataBase();
 
     public static User getCurrentUser() {
         return currentUser;
@@ -56,4 +61,19 @@ public class Stronghold {
     }
 
 
+    public static void initializeApp() {
+        Stronghold.dataBase.loadUsersFromFile();
+        //initialize unit role classes
+        Role.initializeRoles();
+        MilitaryEquipmentRole.initializeRoles();
+        MilitaryPersonRole.initializeRoles();
+        WorkerRole.initializeRoles();
+        //initialize building type classes
+        BuildingType.initializeTypes();
+        AttackingBuildingType.initializeTypes();
+        ItemProducingBuildingType.initializeTypes();
+        PersonProducingBuildingType.initializeTypes();
+        PopularityIncreasingBuildingType.initializeTypes();
+        StorageBuildingType.initializeTypes();
+    }
 }

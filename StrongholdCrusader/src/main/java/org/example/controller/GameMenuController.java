@@ -15,6 +15,7 @@ import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
+import org.example.view.CustomizeMapMenu;
 import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.ArrayList;
@@ -140,6 +141,7 @@ public class GameMenuController {
 
         Battle battle = new Battle(map, governments);
         Stronghold.setCurrentBattle(battle);
+        CustomizeMapMenu.run();
     }
 
 

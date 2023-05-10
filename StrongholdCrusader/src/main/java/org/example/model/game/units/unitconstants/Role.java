@@ -8,7 +8,7 @@ public class Role {
     private final int maxHitPoint;
     private final Quality speed;
 
-    static {
+    public static void initializeRoles() {
         new Role(RoleName.PEASANT, 50, Quality.AVERAGE);
         new Role(RoleName.LADY, 400, Quality.LOW);
         new Role(RoleName.JESTER, 50, Quality.AVERAGE);

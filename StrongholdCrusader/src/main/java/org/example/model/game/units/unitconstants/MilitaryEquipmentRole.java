@@ -5,7 +5,7 @@ public class MilitaryEquipmentRole extends MilitaryUnitRole {
     private final int numberOfEngineersNeeded;
     private final int buildTime;
 
-    static {
+    public static void initializeRoles() {
         new MilitaryEquipmentRole(RoleName.PORTABLE_SHIELD, defaultHitPoint, Quality.LOW, Quality.ZERO, Quality.ZERO, Quality.ZERO, 5, 1, 1);
         new MilitaryEquipmentRole(RoleName.BATTERING_RAM, defaultHitPoint, Quality.LOW, Quality.HIGH, Quality.ZERO, Quality.EXTREMELY_HIGH, 150, 4, 2);
         new MilitaryEquipmentRole(RoleName.SIEGE_TOWER, defaultHitPoint, Quality.LOW, Quality.ZERO, Quality.ZERO, Quality.ZERO, 150, 4, 3);

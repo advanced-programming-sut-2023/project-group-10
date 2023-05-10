@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class MapMenu {
-    public void run() {
+    public static void run() {
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {

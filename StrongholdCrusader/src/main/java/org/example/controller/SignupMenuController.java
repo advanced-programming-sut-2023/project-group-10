@@ -13,7 +13,6 @@ public class SignupMenuController {
     public static SignupMenuMessages createUser(String username, String password, String passwordConfirmation, String email, String nickname) {
         if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username)) return SignupMenuMessages.INVALID_USERNAME_FORMAT;
         if (CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname)) return SignupMenuMessages.INVALID_NICKNAME_FORMAT;
-        if (User.getUserByUsername(username) != null) return SignupMenuMessages.USER_EXISTS;
         SignupMenuMessages message = checkPassword(password);
         if (!password.equals("random") && !message.equals(SignupMenuMessages.STRONG_PASSWORD))
             return message;
@@ -23,6 +22,7 @@ public class SignupMenuController {
             return SignupMenuMessages.EMAIL_EXISTS;
         }
         if (CheckFormatAndEncrypt.isEmailFormatInvalid(email)) return SignupMenuMessages.INVALID_EMAIL_FORMAT;
+        if (User.getUserByUsername(username) != null) return SignupMenuMessages.USER_EXISTS;
         return SignupMenuMessages.SHOW_QUESTIONS;
     }
 

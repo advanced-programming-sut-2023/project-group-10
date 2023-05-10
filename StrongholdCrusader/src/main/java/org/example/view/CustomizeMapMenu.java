@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class CustomizeMapMenu {
-    public static Map run(int size) {
-        CustomizeMapController.newMap(size);
+    public static Map run() {
+        CustomizeMapController.initializeMap();
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
@@ -50,7 +50,7 @@ public class CustomizeMapMenu {
         if (message == null) return;
         switch (message) {
             case INDEX_OUT_OF_BOUNDS:
-                System.out.println("You've entered numbers less than 0 or grater than the size!");
+                System.out.println("You've entered numbers less than 0 or greater than the size!");
                 break;
             case POND_ENTERED:
                 System.out.println("For setting texture to ponds you must only enter one block's coordinates!");

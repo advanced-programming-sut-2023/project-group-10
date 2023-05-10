@@ -1,7 +1,10 @@
 package org.example.controller;
 
 import org.example.model.Stronghold;
-import org.example.model.game.*;
+import org.example.model.game.MapDirections;
+import org.example.model.game.Rock;
+import org.example.model.game.Tree;
+import org.example.model.game.TreeType;
 import org.example.model.game.envirnmont.BlockTexture;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
@@ -10,12 +13,13 @@ import org.example.view.enums.messages.CustomizeMapMessages;
 public class CustomizeMapController {
     private static Map map;
 
-    public static Map getMap() {
-        return map;
+
+    public static void initializeMap() {
+        map = Stronghold.getCurrentBattle().getBattleMap();
     }
 
-    public static void newMap(int size) {
-        map = new Map(size);
+    public static Map getMap() {
+        return map;
     }
 
     public static CustomizeMapMessages setTexture(String landType, Coordinate position) {
@@ -73,6 +77,6 @@ public class CustomizeMapController {
     }
 
     public static boolean isIndexInBounds(int index) {
-        return index>=0 && index< map.getSize();
+        return index >= 0 && index < map.getSize();
     }
 }
