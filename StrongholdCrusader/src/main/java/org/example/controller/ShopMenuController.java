@@ -7,10 +7,11 @@ import org.example.view.enums.messages.ShopMenuMessages;
 public class ShopMenuController {
 
     public static String showPriceList() {
-        String list = "";
+        String list = "~~~ PRICE LIST ~~~";
         for (Item item : Item.values()) {
-            list = list.concat("name : " + item.getName() + "price : " + item.getBuyPrice() +
-                    "you have :" + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(item) + "of this item" + "\n");
+            list += "\nname: " + item.getName();
+            list += "\nprice: " + item.getBuyPrice();
+            list += "\nyou have " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(item) + " of this item";
         }
         return list;
     }

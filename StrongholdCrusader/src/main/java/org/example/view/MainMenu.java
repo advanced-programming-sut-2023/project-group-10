@@ -1,6 +1,8 @@
 package org.example.view;
 
 import org.example.controller.MainMenuController;
+import org.example.model.Stronghold;
+import org.example.model.game.Color;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.MainMenuCommands;
 import org.example.view.enums.messages.MainMenuMessages;
@@ -20,13 +22,11 @@ public class MainMenu {
             else if (MainMenuCommands.getMatcher(input, MainMenuCommands.LOGOUT) != null) {
                 logout();
                 return;
-            }
-
-            else if (MainMenuCommands.getMatcher(input, MainMenuCommands.EXIT) != null)
+            } else if (MainMenuCommands.getMatcher(input, MainMenuCommands.EXIT) != null)
                 System.exit(0);
             else if (MainMenuCommands.getMatcher(input, MainMenuCommands.PROFILE_MENU) != null)
                 goToProfileMenu();
-            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+            else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
                 System.out.println("main menu");
 
             else System.out.println("Invalid command!");
@@ -61,7 +61,7 @@ public class MainMenu {
             System.out.println("You should enter a number(200 or 400) for size");
             return;
         } else
-            mapSize = Integer.parseInt(count);
+            mapSize = Integer.parseInt(size);
         if (!count.matches("\\d+")) {
             System.out.println("You should enter a number(between 2 and 8) for count");
             return;
@@ -69,28 +69,49 @@ public class MainMenu {
             governmentCount = Integer.parseInt(count);
         MainMenuMessages message = MainMenuController.checkMapAndGovernmentsCount(mapSize, governmentCount);
         switch (message) {
-            case SUCCESS:
-                System.out.println("Enter usernames of players you wish to play with: ");
-                break;
             case INVALID_GOVERNMENT_COUNT:
                 System.out.println("You should enter a number between 2 and 8 for count of governments!");
+                return;
+            case INSUFFICIENT_GlOBAL_USERS:
+                System.out.println("There isn't enough registered users!");
                 return;
             case INVALID_MAP_SIZE:
                 System.out.println("You should enter 200 or 400 for map size!");
                 return;
         }
 
-        int enteredCount = 0;
-        // input format : -p <player's username> -c <selected color>
         Scanner scanner = new Scanner(System.in);
         HashMap<String, String> players = new HashMap<>();
-        while (enteredCount < governmentCount) {
+        System.out.println("pick a color for your own government [color name]");
+        String colors = "";
+        for (Color value : Color.values()) {
+            colors = colors.concat(value.getName() + " - ");
+        }
+        System.out.println(colors.substring(0, colors.length() - 3));
+        String myOwnColor = null;
+        for (int i = 0; i < 10; i++) {
+            myOwnColor = scanner.nextLine();
+            if (Color.getColorByName(myOwnColor) != null)
+                break;
+            else
+                myOwnColor = "";
+
+        }
+        if (myOwnColor.length() == 0) {
+            System.out.println("You've taken all your chances,If you wish to start a new game, try again!");
+            return;
+        }
+        players.put(Stronghold.getCurrentUser().getUsername(), myOwnColor);
+
+        // input format : -u <player's username> -c <selected color>
+        System.out.println("Enter usernames of players you wish to play with: ");
+        int enteredCount = 0;
+        while (enteredCount < governmentCount - 1) {
             if (getUsersForGame(players))
                 enteredCount++;
 
         }
-        org.example.model.game.envirnmont.Map map = CustomizeMapMenu.run(mapSize);
-        GameMenu.run(players, map);
+        GameMenu.run(players, new org.example.model.game.envirnmont.Map(mapSize));
     }
 
     private static boolean getUsersForGame(HashMap<String, String> players) {
@@ -102,7 +123,7 @@ public class MainMenu {
 
         for (Map.Entry<String, String> option : options.entrySet()) {
             switch (option.getKey()) {
-                case "-s":
+                case "-u":
                     username = option.getValue();
                     break;
                 case "-c":
@@ -117,11 +138,17 @@ public class MainMenu {
             System.out.println("missing option!");
             return false;
         }
-        MainMenuMessages message = MainMenuController.getPlayers(username, color);
+        MainMenuMessages message = MainMenuController.getPlayers(username, color, players);
         switch (message) {
             case SUCCESS:
                 System.out.println("player with username " + username + " added to the game successfully with color " + color);
                 break;
+            case USER_IN_THE_BATTLE:
+                System.out.println("Player with username " + username + " is already added!");
+                return false;
+            case TAKEN_COLOR:
+                System.out.println("You've already assigned this color to a player, choose a new color!");
+                return false;
             case INVALID_USERNAME:
                 System.out.println("Player with " + username + " doesn't seem to exist!");
                 return false;
@@ -131,12 +158,9 @@ public class MainMenu {
         }
         players.put(username, color);
         return true;
-
-
     }
 
     private static void logout() {
-
         MainMenuMessages message = MainMenuController.logout();
         System.out.println("user logged out successfully!");
     }
@@ -145,4 +169,3 @@ public class MainMenu {
         ProfileMenu.run();
     }
 }
-

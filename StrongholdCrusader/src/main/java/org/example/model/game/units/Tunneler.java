@@ -53,4 +53,11 @@ public class Tunneler extends MilitaryUnit {
     public boolean isSelectable() {
         return super.isSelectable() && tunnelerState == TunnelerState.NONE;
     }
+
+    @Override
+    public void stop() {
+        super.stop();
+        tunnelerState = TunnelerState.NONE;
+        targetBuilding = null;
+    }
 }

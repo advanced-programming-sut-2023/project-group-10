@@ -48,7 +48,7 @@ public abstract class MilitaryUnit extends Unit {
         this.endPoint = endPoint;
         onPatrol = false;
         moatAboutToBeDug = null;
-        moatAboutToBeFilled=null;
+        moatAboutToBeFilled = null;
     }
 
     public void patrol(Coordinate startingPoint, Coordinate endPoint) {
@@ -105,5 +105,14 @@ public abstract class MilitaryUnit extends Unit {
 
     public boolean isSelectable() {
         return moatAboutToBeDug == null;
+    }
+
+    public void stop() {
+        startingPoint = null;
+        endPoint = null;
+        destination = DestinationIndicator.NONE;
+        onPatrol = false;
+        moatAboutToBeDug = null;
+        moatAboutToBeFilled = null;
     }
 }

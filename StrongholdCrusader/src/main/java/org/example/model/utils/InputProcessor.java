@@ -1,5 +1,6 @@
 package org.example.model.utils;
 
+import org.example.controller.CustomizeMapController;
 import org.example.model.Stronghold;
 import org.example.model.game.envirnmont.Coordinate;
 
@@ -16,8 +17,12 @@ public class InputProcessor {
         HashMap<String, String> optArg = new HashMap<>();
         ArrayList<String> arrayList = new ArrayList<>();
 
+        String temp;
         while (matcher.find()) {
-            arrayList.add(matcher.group());
+            temp = matcher.group();
+            if (temp.matches("^\".*\"$"))
+                temp = temp.replaceAll("^\"", "").replaceAll("\"$", "");
+            arrayList.add(temp);
         }
 
         for (int i = 0; i < arrayList.size(); i++) {
@@ -52,8 +57,8 @@ public class InputProcessor {
         if (!x.matches("-?\\d+")) throw new Exception("invalid " + flag1);
         if (!y.matches("-?\\d+")) throw new Exception("invalid " + flag2);
         org.example.model.game.envirnmont.Map map = Stronghold.getCurrentBattle().getBattleMap();
-        if (!map.isIndexInBounds(Integer.parseInt(x))) throw new Exception(flag1 + " out of bounds");
-        if (!map.isIndexInBounds(Integer.parseInt(y))) throw new Exception(flag2 + " out of bounds");
+        if (!CustomizeMapController.isIndexInBounds(Integer.parseInt(x))) throw new Exception(flag1 + " out of bounds");
+        if (!CustomizeMapController.isIndexInBounds(Integer.parseInt(y))) throw new Exception(flag2 + " out of bounds");
         return new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
     }
 

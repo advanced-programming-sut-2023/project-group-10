@@ -23,4 +23,8 @@ public class SiegeEquipment extends MilitaryUnit {
         for (int i = 0; this.engineers.size() < ((MilitaryEquipmentRole) getRole()).getNumberOfEngineersNeeded(); i++)
             this.engineers.add(engineers[i]);
     }
+
+    public int getCurrentNeededEngineers() {
+        return ((MilitaryEquipmentRole) this.getRole()).getNumberOfEngineersNeeded() - engineers.size();
+    }
 }

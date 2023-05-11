@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.model.Stronghold;
 import org.example.model.game.MapDirections;
 import org.example.model.game.Rock;
 import org.example.model.game.Tree;
@@ -12,12 +13,13 @@ import org.example.view.enums.messages.CustomizeMapMessages;
 public class CustomizeMapController {
     private static Map map;
 
-    public static Map getMap() {
-        return map;
+
+    public static void initializeMap() {
+        map = Stronghold.getCurrentBattle().getBattleMap();
     }
 
-    public static void newMap(int size) {
-        map = new Map(size);
+    public static Map getMap() {
+        return map;
     }
 
     public static CustomizeMapMessages setTexture(String landType, Coordinate position) {
@@ -38,14 +40,29 @@ public class CustomizeMapController {
         if (BlockTexture.getTypeByName(landType).equals(BlockTexture.LARGE_POND)
                 || BlockTexture.getTypeByName(landType).equals(BlockTexture.SMALL_POND))
             return CustomizeMapMessages.POND_ENTERED;
+
         for (int i = point1.row; i <= point2.row; i++) {
             for (int j = point1.column; j <= point2.column; j++) {
                 if (map.getBlockByRowAndColumn(i, j).getBuilding() != null)
                     return CustomizeMapMessages.BUILDING_IN_THE_AREA;
             }
         }
+        arrangePoints(point1, point2);
         map.setTextureRectangleOfBlocks(BlockTexture.getTypeByName(landType), point1.row, point1.column, point2.row, point2.column);
         return CustomizeMapMessages.SET_TEXTURE_OF_AREA_SUCCESSFUL;
+    }
+
+    private static void arrangePoints(Coordinate p1, Coordinate p2) {
+        if (p2.row < p1.row) {
+            int tmp = p1.row;
+            p1.row = p2.row;
+            p2.row = tmp;
+        }
+        if (p2.column < p1.column) {
+            int tmp = p1.column;
+            p1.column = p2.column;
+            p2.column = tmp;
+        }
     }
 
 
@@ -72,5 +89,9 @@ public class CustomizeMapController {
             return CustomizeMapMessages.INCOMPATIBLE_LAND;
         map.getBlockByRowAndColumn(position).setDroppable(new Tree(TreeType.getTreeTypeByName(type)));
         return CustomizeMapMessages.SUCCESSFUL_TREE_DROP;
+    }
+
+    public static boolean isIndexInBounds(int index) {
+        return index >= 0 && index < map.getSize();
     }
 }

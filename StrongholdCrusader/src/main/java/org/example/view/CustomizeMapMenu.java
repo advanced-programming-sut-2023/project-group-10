@@ -11,8 +11,9 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class CustomizeMapMenu {
-    public static Map run(int size) {
-        CustomizeMapController.newMap(size);
+    public static Map run() {
+        CustomizeMapController.initializeMap();
+        System.out.println("customize your map and enter \"end customization\" when you're done");
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
@@ -42,14 +43,15 @@ public class CustomizeMapMenu {
             return;
         }
         CustomizeMapMessages message = null;
-        if (input.contains("-x") && input.contains("-y")) message = setTextureSingleBlock(options);
-        else if (input.contains("-x1") && input.contains("-y1") && input.contains("-x2") && input.contains("-y2"))
+        if (input.contains("-x1") && input.contains("-y1") && input.contains("-x2") && input.contains("-y2"))
             message = setTextureRectangleOfBlocks(options);
+       else if (input.contains("-x") && input.contains("-y")) message = setTextureSingleBlock(options);
+
         else System.out.println("You haven't entered your inputs in a valid format");
         if (message == null) return;
         switch (message) {
             case INDEX_OUT_OF_BOUNDS:
-                System.out.println("You've entered numbers less than 0 or grater than the size!");
+                System.out.println("You've entered numbers less than 0 or greater than the size!");
                 break;
             case POND_ENTERED:
                 System.out.println("For setting texture to ponds you must only enter one block's coordinates!");
@@ -145,7 +147,7 @@ public class CustomizeMapMenu {
                 case NON_EMPTY_LAND:
                     System.out.println("You can't drop a rock here!");
                     break;
-                case SUCCESSFUL_DROP:
+                case DROP_ROCK_SUCCESSFUL:
                     System.out.println("You dropped a rock successfully!");
                     break;
             }
@@ -177,7 +179,7 @@ public class CustomizeMapMenu {
                     System.out.println("You've entered invalid type for tree!");
                     break;
                 case INCOMPATIBLE_LAND:
-                    System.out.println("You cant drop a this type of Tree on this type of texture!");
+                    System.out.println("You cant drop  this type of Tree on this type of texture!");
                     break;
                 case SUCCESSFUL_TREE_DROP:
                     System.out.println("Tree dropped successfully");

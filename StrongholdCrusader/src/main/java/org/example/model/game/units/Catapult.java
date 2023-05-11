@@ -19,4 +19,5 @@ public class Catapult extends SiegeEquipment {
     public void changeRockCount(int count) {
         rocksLeft += count;
     }
+
 }

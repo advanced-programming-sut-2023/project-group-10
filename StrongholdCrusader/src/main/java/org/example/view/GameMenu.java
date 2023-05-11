@@ -9,21 +9,20 @@ import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class GameMenu {
     public static void run(HashMap<String, String> players, Map map) {
         GameMenuController.initializeGame(players, map);
+        getCurrentPlayer();
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
             input = scanner.nextLine();
             if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_POPULARITY_FACTORS) != null)
                 showPopularityFactors();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.ROUNDS_PLAYED) != null)
-                showRoundsPlayed();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_PLAYER) != null)
-                getCurrentPlayer();
-
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.ROUNDS_PLAYED) != null) showRoundsPlayed();
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_PLAYER) != null) getCurrentPlayer();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_POPULARITY) != null) showPopularity();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FOOD_LIST) != null) showFoodList();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FOOD_RATE) != null) setFoodRate(input);
@@ -33,28 +32,34 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FEAR_RATE) != null) setFearRate(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FEAR_RATE) != null) showFearRate();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING) != null) dropBuilding(input);
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_UNIT) != null) dropUnit(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_BUILDING) != null)
                 selectBuilding(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_UNIT) != null) selectUnit(input);
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.MOUNT_EQUIPMENT) != null)
+                mountEquipment(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.TRADE_MENU) != null) TradeMenu.run();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOP_MENU) != null) ShopMenu.run();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.NEXT_TURN) != null && endTurn() == GameMenuMessages.GAME_OVER)
-                return;
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.MAP_MENU) != null) MapMenu.run();
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.NEXT_TURN) != null)
+                if (endTurn() == GameMenuMessages.GAME_OVER) return;
+                else getCurrentPlayer();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.LEAVE_GAME) != null) {
                 leaveGame();
                 return;
-            }
-            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("game menu");
+            } else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("game menu");
             else System.out.println("invalid command!");
         }
     }
 
-    private static void showRoundsPlayed(){
-        System.out.println(GameMenuController.showRoundsPlayed()+" rounds are played!");
+    private static void showRoundsPlayed() {
+        System.out.println(GameMenuController.showRoundsPlayed() + " rounds are played!");
     }
-    private static void getCurrentPlayer(){
-        System.out.println(GameMenuController.currentPlayer());
+
+    private static void getCurrentPlayer() {
+        System.out.println("It is " + GameMenuController.currentPlayer().getUsername() + "'s turn to play");
     }
+
     private static void showPopularityFactors() {
         System.out.println(GameMenuController.showPopularityFactors());
     }
@@ -77,10 +82,13 @@ public class GameMenu {
                     break;
                 case SET_FOOD_RATE_SUCCESSFUL:
                     System.out.println("Food rate is set to " + foodRate);
+                case INSUFFICIENT_FOOD:
+                    System.out.println("You don't have sufficient supplies for this rate, try again!");
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
+
     }
 
     private static void showFoodRate() {
@@ -96,8 +104,10 @@ public class GameMenu {
                 case INVALID_TAX_RATE:
                     System.out.println("Enter a number from -3 to 8!");
                     break;
-                case SET_FOOD_TAX_SUCCESSFUL:
-                    System.out.println("Food rate is set to " + taxRate);
+                case SET_TAX_RATE_SUCCESSFUL:
+                    System.out.println("Tax rate is set to " + taxRate);
+                case INSUFFICIENT_GOLD:
+                    System.out.println("You entered a negative number for tax rate, but you don't have enough gold!");
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
@@ -122,8 +132,56 @@ public class GameMenu {
                 case INVALID_FEAR_RATE:
                     System.out.println("Enter a number from -5 to 5!");
                     break;
-                case SET_FOOD_TAX_SUCCESSFUL:
+                case SET_FEAR_RATE_SUCCESSFUL:
                     System.out.println("Fear rate is set to " + fearRate);
+            }
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    public static void dropUnit(String input) {
+        HashMap<String, String> options = InputProcessor.separateInput(input);
+        String type = options.getOrDefault("-t", "");
+        String countAsString = options.getOrDefault("-c", "");
+        if (type == null) {
+            System.out.println("empty type field");
+            return;
+        }
+        options.remove("-t");
+
+        if (countAsString == null) {
+            System.out.println("empty count field");
+            return;
+        }
+        if (type.isEmpty()) {
+            System.out.println("missing unit type");
+            return;
+        }
+        if (!Pattern.compile("-?\\d+").matcher(countAsString).matches()) {
+            System.out.println("You should enter number for count(-c)");
+            return;
+        }
+        options.remove("-c");
+        int count = Integer.parseInt(countAsString);
+
+        try {
+            Coordinate position = InputProcessor.getCoordinateFromXYInput(options, "-x", "-y");
+            GameMenuMessages message = GameMenuController.dropUnit(position, type, count);
+            switch (message) {
+                case INVALID_UNIT_TYPE:
+                    System.out.println("You've entered invalid unit type!");
+                    break;
+                case INVALID_UNIT_COUNT:
+                    System.out.println("You cant drop 0 or negative amount of units!");
+                    break;
+                case SUCCESSFUL_DROP:
+                    System.out.println("Unit dropped successfully");
+                    break;
+                default:
+                    System.out.println("Invalid input!");
+                    break;
+
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
@@ -150,13 +208,14 @@ public class GameMenu {
                     System.out.println("You've entered invalid building type!");
                     break;
                 case INCOMPATIBLE_LAND:
-                    System.out.println("You cant drop a this type of building on this type of texture!");
+                    System.out.println("You cant drop this type of building on this type of texture!");
                     break;
                 case BUILDING_EXISTS_IN_THE_BLOCK:
                     System.out.println("This location is full!");
                     break;
                 case SUCCESSFUL_DROP:
                     System.out.println(" Building dropped successfully");
+                    break;
                 default:
                     System.out.println("Invalid input!");
                     break;
@@ -198,11 +257,23 @@ public class GameMenu {
         }
     }
 
+    private static void mountEquipment(String input) {
+        try {
+            Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            GameMenuMessages result = GameMenuController.mountEquipment(position);
+            if (result == GameMenuMessages.NO_EQUIPMENT_FOUND)
+                System.out.println("no equipment available at this block");
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
     private static GameMenuMessages endTurn() {
+        GameMenuController.goToNextPlayer();
         return null;
     }
 
     private static void leaveGame() {
-
+        System.out.println("Leaving game!");
     }
 }

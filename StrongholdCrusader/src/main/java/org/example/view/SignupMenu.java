@@ -24,7 +24,7 @@ public class SignupMenu {
                 LoginMenu.run();
             else if (SignupMenuCommands.getMatcher(input, SignupMenuCommands.EXIT) != null)
                 return;
-            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+            else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
                 System.out.println("signup menu");
             else
                 System.out.println("Invalid command!");
@@ -236,8 +236,9 @@ public class SignupMenu {
             securityQuestion(scanner, username, password, nickname, email, slogan);
         } else if (securityQuestionMessage.equals(SignupMenuMessages.REENTER_ANSWER)) {
             result = "answers don't match, try again";
-
+            System.out.println(result);
             securityQuestion(scanner, username, password, nickname, email, slogan);
+            return result;
         } else
             result = "Please complete captcha";
         System.out.println(result);

@@ -14,7 +14,7 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
     private final boolean canClimbLadders;
     private final boolean canDigMoats;
 
-    static {
+    public static void initializeRoles() {
         new MilitaryPersonRole(RoleName.LORD, defaultHitPoint * Quality.EXTREMELY_HIGH.getValue(), Quality.LOW, Quality.EXTREMELY_HIGH, Quality.ZERO, Quality.EXTREMELY_HIGH, 0, null, null, false, false);
         new MilitaryPersonRole(RoleName.ARCHER, defaultHitPoint * Quality.LOW.getValue(), Quality.HIGH, Quality.LOW, Quality.AVERAGE, Quality.AVERAGE, 12, BuildingTypeName.BARRACKS, Item.BOW, true, true);
         new MilitaryPersonRole(RoleName.CROSSBOWMAN, defaultHitPoint * Quality.AVERAGE.getValue(), Quality.AVERAGE, Quality.LOW, Quality.LOW, Quality.HIGH, 20, BuildingTypeName.BARRACKS, Item.CROSSBOW, false, false);

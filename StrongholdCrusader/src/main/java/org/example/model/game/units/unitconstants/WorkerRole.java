@@ -7,7 +7,7 @@ public class WorkerRole extends Role {
     private final static int defaultHitPoint = 50;
     private final BuildingType workplaceType;
 
-    static {
+    public static void initializeRoles() {
         new WorkerRole(RoleName.WOODCUTTER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.WOODCUTTER));
         new WorkerRole(RoleName.HUNTER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.HUNTER_POST));
         new WorkerRole(RoleName.APPLE_FARMER, defaultHitPoint, Quality.AVERAGE, BuildingType.getBuildingTypeByName(BuildingTypeName.APPLE_ORCHARD));

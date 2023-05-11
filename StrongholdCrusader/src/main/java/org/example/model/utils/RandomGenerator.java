@@ -14,7 +14,7 @@ public class RandomGenerator {
             "You fight well, my friend. You have struck a mighty blow for our cause.",
             "I am lost, my friend. You must continue the struggle... without me.",
             "My men approach, you will trouble me no more",
-            "I will tear down your castle, stone by stone if i have to! But i will have your head!",
+            "I will tear down your castle, stone by stone if I have to! But I will have your head!",
             "Soon you will see what it means to be Real Warfare!",
             "Is there no one who will rid me of your irritating presence?!",
             "Your time on this earth is limited. Time to say your prayers!",
@@ -22,8 +22,8 @@ public class RandomGenerator {
     };
 
     public static String getRandomSlogan() {
-        Random random = new Random(slogans.length);
-        return slogans[random.nextInt() - 1];
+        Random random = new Random();
+        return slogans[random.nextInt(slogans.length)];
     }
 
     //TODO: are all of these compatible with my teammates?

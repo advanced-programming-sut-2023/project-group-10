@@ -15,7 +15,8 @@ public enum UnitMenuCommands {
     FILL_MOAT("\\s*fill\\s+moat.*"),
     BUILD("\\s*build.*"),
     DISBAND("\\s*disband\\s+unit\\s*"),
-    BACK("\\s*back\\s*");
+    BACK("\\s*back\\s*"),
+    STOP("\\s*stop\\s*");
 
     private final String regex;
 

@@ -13,7 +13,7 @@ import static org.example.model.User.getUsers;
 import static org.example.model.User.gson;
 
 public class DataBase {
-    public static void loadUsersFromFile() {
+    public void loadUsersFromFile() {
         try {
             String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/UserDatabase.json")));
             ArrayList<User> createdUsers;
@@ -28,7 +28,7 @@ public class DataBase {
         }
     }
 
-    public static void saveUsersToFile() {
+    public void saveUsersToFile() {
         try {
             FileWriter fileWriter = new FileWriter("./src/main/resources/UserDatabase.json");
             fileWriter.write(gson.toJson(getUsers()));

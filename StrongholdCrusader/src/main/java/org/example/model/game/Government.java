@@ -4,6 +4,7 @@ import org.example.model.User;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.MilitaryPerson;
+import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
@@ -17,7 +18,7 @@ public class Government {
     private final MilitaryPerson lord;
     private final ArrayList<Unit> units = new ArrayList<>();
     private ArrayList<Building> buildings = new ArrayList<>();
-    private final HashMap<Item, Integer> itemList = new HashMap<>();
+    private final HashMap<Item, Double> itemList = new HashMap<>();
     private int popularity;
     private final HashMap<String, Integer> popularityFactors = new HashMap<>();
     private double gold;
@@ -48,7 +49,8 @@ public class Government {
         return popularity;
     }
 
-    public void changePopularity(int value) {
+    public void changePopularity(int value,String factor) {
+        popularityFactors.put(factor,value);
         popularity += value;
     }
 
@@ -96,8 +98,8 @@ public class Government {
         return units.remove(unit);
     }
 
-    public int getItemCount(Item item) {
-        return itemList.getOrDefault(item, 0);
+    public Double getItemCount(Item item) {
+        return itemList.getOrDefault(item, (double)0);
     }
 
     public void changeGold(double change) {
@@ -107,7 +109,7 @@ public class Government {
     public void addItem(Item item, int amount) {
         if (itemList.containsKey(item))
             itemList.put(item, itemList.get(item) + amount);
-        else itemList.put(item, amount);
+        else itemList.put(item, (double)amount);
 
         gold -= item.getBuyPrice() * amount;
 
@@ -117,7 +119,7 @@ public class Government {
         Item item = trade.getItem();
         if (itemList.containsKey(item))
             itemList.put(item, itemList.get(item) + trade.getAmount());
-        else itemList.put(item, trade.getAmount());
+        else itemList.put(item, (double)trade.getAmount());
         gold -= trade.getPrice() * trade.getAmount();
 
     }
@@ -138,8 +140,8 @@ public class Government {
         gold += price * amount;
     }
 
-    public void changeItemCount(Item item, int change) {
-        itemList.put(item, itemList.getOrDefault(item, 0) + change);
+    public void changeItemCount(Item item, double change) {
+        itemList.put(item, itemList.getOrDefault(item, (double)0) + change);
     }
 
 
@@ -168,9 +170,9 @@ public class Government {
         return fearRate;
     }
 
-    public HashMap<Item, Integer> getFoodList() {
-        HashMap<Item, Integer> foodList = new HashMap<>();
-        for (Map.Entry<Item, Integer> list : itemList.entrySet()) {
+    public HashMap<Item, Double> getFoodList() {
+        HashMap<Item, Double> foodList = new HashMap<>();
+        for (Map.Entry<Item, Double> list : itemList.entrySet()) {
             if (list.getKey().isFood())
                 foodList.put(list.getKey(), list.getValue());
         }
@@ -201,7 +203,7 @@ public class Government {
         return buildings.remove(building);
     }
 
-    public HashMap<Item, Integer> getItemList() {
+    public HashMap<Item, Double> getItemList() {
         return itemList;
     }
 
@@ -209,12 +211,33 @@ public class Government {
         return government.getOwner().getUsername().equals(this.getOwner().getUsername());
     }
 
-    public int getPeasant(){
+    public int getPeasant() {
         int peasant = 0;
-        for(Unit unit : units){
-            if(unit.getRole().equals(Role.getRoleByName(RoleName.PEASANT)))
+        for (Unit unit : units) {
+            if (unit.getRole().equals(Role.getRoleByName(RoleName.PEASANT)))
                 peasant++;
         }
         return peasant;
+    }
+
+    public int getCitizens() {
+        int citizens = 0;
+        for (Unit unit : units) {
+            if (!(unit instanceof MilitaryUnit))
+                citizens++;
+        }
+        return citizens;
+
+    }
+
+    public double calculateTax() {
+        if (taxRate == 0)
+            return 0;
+        double rate = (0.6 + (Math.abs(taxRate) - 1) * 0.2);
+        if (taxRate > 0)
+            return rate;
+        else
+            return -rate;
+
     }
 }
