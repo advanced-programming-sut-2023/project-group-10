@@ -54,7 +54,7 @@ public class MapMenuController {
         details = details.concat("Texture : " + map.getBlockByRowAndColumn(position).getTexture().name().toLowerCase() + "\n");
         if (map.getBlockByRowAndColumn(position).getDroppable() instanceof Tree) {
             details = details.concat("Tree of type : " + ((Tree) map.getBlockByRowAndColumn(position).getDroppable())
-                    .getType().getName() + "with storage : " + ((Tree) map.getBlockByRowAndColumn(position).getDroppable()).getWoodStorage());
+                    .getType().getName() + "with storage : " + ((Tree) map.getBlockByRowAndColumn(position).getDroppable()).getWoodStorage() + "\n");
         }
         int count = 0;
         ArrayList<MilitaryUnit> militaryUnits = map.getBlockByRowAndColumn(position).getAllMilitaryUnits();
@@ -69,9 +69,9 @@ public class MapMenuController {
                 count++;
             }
         }
-        details = details.concat("Military People count : " + count + "\n");
+        details = details.concat(" Military People count : " + count + "\n");
         for (java.util.Map.Entry<MilitaryPersonRole, Integer> militaryPersonRoleIntegerEntry : militaryPeople.entrySet()) {
-            details = details.concat(militaryPersonRoleIntegerEntry.getValue() + "of" + militaryPersonRoleIntegerEntry.getKey() + "\n");
+            details = details.concat(militaryPersonRoleIntegerEntry.getValue() + " of " + militaryPersonRoleIntegerEntry.getKey() + "\n");
         }
         return details;
     }
