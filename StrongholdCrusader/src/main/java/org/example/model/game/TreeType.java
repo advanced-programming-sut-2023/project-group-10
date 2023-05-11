@@ -12,12 +12,13 @@ public enum TreeType {
 
     TreeType(String name, int maxWoodStorage) {
         this.name = name;
-       this.maxWoodStorage = maxWoodStorage;
+        this.maxWoodStorage = maxWoodStorage;
     }
 
     public static TreeType getTreeTypeByName(String name) {
+        name = name.replaceAll("[\\s_-]", "");
         for (TreeType treeType : TreeType.values())
-            if (treeType.name.equals(name)) return treeType;
+            if (treeType.name.replaceAll("\\s", "").equalsIgnoreCase(name)) return treeType;
         return null;
     }
 
@@ -26,6 +27,6 @@ public enum TreeType {
     }
 
     public String getName() {
-        return name.replace("_"," ").toLowerCase();
+        return name.replace("_", " ").toLowerCase();
     }
 }
