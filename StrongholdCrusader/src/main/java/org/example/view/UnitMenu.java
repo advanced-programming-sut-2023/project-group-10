@@ -30,6 +30,7 @@ public class UnitMenu {
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DIG_MOAT) != null) digMoat(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.FILL_MOAT) != null) fillMoat(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BUILD) != null) build(input);
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.STOP) != null) stop();
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) {
                 disband();
                 if (UnitMenuController.selectedMilitaryUnits == null) return;
@@ -106,7 +107,9 @@ public class UnitMenu {
         try {
             Coordinate target = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             UnitMenuMessages result = UnitMenuController.airAttack(target);
-            if (result == UnitMenuMessages.TARGET_OUT_OF_RANGE)
+            if (result == UnitMenuMessages.SELECTED_MELEE_UNIT)
+                System.out.println("all selected units must be range attackers, enter \"attack -ex [x] -ey [y]\" to attack with melee units");
+            else if (result == UnitMenuMessages.TARGET_OUT_OF_RANGE)
                 System.out.println("can't attack there, it's too far away");
             else if (result == UnitMenuMessages.SUCCESSFUL_ENEMY_ATTACK)
                 System.out.println("units are attacking the target");
@@ -238,6 +241,11 @@ public class UnitMenu {
         else if (result == UnitMenuMessages.INSUFFICIENT_RESOURCES)
             System.out.println("you don't have the required resources");
         else if (result == UnitMenuMessages.SUCCESSFUL_BUILD) System.out.println("engineer started building equipment");
+    }
+
+    private static void stop() {
+        UnitMenuController.stop();
+        System.out.println("units stopped their activities");
     }
 
     private static void disband() {

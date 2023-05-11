@@ -20,7 +20,7 @@ public class UnitMenuController {
 
     public static UnitMenuMessages moveUnit(Coordinate destination) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
-        if (!map.getBlockByRowAndColumn(destination).canUnitsGoHere() || map.findPath(selectedMilitaryUnits.get(0).getPosition(), destination) == null)
+        if (!map.getBlockByRowAndColumn(destination).canUnitsGoHere(true) || map.findPath(selectedMilitaryUnits.get(0).getPosition(), destination) == null)
             return UnitMenuMessages.INVALID_DESTINATION;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             selectedMilitaryUnit.moveUnit(destination);
@@ -29,7 +29,7 @@ public class UnitMenuController {
 
     public static UnitMenuMessages patrolUnit(Coordinate startPoint, Coordinate destination) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
-        if (!map.getBlockByRowAndColumn(startPoint).canUnitsGoHere() || !map.getBlockByRowAndColumn(destination).canUnitsGoHere())
+        if (!map.getBlockByRowAndColumn(startPoint).canUnitsGoHere(true) || !map.getBlockByRowAndColumn(destination).canUnitsGoHere(true))
             return UnitMenuMessages.INVALID_DESTINATION;
         if (map.findPath(selectedMilitaryUnits.get(0).getPosition(), startPoint) == null || map.findPath(startPoint, destination) == null)
             return UnitMenuMessages.TOUR_BLOCKED;
@@ -70,7 +70,9 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages airAttack(Coordinate target) {
-        //TODO: difference between air attack and enemy attack?
+        for (MilitaryUnit unit : selectedMilitaryUnits) {
+            if(((MilitaryUnitRole)unit.getRole()).getAttackRange()==Quality.ZERO) return UnitMenuMessages.SELECTED_MELEE_UNIT;
+        }
         return attackEnemy(target);
     }
 
@@ -173,13 +175,18 @@ public class UnitMenuController {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         if (!map.getBlockByRowAndColumn(position).canDigHere() || map.findPath(tunneler.getPosition(), position) == null)
             return UnitMenuMessages.INVALID_TARGET;
-        //TODO: select target castle and find path + add state to tunnelers
         Building nearestEnemyCastle = getNearestEnemyCastle(position);
         if (nearestEnemyCastle == null) return UnitMenuMessages.NO_ENEMY_CASTLE;
         tunneler.setTunnelerState(TunnelerState.GOING_TO_DIG_TUNNEL);
         tunneler.setTargetBuilding(nearestEnemyCastle);
         tunneler.moveUnit(position);
         return UnitMenuMessages.SUCCESSFUL_DIG_TUNNEL;
+    }
+
+    public static void stop() {
+        for (MilitaryUnit militaryUnit : selectedMilitaryUnits) {
+            militaryUnit.stop();
+        }
     }
 
     private static Building getNearestEnemyCastle(Coordinate position) {

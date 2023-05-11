@@ -1,9 +1,11 @@
 package org.example.model.game.envirnmont;
 
+import org.example.model.Stronghold;
 import org.example.model.game.Droppable;
 import org.example.model.game.Government;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.ItemProducingBuilding;
+import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.buildings.buildingconstants.ItemProducingBuildingType;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
@@ -92,7 +94,7 @@ public class Block {
     }
 
     public boolean addUnit(Unit unit) {
-        if (!canUnitsGoHere()) return false;
+        if (!canUnitsGoHere(false)) return false;
         units.add(unit);
         return true;
     }
@@ -109,8 +111,13 @@ public class Block {
             militaryUnit.deleteUnitFromGovernmentAndMap();
     }
 
-    public boolean canUnitsGoHere() {
-        return texture.isWalkable() && (droppable == null || droppable instanceof Building && ((Building) droppable).isClimbable());
+    public boolean canUnitsGoHere(boolean canGoInEnemyPit) {
+        if (!texture.isWalkable()) return false;
+        if (droppable == null) return true;
+        //moat, rock, tree aren't passable
+        if (!(droppable instanceof Building)) return false;
+        if (getBuilding().isClimbable()) return true;
+        return canGoInEnemyPit && getBuilding().getBuildingType().getName() == BuildingTypeName.KILLING_PIT && getBuilding().getGovernment() != Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
     }
 
     public boolean canDigHere() {
