@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class CustomizeMapMenu {
     public static Map run() {
         CustomizeMapController.initializeMap();
+        System.out.println("customize your map and enter \"end customization\" when you're done");
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {

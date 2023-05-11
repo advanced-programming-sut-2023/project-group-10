@@ -161,7 +161,7 @@ public class GameMenu {
 
         try {
             Coordinate position = InputProcessor.getCoordinateFromXYInput(options, "-x", "-y");
-            GameMenuMessages message = GameMenuController.dropBuilding(position, type);
+            GameMenuMessages message = GameMenuController.dropUnit(position, type, count);
             switch (message) {
                 case INVALID_UNIT_TYPE:
                     System.out.println("You've entered invalid unit type!");
@@ -170,7 +170,8 @@ public class GameMenu {
                     System.out.println("You cant drop 0 or negative amount of units!");
                     break;
                 case SUCCESSFUL_DROP:
-                    System.out.println(" Building dropped successfully");
+                    System.out.println("Unit dropped successfully");
+                    break;
                 default:
                     System.out.println("Invalid input!");
                     break;
@@ -208,6 +209,7 @@ public class GameMenu {
                     break;
                 case SUCCESSFUL_DROP:
                     System.out.println(" Building dropped successfully");
+                    break;
                 default:
                     System.out.println("Invalid input!");
                     break;
