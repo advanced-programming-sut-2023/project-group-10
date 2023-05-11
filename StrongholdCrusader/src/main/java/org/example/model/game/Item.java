@@ -91,7 +91,7 @@ public enum Item {
     public int numberOfItemThatCanBeProduced(Government government) {
         int result = Integer.MAX_VALUE;
         for (Map.Entry<Item, Integer> resource : resourcesNeeded.entrySet())
-            result = Math.min(result, government.getItemCount(resource.getKey()) / resource.getValue());
+            result = (int) Math.min(result, government.getItemCount(resource.getKey()) / resource.getValue());
         return result;
     }
 

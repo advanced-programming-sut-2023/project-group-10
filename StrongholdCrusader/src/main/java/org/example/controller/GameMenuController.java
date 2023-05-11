@@ -193,8 +193,7 @@ public class GameMenuController {
         if(!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canUnitsGoHere(false))
             return GameMenuMessages.UNWALKABLE_LAND;
         for (int i = 0; i < count; i++) {
-            Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).addUnit(new Unit(position,
-                    RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
+            new Unit(position, RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlock();
         }
         return GameMenuMessages.SUCCESSFUL_DROP;
     }

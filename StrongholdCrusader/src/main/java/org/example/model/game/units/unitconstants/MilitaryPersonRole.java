@@ -77,8 +77,8 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
     public int numberOfUnitsThatCanBeSpawned(Government government) {
         int result = super.numberOfUnitsThatCanBeSpawned(government);
         for (Item armor : armors)
-            result = Math.min(result, government.getItemCount(armor));
-        result = Math.min(result, government.getItemCount(weapon));
+            result = (int) Math.min(result, government.getItemCount(armor));
+        result = (int) Math.min(result, government.getItemCount(weapon));
         return result;
     }
 }
