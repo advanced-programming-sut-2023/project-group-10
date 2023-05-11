@@ -258,7 +258,7 @@ public class GameMenuController {
     private static void updateFoodCount(Government government) {
         for (Map.Entry<Item, Double> itemIntegerEntry : government.getItemList().entrySet()) {
             if (itemIntegerEntry.getValue() != 0 && itemIntegerEntry.getKey().isFood()) {
-                //TODO
+                government.changeItemCount(itemIntegerEntry.getKey(),government.getCitizens() * (government.getFoodRate() + 2) * (0.5));
             }
         }
     }
