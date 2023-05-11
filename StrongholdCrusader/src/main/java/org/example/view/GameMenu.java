@@ -14,16 +14,15 @@ import java.util.regex.Pattern;
 public class GameMenu {
     public static void run(HashMap<String, String> players, Map map) {
         GameMenuController.initializeGame(players, map);
+        getCurrentPlayer();
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
             input = scanner.nextLine();
             if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_POPULARITY_FACTORS) != null)
                 showPopularityFactors();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.ROUNDS_PLAYED) != null)
-                showRoundsPlayed();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_PLAYER) != null)
-                getCurrentPlayer();
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.ROUNDS_PLAYED) != null) showRoundsPlayed();
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_PLAYER) != null) getCurrentPlayer();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_POPULARITY) != null) showPopularity();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FOOD_LIST) != null) showFoodList();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FOOD_RATE) != null) setFoodRate(input);
@@ -40,8 +39,9 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.TRADE_MENU) != null) TradeMenu.run();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOP_MENU) != null) ShopMenu.run();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.MAP_MENU) != null) MapMenu.run();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.NEXT_TURN) != null && endTurn() == GameMenuMessages.GAME_OVER)
-                return;
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.NEXT_TURN) != null)
+                if (endTurn() == GameMenuMessages.GAME_OVER) return;
+                else getCurrentPlayer();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.LEAVE_GAME) != null) {
                 leaveGame();
                 return;
@@ -55,7 +55,7 @@ public class GameMenu {
     }
 
     private static void getCurrentPlayer() {
-        System.out.println(GameMenuController.currentPlayer());
+        System.out.println("It is " + GameMenuController.currentPlayer().getUsername() + "'s turn to play");
     }
 
     private static void showPopularityFactors() {
@@ -252,10 +252,11 @@ public class GameMenu {
     }
 
     private static GameMenuMessages endTurn() {
+        GameMenuController.goToNextPlayer();
         return null;
     }
 
     private static void leaveGame() {
-
+        System.out.println("Leaving game!");
     }
 }

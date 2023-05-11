@@ -1,7 +1,6 @@
 package org.example;
 
 import org.example.model.Stronghold;
-import org.example.view.LoginMenu;
 import org.example.view.MainMenu;
 import org.example.view.SignupMenu;
 

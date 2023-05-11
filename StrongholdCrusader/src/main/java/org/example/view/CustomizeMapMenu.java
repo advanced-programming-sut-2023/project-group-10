@@ -147,7 +147,7 @@ public class CustomizeMapMenu {
                 case NON_EMPTY_LAND:
                     System.out.println("You can't drop a rock here!");
                     break;
-                case SUCCESSFUL_DROP:
+                case DROP_ROCK_SUCCESSFUL:
                     System.out.println("You dropped a rock successfully!");
                     break;
             }
