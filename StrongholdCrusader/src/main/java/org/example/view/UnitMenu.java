@@ -3,7 +3,6 @@ package org.example.view;
 import org.example.controller.UnitMenuController;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.unitconstants.MilitaryEquipmentRole;
-import org.example.model.game.units.unitconstants.MilitaryUnitStance;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.model.utils.InputProcessor;
@@ -34,7 +33,7 @@ public class UnitMenu {
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) {
                 disband();
                 if (UnitMenuController.selectedMilitaryUnits == null) return;
-            } else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+            } else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
                 System.out.println("unit menu");
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BACK) != null) return;
             else System.out.println("invalid command!");
@@ -78,25 +77,23 @@ public class UnitMenu {
 
     private static void setStance(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
-        try {
-            HashMap<String, String> positionOptions = new HashMap<>();
-            positionOptions.put("-x", options.getOrDefault("-x", ""));
-            positionOptions.put("-y", options.getOrDefault("-y", ""));
-            Coordinate position = InputProcessor.getCoordinateFromXYInput(positionOptions, "-x", "-y");
-            if (!options.containsValue("-s")) {
-                System.out.println("choose a stance");
-                return;
-            }
-            MilitaryUnitStance stance = MilitaryUnitStance.getStanceByName(options.get("-s"));
-            if (stance == null) {
-                System.out.println("invalid stance. choose standing, defensive or offensive");
-                return;
-            }
-            UnitMenuMessages result = UnitMenuController.setStance(position, stance);
-            if (result == UnitMenuMessages.SUCCESSFUL_SET_STANCE) System.out.println("stance was set successfully");
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
+        if (!options.containsValue("-s")) {
+            System.out.println("choose a stance");
+            return;
         }
+        String stance = options.get("-s");
+        if (stance == null) {
+            System.out.println("empty field");
+            return;
+        }
+        options.remove("-s");
+        if (!options.isEmpty()) {
+            System.out.println("invalid options");
+            return;
+        }
+        UnitMenuMessages result = UnitMenuController.setStance(stance);
+        if (result == UnitMenuMessages.INVALID_STANCE) System.out.println("invalid stance");
+        else if (result == UnitMenuMessages.SUCCESSFUL_SET_STANCE) System.out.println("stance was set successfully");
     }
 
     private static void attack(String input) {
@@ -205,7 +202,7 @@ public class UnitMenu {
             Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             UnitMenuMessages result = UnitMenuController.fillMoat(position);
             if (result == UnitMenuMessages.INVALID_TARGET) System.out.println("no moats here");
-            else if(result==UnitMenuMessages.INVALID_DESTINATION) System.out.println("can't get there");
+            else if (result == UnitMenuMessages.INVALID_DESTINATION) System.out.println("can't get there");
             else if (result == UnitMenuMessages.SUCCESSFUL_DIG_MOAT)
                 System.out.println("units are on their way to fill the moat");
         } catch (Exception exception) {

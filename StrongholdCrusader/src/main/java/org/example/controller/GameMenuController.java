@@ -145,13 +145,13 @@ public class GameMenuController {
     }
 
 
-    private void moveAllUnits(Government government) {
+    private static void moveAllUnits(Government government) {
         for (Unit unit : government.getUnits())
             if (unit instanceof MilitaryUnit && ((MilitaryUnit) unit).getDestination() != null)
                 moveUnit((MilitaryUnit) unit, unit.getSpeed());
     }
 
-    private void moveUnit(MilitaryUnit unit, int moveCount) {
+    private static void moveUnit(MilitaryUnit unit, int moveCount) {
         ArrayList<Coordinate> path = Stronghold.getCurrentBattle().getBattleMap().findPath(new Node(unit.getPosition()), new Node(unit.getDestination()));
         if (path == null) return;
         int movesLeft;
@@ -201,7 +201,7 @@ public class GameMenuController {
         }
     }
 
-    public void goToNextPlayer() {
+    public static void goToNextPlayer() {
         Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         moveAllUnits(currentGovernment);
         attackAllUnits(currentGovernment);
@@ -216,7 +216,7 @@ public class GameMenuController {
         Stronghold.getCurrentBattle().goToNextPlayer();
     }
 
-    private void produceItems(Government government) {
+    private static void produceItems(Government government) {
         for (Building building : government.getBuildings()) {
             if (building instanceof ItemProducingBuilding) {
                 ((ItemProducingBuilding) building).produce();
@@ -225,7 +225,7 @@ public class GameMenuController {
     }
 
 
-    private void producePeasants(Government government) {
+    private static void producePeasants(Government government) {
         for (Building building : government.getBuildings()) {
             if (building instanceof ItemProducingBuilding) {
                 ((ItemProducingBuilding) building).produce();
@@ -233,7 +233,7 @@ public class GameMenuController {
         }
     }
 
-    private void updateFoodCount(Government government) {
+    private static void updateFoodCount(Government government) {
         for (Map.Entry<Item, Integer> itemIntegerEntry : government.getItemList().entrySet()) {
             if (itemIntegerEntry.getValue() != 0 && itemIntegerEntry.getKey().isFood()) {
                 //TODO
@@ -241,22 +241,20 @@ public class GameMenuController {
         }
     }
 
-    private void updatePopularity(Government government) {
+    private static void updatePopularity(Government government) {
 
     }
 
 
-    private void collectTaxes(Government government) {
-        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().changeGold(
-                Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTaxPayers()
-                        * Stronghold.getCurrentBattle().getGovernmentAboutToPlay().calculateTax());
-    }
-
-    private void attackAllUnits(Government government) {
+    private static void collectTaxes(Government government) {
 
     }
 
-    private void cutWoods(Government government) {
+    private static void attackAllUnits(Government government) {
+
+    }
+
+    private static void cutWoods(Government government) {
 //??
     }
 

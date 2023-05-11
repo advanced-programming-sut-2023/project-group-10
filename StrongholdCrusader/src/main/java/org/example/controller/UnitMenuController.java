@@ -38,11 +38,12 @@ public class UnitMenuController {
         return UnitMenuMessages.SUCCESSFUL_PATROL;
     }
 
-    // TODO: move to game menu
-    public static UnitMenuMessages setStance(Coordinate position, MilitaryUnitStance stance) {
+    public static UnitMenuMessages setStance(String stance) {
         //TODO: check and complete doc:pg.23
+        MilitaryUnitStance unitStance=MilitaryUnitStance.getStanceByName(stance);
+        if(unitStance==null) return UnitMenuMessages.INVALID_STANCE;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
-            selectedMilitaryUnit.changeStance(stance);
+            selectedMilitaryUnit.changeStance(unitStance);
         return UnitMenuMessages.SUCCESSFUL_SET_STANCE;
     }
 

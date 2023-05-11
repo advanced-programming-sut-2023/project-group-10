@@ -17,8 +17,12 @@ public class InputProcessor {
         HashMap<String, String> optArg = new HashMap<>();
         ArrayList<String> arrayList = new ArrayList<>();
 
+        String temp;
         while (matcher.find()) {
-            arrayList.add(matcher.group());
+            temp = matcher.group();
+            if (temp.matches("^\".*\"$"))
+                temp = temp.replaceAll("^\"", "").replaceAll("\"$", "");
+            arrayList.add(temp);
         }
 
         for (int i = 0; i < arrayList.size(); i++) {

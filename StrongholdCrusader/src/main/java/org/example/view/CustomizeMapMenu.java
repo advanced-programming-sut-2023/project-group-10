@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class CustomizeMapMenu {
     public static Map run() {
         CustomizeMapController.initializeMap();
+        System.out.println("customize your map and enter \"end customization\" when you're done");
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
@@ -146,7 +147,7 @@ public class CustomizeMapMenu {
                 case NON_EMPTY_LAND:
                     System.out.println("You can't drop a rock here!");
                     break;
-                case SUCCESSFUL_DROP:
+                case DROP_ROCK_SUCCESSFUL:
                     System.out.println("You dropped a rock successfully!");
                     break;
             }
