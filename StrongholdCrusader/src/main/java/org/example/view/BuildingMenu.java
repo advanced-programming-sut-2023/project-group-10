@@ -55,6 +55,9 @@ public class BuildingMenu {
             case INVALID_BUILDING:
                 System.out.println("You building should be barracks or engineers guild or mercenary post!");
                 break;
+            case INVALID_UNIT_TYPE:
+                System.out.println("Invalid unit type!");
+                break;
             case INSUFFICIENT_RESOURCES:
                 //should we  mention which resource?
                 System.out.println("You don't have enough resources!");
