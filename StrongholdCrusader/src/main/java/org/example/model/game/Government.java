@@ -4,6 +4,7 @@ import org.example.model.User;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.MilitaryPerson;
+import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
@@ -209,12 +210,33 @@ public class Government {
         return government.getOwner().getUsername().equals(this.getOwner().getUsername());
     }
 
-    public int getPeasant(){
+    public int getPeasant() {
         int peasant = 0;
-        for(Unit unit : units){
-            if(unit.getRole().equals(Role.getRoleByName(RoleName.PEASANT)))
+        for (Unit unit : units) {
+            if (unit.getRole().equals(Role.getRoleByName(RoleName.PEASANT)))
                 peasant++;
         }
         return peasant;
+    }
+
+    public int getTaxPayers() {
+        int taxPayers = 0;
+        for (Unit unit : units) {
+            if (!(unit instanceof MilitaryUnit))
+                taxPayers++;
+        }
+        return taxPayers;
+
+    }
+
+    public double calculateTax() {
+        if (taxRate == 0)
+            return 0;
+        double rate = (0.6 + (Math.abs(taxRate) - 1) * 0.2);
+        if (taxRate > 0)
+            return rate;
+        else
+            return -rate;
+
     }
 }

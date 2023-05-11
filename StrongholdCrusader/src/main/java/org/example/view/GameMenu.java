@@ -170,7 +170,7 @@ public class GameMenu {
                     System.out.println("You cant drop 0 or negative amount of units!");
                     break;
                 case SUCCESSFUL_DROP:
-                    System.out.println(" Building dropped successfully");
+                    System.out.println("Unit dropped successfully");
                 default:
                     System.out.println("Invalid input!");
                     break;
@@ -248,6 +248,7 @@ public class GameMenu {
             System.out.println(exception.getMessage());
         }
     }
+
 
     private static GameMenuMessages endTurn() {
         return null;

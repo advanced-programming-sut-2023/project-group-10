@@ -247,7 +247,9 @@ public class GameMenuController {
 
 
     private void collectTaxes(Government government) {
-
+        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().changeGold(
+                Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTaxPayers()
+                        * Stronghold.getCurrentBattle().getGovernmentAboutToPlay().calculateTax());
     }
 
     private void attackAllUnits(Government government) {
