@@ -9,6 +9,7 @@ import org.example.model.game.Item;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.ItemProducingBuilding;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
+import org.example.model.game.buildings.buildingconstants.PopularityIncreasingBuildingType;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Node;
 import org.example.model.game.units.MilitaryUnit;
@@ -63,16 +64,21 @@ public class GameMenuController {
 
 
     public static GameMenuMessages setFoodRate(int foodRate) {
+        Government government = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         if (foodRate < -2 || foodRate > 2) return GameMenuMessages.INVALID_FOOD_RATE;
-        //TODO: feed people by foodRate+2
+        for (Map.Entry<Item, Integer> itemIntegerEntry : government.getFoodList().entrySet()) {
+            if (itemIntegerEntry.getValue() < government.getCitizens() * (foodRate + 2) * (0.5))
+                return GameMenuMessages.INSUFFICIENT_FOOD;
+        }
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFoodRate(foodRate);
-        //TODO: affect it on popularity!
         return GameMenuMessages.SET_FOOD_RATE_SUCCESSFUL;
-
     }
 
     public static GameMenuMessages setTaxRate(int taxRate) {
+        Government government = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         if (taxRate < -3 || taxRate > 8) return GameMenuMessages.INVALID_TAX_RATE;
+        if (taxRate < 0 && government.getGold() < government.getCitizens() * (0.6 + (Math.abs(taxRate) - 1)))
+            return GameMenuMessages.INSUFFICIENT_GOLD;
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setTaxRate(taxRate);
         return GameMenuMessages.SET_TAX_RATE_SUCCESSFUL;
 
@@ -242,14 +248,63 @@ public class GameMenuController {
     }
 
     private static void updatePopularity(Government government) {
+        modifyFoodRate(government);
+        modifyTaxRate(government);
+        religion(government);
+        fear(government);
 
+    }
+
+    private static void modifyFoodRate(Government government) {
+        outer:
+        while (government.getFoodRate() > -2) {
+            inner:
+            for (Map.Entry<Item, Integer> itemIntegerEntry : government.getFoodList().entrySet()) {
+                if (itemIntegerEntry.getValue() < government.getCitizens() * (government.getFoodRate() + 2) * (0.5)) {
+                    government.setFoodRate(government.getFoodRate() - 1);
+                    break inner;
+                } else
+                    break outer;
+            }
+        }
+        government.changePopularity(government.getFearRate(), "Food");
+    }
+
+    private static void modifyTaxRate(Government government) {
+        while (government.getTaxRate() < 0) {
+            if (government.getGold() < government.getTaxRate() * government.getCitizens())
+                government.setTaxRate(government.getTaxRate() + 1);
+            else
+                break;
+        }
+        government.changePopularity(government.getTaxRate(), "Tax");
+
+    }
+
+    private static void religion(Government government) {
+        int religionFactor = 0;
+        for (Building building : government.getBuildings()) {
+            if (building.getBuildingType() instanceof PopularityIncreasingBuildingType)
+                religionFactor += ((PopularityIncreasingBuildingType) building.getBuildingType()).getIncreaseInPopularity();
+        }
+        government.changePopularity(religionFactor, "Religion");
+
+    }
+
+    private static void fear(Government government) {
+        government.changePopularity(government.getFearRate(), "Fear");
     }
 
 
     private static void collectTaxes(Government government) {
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().changeGold(
-                Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTaxPayers()
+                Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getCitizens()
                         * Stronghold.getCurrentBattle().getGovernmentAboutToPlay().calculateTax());
+    }
+
+    private static void feedCitizens(Government government) {
+        HashMap<Item, Integer> foodList = government.getFoodList();
+
     }
 
 

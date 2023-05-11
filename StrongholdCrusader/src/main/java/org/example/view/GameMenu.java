@@ -80,6 +80,8 @@ public class GameMenu {
                     break;
                 case SET_FOOD_RATE_SUCCESSFUL:
                     System.out.println("Food rate is set to " + foodRate);
+                case INSUFFICIENT_FOOD:
+                    System.out.println("You don't have sufficient supplies for this rate, try again!");
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
@@ -102,6 +104,8 @@ public class GameMenu {
                     break;
                 case SET_TAX_RATE_SUCCESSFUL:
                     System.out.println("Tax rate is set to " + taxRate);
+                case INSUFFICIENT_GOLD:
+                    System.out.println("You entered a negative number for tax rate, but you don't have enough gold!");
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());

@@ -49,7 +49,8 @@ public class Government {
         return popularity;
     }
 
-    public void changePopularity(int value) {
+    public void changePopularity(int value,String factor) {
+        popularityFactors.put(factor,value);
         popularity += value;
     }
 
@@ -219,13 +220,13 @@ public class Government {
         return peasant;
     }
 
-    public int getTaxPayers() {
-        int taxPayers = 0;
+    public int getCitizens() {
+        int citizens = 0;
         for (Unit unit : units) {
             if (!(unit instanceof MilitaryUnit))
-                taxPayers++;
+                citizens++;
         }
-        return taxPayers;
+        return citizens;
 
     }
 
