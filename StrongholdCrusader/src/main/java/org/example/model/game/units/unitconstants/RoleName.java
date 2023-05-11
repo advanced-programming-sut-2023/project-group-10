@@ -65,4 +65,10 @@ public enum RoleName {
             if (roleName.toString().replaceAll("_", "").equalsIgnoreCase(name)) return roleName;
         return null;
     }
+
+
+    @Override
+    public String toString() {
+        return super.toString().replaceAll("_", " ").toLowerCase();
+    }
 }

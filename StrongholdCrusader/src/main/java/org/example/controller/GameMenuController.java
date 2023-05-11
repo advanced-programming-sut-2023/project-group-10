@@ -13,11 +13,13 @@ import org.example.model.game.buildings.buildingconstants.PopularityIncreasingBu
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Node;
 import org.example.model.game.units.MilitaryUnit;
+import org.example.model.game.units.SiegeEquipment;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.CustomizeMapMenu;
 import org.example.view.enums.messages.GameMenuMessages;
+import org.example.view.enums.messages.MountEquipmentMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -131,6 +133,20 @@ public class GameMenuController {
         UnitMenuController.selectedMilitaryUnits = selectedMilitaryUnits;
         return GameMenuMessages.SUCCESSFUL_SELECT;
     }
+
+    public static GameMenuMessages mountEquipment(Coordinate position) {
+        ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        SiegeEquipment siegeEquipment=null;
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
+            if(selectedMilitaryUnit instanceof SiegeEquipment) {
+                siegeEquipment=(SiegeEquipment) selectedMilitaryUnit;
+                break;
+            }
+        if(siegeEquipment==null) return GameMenuMessages.NO_EQUIPMENT_FOUND;
+        MountEquipmentMenu.run(siegeEquipment);
+        return GameMenuMessages.MOUNT_SUCCESSFUL;
+    }
+
 
     //TODO: what's this? first String is username --> battle
     public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {

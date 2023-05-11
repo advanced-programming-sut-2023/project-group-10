@@ -23,7 +23,8 @@ public enum GameMenuCommands {
     SHOW_PLAYER("\\s*show\\s+current\\s*player\\s*"),
     NEXT_TURN("\\s*next\\s+turn\\s*"),
     LEAVE_GAME("\\s*leave\\s+game\\s*"),
-    DROP_UNIT("\\s*drop\\s*unit.*");
+    DROP_UNIT("\\s*drop\\s*unit.*"),
+    MOUNT_EQUIPMENT("\\s*mount\\s+equipment.*");
 
     public final String regex;
 
