@@ -5,6 +5,7 @@ import org.example.model.User;
 import org.example.model.game.Item;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
+import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.MilitaryPersonRole;
@@ -26,7 +27,7 @@ public class BuildingMenuController {
         if(!canBuildingCreateUnit())
             return BuildingMenuMessages.INVALID_BUILDING;
 
-        if (true) //TODO complete
+        if (false) //TODO complete
             return BuildingMenuMessages.INSUFFICIENT_RESOURCES;
 
         if (selectedBuilding.getGovernment().getPeasant() < count)
@@ -35,6 +36,10 @@ public class BuildingMenuController {
         if (isTypeCompatible(type))
             return BuildingMenuMessages.INCOMPATIBLE_TYPES;
 
+        for(int i = 0; i < count; i++){
+            Unit unit = new Unit(selectedBuilding.getPosition(), RoleName.getRoleNameByNameString(type),
+                                 selectedBuilding.getGovernment());
+        }
         return BuildingMenuMessages.CREATE_UNIT_SUCCESSFUL;
     }
 
