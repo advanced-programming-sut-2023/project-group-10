@@ -52,9 +52,9 @@ public class MapMenuController {
             return "You've entered invalid index!";
         String details = "";
         details = details.concat("Texture : " + map.getBlockByRowAndColumn(position).getTexture().name().toLowerCase() + "\n");
-        if(map.getBlockByRowAndColumn(position).getDroppable() instanceof Tree){
-           details= details.concat("Tree of type : "+ ((Tree) map.getBlockByRowAndColumn(position).getDroppable())
-                   .getType().getName()+"with storage : "+ ((Tree) map.getBlockByRowAndColumn(position).getDroppable()).getWoodStorage());
+        if (map.getBlockByRowAndColumn(position).getDroppable() instanceof Tree) {
+            details = details.concat("Tree of type : " + ((Tree) map.getBlockByRowAndColumn(position).getDroppable())
+                    .getType().getName() + "with storage : " + ((Tree) map.getBlockByRowAndColumn(position).getDroppable()).getWoodStorage());
         }
         int count = 0;
         ArrayList<MilitaryUnit> militaryUnits = map.getBlockByRowAndColumn(position).getAllMilitaryUnits();

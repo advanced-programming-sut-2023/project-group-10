@@ -1,9 +1,9 @@
 package org.example.view.enums.messages;
 
 public enum CustomizeMapMessages {
-    BUILDING_EXISTS_IN_THE_BLOCK,
+    DROPPABLE_IN_THE_BLOCK,
     SET_TEXTURE_OF_BLOCK_SUCCESSFUL,
-    BUILDING_IN_THE_AREA,
+    DROPPABlE_IN_THE_AREA,
     SET_TEXTURE_OF_AREA_SUCCESSFUL,
     SUCCESSFUL_CLEAR,
     NON_EMPTY_LAND,

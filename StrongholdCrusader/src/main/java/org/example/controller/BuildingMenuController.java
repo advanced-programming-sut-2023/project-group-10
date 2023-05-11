@@ -23,7 +23,7 @@ public class BuildingMenuController {
     }
 
     public static BuildingMenuMessages createUnit(String type, int count) {
-        if(!canBuildingCreateUnit())
+        if (!canBuildingCreateUnit())
             return BuildingMenuMessages.INVALID_BUILDING;
 
         if (true) //TODO complete
@@ -39,7 +39,7 @@ public class BuildingMenuController {
     }
 
     public static BuildingMenuMessages repair() {
-        if(!selectedBuilding.getBuildingType().isRepairable())
+        if (!selectedBuilding.getBuildingType().isRepairable())
             return BuildingMenuMessages.NOT_CASTLE_BUILDING;
         if (stoneCounter() > selectedBuilding.getGovernment().getItemCount(Item.STONE))
             return BuildingMenuMessages.INSUFFICIENT_STONE;
@@ -50,7 +50,7 @@ public class BuildingMenuController {
         return BuildingMenuMessages.REPAIR_SUCCESSFUL;
     }
 
-    private static boolean enemiesForceClose(){
+    private static boolean enemiesForceClose() {
         int row = selectedBuilding.getPosition().row;
         int column = selectedBuilding.getPosition().column;
         Map map = Stronghold.getCurrentBattle().getBattleMap();
@@ -59,10 +59,10 @@ public class BuildingMenuController {
         int[] rowMove = {-1, 0, 0, 0, 1};
         int[] columnMove = {0, -1, 0, 1, 0};
 
-        for(int i = 0; i < 5; i++){
-            for(int j = 0; j < 5; j++){
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 if (map.isIndexInBounds(selectedBuilding.getPosition().row + rowMove[i]) &&
-                    map.isIndexInBounds(selectedBuilding.getPosition().column + columnMove[j])) {
+                        map.isIndexInBounds(selectedBuilding.getPosition().column + columnMove[j])) {
                     ArrayList<Unit> units = map.getBlockByRowAndColumn(row + rowMove[i], column + columnMove[j]).getAllUnits();
                     for (Unit unit : units) {
                         if (!unit.getGovernment().getOwner().equals(owner))
@@ -74,22 +74,22 @@ public class BuildingMenuController {
         return false;
     }
 
-    private static boolean canBuildingCreateUnit(){
+    private static boolean canBuildingCreateUnit() {
         return selectedBuilding.getBuildingType().getName().equals(BuildingTypeName.ENGINEER_GUILD) ||
                 selectedBuilding.getBuildingType().getName().equals(BuildingTypeName.MERCENARY_POST) ||
                 selectedBuilding.getBuildingType().getName().equals(BuildingTypeName.BARRACKS);
     }
 
-    private static boolean isTypeCompatible(String type){
+    private static boolean isTypeCompatible(String type) {
         BuildingTypeName buildingTypeName = selectedBuilding.getBuildingType().getName();
         MilitaryPersonRole militaryRole = (MilitaryPersonRole) Role.getRoleByName(RoleName.getRoleNameByNameString(type));
 
-        if(militaryRole != null)
+        if (militaryRole != null)
             return militaryRole.getProducingBuilding().equals(buildingTypeName);
         return false;
     }
 
-    private static int stoneCounter(){
+    private static int stoneCounter() {
         return (selectedBuilding.getBuildingType().getMaxHitPoint() - selectedBuilding.getHitPoint()) / 2;
     }
 

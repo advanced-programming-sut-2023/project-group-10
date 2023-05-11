@@ -27,8 +27,8 @@ public class CustomizeMapController {
             return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
         if (BlockTexture.getTypeByName(landType) == null)
             return CustomizeMapMessages.INVALID_LAND_TYPE;
-        if (map.getBlockByRowAndColumn(position).getBuilding() != null)
-            return CustomizeMapMessages.BUILDING_EXISTS_IN_THE_BLOCK;
+        if (map.getBlockByRowAndColumn(position).getDroppable() != null)
+            return CustomizeMapMessages.DROPPABLE_IN_THE_BLOCK;
         map.setTextureSingleBlock(BlockTexture.getTypeByName(landType), position.row, position.column);
         return CustomizeMapMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL;
     }
@@ -43,8 +43,8 @@ public class CustomizeMapController {
 
         for (int i = point1.row; i <= point2.row; i++) {
             for (int j = point1.column; j <= point2.column; j++) {
-                if (map.getBlockByRowAndColumn(i, j).getBuilding() != null)
-                    return CustomizeMapMessages.BUILDING_IN_THE_AREA;
+                if (map.getBlockByRowAndColumn(i, j).getDroppable() != null)
+                    return CustomizeMapMessages.DROPPABlE_IN_THE_AREA;
             }
         }
         arrangePoints(point1, point2);

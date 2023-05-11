@@ -59,10 +59,10 @@ public class CustomizeMapMenu {
             case INVALID_LAND_TYPE:
                 System.out.println("You've entered invalid type for texture!");
                 break;
-            case BUILDING_IN_THE_AREA:
+            case DROPPABlE_IN_THE_AREA:
                 System.out.println("There's a building in the area you selected!");
                 return;
-            case BUILDING_EXISTS_IN_THE_BLOCK:
+            case DROPPABLE_IN_THE_BLOCK:
                 System.out.println("There's a building in the block you selected!");
                 return;
             case SET_TEXTURE_OF_BLOCK_SUCCESSFUL:

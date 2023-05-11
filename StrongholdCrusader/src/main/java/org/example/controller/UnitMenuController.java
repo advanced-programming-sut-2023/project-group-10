@@ -40,8 +40,8 @@ public class UnitMenuController {
 
     public static UnitMenuMessages setStance(String stance) {
         //TODO: check and complete doc:pg.23
-        MilitaryUnitStance unitStance=MilitaryUnitStance.getStanceByName(stance);
-        if(unitStance==null) return UnitMenuMessages.INVALID_STANCE;
+        MilitaryUnitStance unitStance = MilitaryUnitStance.getStanceByName(stance);
+        if (unitStance == null) return UnitMenuMessages.INVALID_STANCE;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             selectedMilitaryUnit.changeStance(unitStance);
         return UnitMenuMessages.SUCCESSFUL_SET_STANCE;
@@ -71,7 +71,8 @@ public class UnitMenuController {
 
     public static UnitMenuMessages airAttack(Coordinate target) {
         for (MilitaryUnit unit : selectedMilitaryUnits) {
-            if(((MilitaryUnitRole)unit.getRole()).getAttackRange()==Quality.ZERO) return UnitMenuMessages.SELECTED_MELEE_UNIT;
+            if (((MilitaryUnitRole) unit.getRole()).getAttackRange() == Quality.ZERO)
+                return UnitMenuMessages.SELECTED_MELEE_UNIT;
         }
         return attackEnemy(target);
     }

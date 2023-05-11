@@ -69,10 +69,10 @@ public class ProfileMenuController {
         if (email == null || email.length() == 0 || email.matches("\\s*"))
             return ProfileMenuMessages.NO_EMAIL_PROVIDED;
 
-       else if (CheckFormatAndEncrypt.isEmailFormatInvalid(email))
+        else if (CheckFormatAndEncrypt.isEmailFormatInvalid(email))
             return ProfileMenuMessages.INVALID_EMAIL;
 
-       else if(email.equals(Stronghold.getCurrentUser().getEmail()))
+        else if (email.equals(Stronghold.getCurrentUser().getEmail()))
             return ProfileMenuMessages.OLD_EMAIL_ENTERED;
 
         else if (User.getUserByEmail(email) != null)

@@ -136,13 +136,13 @@ public class GameMenuController {
 
     public static GameMenuMessages mountEquipment(Coordinate position) {
         ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
-        SiegeEquipment siegeEquipment=null;
+        SiegeEquipment siegeEquipment = null;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
-            if(selectedMilitaryUnit instanceof SiegeEquipment) {
-                siegeEquipment=(SiegeEquipment) selectedMilitaryUnit;
+            if (selectedMilitaryUnit instanceof SiegeEquipment) {
+                siegeEquipment = (SiegeEquipment) selectedMilitaryUnit;
                 break;
             }
-        if(siegeEquipment==null) return GameMenuMessages.NO_EQUIPMENT_FOUND;
+        if (siegeEquipment == null) return GameMenuMessages.NO_EQUIPMENT_FOUND;
         MountEquipmentMenu.run(siegeEquipment);
         return GameMenuMessages.MOUNT_SUCCESSFUL;
     }
@@ -258,7 +258,7 @@ public class GameMenuController {
     private static void updateFoodCount(Government government) {
         for (Map.Entry<Item, Double> itemIntegerEntry : government.getItemList().entrySet()) {
             if (itemIntegerEntry.getValue() != 0 && itemIntegerEntry.getKey().isFood()) {
-                government.changeItemCount(itemIntegerEntry.getKey(),government.getCitizens() * (government.getFoodRate() + 2) * (0.5));
+                government.changeItemCount(itemIntegerEntry.getKey(), government.getCitizens() * (government.getFoodRate() + 2) * (0.5));
             }
         }
     }

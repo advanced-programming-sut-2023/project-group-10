@@ -12,9 +12,9 @@ public class MainMenuController {
     public static MainMenuMessages checkMapAndGovernmentsCount(int mapSize, int governmentCount) {
         if (mapSize != 200 && mapSize != 400)
             return MainMenuMessages.INVALID_MAP_SIZE;
-        if (governmentCount < 2 || governmentCount > 8 )
+        if (governmentCount < 2 || governmentCount > 8)
             return MainMenuMessages.INVALID_GOVERNMENT_COUNT;
-        if( governmentCount > User.getUsers().size())
+        if (governmentCount > User.getUsers().size())
             return MainMenuMessages.INSUFFICIENT_GlOBAL_USERS;
         return MainMenuMessages.SUCCESS;
     }
@@ -27,18 +27,18 @@ public class MainMenuController {
         return MainMenuMessages.SUCCESSFUL_LOGOUT;
     }
 
-    public static MainMenuMessages getPlayers(String username, String color, HashMap<String,String> players) {
+    public static MainMenuMessages getPlayers(String username, String color, HashMap<String, String> players) {
         User myUser = User.getUserByUsername(username);
         if (myUser == null)
             return MainMenuMessages.INVALID_USERNAME;
-        if(players.containsKey(username))
+        if (players.containsKey(username))
             return MainMenuMessages.USER_IN_THE_BATTLE;
 
         Color myColor = MainMenuController.isColorValid(color);
         if (myColor == null) {
             return MainMenuMessages.INVALID_COLOR;
         }
-        if(players.containsValue(myColor.getName()))
+        if (players.containsValue(myColor.getName()))
             return MainMenuMessages.TAKEN_COLOR;
 
         return MainMenuMessages.SUCCESS;
