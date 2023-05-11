@@ -36,9 +36,9 @@ public class BuildingMenuController {
         if (isTypeCompatible(type))
             return BuildingMenuMessages.INCOMPATIBLE_TYPES;
 
-        for(int i = 0; i < count; i++){
-            Unit unit = new Unit(selectedBuilding.getPosition(), RoleName.getRoleNameByNameString(type),
-                                 selectedBuilding.getGovernment());
+        for (int i = 0; i < count; i++) { //TODO check
+            Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuilding.getPosition()).addUnit(new Unit(selectedBuilding.getPosition(),
+                    RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
         }
         return BuildingMenuMessages.CREATE_UNIT_SUCCESSFUL;
     }
