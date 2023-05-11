@@ -175,6 +175,9 @@ public class GameMenu {
                 case INVALID_UNIT_COUNT:
                     System.out.println("You cant drop 0 or negative amount of units!");
                     break;
+                case UNWALKABLE_LAND:
+                    System.out.println("Unit can't go here!");
+                    break;
                 case SUCCESSFUL_DROP:
                     System.out.println("Unit dropped successfully");
                     break;
