@@ -42,6 +42,7 @@ public class BuildingMenuController {
         for (int i = 0; i < count; i++)
             Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuilding.getPosition()).addUnit(new Unit(selectedBuilding.getPosition(),
                     RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
+        //TODO how to decrease from resources
         return BuildingMenuMessages.CREATE_UNIT_SUCCESSFUL;
     }
 

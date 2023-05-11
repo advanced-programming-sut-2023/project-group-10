@@ -74,6 +74,10 @@ public class Government {
         popularityFactors.put("food", popularityFactors.get("food") + foodRate);
     }
 
+    public void setGold (double gold){
+        this.gold = gold;
+    }
+
     public int getFoodRate() {
         return foodRate;
     }
