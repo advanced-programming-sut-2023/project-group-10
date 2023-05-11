@@ -46,7 +46,7 @@ public class GameMenuController {
     public static String showFoodList() {
         String foodList = "";
 
-        for (Map.Entry<Item, Integer> list : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFoodList().entrySet()) {
+        for (Map.Entry<Item, Double> list : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFoodList().entrySet()) {
             foodList = foodList.concat("Food : " + list.getKey() + " Amount : " + list.getValue() + "\n");
         }
         return foodList;
@@ -68,7 +68,7 @@ public class GameMenuController {
     public static GameMenuMessages setFoodRate(int foodRate) {
         Government government = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         if (foodRate < -2 || foodRate > 2) return GameMenuMessages.INVALID_FOOD_RATE;
-        for (Map.Entry<Item, Integer> itemIntegerEntry : government.getFoodList().entrySet()) {
+        for (Map.Entry<Item, Double> itemIntegerEntry : government.getFoodList().entrySet()) {
             if (itemIntegerEntry.getValue() < government.getCitizens() * (foodRate + 2) * (0.5))
                 return GameMenuMessages.INSUFFICIENT_FOOD;
         }
@@ -256,7 +256,7 @@ public class GameMenuController {
     }
 
     private static void updateFoodCount(Government government) {
-        for (Map.Entry<Item, Integer> itemIntegerEntry : government.getItemList().entrySet()) {
+        for (Map.Entry<Item, Double> itemIntegerEntry : government.getItemList().entrySet()) {
             if (itemIntegerEntry.getValue() != 0 && itemIntegerEntry.getKey().isFood()) {
                 //TODO
             }
@@ -275,7 +275,7 @@ public class GameMenuController {
         outer:
         while (government.getFoodRate() > -2) {
             inner:
-            for (Map.Entry<Item, Integer> itemIntegerEntry : government.getFoodList().entrySet()) {
+            for (Map.Entry<Item, Double> itemIntegerEntry : government.getFoodList().entrySet()) {
                 if (itemIntegerEntry.getValue() < government.getCitizens() * (government.getFoodRate() + 2) * (0.5)) {
                     government.setFoodRate(government.getFoodRate() - 1);
                     break inner;
@@ -319,7 +319,7 @@ public class GameMenuController {
     }
 
     private static void feedCitizens(Government government) {
-        HashMap<Item, Integer> foodList = government.getFoodList();
+        HashMap<Item, Double> foodList = government.getFoodList();
 
     }
 

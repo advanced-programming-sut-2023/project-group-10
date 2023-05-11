@@ -18,7 +18,7 @@ public class Government {
     private final MilitaryPerson lord;
     private final ArrayList<Unit> units = new ArrayList<>();
     private ArrayList<Building> buildings = new ArrayList<>();
-    private final HashMap<Item, Integer> itemList = new HashMap<>();
+    private final HashMap<Item, Double> itemList = new HashMap<>();
     private int popularity;
     private final HashMap<String, Integer> popularityFactors = new HashMap<>();
     private double gold;
@@ -98,8 +98,8 @@ public class Government {
         return units.remove(unit);
     }
 
-    public int getItemCount(Item item) {
-        return itemList.getOrDefault(item, 0);
+    public Double getItemCount(Item item) {
+        return itemList.getOrDefault(item, (double)0);
     }
 
     public void changeGold(double change) {
@@ -109,7 +109,7 @@ public class Government {
     public void addItem(Item item, int amount) {
         if (itemList.containsKey(item))
             itemList.put(item, itemList.get(item) + amount);
-        else itemList.put(item, amount);
+        else itemList.put(item, (double)amount);
 
         gold -= item.getBuyPrice() * amount;
 
@@ -119,7 +119,7 @@ public class Government {
         Item item = trade.getItem();
         if (itemList.containsKey(item))
             itemList.put(item, itemList.get(item) + trade.getAmount());
-        else itemList.put(item, trade.getAmount());
+        else itemList.put(item, (double)trade.getAmount());
         gold -= trade.getPrice() * trade.getAmount();
 
     }
@@ -140,8 +140,8 @@ public class Government {
         gold += price * amount;
     }
 
-    public void changeItemCount(Item item, int change) {
-        itemList.put(item, itemList.getOrDefault(item, 0) + change);
+    public void changeItemCount(Item item, double change) {
+        itemList.put(item, itemList.getOrDefault(item, (double)0) + change);
     }
 
 
@@ -170,9 +170,9 @@ public class Government {
         return fearRate;
     }
 
-    public HashMap<Item, Integer> getFoodList() {
-        HashMap<Item, Integer> foodList = new HashMap<>();
-        for (Map.Entry<Item, Integer> list : itemList.entrySet()) {
+    public HashMap<Item, Double> getFoodList() {
+        HashMap<Item, Double> foodList = new HashMap<>();
+        for (Map.Entry<Item, Double> list : itemList.entrySet()) {
             if (list.getKey().isFood())
                 foodList.put(list.getKey(), list.getValue());
         }
@@ -203,7 +203,7 @@ public class Government {
         return buildings.remove(building);
     }
 
-    public HashMap<Item, Integer> getItemList() {
+    public HashMap<Item, Double> getItemList() {
         return itemList;
     }
 
