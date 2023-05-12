@@ -70,7 +70,7 @@ public class GameMenuController {
         Government government = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         if (foodRate < -2 || foodRate > 2) return GameMenuMessages.INVALID_FOOD_RATE;
         for (Map.Entry<Item, Double> itemIntegerEntry : government.getFoodList().entrySet()) {
-            if (itemIntegerEntry.getValue() < government.getCitizens() * (foodRate + 2) * (0.5))
+            if (itemIntegerEntry.getValue() < government.getCitizensCounts() * (foodRate + 2) * (0.5))
                 return GameMenuMessages.INSUFFICIENT_FOOD;
         }
         government.setFoodRate(foodRate);
@@ -80,7 +80,7 @@ public class GameMenuController {
     public static GameMenuMessages setTaxRate(int taxRate) {
         Government government = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         if (taxRate < -3 || taxRate > 8) return GameMenuMessages.INVALID_TAX_RATE;
-        if (taxRate < 0 && government.getGold() < government.getCitizens() * (0.6 + (Math.abs(taxRate) - 1)))
+        if (taxRate < 0 && government.getGold() < government.getCitizensCounts() * (0.6 + (Math.abs(taxRate) - 1)))
             return GameMenuMessages.INSUFFICIENT_GOLD;
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setTaxRate(taxRate);
         return GameMenuMessages.SET_TAX_RATE_SUCCESSFUL;
@@ -105,7 +105,7 @@ public class GameMenuController {
             return GameMenuMessages.INCOMPATIBLE_LAND;
         BuildingTypeName buildingType = BuildingTypeName.getBuildingTypeNameByNameString(type);
         int neededPeasants = BuildingType.getBuildingTypeByName(buildingType).getEmployeeCount();
-        if (neededPeasants > Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasant())
+        if (neededPeasants > Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasantsCount())
             return GameMenuMessages.NOT_ENOUGH_PEASANTS;
         RoleName workerRole = WorkerRole.getRoleNameByWorkplace(BuildingTypeName.getBuildingTypeNameByNameString(type));
         if (workerRole != null)
@@ -286,7 +286,7 @@ public class GameMenuController {
     private static void updateFoodCount(Government government) {
         for (Map.Entry<Item, Double> itemIntegerEntry : government.getItemList().entrySet()) {
             if (itemIntegerEntry.getValue() != 0 && itemIntegerEntry.getKey().isFood()) {
-                government.changeItemCount(itemIntegerEntry.getKey(), government.getCitizens() * (government.getFoodRate() + 2) * (0.5));
+                government.changeItemCount(itemIntegerEntry.getKey(), government.getCitizensCounts() * (government.getFoodRate() + 2) * (0.5));
             }
         }
     }
@@ -303,7 +303,7 @@ public class GameMenuController {
         outer:
         while (government.getFoodRate() > -2) {
             for (Map.Entry<Item, Double> itemIntegerEntry : government.getFoodList().entrySet()) {
-                if (itemIntegerEntry.getValue() < government.getCitizens() * (government.getFoodRate() + 2) * (0.5)) {
+                if (itemIntegerEntry.getValue() < government.getCitizensCounts() * (government.getFoodRate() + 2) * (0.5)) {
                     government.setFoodRate(government.getFoodRate() - 1);
                     break;
                 } else break outer;
@@ -314,7 +314,7 @@ public class GameMenuController {
 
     private static void modifyTaxRate(Government government) {
         while (government.getTaxRate() < 0) {
-            if (government.getGold() < government.getTaxRate() * government.getCitizens())
+            if (government.getGold() < government.getTaxRate() * government.getCitizensCounts())
                 government.setTaxRate(government.getTaxRate() + 1);
             else break;
         }
@@ -337,7 +337,7 @@ public class GameMenuController {
     }
 
     private static void collectTaxes(Government government) {
-        government.changeGold(government.getCitizens() * government.calculateTax());
+        government.changeGold(government.getCitizensCounts() * government.calculateTax());
     }
 
     private static void feedCitizens(Government government) {
@@ -450,7 +450,7 @@ public class GameMenuController {
 
             }
         }
-        capacity -= government.getPeasant();
+        capacity -= government.getPeasantsCount();
         if (capacity < newPeasants)
             newPeasants = capacity;
         for (int i = 0; i < newPeasants; i++) {

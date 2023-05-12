@@ -33,7 +33,7 @@ public class BuildingMenuController {
         if (militaryPersonRole.numberOfUnitsThatCanBeSpawned(selectedBuilding.getGovernment()) < count)
             return BuildingMenuMessages.INSUFFICIENT_RESOURCES;
 
-        if (selectedBuilding.getGovernment().getPeasant() < count)
+        if (selectedBuilding.getGovernment().getPeasantsCount() < count)
             return BuildingMenuMessages.INSUFFICIENT_POPULATION;
 
         if (isTypeCompatible(type))

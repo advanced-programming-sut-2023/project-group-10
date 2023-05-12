@@ -18,9 +18,20 @@ public class MapMenu {
             if (MapMenuCommands.getMatcher(input, MapMenuCommands.SHOW_MAP) != null) showMap(input);
             else if (MapMenuCommands.getMatcher(input, MapMenuCommands.MOVE_MAP) != null) moveMap(input);
             else if (MapMenuCommands.getMatcher(input, MapMenuCommands.SHOW_DETAILS) != null) showDetails(input);
+            else if (MapMenuCommands.getMatcher(input, MapMenuCommands.SHOW_EXTENDED_DETAILS) != null) showExtendedDetails(input);
+
             else if (MapMenuCommands.getMatcher(input, MapMenuCommands.BACK) != null) return;
             else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("map menu");
             else System.out.println("invalid command!");
+        }
+    }
+
+    private static void showExtendedDetails(String input) {
+        try {
+            Coordinate blockPosition = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            System.out.println(MapMenuController.showDetailsExtended(blockPosition));
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
         }
     }
 
