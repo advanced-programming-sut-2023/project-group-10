@@ -62,7 +62,7 @@ public enum RoleName {
     public static RoleName getRoleNameByNameString(String name) {
         name = name.replaceAll("[\\s_-]", "");
         for (RoleName roleName : RoleName.values())
-            if (roleName.toString().replaceAll("_", "").equalsIgnoreCase(name)) return roleName;
+            if (roleName.toString().replaceAll("[\\s_]", "").equalsIgnoreCase(name)) return roleName;
         return null;
     }
 

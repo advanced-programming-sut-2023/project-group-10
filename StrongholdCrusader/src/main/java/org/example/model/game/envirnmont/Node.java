@@ -21,7 +21,7 @@ public class Node {
         for (int i = 0; i < 4; i++) {
             potentialNeighborCoordinate = new Coordinate(coordinate.row + verticalChange[i], coordinate.column + horizontalChange[i]);
             if (!map.isIndexInBounds(potentialNeighborCoordinate)) continue;
-            if (map.getBlockByRowAndColumn(potentialNeighborCoordinate).canUnitsGoHere(true) | potentialNeighborCoordinate.equals(endpoint))
+            if (map.getBlockByRowAndColumn(potentialNeighborCoordinate).canUnitsGoHere(true) || potentialNeighborCoordinate.equals(endpoint))
                 neighbors.add(new Node(potentialNeighborCoordinate));
         }
         return neighbors;

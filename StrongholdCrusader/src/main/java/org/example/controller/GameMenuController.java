@@ -110,12 +110,14 @@ public class GameMenuController {
         RoleName workerRole = WorkerRole.getRoleNameByWorkplace(BuildingTypeName.getBuildingTypeNameByNameString(type));
         if (workerRole != null)
             Unit.produceUnits(workerRole, neededPeasants, position);
-        for (Unit unit : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getUnits())
-            if (unit.getRole().getName() == RoleName.PEASANT) {
-                unit.killMe();
-                neededPeasants--;
-                if (neededPeasants == 0) break;
-            }
+        if(neededPeasants!=0) {
+            for (Unit unit : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getUnits())
+                if (unit.getRole().getName() == RoleName.PEASANT) {
+                    unit.killMe();
+                    neededPeasants--;
+                    if (neededPeasants == 0) break;
+                }
+        }
         if (BuildingType.getBuildingTypeByName(buildingType) instanceof ItemProducingBuildingType)
             new ItemProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
         else if (buildingType == BuildingTypeName.STAIRS)
@@ -147,7 +149,7 @@ public class GameMenuController {
 
     public static GameMenuMessages selectUnit(Coordinate position) {
         ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
-        if (selectedMilitaryUnits == null) return GameMenuMessages.NO_UNITS_FOUND;
+        if (selectedMilitaryUnits == null || selectedMilitaryUnits.size() == 0) return GameMenuMessages.NO_UNITS_FOUND;
         UnitMenuController.selectedMilitaryUnits = selectedMilitaryUnits;
         return GameMenuMessages.SUCCESSFUL_SELECT;
     }
@@ -258,6 +260,7 @@ public class GameMenuController {
         collectTaxes(currentGovernment);
         feedCitizens(currentGovernment);
         addPeasants(currentGovernment);
+        currentGovernment.setExcessFood(0);
         updateFoodCount(currentGovernment);
         updatePopularity(currentGovernment);
         Government dead;
@@ -357,9 +360,11 @@ public class GameMenuController {
         ArrayList<Coordinate> path = Stronghold.getCurrentBattle().getBattleMap().findPath(new Node(unit.getPosition()), new Node(unit.getDestination()));
         if (path == null) return;
         int movesLeft;
+        Building building;
         unit.setPosition(path.get((movesLeft = Math.min(moveCount, path.size())) - 1));
         for (int i = 0; i < movesLeft - 1; i++) {
-            if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(path.get(i)).getBuilding().getBuildingType().getName() == BuildingTypeName.KILLING_PIT) {
+            building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(path.get(i)).getBuilding();
+            if (building != null && building.getBuildingType().getName() == BuildingTypeName.KILLING_PIT) {
                 unit.killMe();
                 return;
             }
