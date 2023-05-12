@@ -58,20 +58,22 @@ public class MapMenuController {
         }
         int count = 0;
         ArrayList<MilitaryUnit> militaryUnits = map.getBlockByRowAndColumn(position).getAllMilitaryUnits();
-        HashMap<MilitaryPersonRole, Integer> militaryPeople = new HashMap<>();
+        HashMap<MilitaryPerson, Integer> militaryPeople = new HashMap<>();
         for (MilitaryUnit militaryUnit : militaryUnits) {
             if ((militaryUnit instanceof MilitaryPerson)) {
                 if (militaryPeople.containsKey(militaryUnit.getRole()))
-                    militaryPeople.put((MilitaryPersonRole) militaryUnit.getRole(), militaryPeople.get(militaryUnit.getRole()) + 1);
+                    militaryPeople.put((MilitaryPerson) militaryUnit, militaryPeople.get(militaryUnit.getRole()) + 1);
                 else
-                    militaryPeople.put((MilitaryPersonRole) militaryUnit.getRole(), 1);
+                    militaryPeople.put((MilitaryPerson) militaryUnit, 1);
 
                 count++;
             }
         }
         details = details.concat("Military People count : " + count + "\n");
-        for (java.util.Map.Entry<MilitaryPersonRole, Integer> militaryPersonRoleIntegerEntry : militaryPeople.entrySet()) {
-            details = details.concat(militaryPersonRoleIntegerEntry.getValue() + " of " + militaryPersonRoleIntegerEntry.getKey().getName().toString() + "\n");
+        for (java.util.Map.Entry<MilitaryPerson, Integer> militaryPersonIntegerEntry : militaryPeople.entrySet()) {
+            details = details.concat(militaryPersonIntegerEntry.getValue() + " of "
+                    + militaryPersonIntegerEntry.getKey().getRole().getName().toString()+
+                    " with "+militaryPersonIntegerEntry.getKey().getHitPoint()+" hitpoints!\n");
         }
         return details;
     }
