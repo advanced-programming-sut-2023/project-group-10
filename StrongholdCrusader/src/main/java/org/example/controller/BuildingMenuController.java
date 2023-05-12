@@ -53,6 +53,8 @@ public class BuildingMenuController {
     public static BuildingMenuMessages repair() {
         if (!selectedBuilding.getBuildingType().isRepairable())
             return BuildingMenuMessages.NOT_CASTLE_BUILDING;
+        if(selectedBuilding.getHitPoint() == selectedBuilding.getBuildingType().getMaxHitPoint())
+            return BuildingMenuMessages.AT_MAX_HITPOINT;
         if (stoneCounter() > selectedBuilding.getGovernment().getItemCount(Item.STONE))
             return BuildingMenuMessages.INSUFFICIENT_STONE;
         if (enemiesForceClose())
