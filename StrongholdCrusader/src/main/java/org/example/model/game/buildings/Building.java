@@ -54,4 +54,11 @@ public class Building extends Entity {
         this.getGovernment().deleteBuilding(this);
         Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).setDroppable(null);
     }
+
+    @Override
+    public void setGovernment(Government government) {
+        this.getGovernment().deleteBuilding(this);
+        super.setGovernment(government);
+        this.getGovernment().addBuilding(this);
+    }
 }

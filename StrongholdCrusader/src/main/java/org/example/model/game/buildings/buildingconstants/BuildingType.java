@@ -76,4 +76,8 @@ public class BuildingType {
     public boolean isRepairable() {
         return isRepairable;
     }
+
+    public boolean isCapturable() {
+        return name == BuildingTypeName.SMALL_STONE_GATEHOUSE || name == BuildingTypeName.LARGE_STONE_GATEHOUSE;
+    }
 }

@@ -332,7 +332,6 @@ public class GameMenuController {
         if (moveCount > 0) moveUnit(unit, moveCount);
     }
 
-    //TODO: remove isDead checks when kill method is implemented
     private static void attackAllUnits(Government government) {
         int damage;
         Unit closestEnemyUnit;
@@ -347,7 +346,7 @@ public class GameMenuController {
             closestEnemyUnit = findClosestEnemyUnit(unit.getPosition());
             if (closestEnemyUnit.getPosition().getDistanceFrom(unit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
                 closestEnemyUnit.changeHitPoint(-damage);
-                if (closestEnemyUnit.isDead()) closestEnemyUnit.deleteUnitFromGovernmentAndMap();
+                if(closestEnemyUnit.isDead()) closestEnemyUnit.killMe();
             } else if (((MilitaryUnit) unit).getStance() != MilitaryUnitStance.STAND_GROUND && ((MilitaryUnit) unit).getBoostInFireRange() == 0) {
                 closestEnemyUnit = findClosestEnemyUnitBasedOnPath(unit.getPosition());
                 path = Stronghold.getCurrentBattle().getBattleMap().findPath(closestEnemyUnit.getPosition(), unit.getPosition());
@@ -358,7 +357,7 @@ public class GameMenuController {
                     if (path.get(i).getDistanceFrom(closestEnemyUnit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
                         ((MilitaryUnit) unit).setPosition(path.get(i));
                         closestEnemyUnit.changeHitPoint(damage);
-                        if (closestEnemyUnit.isDead()) closestEnemyUnit.deleteUnitFromGovernmentAndMap();
+                        if(closestEnemyUnit.isDead()) closestEnemyUnit.killMe();
                     }
             }
         }

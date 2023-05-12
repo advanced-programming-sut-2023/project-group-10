@@ -71,7 +71,7 @@ public class UnitMenuController {
             if (unit.isDead()) deadUnits.add(unit);
         }
         for (Unit deadUnit : deadUnits)
-            deadUnit.deleteUnitFromGovernmentAndMap();
+            deadUnit.killMe();
         enemyBuilding.changeHitPoint(-totalDamageToBuildings);
         if (enemyBuilding.getHitPoint() <= 0) enemyBuilding.deleteBuildingFromMapAndGovernment();
         return UnitMenuMessages.SUCCESSFUL_ENEMY_ATTACK;
@@ -229,8 +229,9 @@ public class UnitMenuController {
 
     public static UnitMenuMessages disband() {
         for (MilitaryUnit selectedUnit : selectedMilitaryUnits) {
-            new Unit(selectedUnit.getPosition(), RoleName.PEASANT, selectedUnit.getGovernment()).addToGovernmentAndBlock();
-            selectedUnit.deleteUnitFromGovernmentAndMap();
+            Unit peasant = new Unit(selectedUnit.getGovernment().getKeep(), RoleName.PEASANT, selectedUnit.getGovernment());
+            peasant.addToGovernmentAndBlock();
+            selectedUnit.killMe();
         }
         selectedMilitaryUnits = null;
         return UnitMenuMessages.SUCCESSFUL_DISBAND;
@@ -251,19 +252,14 @@ public class UnitMenuController {
 
     public static UnitMenuMessages captureBuilding(Coordinate position) {
         MilitaryUnit selectedCapturingUnit = getSelectedCapturingUnit();
-        if (selectedCapturingUnit== null)
-            return UnitMenuMessages.NO_CAPTURING_UNITS;
+        if (selectedCapturingUnit == null) return UnitMenuMessages.NO_CAPTURING_UNITS;
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() == null)
             return UnitMenuMessages.NO_BUILDING;
-        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding().getGovernment().
-                equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding().getGovernment().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
             return UnitMenuMessages.YOUR_OWN_BUILDING;
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
-                getBuilding().getBuildingType().getName().equals(BuildingTypeName.SMALL_STONE_GATEHOUSE)
-                && !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
-                getBuilding().getBuildingType().getName().equals(BuildingTypeName.LARGE_STONE_GATEHOUSE))
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding().getBuildingType().isCapturable())
             return UnitMenuMessages.UNCAPTURABLE_BUILDING_TYPE;
-        if(Stronghold.getCurrentBattle().getBattleMap().findPath(selectedCapturingUnit.getPosition(), position) == null)
+        if (Stronghold.getCurrentBattle().getBattleMap().findPath(selectedCapturingUnit.getPosition(), position) == null)
             return UnitMenuMessages.UNREACHABLE_DESTINATION;
         selectedCapturingUnit.moveUnit(position);
         return UnitMenuMessages.GATEHOUSE_CAPTURED_SUCCESSFULLY;

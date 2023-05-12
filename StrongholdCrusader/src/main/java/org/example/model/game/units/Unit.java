@@ -38,7 +38,7 @@ public class Unit extends Entity {
         return hitPoint <= 0;
     }
 
-    public void deleteUnitFromGovernmentAndMap() {
+    public void killMe() {
         this.getGovernment().deleteUnit(this);
         Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).removeUnit(this);
     }
