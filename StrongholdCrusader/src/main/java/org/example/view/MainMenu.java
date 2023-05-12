@@ -1,13 +1,11 @@
 package org.example.view;
 
-import org.example.controller.GameMenuController;
 import org.example.controller.MainMenuController;
 import org.example.model.Stronghold;
 import org.example.model.game.Color;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.MainMenuCommands;
-import org.example.view.enums.messages.GameMenuMessages;
 import org.example.view.enums.messages.MainMenuMessages;
 
 import java.util.HashMap;
@@ -106,10 +104,10 @@ public class MainMenu {
             return;
         }
         System.out.println("Enter your keeps position: [in -x -y format]");
-        while (true){
+        while (true) {
             try {
                 Coordinate position = InputProcessor.getCoordinateFromXYInput(InputProcessor.separateInput(scanner.nextLine()), "-x", "-y");
-                keeps.put(Stronghold.getCurrentUser().getUsername(),position);
+                keeps.put(Stronghold.getCurrentUser().getUsername(), position);
                 System.out.println("You've chosen keep successfully, now choose players you wish to play with and their keeps!");
                 break;
             } catch (Exception exception) {
@@ -122,18 +120,19 @@ public class MainMenu {
         // input format : -u <player's username> -c <selected color> -x keep's x -y keeps y
         int enteredCount = 0;
         while (enteredCount < governmentCount - 1) {
-            if (getUsersForGame(players,keeps))
+            if (getUsersForGame(players, keeps, mapSize))
                 enteredCount++;
 
         }
-        GameMenu.run(players,keeps, new org.example.model.game.envirnmont.Map(mapSize));
+        GameMenu.run(players, keeps, new org.example.model.game.envirnmont.Map(mapSize));
     }
 
-    private static boolean getUsersForGame(HashMap<String, String> players,HashMap<String, Coordinate> keeps) {
+    private static boolean getUsersForGame(HashMap<String, String> players, HashMap<String, Coordinate> keeps, int mapSize) {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         HashMap<String, String> options = InputProcessor.separateInput(input);
-        String username = options.getOrDefault("-u","");;
+        String username = options.getOrDefault("-u", "");
+        ;
 
         if (username == null) {
             System.out.println("empty username filed");
@@ -144,7 +143,7 @@ public class MainMenu {
             return false;
         }
         options.remove("-u");
-        String color =options.getOrDefault("-c", "");
+        String color = options.getOrDefault("-c", "");
         if (color == null) {
             System.out.println("empty color filed");
             return false;
@@ -156,8 +155,8 @@ public class MainMenu {
         options.remove("-c");
         Coordinate position;
         try {
-             position = InputProcessor.getCoordinateFromXYInput(options, "-x", "-y");
-            MainMenuMessages message = MainMenuController.getPlayers(username, color,players,keeps,position);
+            position = InputProcessor.getCoordinateFromXYInput(options, "-x", "-y", mapSize);
+            MainMenuMessages message = MainMenuController.getPlayers(username, color, players, keeps, position);
             switch (message) {
                 case SUCCESS:
                     System.out.println("player with username " + username + " added to the game successfully with color " + color);
@@ -180,7 +179,7 @@ public class MainMenu {
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
-            return  false;
+            return false;
         }
         keeps.put(username, position);
         players.put(username, color);
