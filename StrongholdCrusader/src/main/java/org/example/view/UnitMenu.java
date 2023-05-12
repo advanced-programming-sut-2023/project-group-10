@@ -79,7 +79,7 @@ public class UnitMenu {
 
     private static void setStance(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
-        if (!options.containsValue("-s")) {
+        if (!options.containsKey("-s")) {
             System.out.println("choose a stance");
             return;
         }
