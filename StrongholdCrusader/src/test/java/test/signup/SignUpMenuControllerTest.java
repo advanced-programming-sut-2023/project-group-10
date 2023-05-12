@@ -2,7 +2,6 @@ package test.signup;
 
 import org.example.controller.SignupMenuController;
 import org.example.model.DataBase;
-import org.example.model.Stronghold;
 import org.example.view.enums.messages.SignupMenuMessages;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 public class SignUpMenuControllerTest {
 @Mock
-        DataBase dataBase;
+    DataBase dataBase;
 @InjectMocks
     SignupMenuController signupMenuController;
 
@@ -153,9 +152,10 @@ public class SignUpMenuControllerTest {
                 ("1", "Father's name", "Father's name",
                         "mehrazin001", "MEHR@azin001", "Mehrazin_M", "My moto is:Don't have a moto!", "mehrazin@mail.com");
         SignupMenuMessages signupMenuMessage = signupMenuController.createUser
-                ("mehrazin001", "password", "password", "slogan", "email");
+                ("mehrazin001", "MEHR@azin001", "MEHR@azin001", "mehrazin@mail.com", "Mehrazin_M");
         Assertions.assertEquals(SignupMenuMessages.USER_EXISTS, signupMenuMessage);
     }
+    //TODO email exist or user exist?
 
     @Test
     public void testTakenEmail() throws Exception {

@@ -14,7 +14,8 @@ public class LoginMenuController {
             return LoginMenuMessages.USERNAME_DOESNT_EXIST;
         //TODO: a function for checking password exists in user,Mehrazin would probably modify it, but try to use that function
 
-        loginPassword(username, password);
+        if(!User.getUserByUsername(username).checkPassword(password))
+            return LoginMenuMessages.WRONG_PASSWORD;
 
         // not sure about it TODO: check
         if (stayLoggedIn)
@@ -58,27 +59,5 @@ public class LoginMenuController {
             return LoginMenuMessages.NO_SPECIAL_CHARACTER;
 
         else return LoginMenuMessages.STRONG_PASSWORD;
-    }
-
-    private static void loginPassword(String username, String password) {
-        int wrongPassword = 1;
-
-        while (!User.getUserByUsername(username).checkPassword(password)) {
-            System.out.println("Wrong password!");
-            System.out.println("You have to wait " + wrongPassword * 5 + " seconds to enter another password!");
-            StopWatch watch = new StopWatch();
-            watch.start();
-
-            Scanner scanner = new Scanner(System.in);
-            password = scanner.nextLine();
-            long time;
-
-            while ((time = watch.getTime()) < wrongPassword * 5000L) {
-                System.out.println("You have to wait " + (wrongPassword * 5 - time / 1000) + " seconds to enter another password!");
-                password = scanner.nextLine();
-            }
-            watch.stop();
-            wrongPassword++;
-        }
     }
 }
