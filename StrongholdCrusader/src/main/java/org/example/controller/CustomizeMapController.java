@@ -93,8 +93,4 @@ public class CustomizeMapController {
         map.getBlockByRowAndColumn(position).setDroppable(new Tree(TreeType.getTreeTypeByName(type)));
         return CustomizeMapMessages.SUCCESSFUL_TREE_DROP;
     }
-
-    public static boolean isIndexInBounds(int index) {
-        return index >= 0 && index < map.getSize();
-    }
 }

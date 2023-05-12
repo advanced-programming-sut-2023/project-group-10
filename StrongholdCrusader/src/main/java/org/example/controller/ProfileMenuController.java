@@ -39,6 +39,7 @@ public class ProfileMenuController {
 
         else {
             Stronghold.getCurrentUser().setNickname(nickname);
+            Stronghold.dataBase.saveUsersToFile();
             return ProfileMenuMessages.CHANGE_NICKNAME_SUCCESSFUL;
         }
     }
@@ -62,6 +63,7 @@ public class ProfileMenuController {
         }
 
         Stronghold.getCurrentUser().setPassword(newPassword);
+        Stronghold.dataBase.saveUsersToFile();
         return ProfileMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 
@@ -80,6 +82,7 @@ public class ProfileMenuController {
 
         else {
             Stronghold.getCurrentUser().setEmail(email);
+            Stronghold.dataBase.saveUsersToFile();
             return ProfileMenuMessages.CHANGE_EMAIL_SUCCESSFUL;
         }
     }
