@@ -79,6 +79,8 @@ public class CustomizeMapController {
     public static CustomizeMapMessages dropRock(Coordinate position, String direction) {
         if (map.getBlockByRowAndColumn(position).getDroppable() != null)
             return CustomizeMapMessages.NON_EMPTY_LAND;
+        if (map.getBlockByRowAndColumn(position).isKeep())
+            return CustomizeMapMessages.IS_KEEP;
         map.getBlockByRowAndColumn(position).setDroppable(new Rock(MapDirections.getByName(direction)));
         return CustomizeMapMessages.DROP_ROCK_SUCCESSFUL;
     }
@@ -90,6 +92,8 @@ public class CustomizeMapController {
             return CustomizeMapMessages.INVALID_TREE_TYPE;
         if (!map.getBlockByRowAndColumn(position).getTexture().isPlantable())
             return CustomizeMapMessages.INCOMPATIBLE_LAND;
+        if (map.getBlockByRowAndColumn(position).isKeep())
+            return CustomizeMapMessages.IS_KEEP;
         map.getBlockByRowAndColumn(position).setDroppable(new Tree(TreeType.getTreeTypeByName(type)));
         return CustomizeMapMessages.SUCCESSFUL_TREE_DROP;
     }

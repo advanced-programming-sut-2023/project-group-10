@@ -21,7 +21,7 @@ public class Stairs extends Building {
                 if (map.isIndexInBounds(getPosition().row + rowMove[i]) && map.isIndexInBounds(getPosition().column + columnMove[j])) {
                     Building building = map.getBlockByRowAndColumn(getPosition().row + rowMove[i],
                             getPosition().column + columnMove[j]).getBuilding();
-                    if(building.getGovernment().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
+                    if(building!=null && building.getGovernment().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
                         building.setClimbable(true);
                 }
             }

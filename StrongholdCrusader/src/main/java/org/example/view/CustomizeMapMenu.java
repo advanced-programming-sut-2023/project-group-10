@@ -149,6 +149,9 @@ public class CustomizeMapMenu {
                 case NON_EMPTY_LAND:
                     System.out.println("You can't drop a rock here!");
                     break;
+                case IS_KEEP:
+                    System.out.println("You can't drop a rock in keep!");
+                    break;
                 case DROP_ROCK_SUCCESSFUL:
                     System.out.println("You dropped a rock successfully!");
                     break;
@@ -182,6 +185,9 @@ public class CustomizeMapMenu {
                     break;
                 case INCOMPATIBLE_LAND:
                     System.out.println("You cant drop  this type of Tree on this type of texture!");
+                    break;
+                case IS_KEEP:
+                    System.out.println("You can't drop a tree in keep!");
                     break;
                 case SUCCESSFUL_TREE_DROP:
                     System.out.println("Tree dropped successfully");

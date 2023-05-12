@@ -223,8 +223,11 @@ public class GameMenu {
                 case BUILDING_EXISTS_IN_THE_BLOCK:
                     System.out.println("This location is full!");
                     break;
+                case NOT_ENOUGH_PEASANTS:
+                    System.out.println("You don't have enough peasants for this building!");
+                    break;
                 case SUCCESSFUL_DROP:
-                    System.out.println(" Building dropped successfully");
+                    System.out.println("Building dropped successfully");
                     break;
                 default:
                     System.out.println("Invalid input!");

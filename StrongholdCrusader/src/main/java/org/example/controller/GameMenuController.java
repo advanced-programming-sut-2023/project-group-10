@@ -95,17 +95,19 @@ public class GameMenuController {
 
 
     public static GameMenuMessages dropBuilding(Coordinate position, String type) {
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getDroppable() != null)
+            return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
         if (BuildingTypeName.getBuildingTypeNameByNameString(type) == null)
             return GameMenuMessages.INVALID_BUILDING_TYPE;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isBuildable())
             return GameMenuMessages.INCOMPATIBLE_LAND;
-        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getDroppable() != null)
-            return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
         BuildingTypeName buildingType = BuildingTypeName.getBuildingTypeNameByNameString(type);
         int neededPeasants = BuildingType.getBuildingTypeByName(buildingType).getEmployeeCount();
         if (neededPeasants > Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasant())
             return GameMenuMessages.NOT_ENOUGH_PEASANTS;
-        Unit.produceUnits(WorkerRole.getRoleNameByWorkplace(BuildingTypeName.getBuildingTypeNameByNameString(type)), neededPeasants, position);
+        RoleName workerRole = WorkerRole.getRoleNameByWorkplace(BuildingTypeName.getBuildingTypeNameByNameString(type));
+        if (workerRole != null)
+            Unit.produceUnits(workerRole, neededPeasants, position);
         for (Unit unit : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getUnits())
             if (unit.getRole().getName() == RoleName.PEASANT) {
                 unit.killMe();
