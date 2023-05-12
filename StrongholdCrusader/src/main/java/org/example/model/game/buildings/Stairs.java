@@ -17,8 +17,13 @@ public class Stairs extends Building {
         int[] rowMove = {-1, 0, 0, 1};
         int[] columnMove = {0, -1, 1, 0};
         for (int i = 0; i < 4; i++)
-            for (int j = 0; j < 4; j++)
-                if (map.isIndexInBounds(getPosition().row + rowMove[i]) && map.isIndexInBounds(getPosition().column + columnMove[j]))
-                    map.getBlockByRowAndColumn(getPosition().row + rowMove[i], getPosition().column + columnMove[j]).getBuilding().setClimbable(true);
+            for (int j = 0; j < 4; j++) {
+                if (map.isIndexInBounds(getPosition().row + rowMove[i]) && map.isIndexInBounds(getPosition().column + columnMove[j])) {
+                    Building building = map.getBlockByRowAndColumn(getPosition().row + rowMove[i],
+                            getPosition().column + columnMove[j]).getBuilding();
+                    if(building.getGovernment().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
+                        building.setClimbable(true);
+                }
+            }
     }
 }

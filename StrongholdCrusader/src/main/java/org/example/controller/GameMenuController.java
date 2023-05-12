@@ -157,6 +157,9 @@ public class GameMenuController {
             User owner = User.getUserByUsername(player.getKey());
             Color color = Color.getColorByName(player.getValue());
             Government gov = new Government(owner, color);
+            gov.addItem(Item.WOOD, 20);
+            gov.addItem(Item.STONE, 20);
+            gov.setGold(20);
             governments[x] = gov;
             x++;
         }

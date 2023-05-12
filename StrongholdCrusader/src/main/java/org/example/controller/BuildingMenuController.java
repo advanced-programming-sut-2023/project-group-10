@@ -5,7 +5,6 @@ import org.example.model.User;
 import org.example.model.game.Item;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
-import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.MilitaryPersonRole;
@@ -27,7 +26,11 @@ public class BuildingMenuController {
         if (!canBuildingCreateUnit())
             return BuildingMenuMessages.INVALID_BUILDING;
 
-        if (false) //TODO complete
+        if(RoleName.getRoleNameByNameString(type) == null)
+            return BuildingMenuMessages.INVALID_UNIT_TYPE;
+
+        MilitaryPersonRole militaryPersonRole = (MilitaryPersonRole) Role.getRoleByName(RoleName.getRoleNameByNameString(type));
+        if (militaryPersonRole.numberOfUnitsThatCanBeSpawned(selectedBuilding.getGovernment()) < count)
             return BuildingMenuMessages.INSUFFICIENT_RESOURCES;
 
         if (selectedBuilding.getGovernment().getPeasant() < count)
@@ -36,10 +39,10 @@ public class BuildingMenuController {
         if (isTypeCompatible(type))
             return BuildingMenuMessages.INCOMPATIBLE_TYPES;
 
-        for (int i = 0; i < count; i++) { //TODO check
+        for (int i = 0; i < count; i++)
             Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuilding.getPosition()).addUnit(new Unit(selectedBuilding.getPosition(),
                     RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
-        }
+        //TODO how to decrease from resources
         return BuildingMenuMessages.CREATE_UNIT_SUCCESSFUL;
     }
 
@@ -96,6 +99,9 @@ public class BuildingMenuController {
 
     private static int stoneCounter() {
         return (selectedBuilding.getBuildingType().getMaxHitPoint() - selectedBuilding.getHitPoint()) / 2;
+    }
+
+    private static void equipment(){
     }
 
 }
