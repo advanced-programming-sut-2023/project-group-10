@@ -1,15 +1,9 @@
 package org.example.model;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.example.model.utils.CheckFormatAndEncrypt;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 public class User {
     private String username;
@@ -41,8 +35,8 @@ public class User {
                                String questionNumber, String securityAnswer) {
         Stronghold.dataBase.loadUsersFromFile();
         users.add(new User(username, password, nickname, email, slogan, questionNumber, securityAnswer));
-        Stronghold.dataBase.saveUsersToFile();    }
-
+        Stronghold.dataBase.saveUsersToFile();
+    }
 
 
     public static boolean checkSecurityAnswer(String username, String answer) {
@@ -149,7 +143,8 @@ public class User {
     }
 
     public void setHighScore(int highScore) {
-        this.highScore = highScore;
+        if (this.highScore <= highScore)
+            this.highScore = highScore;
     }
 
     public int getRank() {

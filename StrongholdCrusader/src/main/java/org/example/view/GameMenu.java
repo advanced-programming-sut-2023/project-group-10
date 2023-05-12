@@ -47,10 +47,7 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.NEXT_TURN) != null)
                 if (endTurn() == GameMenuMessages.GAME_OVER) return;
                 else getCurrentPlayer();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.LEAVE_GAME) != null) {
-                leaveGame();
-                return;
-            } else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("game menu");
+            else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("game menu");
             else System.out.println("invalid command!");
         }
     }
@@ -299,11 +296,8 @@ public class GameMenu {
     }
 
     private static GameMenuMessages endTurn() {
-        GameMenuController.goToNextPlayer();
-        return null;
+
+        return GameMenuController.goToNextPlayer();
     }
 
-    private static void leaveGame() {
-        System.out.println("Leaving game!");
-    }
 }
