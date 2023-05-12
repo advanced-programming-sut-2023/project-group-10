@@ -5,7 +5,6 @@ public enum NumericalEnums {
     SPEED_COEFFICIENT(1),
     RANGE_COEFFICIENT(3),
     DAMAGE_COEFFICIENT(10),
-    INITIAL_TREE_WOODS(0),
     WOOD_REDUCTION_RATE(2);
     private final int value;
 

@@ -2,6 +2,8 @@ package org.example.model.game;
 
 import org.example.model.User;
 import org.example.model.game.buildings.Building;
+import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
+import org.example.model.game.buildings.buildingconstants.StorageBuildingType;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.MilitaryUnit;
@@ -10,6 +12,7 @@ import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -258,5 +261,35 @@ public class Government {
         else
             return -rate;
 
+    }
+
+    public void changeExcessFood(int change) {
+        excessFood += change;
+    }
+
+    private int getTotalItemCount(String type) {
+        int count = 0;
+        for (Map.Entry<Item, Double> entry : itemList.entrySet())
+            if (entry.getKey().isFood() && type.equals("food") ||
+                    Arrays.asList(Item.getPrimaryItems()).contains(entry.getKey()) && type.equals("primary") ||
+                    Arrays.asList(Item.getWeaponsAndArmors()).contains(entry.getKey()) && type.equals("weapon"))
+                count += entry.getValue();
+        return count;
+    }
+
+    private int getStorageSpace(BuildingTypeName storageName) {
+        int storageSpace = 0;
+        for (Building building : buildings)
+            if (building.getBuildingType().getName() == storageName)
+                storageSpace += ((StorageBuildingType) building.getBuildingType()).getCapacity();
+        return storageSpace;
+    }
+
+    public int getStorageSpaceForItem(Item item) {
+        if (!item.isSellable()) return Integer.MAX_VALUE;
+        if (item.isFood()) return getStorageSpace(BuildingTypeName.GRANARY) - getTotalItemCount("food");
+        if (Arrays.asList(Item.getPrimaryItems()).contains(item))
+            return getStorageSpace(BuildingTypeName.STOCKPILE) - getTotalItemCount("primary");
+        return getStorageSpace(BuildingTypeName.ARMOURY) - getTotalItemCount("weapon");
     }
 }
