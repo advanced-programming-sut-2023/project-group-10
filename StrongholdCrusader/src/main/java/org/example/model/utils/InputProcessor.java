@@ -1,6 +1,5 @@
 package org.example.model.utils;
 
-import org.example.controller.CustomizeMapController;
 import org.example.model.Stronghold;
 import org.example.model.game.envirnmont.Coordinate;
 
@@ -37,11 +36,20 @@ public class InputProcessor {
     }
 
     //TODO: change location if necessary
+
     public static Coordinate getCoordinateFromXYInput(String input, String flag1, String flag2) throws Exception {
-        return getCoordinateFromXYInput(InputProcessor.separateInput(input), flag1, flag2);
+        return getCoordinateFromXYInput(input, flag1, flag2, Stronghold.getCurrentBattle().getBattleMap().getSize());
+    }
+
+    public static Coordinate getCoordinateFromXYInput(String input, String flag1, String flag2, int mapSize) throws Exception {
+        return getCoordinateFromXYInput(InputProcessor.separateInput(input), flag1, flag2, mapSize);
     }
 
     public static Coordinate getCoordinateFromXYInput(HashMap<String, String> options, String flag1, String flag2) throws Exception {
+        return getCoordinateFromXYInput(options, flag1, flag2, Stronghold.getCurrentBattle().getBattleMap().getSize());
+    }
+
+    public static Coordinate getCoordinateFromXYInput(HashMap<String, String> options, String flag1, String flag2, int mapSize) throws Exception {
         String x = "";
         String y = "";
         for (Map.Entry<String, String> option : options.entrySet()) {
@@ -56,9 +64,10 @@ public class InputProcessor {
         if (x.isEmpty() || y.isEmpty()) throw new Exception("missing argument");
         if (!x.matches("-?\\d+")) throw new Exception("invalid " + flag1);
         if (!y.matches("-?\\d+")) throw new Exception("invalid " + flag2);
-        org.example.model.game.envirnmont.Map map = Stronghold.getCurrentBattle().getBattleMap();
-        if (!CustomizeMapController.isIndexInBounds(Integer.parseInt(x))) throw new Exception(flag1 + " out of bounds");
-        if (!CustomizeMapController.isIndexInBounds(Integer.parseInt(y))) throw new Exception(flag2 + " out of bounds");
+        int xInt = Integer.parseInt(x);
+        int yInt = Integer.parseInt(y);
+        if (xInt < 0 || xInt >= mapSize) throw new Exception(flag1 + " out of bounds");
+        if (yInt < 0 || yInt >= mapSize) throw new Exception(flag2 + " out of bounds");
         return new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
     }
 
