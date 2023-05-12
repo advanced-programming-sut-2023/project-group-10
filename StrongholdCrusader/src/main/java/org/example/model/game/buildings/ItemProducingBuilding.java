@@ -22,7 +22,7 @@ public class ItemProducingBuilding extends Building {
         if (Stronghold.getCurrentBattle().getTurnsPassed() % buildingType.getRate() != turnIndicator) return;
         for (Item item : buildingType.getItems()) {
             int possibleToProduce = Math.min(buildingType.getItemCountProducedPerProduction(), item.numberOfItemThatCanBeProduced(getGovernment()));
-            int storageSpace = getGovernment().getStorageSpaceForItem(item);
+            int storageSpace = Math.max(getGovernment().getStorageSpaceForItem(item), 0);
             if (item.isFood() && storageSpace < possibleToProduce)
                 getGovernment().changeExcessFood(possibleToProduce - storageSpace);
             if (item == Item.WOOD) {
