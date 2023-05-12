@@ -98,10 +98,8 @@ public class Block {
         this.onFire = onFire;
     }
 
-    public boolean addUnit(Unit unit) {
-        if (!canUnitsGoHere(false)) return false;
+    public void addUnit(Unit unit) {
         units.add(unit);
-        return true;
     }
 
     public void removeUnit(Unit unit) {
@@ -126,7 +124,7 @@ public class Block {
     }
 
     public boolean isBuildable() {
-        return droppable==null && !onFire && texture.isBuildable() && !isKeep;
+        return droppable == null && !onFire && texture.isBuildable() && !isKeep;
     }
 
     public boolean canDigHere() {

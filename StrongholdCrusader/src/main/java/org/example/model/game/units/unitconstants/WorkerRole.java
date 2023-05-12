@@ -35,6 +35,13 @@ public class WorkerRole extends Role {
         this.workplaceType = workplaceType;
     }
 
+    public static RoleName getRoleNameByWorkplace(BuildingTypeName buildingTypeName) {
+        for (Role role : getAllRoles())
+            if (role instanceof WorkerRole && ((WorkerRole) role).getWorkplaceType().getName() == buildingTypeName)
+                return role.getName();
+        return null;
+    }
+
     public BuildingType getWorkplaceType() {
         return workplaceType;
     }

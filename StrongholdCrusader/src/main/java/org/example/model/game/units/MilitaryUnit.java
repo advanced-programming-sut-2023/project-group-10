@@ -123,11 +123,4 @@ public abstract class MilitaryUnit extends Unit {
             return 0;
         return ((AttackingBuildingType) building.getBuildingType()).getBoostInFireRange();
     }
-
-    @Override
-    public void setPosition(Coordinate newCoordinate) {
-        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getPosition()).removeUnit(this);
-        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(newCoordinate).addUnit(this);
-        super.setPosition(newCoordinate);
-    }
 }

@@ -106,7 +106,7 @@ public class MainMenu {
         System.out.println("Enter your keeps position: [in -x -y format]");
         while (true) {
             try {
-                Coordinate position = InputProcessor.getCoordinateFromXYInput(InputProcessor.separateInput(scanner.nextLine()), "-x", "-y");
+                Coordinate position = InputProcessor.getCoordinateFromXYInput(InputProcessor.separateInput(scanner.nextLine()), "-x", "-y", mapSize);
                 keeps.put(Stronghold.getCurrentUser().getUsername(), position);
                 System.out.println("You've chosen keep successfully, now choose players you wish to play with and their keeps!");
                 break;
