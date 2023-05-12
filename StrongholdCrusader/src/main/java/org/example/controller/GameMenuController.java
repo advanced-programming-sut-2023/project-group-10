@@ -13,6 +13,7 @@ import org.example.model.game.buildings.buildingconstants.PopularityIncreasingBu
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Node;
+import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.SiegeEquipment;
 import org.example.model.game.units.Unit;
@@ -45,10 +46,10 @@ public class GameMenuController {
 
     public static String showFoodList() {
         String foodList = "";
-
         for (Map.Entry<Item, Double> list : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFoodList().entrySet()) {
             foodList = foodList.concat("Food : " + list.getKey() + " Amount : " + list.getValue() + "\n");
         }
+        if (foodList.isEmpty()) foodList = "You have no food!";
         return foodList;
     }
 
@@ -72,7 +73,7 @@ public class GameMenuController {
             if (itemIntegerEntry.getValue() < government.getCitizens() * (foodRate + 2) * (0.5))
                 return GameMenuMessages.INSUFFICIENT_FOOD;
         }
-        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFoodRate(foodRate);
+        government.setFoodRate(foodRate);
         return GameMenuMessages.SET_FOOD_RATE_SUCCESSFUL;
     }
 
@@ -125,7 +126,7 @@ public class GameMenuController {
         return Stronghold.getCurrentBattle().getTurnsPassed();
     }
 
-    private String showCurrentPlayer() {
+    public static String showCurrentPlayer() {
         User player = GameMenuController.currentPlayer();
         return ("player \" " + player.getNickname() + "\" with username : " + player.getUsername() + "is about to play!");
     }
@@ -179,6 +180,10 @@ public class GameMenuController {
 
         Battle battle = new Battle(map, governments);
         Stronghold.setCurrentBattle(battle);
+
+        for (Government government : governments) {
+            new MilitaryPerson(government.getKeep(), RoleName.LORD, government).addToGovernmentAndBlock();
+        }
         CustomizeMapMenu.run();
     }
 
@@ -252,6 +257,8 @@ public class GameMenuController {
         Government dead;
         while ((dead = deadLord()) != null) {
             countScore(dead);
+            removeAllBuildings(dead);
+            removeAllUnits(dead);
             Stronghold.getCurrentBattle().removeGovernment(dead);
         }
         if (aliveLords().size() == 1) {
@@ -369,6 +376,7 @@ public class GameMenuController {
                 continue;
 
             closestEnemyUnit = findClosestEnemyUnit(unit.getPosition());
+            if (closestEnemyUnit == null) continue;
             if (closestEnemyUnit.getPosition().getDistanceFrom(unit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
                 closestEnemyUnit.changeHitPoint(-damage);
                 if (closestEnemyUnit.isDead()) closestEnemyUnit.killMe();
@@ -380,7 +388,7 @@ public class GameMenuController {
                 else pathLimit = Math.min(unit.getSpeed(), path.size());
                 for (int i = 0; i < pathLimit; i++)
                     if (path.get(i).getDistanceFrom(closestEnemyUnit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
-                        ((MilitaryUnit) unit).setPosition(path.get(i));
+                        unit.setPosition(path.get(i));
                         closestEnemyUnit.changeHitPoint(damage);
                         if (closestEnemyUnit.isDead()) closestEnemyUnit.killMe();
                     }

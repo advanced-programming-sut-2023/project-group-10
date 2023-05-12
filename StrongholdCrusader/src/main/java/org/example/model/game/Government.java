@@ -34,7 +34,6 @@ public class Government {
 
     public Government(User owner, Color color, Coordinate keep) {
         this.owner = owner;
-        new MilitaryPerson(new Coordinate(keep.row, keep.column), RoleName.LORD, this).addToGovernmentAndBlock();
         this.popularity = NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
         this.color = color;
         this.keep = keep;

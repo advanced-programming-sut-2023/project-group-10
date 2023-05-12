@@ -28,6 +28,8 @@ public class CustomizeMapController {
             return CustomizeMapMessages.INVALID_LAND_TYPE;
         if (map.getBlockByRowAndColumn(position).getDroppable() != null)
             return CustomizeMapMessages.DROPPABLE_IN_THE_BLOCK;
+        if (map.getBlockByRowAndColumn(position).isKeep() && !BlockTexture.getTypeByName(landType).isWalkable())
+            return CustomizeMapMessages.IS_KEEP;
         map.setTextureSingleBlock(BlockTexture.getTypeByName(landType), position.row, position.column);
         return CustomizeMapMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL;
     }
@@ -44,6 +46,8 @@ public class CustomizeMapController {
             for (int j = point1.column; j <= point2.column; j++) {
                 if (map.getBlockByRowAndColumn(i, j).getDroppable() != null)
                     return CustomizeMapMessages.DROPPABlE_IN_THE_AREA;
+                if (map.getBlockByRowAndColumn(i, j).isKeep() && !BlockTexture.getTypeByName(landType).isWalkable())
+                    return CustomizeMapMessages.IS_KEEP;
             }
         }
         arrangePoints(point1, point2);

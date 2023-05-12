@@ -34,14 +34,6 @@ public class Engineer extends MilitaryUnit {
         this.hasOil = hasOil;
     }
 
-    public SiegeEquipment buildSiegeEquipment(RoleName siegeEquipmentName) {
-        if (!(Role.getRoleByName(siegeEquipmentName) instanceof MilitaryUnitRole)) return null;
-        MilitaryUnitRole siegeEquipmentType = (MilitaryUnitRole) Role.getRoleByName(siegeEquipmentName);
-        if (siegeEquipmentType.numberOfUnitsThatCanBeSpawned(getGovernment()) == 0) return null;
-        //TODO: check
-        return new SiegeEquipment(getPosition(), siegeEquipmentName, getGovernment());
-    }
-
     @Override
     public void updateDestination() {
         if (this.onBoilingDuty &&

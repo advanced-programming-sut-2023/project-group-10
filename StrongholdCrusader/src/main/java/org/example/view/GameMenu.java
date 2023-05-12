@@ -25,12 +25,12 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_PLAYER) != null) getCurrentPlayer();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_POPULARITY) != null) showPopularity();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FOOD_LIST) != null) showFoodList();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FOOD_RATE) != null) setFoodRate(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FOOD_RATE) != null) showFoodRate();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_TAX_RATE) != null) setTaxRate(input);
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FOOD_RATE) != null) setFoodRate(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_TAX_RATE) != null) showTaxRate();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FEAR_RATE) != null) setFearRate(input);
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_TAX_RATE) != null) setTaxRate(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FEAR_RATE) != null) showFearRate();
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FEAR_RATE) != null) setFearRate(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING) != null) dropBuilding(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_UNIT) != null) dropUnit(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_BUILDING) != null)
@@ -57,7 +57,7 @@ public class GameMenu {
     }
 
     private static void getCurrentPlayer() {
-        System.out.println("It is " + GameMenuController.currentPlayer().getUsername() + "'s turn to play");
+        System.out.println(GameMenuController.showCurrentPlayer());
     }
 
     private static void showPopularityFactors() {
