@@ -62,7 +62,7 @@ public class UnitMenuController {
         Block targetBlock = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(target);
         ArrayList<Unit> enemyUnits = targetBlock.getAllAttackableEnemyUnits(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         Building enemyBuilding = targetBlock.getBuilding();
-        if (enemyUnits.size() == 0 && enemyBuilding.getGovernment() == Stronghold.getCurrentBattle().getGovernmentAboutToPlay())
+        if (enemyUnits.size() == 0 && enemyBuilding != null && enemyBuilding.getGovernment() == Stronghold.getCurrentBattle().getGovernmentAboutToPlay())
             return UnitMenuMessages.NO_ENEMY_HERE;
         ArrayList<Unit> deadUnits = new ArrayList<>();
         for (Unit unit : enemyUnits) {
@@ -71,7 +71,7 @@ public class UnitMenuController {
         }
         for (Unit deadUnit : deadUnits)
             deadUnit.killMe();
-        if (enemyBuilding.getGovernment() != Stronghold.getCurrentBattle().getGovernmentAboutToPlay()) {
+        if (enemyBuilding != null && enemyBuilding.getGovernment() != Stronghold.getCurrentBattle().getGovernmentAboutToPlay()) {
             enemyBuilding.changeHitPoint(-totalDamageToBuildings);
             if (enemyBuilding.getHitPoint() <= 0) enemyBuilding.deleteBuildingFromMapAndGovernment();
         }
