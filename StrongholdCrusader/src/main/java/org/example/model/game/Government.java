@@ -25,9 +25,9 @@ public class Government {
     private final HashMap<String, Integer> popularityFactors = new HashMap<>();
     private double gold;
     private final Color color;
-    private int foodRate = -2;
+    private int foodRate;
     private int excessFood;
-    private int taxRate = 0;
+    private int taxRate;
     private int fearRate;
     private final ArrayList<Trade> tradeList = new ArrayList<>();
     private final Coordinate keep;
@@ -39,6 +39,12 @@ public class Government {
         this.keep = keep;
         for (Item item : Item.values())
             itemList.put(item, 0.0);
+        foodRate = -2;
+        popularityFactors.put("food", -2);
+        taxRate = 0;
+        popularityFactors.put("tax", 0);
+        fearRate = 0;
+        popularityFactors.put("fear", 0);
     }
 
     public Coordinate getKeep() {
