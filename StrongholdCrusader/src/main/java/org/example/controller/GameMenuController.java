@@ -20,7 +20,7 @@ import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.*;
 import org.example.view.CustomizeMapMenu;
 import org.example.view.enums.messages.GameMenuMessages;
-import org.example.view.enums.messages.MountEquipmentMenu;
+import org.example.view.MountEquipmentMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;

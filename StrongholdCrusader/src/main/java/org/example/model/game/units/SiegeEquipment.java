@@ -32,4 +32,12 @@ public class SiegeEquipment extends MilitaryUnit {
     public boolean isSelectable() {
         return getCurrentNeededEngineers() == 0;
     }
+
+    @Override
+    public void killMe() {
+        for (Engineer engineer : engineers) {
+            engineer.killMe();
+        }
+        super.killMe();
+    }
 }
