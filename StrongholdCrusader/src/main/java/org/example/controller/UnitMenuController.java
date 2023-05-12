@@ -265,13 +265,13 @@ public class UnitMenuController {
             return UnitMenuMessages.UNCAPTURABLE_BUILDING_TYPE;
         if(Stronghold.getCurrentBattle().getBattleMap().findPath(selectedCapturingUnit.getPosition(), position) == null)
             return UnitMenuMessages.UNREACHABLE_DESTINATION;
+        selectedCapturingUnit.moveUnit(position);
         return UnitMenuMessages.GATEHOUSE_CAPTURED_SUCCESSFULLY;
     }
 
     private static MilitaryUnit getSelectedCapturingUnit() {
-        //How to check for RoleName.ASSASSIN and Ladderman
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits) {
-            if (selectedMilitaryUnit instanceof SiegeTower)
+            if (selectedMilitaryUnit instanceof SiegeTower || selectedMilitaryUnit instanceof Ladderman)
                 return selectedMilitaryUnit;
         }
         return null;

@@ -12,17 +12,11 @@ public class SiegeTower extends SiegeEquipment {
         super(position, role, government);
     }
 
-    public void captureEnemyBuilding() {
-        initialGovernment = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getEndPoint()).getBuilding().getGovernment();
-        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().addBuilding
-                (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getEndPoint()).getBuilding());
-        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getEndPoint()).getBuilding().getGovernment().
-                deleteBuilding(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getEndPoint()).getBuilding());
 
-    }
 
     @Override
     public void updateDestination() {
+        initialGovernment = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getEndPoint()).getBuilding().getGovernment();
         captureEnemyBuilding();
         super.updateDestination();
     }
