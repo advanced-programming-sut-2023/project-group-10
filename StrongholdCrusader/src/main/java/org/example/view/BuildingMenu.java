@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.controller.BuildingMenuController;
+import org.example.model.Stronghold;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.BuildingMenuCommands;
@@ -13,7 +14,10 @@ import java.util.Scanner;
 public class BuildingMenu {
     public static void run(Coordinate coordinate) {
         Scanner scanner = new Scanner(System.in);
+        BuildingMenuController.setSelectedBuilding
+                (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(coordinate).getBuilding());
         System.out.println("hitpoints: " + BuildingMenuController.selectedBuilding.getHitPoint());
+
         while (true) {
             String input = scanner.nextLine();
             if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.CREATE_UNIT) != null)
