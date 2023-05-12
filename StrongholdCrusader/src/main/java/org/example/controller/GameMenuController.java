@@ -97,6 +97,8 @@ public class GameMenuController {
     public static GameMenuMessages dropBuilding(Coordinate position, String type) {
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getDroppable() != null)
             return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
+        if(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isKeep())
+            return GameMenuMessages.IS_KEEP;
         if (BuildingTypeName.getBuildingTypeNameByNameString(type) == null)
             return GameMenuMessages.INVALID_BUILDING_TYPE;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isBuildable())
