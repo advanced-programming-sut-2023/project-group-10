@@ -72,11 +72,18 @@ public class InputProcessor {
     }
 
     public static Integer rateInputProcessor(String input) throws Exception {
-        HashMap<String, String> options = InputProcessor.separateInput(input);
         String rate = "";
+        Pattern pattern = Pattern.compile(".*-r\\s*(?<rate>-?\\S+).*");
+        Matcher matcher = pattern.matcher(input);
+        if(matcher.matches()){
+            rate=matcher.group("rate");
+           input= input.replaceFirst("-r","");
+           input=input.replaceFirst(rate,"");
+        }
+        HashMap<String, String> options = InputProcessor.separateInput(input);
         for (Map.Entry<String, String> option : options.entrySet()) {
             if (option.getKey().equals("-r")) {
-                rate = option.getValue();
+                throw new Exception("more than one -r");
             } else throw new Exception("invalid option");
         }
         if (!rate.matches("-?\\d+")) throw new Exception("You should enter a number for rate!");
