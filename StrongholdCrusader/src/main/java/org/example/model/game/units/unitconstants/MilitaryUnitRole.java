@@ -39,9 +39,10 @@ public abstract class MilitaryUnitRole extends Role {
         return ((int) government.getGold()) / cost;
     }
 
+    // TODO: add specific unit types instead of military person
     public int tryToProduceThisMany(Government government, Coordinate position, int count) {
         count = Math.min(count, numberOfUnitsThatCanBeSpawned(government));
-        government.changeGold(this.getCost() * count);
+        government.changeGold(-this.getCost() * count);
         for (int i = 0; i < count; i++)
             if (this instanceof MilitaryPersonRole) new MilitaryPerson(position, this.getName(), government).addToGovernmentAndBlock();
             else new SiegeEquipment(position, this.getName(), government).addToGovernmentAndBlock();

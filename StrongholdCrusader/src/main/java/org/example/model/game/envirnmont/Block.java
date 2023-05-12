@@ -17,6 +17,7 @@ public class Block {
     private Droppable droppable;
     private final ArrayList<Unit> units;
     private boolean onFire;
+    private boolean isKeep;
 
     Block(BlockTexture texture) {
         this.texture = texture;
@@ -63,8 +64,12 @@ public class Block {
         return result;
     }
 
-    public boolean isOnFire() {
-        return onFire;
+    public boolean isKeep() {
+        return isKeep;
+    }
+
+    public void setKeep(boolean keep) {
+        isKeep = keep;
     }
 
     public void setTexture(BlockTexture texture) {
@@ -120,8 +125,12 @@ public class Block {
         return canGoInEnemyPit && getBuilding().getBuildingType().getName() == BuildingTypeName.KILLING_PIT && getBuilding().getGovernment() != Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
     }
 
+    public boolean isBuildable() {
+        return droppable==null && !onFire && texture.isBuildable() && !isKeep;
+    }
+
     public boolean canDigHere() {
-        return droppable == null && !onFire && texture.isBuildable();
+        return droppable == null && !onFire && isBuildable();
     }
 
     public ArrayList<Unit> getAllAttackableEnemyUnits(Government government) {
