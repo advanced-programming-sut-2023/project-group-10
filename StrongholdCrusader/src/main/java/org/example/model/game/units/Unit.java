@@ -31,7 +31,16 @@ public class Unit extends Entity {
     }
 
     public void changeHitPoint(int change) {
+        if (change < 0 && isNearShield()) change /= NumericalEnums.SHIELD_PROTECTION_COEFFICIENT.getValue();
         hitPoint += change;
+    }
+
+    private boolean isNearShield() {
+        if (getRole().getName() == RoleName.PORTABLE_SHIELD) return false;
+        for (Unit unit : getGovernment().getUnits())
+            if (unit.getRole().getName() == RoleName.PORTABLE_SHIELD && unit.getPosition().getDistanceFrom(getPosition()) < NumericalEnums.SHIELD_RANGE.getValue())
+                return true;
+        return false;
     }
 
     public boolean isDead() {
@@ -53,4 +62,6 @@ public class Unit extends Entity {
     public boolean isAttackable() {
         return true;
     }
+
+
 }

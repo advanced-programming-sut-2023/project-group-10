@@ -7,7 +7,9 @@ public enum NumericalEnums {
     DAMAGE_COEFFICIENT(10),
     WOOD_REDUCTION_RATE(2),
     SCORE_CONSTANT(150),
-    PEASANT_PRODUCTION_RATE(5);
+    PEASANT_PRODUCTION_RATE(5),
+    SHIELD_PROTECTION_COEFFICIENT(2),
+    SHIELD_RANGE(10);
     private final int value;
 
     NumericalEnums(int value) {
