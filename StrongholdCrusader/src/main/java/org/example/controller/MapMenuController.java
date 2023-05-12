@@ -82,10 +82,10 @@ public class MapMenuController {
         }
         details = details.concat("Military People count : " + count + "\n");
         for (java.util.Map.Entry<String, ArrayList<MilitaryPerson>> militaryPersonIntegerEntry : militaryPeople.entrySet()) {
-            details = details.concat(militaryPersonIntegerEntry.getValue() + " of "
+            details = details.concat(militaryPersonIntegerEntry.getValue().size() + " of "
                     + militaryPersonIntegerEntry.getKey() + " with hitpoints:\n");
             for (int i = 0; i < militaryPersonIntegerEntry.getValue().size(); i++) {
-                details = details.concat(Integer.toString(militaryPersonIntegerEntry.getValue().get(i).getHitPoint()) + " - ");
+                details = details.concat(militaryPersonIntegerEntry.getValue().get(i).getHitPoint() + " - ");
             }
             details = details.substring(0, details.length() - 2);
             details = details + "\n";
