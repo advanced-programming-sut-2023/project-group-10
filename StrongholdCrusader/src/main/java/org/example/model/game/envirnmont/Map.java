@@ -96,7 +96,8 @@ public class Map {
                 neighbor.visited = true;
                 queue.add(neighbor);
                 neighbor.previousNode = currentNode;
-                if (neighbor == end) {
+                if (neighbor.coordinate.equals(end.coordinate)) {
+                    end = neighbor;
                     queue.clear();
                     break;
                 }

@@ -357,9 +357,11 @@ public class GameMenuController {
         ArrayList<Coordinate> path = Stronghold.getCurrentBattle().getBattleMap().findPath(new Node(unit.getPosition()), new Node(unit.getDestination()));
         if (path == null) return;
         int movesLeft;
+        Building building;
         unit.setPosition(path.get((movesLeft = Math.min(moveCount, path.size())) - 1));
         for (int i = 0; i < movesLeft - 1; i++) {
-            if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(path.get(i)).getBuilding().getBuildingType().getName() == BuildingTypeName.KILLING_PIT) {
+            building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(path.get(i)).getBuilding();
+            if (building != null && building.getBuildingType().getName() == BuildingTypeName.KILLING_PIT) {
                 unit.killMe();
                 return;
             }
