@@ -66,4 +66,11 @@ public class Battle {
         }
         return count;
     }
+
+    public Government getAliveGovernment() {
+        for (Government government : governments)
+            if (government != null)
+                return government;
+        return null;
+    }
 }

@@ -138,6 +138,7 @@ public class User {
     }
 
     public int getHighScore() {
+        Stronghold.dataBase.loadUsersFromFile();
         return highScore;
     }
 

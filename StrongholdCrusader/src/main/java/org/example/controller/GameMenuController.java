@@ -468,7 +468,7 @@ public class GameMenuController {
 
     private static Government deadLord() {
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
-            if (government.getLord().isDead()) return government;
+            if (government != null && government.getLord().isDead()) return government;
         }
         return null;
     }
@@ -476,7 +476,7 @@ public class GameMenuController {
     private static ArrayList<Unit> aliveLords() {
         ArrayList<Unit> lords = new ArrayList<>();
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
-            if (!government.getLord().isDead()) lords.add(government.getLord());
+            if (government!=null && !government.getLord().isDead()) lords.add(government.getLord());
         }
         return lords;
     }
