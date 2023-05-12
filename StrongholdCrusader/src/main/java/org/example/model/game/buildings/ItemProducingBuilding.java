@@ -19,6 +19,8 @@ public class ItemProducingBuilding extends Building {
         ItemProducingBuildingType buildingType = (ItemProducingBuildingType) getBuildingType();
         if (Stronghold.getCurrentBattle().getTurnsPassed() % buildingType.getRate() != turnIndicator) return;
         for (Item item : buildingType.getItems())
+        {
             item.tryToProduceThisMany(getGovernment(), buildingType.getItemCountProducedPerProduction());
+        }
     }
 }

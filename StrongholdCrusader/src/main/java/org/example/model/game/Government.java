@@ -24,6 +24,7 @@ public class Government {
     private double gold;
     private final Color color;
     private int foodRate;
+    private int excessFood;
     private int taxRate;
     private int fearRate;
     private final ArrayList<Trade> tradeList = new ArrayList<>();
@@ -80,6 +81,14 @@ public class Government {
 
     public int getFoodRate() {
         return foodRate;
+    }
+
+    public int getExcessFood() {
+        return excessFood;
+    }
+
+    public void setExcessFood(int excessFood) {
+        this.excessFood = excessFood;
     }
 
     public double getGold() {
