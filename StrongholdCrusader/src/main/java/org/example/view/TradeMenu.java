@@ -81,11 +81,11 @@ public class TradeMenu {
         price = Integer.parseInt(priceString);
         TradeMenuMessages tradeMessage = TradeMenuController.sendRequest(resourceType, resourceAmount, price, message, recipientId);
         switch (tradeMessage) {
-            case INSUFFICIENT_STOCK:
-                System.out.println("You don't have enough resources to donate!");
-                break;
             case INVALID_USER:
                 System.out.println("There is no user with this id in the current battle!");
+                break;
+            case NOT_SUFFICIENT_GOLD:
+                System.out.println("you don't have enough gold");
                 break;
             case INVALID_TYPE:
                 System.out.println("There is no resource with this type");
@@ -131,8 +131,8 @@ public class TradeMenu {
             case MISMATCH_OF_TRADERS:
                 System.out.println("you must be the recipient of the trade to accept it");
                 break;
-            case NOT_SUFFICIENT_GOLD:
-                System.out.println("you don't have enough gold");
+            case NOT_ENOUGH_ITEMS:
+                System.out.println("you don't have enough of this item");
                 break;
             case TRADE_SUCCESSFULLY_ACCEPTED:
                 System.out.println("the trade was accepted successfully");

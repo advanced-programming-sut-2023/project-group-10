@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.controller.ShopMenuController;
+import org.example.model.Stronghold;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.ShopMenuCommands;
 import org.example.view.enums.messages.ShopMenuMessages;
@@ -16,6 +17,8 @@ public class ShopMenu {
         while (true) {
             input = scanner.nextLine();
             if ((ShopMenuCommands.getMatcher(input, ShopMenuCommands.SHOW_LIST)) != null) showPriceList();
+            else if(ShopMenuCommands.getMatcher(input, ShopMenuCommands.SHOW_GOLD) != null)
+                System.out.println(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold());
             else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.SELL) != null) sell(input);
             else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.BUY) != null) buy(input);
             else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.BACK) != null) return;

@@ -20,7 +20,7 @@ import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.*;
 import org.example.view.CustomizeMapMenu;
 import org.example.view.enums.messages.GameMenuMessages;
-import org.example.view.enums.messages.MountEquipmentMenu;
+import org.example.view.MountEquipmentMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,12 +110,14 @@ public class GameMenuController {
         RoleName workerRole = WorkerRole.getRoleNameByWorkplace(BuildingTypeName.getBuildingTypeNameByNameString(type));
         if (workerRole != null)
             Unit.produceUnits(workerRole, neededPeasants, position);
-        for (Unit unit : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getUnits())
-            if (unit.getRole().getName() == RoleName.PEASANT) {
-                unit.killMe();
-                neededPeasants--;
-                if (neededPeasants == 0) break;
-            }
+        if(neededPeasants!=0) {
+            for (Unit unit : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getUnits())
+                if (unit.getRole().getName() == RoleName.PEASANT) {
+                    unit.killMe();
+                    neededPeasants--;
+                    if (neededPeasants == 0) break;
+                }
+        }
         if (BuildingType.getBuildingTypeByName(buildingType) instanceof ItemProducingBuildingType)
             new ItemProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
         else if (buildingType == BuildingTypeName.STAIRS)
@@ -147,7 +149,7 @@ public class GameMenuController {
 
     public static GameMenuMessages selectUnit(Coordinate position) {
         ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
-        if (selectedMilitaryUnits == null) return GameMenuMessages.NO_UNITS_FOUND;
+        if (selectedMilitaryUnits == null || selectedMilitaryUnits.size() == 0) return GameMenuMessages.NO_UNITS_FOUND;
         UnitMenuController.selectedMilitaryUnits = selectedMilitaryUnits;
         return GameMenuMessages.SUCCESSFUL_SELECT;
     }
@@ -258,6 +260,7 @@ public class GameMenuController {
         collectTaxes(currentGovernment);
         feedCitizens(currentGovernment);
         addPeasants(currentGovernment);
+        currentGovernment.setExcessFood(0);
         updateFoodCount(currentGovernment);
         updatePopularity(currentGovernment);
         Government dead;

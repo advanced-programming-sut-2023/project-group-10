@@ -5,9 +5,10 @@ import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.Engineer;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.SiegeEquipment;
-import org.example.view.MountEquipmentMenuMessages;
+import org.example.view.enums.messages.MountEquipmentMenuMessages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MountEquipmentMenuController {
     private static SiegeEquipment siegeEquipment;
@@ -35,7 +36,8 @@ public class MountEquipmentMenuController {
             if (unit instanceof Engineer && !((Engineer) unit).isOnBoilingDuty())
                 engineers.add((Engineer) unit);
         if (engineers.size() == 0) return MountEquipmentMenuMessages.NO_ENGINEERS;
-        if (engineers.contains(engineers.get(0))) return MountEquipmentMenuMessages.ALREADY_SELECTED;
+        if (Arrays.asList(selectedEngineers).contains(engineers.get(0)))
+            return MountEquipmentMenuMessages.ALREADY_SELECTED;
         for (int i = 0; i < engineers.size() && index < selectedEngineers.length; i++, index++)
             selectedEngineers[index] = engineers.get(i);
         return MountEquipmentMenuMessages.SELECTION_SUCCESSFUL;
