@@ -34,7 +34,7 @@ public class ShopMenuController {
             return ShopMenuMessages.INVALID_AMOUNT;
         if (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(Item.getItemByName(name)) < amount)
             return ShopMenuMessages.INSUFFICIENT_AMOUNT;
-        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().reduceItem(Item.getItemByName(name), amount, Item.getItemByName(name).getBuyPrice());
+        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().reduceItem(Item.getItemByName(name), amount, Item.getItemByName(name).getSellPrice());
         return ShopMenuMessages.SUCCESS;
     }
 }

@@ -116,7 +116,7 @@ public abstract class MilitaryUnit extends Unit {
         return (((MilitaryUnitRole) getRole()).getAttackRange().getValue() + getBoostInFireRange()) * NumericalEnums.RANGE_COEFFICIENT.getValue() + 1;
     }
 
-    private int getBoostInFireRange() {
+    public int getBoostInFireRange() {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         Building building = map.getBlockByRowAndColumn(getPosition()).getBuilding();
         if (building == null || !(building.getBuildingType() instanceof AttackingBuildingType) || ((MilitaryUnitRole) this.getRole()).getAttackRange() == Quality.ZERO)

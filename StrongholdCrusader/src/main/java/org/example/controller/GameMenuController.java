@@ -13,6 +13,8 @@ import org.example.model.game.envirnmont.Node;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.SiegeEquipment;
 import org.example.model.game.units.Unit;
+import org.example.model.game.units.unitconstants.MilitaryUnitRole;
+import org.example.model.game.units.unitconstants.MilitaryUnitStance;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.CustomizeMapMenu;
@@ -113,12 +115,10 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages selectBuilding(Coordinate position) {
-        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() == null)
-            return GameMenuMessages.EMPTY_LAND;
+        Building building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding();
+        if (building == null) return GameMenuMessages.EMPTY_LAND;
 
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
-                getBuilding().getGovernment().getOwner().getUsername().
-                equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername()))
+        if (building.getGovernment() != Stronghold.getCurrentBattle().getGovernmentAboutToPlay())
             return GameMenuMessages.OPPONENT_BUILDING;
 
         return GameMenuMessages.SUCCESSFUL_SELECT;
@@ -126,8 +126,7 @@ public class GameMenuController {
 
     public static GameMenuMessages selectUnit(Coordinate position) {
         ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
-        if (selectedMilitaryUnits == null)
-            return GameMenuMessages.NO_UNITS_FOUND;
+        if (selectedMilitaryUnits == null) return GameMenuMessages.NO_UNITS_FOUND;
         UnitMenuController.selectedMilitaryUnits = selectedMilitaryUnits;
         return GameMenuMessages.SUCCESSFUL_SELECT;
     }
@@ -145,7 +144,6 @@ public class GameMenuController {
         return GameMenuMessages.MOUNT_SUCCESSFUL;
     }
 
-    //TODO: what's this? first String is username --> battle
     public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {
         Government[] governments = new Government[players.size()];
         int x = 0;
@@ -166,30 +164,11 @@ public class GameMenuController {
         CustomizeMapMenu.run();
     }
 
-
-    private static void moveAllUnits(Government government) {
-        for (Unit unit : government.getUnits())
-            if (unit instanceof MilitaryUnit && ((MilitaryUnit) unit).getDestination() != null)
-                moveUnit((MilitaryUnit) unit, unit.getSpeed());
-    }
-
-    private static void moveUnit(MilitaryUnit unit, int moveCount) {
-        ArrayList<Coordinate> path = Stronghold.getCurrentBattle().getBattleMap().findPath(new Node(unit.getPosition()), new Node(unit.getDestination()));
-        if (path == null) return;
-        int movesLeft;
-        unit.setPosition(path.get((movesLeft = Math.min(moveCount, path.size())) - 1));
-        if (unit.getDestination().equals(unit.getPosition())) unit.updateDestination();
-        if (!unit.isOnPatrol()) return;
-        moveCount = moveCount - movesLeft;
-        if (moveCount > 0) moveUnit(unit, moveCount);
-    }
-
     public static GameMenuMessages dropUnit(Coordinate position, String type, int count) {
         if (Role.getRoleByName(RoleName.getRoleNameByNameString(type)) == null)
             return GameMenuMessages.INVALID_UNIT_TYPE;
 
-        if (count < 0)
-            return GameMenuMessages.INVALID_UNIT_COUNT;
+        if (count < 0) return GameMenuMessages.INVALID_UNIT_COUNT;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canUnitsGoHere(false))
             return GameMenuMessages.UNWALKABLE_LAND;
         for (int i = 0; i < count; i++) {
@@ -204,11 +183,11 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages deleteStructure(Coordinate destination) {
-        Block target=Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination);
-        Droppable droppable=target.getDroppable();
-        if(droppable==null) return GameMenuMessages.NO_STRUCTURE;
-        if(!(droppable instanceof Entity)) return GameMenuMessages.NOT_YOUR_STRUCTURE;
-        if(droppable instanceof Building) ((Building) droppable).deleteBuildingFromMapAndGovernment();
+        Block target = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination);
+        Droppable droppable = target.getDroppable();
+        if (droppable == null) return GameMenuMessages.NO_STRUCTURE;
+        if (!(droppable instanceof Entity)) return GameMenuMessages.NOT_YOUR_STRUCTURE;
+        if (droppable instanceof Building) ((Building) droppable).deleteBuildingFromMapAndGovernment();
         else target.setDroppable(null);
         return GameMenuMessages.SUCCESSFUL_DELETE_STRUCTURE;
     }
@@ -261,7 +240,9 @@ public class GameMenuController {
         }
     }
 
-
+    //TODO: add max population and population rate functions + update produce peasants + add keep position to government (get position in initialize game (?)) + add peasants to keep position
+    // prevent setting unwalkable texture to keep's position in customize map menu
+    // change lord's position to keep position in government constructor
     private static void producePeasants(Government government) {
         for (Building building : government.getBuildings()) {
             if (building instanceof ItemProducingBuilding) {
@@ -294,8 +275,7 @@ public class GameMenuController {
                 if (itemIntegerEntry.getValue() < government.getCitizens() * (government.getFoodRate() + 2) * (0.5)) {
                     government.setFoodRate(government.getFoodRate() - 1);
                     break inner;
-                } else
-                    break outer;
+                } else break outer;
             }
         }
         government.changePopularity(government.getFearRate(), "Food");
@@ -305,8 +285,7 @@ public class GameMenuController {
         while (government.getTaxRate() < 0) {
             if (government.getGold() < government.getTaxRate() * government.getCitizens())
                 government.setTaxRate(government.getTaxRate() + 1);
-            else
-                break;
+            else break;
         }
         government.changePopularity(government.getTaxRate(), "Tax");
 
@@ -326,11 +305,8 @@ public class GameMenuController {
         government.changePopularity(government.getFearRate(), "Fear");
     }
 
-
     private static void collectTaxes(Government government) {
-        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().changeGold(
-                Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getCitizens()
-                        * Stronghold.getCurrentBattle().getGovernmentAboutToPlay().calculateTax());
+        government.changeGold(government.getCitizens() * government.calculateTax());
     }
 
     private static void feedCitizens(Government government) {
@@ -338,9 +314,81 @@ public class GameMenuController {
 
     }
 
+    private static void moveAllUnits(Government government) {
+        for (Unit unit : government.getUnits())
+            if (unit instanceof MilitaryUnit && ((MilitaryUnit) unit).getDestination() != null)
+                moveUnit((MilitaryUnit) unit, unit.getSpeed());
+    }
 
+    private static void moveUnit(MilitaryUnit unit, int moveCount) {
+        ArrayList<Coordinate> path = Stronghold.getCurrentBattle().getBattleMap().findPath(new Node(unit.getPosition()), new Node(unit.getDestination()));
+        if (path == null) return;
+        int movesLeft;
+        unit.setPosition(path.get((movesLeft = Math.min(moveCount, path.size())) - 1));
+        if (unit.getDestination().equals(unit.getPosition())) unit.updateDestination();
+        if (!unit.isOnPatrol()) return;
+        moveCount = moveCount - movesLeft;
+        if (moveCount > 0) moveUnit(unit, moveCount);
+    }
+
+    //TODO: remove isDead checks when kill method is implemented
     private static void attackAllUnits(Government government) {
+        int damage;
+        Unit closestEnemyUnit;
+        int pathLimit;
+        ArrayList<Coordinate> path;
+        for (Unit unit : government.getUnits()) {
+            if (!(unit instanceof MilitaryUnit)) continue;
+            if (((MilitaryUnit) unit).getDestination() != null) continue;
+            if ((damage = ((MilitaryUnitRole) unit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue()) == 0)
+                continue;
 
+            closestEnemyUnit = findClosestEnemyUnit(unit.getPosition());
+            if (closestEnemyUnit.getPosition().getDistanceFrom(unit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
+                closestEnemyUnit.changeHitPoint(-damage);
+                if (closestEnemyUnit.isDead()) closestEnemyUnit.deleteUnitFromGovernmentAndMap();
+            } else if (((MilitaryUnit) unit).getStance() != MilitaryUnitStance.STAND_GROUND && ((MilitaryUnit) unit).getBoostInFireRange() == 0) {
+                closestEnemyUnit = findClosestEnemyUnitBasedOnPath(unit.getPosition());
+                path = Stronghold.getCurrentBattle().getBattleMap().findPath(closestEnemyUnit.getPosition(), unit.getPosition());
+                if (((MilitaryUnit) unit).getStance() == MilitaryUnitStance.DEFENSIVE_STANCE)
+                    pathLimit = Math.min(unit.getSpeed() / 2, path.size());
+                else pathLimit = Math.min(unit.getSpeed(), path.size());
+                for (int i = 0; i < pathLimit; i++)
+                    if (path.get(i).getDistanceFrom(closestEnemyUnit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
+                        ((MilitaryUnit) unit).setPosition(path.get(i));
+                        closestEnemyUnit.changeHitPoint(damage);
+                        if (closestEnemyUnit.isDead()) closestEnemyUnit.deleteUnitFromGovernmentAndMap();
+                    }
+            }
+        }
+    }
+
+    private static Unit findClosestEnemyUnitBasedOnPath(Coordinate position) {
+        ArrayList<Unit> enemyUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getAllAttackableEnemyUnits(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        int minDistance = Integer.MAX_VALUE;
+        Unit closestEnemyUnit = null;
+        ArrayList<Coordinate> path;
+        for (Unit enemyUnit : enemyUnits) {
+            path = Stronghold.getCurrentBattle().getBattleMap().findPath(enemyUnit.getPosition(), position);
+            if (path != null && path.size() < minDistance) {
+                minDistance = path.size();
+                closestEnemyUnit = enemyUnit;
+            }
+        }
+        return closestEnemyUnit;
+    }
+
+    private static Unit findClosestEnemyUnit(Coordinate position) {
+        ArrayList<Unit> enemyUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getAllAttackableEnemyUnits(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        int minDistance = Integer.MAX_VALUE;
+        Unit closestEnemyUnit = null;
+        for (Unit enemyUnit : enemyUnits) {
+            if (enemyUnit.getPosition().getDistanceFrom(position) < minDistance) {
+                minDistance = enemyUnit.getPosition().getDistanceFrom(position);
+                closestEnemyUnit = enemyUnit;
+            }
+        }
+        return closestEnemyUnit;
     }
 
     private static void cutWoods(Government government) {
@@ -350,15 +398,10 @@ public class GameMenuController {
     public static GameMenuMessages captureBuilding(Coordinate position) {
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() == null)
             return GameMenuMessages.NO_BUILDING;
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
-                getBuilding().getBuildingType().getName().equals(BuildingTypeName.SMALL_STONE_GATEHOUSE)
-                && !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
-                getBuilding().getBuildingType().getName().equals(BuildingTypeName.LARGE_STONE_GATEHOUSE))
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding().getBuildingType().getName().equals(BuildingTypeName.SMALL_STONE_GATEHOUSE) && !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding().getBuildingType().getName().equals(BuildingTypeName.LARGE_STONE_GATEHOUSE))
             return GameMenuMessages.UNCAPTURABLE_BUILDING_TYPE;
 
 
         return GameMenuMessages.GATEHOUSE_CAPTURED_SUCCESSFULLY;
     }
-
-
 }
