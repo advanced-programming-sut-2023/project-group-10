@@ -444,6 +444,7 @@ public class GameMenuController {
 
             }
         }
+        capacity-= government.getPeasant();
         if (capacity < newPeasants)
             newPeasants = capacity;
         for (int i = 0; i < newPeasants; i++) {
