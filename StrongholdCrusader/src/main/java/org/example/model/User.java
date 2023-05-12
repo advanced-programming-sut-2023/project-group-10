@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import org.example.model.utils.CheckFormatAndEncrypt;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class User {
     private String username;
@@ -15,7 +14,6 @@ public class User {
     private String questionNumber;
     private String questionAnswer;
     private int highScore;
-    //I think it should be moved in the game class or whatever
     private static ArrayList<User> users = new ArrayList<>();
     static final Gson gson = new Gson();
 
@@ -120,7 +118,6 @@ public class User {
         return null;
     }
 
-    //TODO: discuss the type
     public void setSecurityQuestion(String number, String answer) {
         questionNumber = number;
         questionAnswer = answer;
@@ -146,35 +143,16 @@ public class User {
     public void setHighScore(int highScore) {
         if (this.highScore <= highScore)
             this.highScore = highScore;
+        Stronghold.dataBase.saveUsersToFile();
     }
 
     public int getRank() {
-        ArrayList<User> sorted = sortUsers();
-        for(int i = 0; i < sorted.size(); i++){
-            if(sorted.get(i).equals(this))
-                return i+1;
-        }
+        Stronghold.dataBase.loadUsersFromFile();
+
         return 0;
     }
 
     public static ArrayList<User> getUsers() {
         return users;
-    }
-
-    private static ArrayList<User> sortUsers() {
-        ArrayList<User> toBeSorted = new ArrayList<>();
-        Collections.copy(toBeSorted, users);
-
-        for(int i = 0; i < toBeSorted.size()-1; i++){
-            for(int j = 1; j < toBeSorted.size()-i-1; j++){
-                if(toBeSorted.get(j).getHighScore() < toBeSorted.get(j+1).getHighScore())
-                    Collections.swap(toBeSorted, j, j+1);
-                else if(toBeSorted.get(j).getHighScore() == toBeSorted.get(j+1).getHighScore()){
-                    if(toBeSorted.get(j).getNickname().compareTo(toBeSorted.get(j+1).getNickname()) > 0)
-                        Collections.swap(toBeSorted, j, j+1);
-                }
-            }
-        }
-        return toBeSorted;
     }
 }
