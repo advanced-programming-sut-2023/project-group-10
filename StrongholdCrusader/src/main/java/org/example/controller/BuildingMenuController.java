@@ -59,6 +59,7 @@ public class BuildingMenuController {
             return BuildingMenuMessages.ENEMIES_FORCES_ARE_CLOSE;
 
         selectedBuilding.setHitPoint(selectedBuilding.getBuildingType().getMaxHitPoint());
+        selectedBuilding.getGovernment().changeItemCount(Item.STONE, -stoneCounter());
         return BuildingMenuMessages.REPAIR_SUCCESSFUL;
     }
 
@@ -103,9 +104,6 @@ public class BuildingMenuController {
 
     private static int stoneCounter() {
         return (selectedBuilding.getBuildingType().getMaxHitPoint() - selectedBuilding.getHitPoint()) / 2;
-    }
-
-    private static void equipment() {
     }
 
 }
