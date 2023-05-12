@@ -2,8 +2,7 @@ package org.example.model.game.units.unitconstants;
 
 import org.example.model.game.Government;
 import org.example.model.game.envirnmont.Coordinate;
-import org.example.model.game.units.MilitaryPerson;
-import org.example.model.game.units.SiegeEquipment;
+import org.example.model.game.units.Unit;
 
 public abstract class MilitaryUnitRole extends Role {
     private final Quality attackRating;
@@ -39,13 +38,10 @@ public abstract class MilitaryUnitRole extends Role {
         return ((int) government.getGold()) / cost;
     }
 
-    // TODO: add specific unit types instead of military person
     public int tryToProduceThisMany(Government government, Coordinate position, int count) {
         count = Math.min(count, numberOfUnitsThatCanBeSpawned(government));
         government.changeGold(-this.getCost() * count);
-        for (int i = 0; i < count; i++)
-            if (this instanceof MilitaryPersonRole) new MilitaryPerson(position, this.getName(), government).addToGovernmentAndBlock();
-            else new SiegeEquipment(position, this.getName(), government).addToGovernmentAndBlock();
+        if (this instanceof MilitaryPersonRole) Unit.produceUnits(getName(), count, position);
         return count;
     }
 }
