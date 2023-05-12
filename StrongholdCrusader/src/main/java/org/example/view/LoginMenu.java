@@ -1,6 +1,8 @@
 package org.example.view;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.example.controller.LoginMenuController;
+import org.example.model.User;
 import org.example.model.utils.CaptchaGenerator;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.LoginMenuCommands;
@@ -70,13 +72,12 @@ public class LoginMenu {
                 break;
 
             case WRONG_PASSWORD:
-                System.out.println("Username and password didn't march!");
+                password = loginPassword(username, password);
+                loginSuccessful();
                 break;
 
             case LOGIN_SUCCESSFUL:
-                CaptchaGenerator.run();
-                System.out.println("User logged in successfully!");
-                MainMenu.run();
+                loginSuccessful();
                 break;
         }
     }
@@ -128,5 +129,34 @@ public class LoginMenu {
                 System.out.println("Password changed successfully!");
                 break;
         }
+    }
+
+    private static String loginPassword(String username, String password) {
+        int wrongPassword = 1;
+
+        while (!User.getUserByUsername(username).checkPassword(password)) {
+            System.out.println("Wrong password!");
+            System.out.println("You have to wait " + wrongPassword * 5 + " seconds to enter another password!");
+            StopWatch watch = new StopWatch();
+            watch.start();
+
+            Scanner scanner = new Scanner(System.in);
+            password = scanner.nextLine();
+            long time;
+
+            while ((time = watch.getTime()) < wrongPassword * 5000L) {
+                System.out.println("You have to wait " + (wrongPassword * 5 - time / 1000) + " seconds to enter another password!");
+                password = scanner.nextLine();
+            }
+            watch.stop();
+            wrongPassword++;
+        }
+        return password;
+    }
+
+    private static void loginSuccessful(){
+        CaptchaGenerator.run();
+        System.out.println("User logged in successfully!");
+        MainMenu.run();
     }
 }
