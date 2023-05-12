@@ -4,7 +4,7 @@ import org.example.model.game.envirnmont.Coordinate;
 
 public abstract class Entity implements Droppable {
     private Coordinate position;
-    private final Government government;
+    private Government government;
 
     public Entity(Coordinate position, Government government) {
         this.position = position;
@@ -17,6 +17,10 @@ public abstract class Entity implements Droppable {
 
     public Government getGovernment() {
         return government;
+    }
+
+    public void setGovernment(Government government) {
+        this.government = government;
     }
 
     protected void setPosition(Coordinate newCoordinate) {

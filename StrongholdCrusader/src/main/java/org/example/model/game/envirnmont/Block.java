@@ -74,7 +74,7 @@ public class Block {
     public void clearBlock() {
         droppable = null;
         for (Unit unit : units)
-            unit.deleteUnitFromGovernmentAndMap();
+            unit.killMe();
         setOnFire(false);
     }
 
@@ -108,7 +108,7 @@ public class Block {
         for (Unit unit : units)
             if (unit instanceof MilitaryUnit && unit.getGovernment() == government) unitsToBeDeleted.add(unit);
         for (Unit militaryUnit : unitsToBeDeleted)
-            militaryUnit.deleteUnitFromGovernmentAndMap();
+            militaryUnit.killMe();
     }
 
     public boolean canUnitsGoHere(boolean canGoInEnemyPit) {

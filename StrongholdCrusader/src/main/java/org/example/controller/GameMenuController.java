@@ -132,7 +132,7 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages mountEquipment(Coordinate position) {
-        ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         SiegeEquipment siegeEquipment = null;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             if (selectedMilitaryUnit instanceof SiegeEquipment) {
@@ -144,15 +144,15 @@ public class GameMenuController {
         return GameMenuMessages.MOUNT_SUCCESSFUL;
     }
 
-    public static void initializeGame(HashMap<String, String> players,HashMap<String, Coordinate> keeps, org.example.model.game.envirnmont.Map map) {
+    public static void initializeGame(HashMap<String, String> players, HashMap<String, Coordinate> keeps, org.example.model.game.envirnmont.Map map) {
         Government[] governments = new Government[players.size()];
         int x = 0;
 
         for (Map.Entry<String, String> player : players.entrySet()) {
             User owner = User.getUserByUsername(player.getKey());
             Color color = Color.getColorByName(player.getValue());
-            Coordinate keep=keeps.get(player.getKey());
-            Government gov = new Government(owner, color,keep);
+            Coordinate keep = keeps.get(player.getKey());
+            Government gov = new Government(owner, color, keep);
             gov.addItem(Item.WOOD, 20);
             gov.addItem(Item.STONE, 20);
             gov.setGold(20);
@@ -218,33 +218,34 @@ public class GameMenuController {
         }
     }
 
-    public static void goToNextPlayer() {
+    public static GameMenuMessages goToNextPlayer() {
         Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
-        moveAllUnits(currentGovernment);
-        attackAllUnits(currentGovernment);
-        //farms and etc. should produce at every turn(if their rates matches)
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
             produceItems(government);
         }
+
+        moveAllUnits(currentGovernment);
+        attackAllUnits(currentGovernment);
+
         collectTaxes(currentGovernment);
-        producePeasants(currentGovernment);
+        feedCitizens(currentGovernment);
+        addPeasants(currentGovernment);
         updateFoodCount(currentGovernment);
         updatePopularity(currentGovernment);
+        Government dead;
+        while ((dead = deadLord()) != null) {
+            countScore(dead);
+            Stronghold.getCurrentBattle().removeGovernment(dead);
+        }
+        if (aliveLords().size() == 1) {
+            countScore(aliveLords().get(0).getGovernment());
+            return GameMenuMessages.GAME_OVER;
+        }
         Stronghold.getCurrentBattle().goToNextPlayer();
+        return GameMenuMessages.NEXT_PLAYER;
     }
 
     private static void produceItems(Government government) {
-        for (Building building : government.getBuildings()) {
-            if (building instanceof ItemProducingBuilding) {
-                ((ItemProducingBuilding) building).produce();
-            }
-        }
-    }
-
-    //TODO: add max population and population rate functions + update produce peasants + add keep position to government (get position in initialize game (?)) + add peasants to keep position
-    // prevent setting unwalkable texture to keep's position in customize map menu
-    // change lord's position to keep position in government constructor
-    private static void producePeasants(Government government) {
         for (Building building : government.getBuildings()) {
             if (building instanceof ItemProducingBuilding) {
                 ((ItemProducingBuilding) building).produce();
@@ -271,11 +272,10 @@ public class GameMenuController {
     private static void modifyFoodRate(Government government) {
         outer:
         while (government.getFoodRate() > -2) {
-            inner:
             for (Map.Entry<Item, Double> itemIntegerEntry : government.getFoodList().entrySet()) {
                 if (itemIntegerEntry.getValue() < government.getCitizens() * (government.getFoodRate() + 2) * (0.5)) {
                     government.setFoodRate(government.getFoodRate() - 1);
-                    break inner;
+                    break;
                 } else break outer;
             }
         }
@@ -312,7 +312,9 @@ public class GameMenuController {
 
     private static void feedCitizens(Government government) {
         HashMap<Item, Double> foodList = government.getFoodList();
-
+        for (Map.Entry<Item, Double> itemDoubleEntry : foodList.entrySet()) {
+            government.changeItemCount(itemDoubleEntry.getKey(), (-1) * (government.getFoodRate() + 2) * 0.5);
+        }
     }
 
     private static void moveAllUnits(Government government) {
@@ -332,7 +334,6 @@ public class GameMenuController {
         if (moveCount > 0) moveUnit(unit, moveCount);
     }
 
-    //TODO: remove isDead checks when kill method is implemented
     private static void attackAllUnits(Government government) {
         int damage;
         Unit closestEnemyUnit;
@@ -347,7 +348,7 @@ public class GameMenuController {
             closestEnemyUnit = findClosestEnemyUnit(unit.getPosition());
             if (closestEnemyUnit.getPosition().getDistanceFrom(unit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
                 closestEnemyUnit.changeHitPoint(-damage);
-                if (closestEnemyUnit.isDead()) closestEnemyUnit.deleteUnitFromGovernmentAndMap();
+                if (closestEnemyUnit.isDead()) closestEnemyUnit.killMe();
             } else if (((MilitaryUnit) unit).getStance() != MilitaryUnitStance.STAND_GROUND && ((MilitaryUnit) unit).getBoostInFireRange() == 0) {
                 closestEnemyUnit = findClosestEnemyUnitBasedOnPath(unit.getPosition());
                 path = Stronghold.getCurrentBattle().getBattleMap().findPath(closestEnemyUnit.getPosition(), unit.getPosition());
@@ -358,7 +359,7 @@ public class GameMenuController {
                     if (path.get(i).getDistanceFrom(closestEnemyUnit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
                         ((MilitaryUnit) unit).setPosition(path.get(i));
                         closestEnemyUnit.changeHitPoint(damage);
-                        if (closestEnemyUnit.isDead()) closestEnemyUnit.deleteUnitFromGovernmentAndMap();
+                        if (closestEnemyUnit.isDead()) closestEnemyUnit.killMe();
                     }
             }
         }
@@ -392,13 +393,33 @@ public class GameMenuController {
         return closestEnemyUnit;
     }
 
-    private static void cutWoods(Government government) {
-//??
-    }
-
 
     private static void addPeasants(Government government) {
-        int newPeasants=government.getExcessFood()/5;
-        government.addUnit(new Unit(government.getKeep(),RoleName.PEASANT,government));
+        int newPeasants = government.getExcessFood() / NumericalEnums.PEASANT_PRODUCTION_RATE.getValue();
+        for (int i = 0; i < newPeasants; i++) {
+            government.addUnit(new Unit(government.getKeep(), RoleName.PEASANT, government));
+
+        }
+    }
+
+    private static void countScore(Government government) {
+        government.getOwner().setHighScore(Stronghold.getCurrentBattle().getTurnsPassed() * NumericalEnums.SCORE_CONSTANT.getValue());
+    }
+
+    private static Government deadLord() {
+        for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
+            if (government.getLord().isDead())
+                return government;
+        }
+        return null;
+    }
+
+    private static ArrayList<Unit> aliveLords() {
+        ArrayList<Unit> lords = new ArrayList<>();
+        for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
+            if (!government.getLord().isDead())
+                lords.add(government.getLord());
+        }
+        return lords;
     }
 }

@@ -5,7 +5,11 @@ public enum NumericalEnums {
     SPEED_COEFFICIENT(1),
     RANGE_COEFFICIENT(3),
     DAMAGE_COEFFICIENT(10),
-    WOOD_REDUCTION_RATE(2);
+    WOOD_REDUCTION_RATE(2),
+    SCORE_CONSTANT(150),
+    PEASANT_PRODUCTION_RATE(5),
+    SHIELD_PROTECTION_COEFFICIENT(2),
+    SHIELD_RANGE(10);
     private final int value;
 
     NumericalEnums(int value) {

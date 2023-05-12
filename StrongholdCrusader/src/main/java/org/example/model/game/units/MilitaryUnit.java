@@ -130,11 +130,4 @@ public abstract class MilitaryUnit extends Unit {
         Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(newCoordinate).addUnit(this);
         super.setPosition(newCoordinate);
     }
-    public void captureEnemyBuilding() {
-        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().addBuilding
-                (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getEndPoint()).getBuilding());
-        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getEndPoint()).getBuilding().getGovernment().
-                deleteBuilding(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getEndPoint()).getBuilding());
-
-    }
 }

@@ -45,7 +45,7 @@ public class Tunneler extends MilitaryUnit {
             this.moveUnit(targetBuilding.getPosition());
         } else if (tunnelerState == TunnelerState.IN_TUNNEL) {
             targetBuilding.deleteBuildingFromMapAndGovernment();
-            this.deleteUnitFromGovernmentAndMap();
+            this.killMe();
         }
     }
 

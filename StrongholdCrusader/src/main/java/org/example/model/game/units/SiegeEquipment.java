@@ -27,4 +27,9 @@ public class SiegeEquipment extends MilitaryUnit {
     public int getCurrentNeededEngineers() {
         return ((MilitaryEquipmentRole) this.getRole()).getNumberOfEngineersNeeded() - engineers.size();
     }
+
+    @Override
+    public boolean isSelectable() {
+        return getCurrentNeededEngineers() == 0;
+    }
 }
