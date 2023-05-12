@@ -40,12 +40,12 @@ public class Government {
         for (Item item : Item.values())
             itemList.put(item, 0.0);
         foodRate = -2;
-        popularityFactors.put("food", -2);
+        popularityFactors.put("Food", -2);
         taxRate = 0;
-        popularityFactors.put("tax", 0);
+        popularityFactors.put("Tax", 0);
         fearRate = 0;
-        popularityFactors.put("fear", 0);
-        popularityFactors.put("religion",0);
+        popularityFactors.put("Fear", 0);
+        popularityFactors.put("Religion",0);
     }
 
     public Coordinate getKeep() {
@@ -71,22 +71,22 @@ public class Government {
 
     public void setTaxRate(int taxRate) {
         this.taxRate = taxRate;
-        popularityFactors.put("tax", popularityFactors.get("tax") + taxRate);
+        popularityFactors.put("Tax", popularityFactors.get("Tax") + taxRate);
     }
 
     public void setFearRate(int fearRate) {
         this.fearRate = fearRate;
-        popularityFactors.put("fear", popularityFactors.get("fear") + fearRate);
+        popularityFactors.put("Fear", popularityFactors.get("Fear") + fearRate);
     }
 
     public void addReligion() {
         //TODO: add percentage of blessed units to the mix
-        popularityFactors.put("religion", 1);
+        popularityFactors.put("Religion", 1);
     }
 
     public void setFoodRate(int foodRate) {
         this.foodRate = foodRate;
-        popularityFactors.put("food", popularityFactors.get("food") + foodRate);
+        popularityFactors.put("Food", popularityFactors.get("Food") + foodRate);
     }
 
     public void setGold(double gold) {
