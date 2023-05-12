@@ -19,8 +19,8 @@ import org.example.model.game.units.SiegeEquipment;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.*;
 import org.example.view.CustomizeMapMenu;
-import org.example.view.enums.messages.GameMenuMessages;
 import org.example.view.MountEquipmentMenu;
+import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,7 +110,7 @@ public class GameMenuController {
         RoleName workerRole = WorkerRole.getRoleNameByWorkplace(BuildingTypeName.getBuildingTypeNameByNameString(type));
         if (workerRole != null)
             Unit.produceUnits(workerRole, neededPeasants, position);
-        if(neededPeasants!=0) {
+        if (neededPeasants != 0) {
             for (Unit unit : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getUnits())
                 if (unit.getRole().getName() == RoleName.PEASANT) {
                     unit.killMe();
@@ -126,6 +126,7 @@ public class GameMenuController {
             new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
+
     public static int showRoundsPlayed() {
         return Stronghold.getCurrentBattle().getTurnsPassed();
     }
@@ -381,6 +382,7 @@ public class GameMenuController {
         for (Unit unit : government.getUnits()) {
             if (!(unit instanceof MilitaryUnit)) continue;
             if (((MilitaryUnit) unit).getDestination() != null) continue;
+            if (unit instanceof SiegeEquipment && unit.getRole().getName() != RoleName.FIRE_BALLISTA) continue;
             if ((damage = ((MilitaryUnitRole) unit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue()) == 0)
                 continue;
 

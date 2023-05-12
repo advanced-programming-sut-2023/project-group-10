@@ -74,7 +74,8 @@ public class Unit extends Entity {
     }
 
     public void killMe() {
-        this.getGovernment().deleteUnit(this);
+        if (this.getRole().getName() == RoleName.LORD) this.changeHitPoint(-this.getHitPoint());
+        else this.getGovernment().deleteUnit(this);
         Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).removeUnit(this);
     }
 
