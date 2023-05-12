@@ -4,7 +4,7 @@ import org.example.model.utils.ASCIIColor;
 
 public enum BlockTexture {
     //on land
-    EARTH(false, true, true,true, ASCIIColor.RESET),
+    EARTH(false, true, true,true, ASCIIColor.RED_BACKGROUND),
     EARTH_AND_STONES(false, true, true,true, ASCIIColor.RESET),
     BOULDERS(false, true, true,true, ASCIIColor.YELLOW_BACKGROUND),
     ROCKS(false, false, false,false, ASCIIColor.YELLOW_BACKGROUND),
