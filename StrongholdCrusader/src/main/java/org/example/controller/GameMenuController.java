@@ -97,7 +97,7 @@ public class GameMenuController {
     public static GameMenuMessages dropBuilding(Coordinate position, String type) {
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getDroppable() != null)
             return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
-        if(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isKeep())
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isKeep())
             return GameMenuMessages.IS_KEEP;
         if (BuildingTypeName.getBuildingTypeNameByNameString(type) == null)
             return GameMenuMessages.INVALID_BUILDING_TYPE;
@@ -187,6 +187,8 @@ public class GameMenuController {
 
         for (Government government : governments) {
             new MilitaryPerson(government.getKeep(), RoleName.LORD, government).addToGovernmentAndBlock();
+            for (int i = 0; i < 10; i++)
+                new Unit(government.getKeep(), RoleName.PEASANT, government).addToGovernmentAndBlock();
         }
         CustomizeMapMenu.run();
     }
@@ -446,7 +448,7 @@ public class GameMenuController {
 
             }
         }
-        capacity-= government.getPeasant();
+        capacity -= government.getPeasant();
         if (capacity < newPeasants)
             newPeasants = capacity;
         for (int i = 0; i < newPeasants; i++) {

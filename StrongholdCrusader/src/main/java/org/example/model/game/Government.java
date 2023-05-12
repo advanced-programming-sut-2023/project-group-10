@@ -46,8 +46,6 @@ public class Government {
         fearRate = 0;
         popularityFactors.put("Fear", 0);
         popularityFactors.put("Religion", 0);
-        for (int i = 0; i < 10; i++)
-            new Unit(keep, RoleName.PEASANT, this).addToGovernmentAndBlock();
     }
 
     public Coordinate getKeep() {
