@@ -85,14 +85,15 @@ public class Map {
 
     public ArrayList<Coordinate> findPath(Node start, Node end) {
         LinkedList<Node> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[size][size];
         queue.add(start);
-        start.visited = true;
+        visited[start.coordinate.row][start.coordinate.column] = true;
         Node currentNode;
         while (!queue.isEmpty()) {
             currentNode = queue.pollFirst();
             for (Node neighbor : currentNode.getNeighbors(this, end.coordinate)) {
-                if (neighbor.visited) continue;
-                neighbor.visited = true;
+                if (visited[neighbor.coordinate.row][neighbor.coordinate.column]) continue;
+                visited[neighbor.coordinate.row][neighbor.coordinate.column] = true;
                 queue.add(neighbor);
                 neighbor.previousNode = currentNode;
                 if (neighbor.coordinate.equals(end.coordinate)) {

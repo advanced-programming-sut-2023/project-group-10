@@ -5,12 +5,10 @@ import java.util.ArrayList;
 public class Node {
     public Coordinate coordinate;
     public Node previousNode;
-    public boolean visited;
 
     public Node(Coordinate coordinate) {
         this.coordinate = coordinate;
-        previousNode=null;
-        visited=false;
+        previousNode = null;
     }
 
     public ArrayList<Node> getNeighbors(Map map, Coordinate endpoint) {

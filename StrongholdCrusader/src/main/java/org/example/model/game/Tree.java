@@ -18,6 +18,6 @@ public class Tree implements Droppable {
     }
 
     public void reduceWoodStorage(int amount) {
-        this.woodStorage -= TreeType.getMaxWoodStorage(this.type) * amount * NumericalEnums.WOOD_REDUCTION_RATE.getValue();
+        this.woodStorage -= amount * NumericalEnums.WOOD_REDUCTION_RATE.getValue();
     }
 }
