@@ -45,7 +45,8 @@ public class Engineer extends MilitaryUnit {
     @Override
     public void updateDestination() {
         if (this.onBoilingDuty &&
-                Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getEndPoint()).getBuilding().getBuildingType().getName() == BuildingTypeName.OIL_SMELTER)
+                Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn
+                        (getEndPoint()).getBuilding().getBuildingType().getName() == BuildingTypeName.OIL_SMELTER)
             this.setHasOil(true);
         super.updateDestination();
     }

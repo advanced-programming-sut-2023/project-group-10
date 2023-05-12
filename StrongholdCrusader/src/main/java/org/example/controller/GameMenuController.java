@@ -190,7 +190,7 @@ public class GameMenuController {
 
         if (count < 0)
             return GameMenuMessages.INVALID_UNIT_COUNT;
-        if(!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canUnitsGoHere(false))
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canUnitsGoHere(false))
             return GameMenuMessages.UNWALKABLE_LAND;
         for (int i = 0; i < count; i++) {
             new Unit(position, RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlock();
@@ -331,6 +331,19 @@ public class GameMenuController {
 
     private static void cutWoods(Government government) {
 //??
+    }
+
+    public static GameMenuMessages captureBuilding(Coordinate position) {
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() == null)
+            return GameMenuMessages.NO_BUILDING;
+        if(!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
+                getBuilding().getBuildingType().getName().equals(BuildingTypeName.SMALL_STONE_GATEHOUSE)
+        && !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
+                getBuilding().getBuildingType().getName().equals(BuildingTypeName.LARGE_STONE_GATEHOUSE))
+            return GameMenuMessages.UNCAPTURABLE_BUILDING_TYPE;
+
+
+        return GameMenuMessages.GATEHOUSE_CAPTURED_SUCCESSFULLY;
     }
 
 
