@@ -10,13 +10,8 @@ import org.example.model.game.buildings.buildingconstants.*;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Node;
-import org.example.model.game.units.MilitaryUnit;
-import org.example.model.game.units.SiegeEquipment;
-import org.example.model.game.units.Unit;
-import org.example.model.game.units.unitconstants.MilitaryUnitRole;
-import org.example.model.game.units.unitconstants.MilitaryUnitStance;
-import org.example.model.game.units.unitconstants.Role;
-import org.example.model.game.units.unitconstants.RoleName;
+import org.example.model.game.units.*;
+import org.example.model.game.units.unitconstants.*;
 import org.example.view.CustomizeMapMenu;
 import org.example.view.enums.messages.GameMenuMessages;
 import org.example.view.enums.messages.MountEquipmentMenu;
@@ -179,11 +174,30 @@ public class GameMenuController {
         if (count < 0) return GameMenuMessages.INVALID_UNIT_COUNT;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canUnitsGoHere(false))
             return GameMenuMessages.UNWALKABLE_LAND;
-        for (int i = 0; i < count; i++) {
-            new Unit(position, RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlock();
+        for (Unit producedUnit : produceUnits(type, count, position)) {
+            producedUnit.addToGovernmentAndBlock();
         }
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
+
+    public static ArrayList<Unit> produceUnits(String type, int count, Coordinate position) {
+        ArrayList<Unit> units = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            RoleName roleName = RoleName.getRoleNameByNameString(type);
+            if (Role.getRoleByName(roleName) instanceof MilitaryPersonRole)
+                units.add(new MilitaryPerson(position, RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
+            else if (Role.getRoleByName(roleName).equals(RoleName.ENGINEER))
+                units.add(new Engineer(position,roleName,Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
+            else if(Role.getRoleByName(roleName).equals(RoleName.TUNNELER))
+                units.add(new Tunneler(position,roleName,Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
+            else if(Role.getRoleByName(roleName).equals(RoleName.LADDERMAN))
+                units.add(new Ladderman(position,roleName,Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
+            else
+                units.add(new Unit(position, RoleName.getRoleNameByNameString(type), Stronghold.getCurrentBattle().getGovernmentAboutToPlay()));
+        }
+        return units;
+    }
+
 
     public static void clearForces(Coordinate destination) {
         Block target = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination);
