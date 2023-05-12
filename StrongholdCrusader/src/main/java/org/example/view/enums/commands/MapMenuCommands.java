@@ -4,10 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum MapMenuCommands {
-    SHOW_MAP("\\s*show\\s+map.*"),
-    MOVE_MAP("\\s*move\\s+map.*"),
-    SHOW_DETAILS("\\s*show\\s+details.*"),
-    SHOW_EXTENDED_DETAILS("\\s*show\\s+extended\\s+details.*"),
+    SHOW_MAP("^\\s*show\\s+map\\-.+$"),
+    MOVE_MAP("^\\s*move\\s+map.*$"),
+    SHOW_DETAILS("^\\s*show\\s+details.*$"),
+    SHOW_EXTENDED_DETAILS("^\\s*show\\s+extended\\s+details.*$"),
     BACK("\\s*back\\s*");
     public final String regex;
 

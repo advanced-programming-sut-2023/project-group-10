@@ -64,14 +64,16 @@ public class MapMenuController {
         int count = 0;
         ArrayList<MilitaryUnit> militaryUnits = map.getBlockByRowAndColumn(position).getAllMilitaryUnits();
         HashMap<String, ArrayList<MilitaryPerson>> militaryPeople = new HashMap<>();
+        ArrayList<MilitaryPerson> newUnits = new ArrayList<>();
         for (MilitaryUnit militaryUnit : militaryUnits) {
             if ((militaryUnit instanceof MilitaryPerson)) {
-                ArrayList<MilitaryPerson> newUnits = new ArrayList<>();
+
                 if (militaryPeople.containsKey(militaryUnit.getRole().toString())) {
-                    militaryPeople.get(militaryUnit.getRole().getName().toString());
+                    newUnits = militaryPeople.get(militaryUnit.getRole().getName().toString());
                     newUnits.add((MilitaryPerson) militaryUnit);
                     militaryPeople.put(militaryUnit.getRole().getName().toString(), newUnits);
                 } else {
+                    newUnits = new ArrayList<>();
                     newUnits.add((MilitaryPerson) militaryUnit);
                     militaryPeople.put(militaryUnit.getRole().getName().toString(), newUnits);
                 }
@@ -104,15 +106,15 @@ public class MapMenuController {
             if (unit.getRole().equals(Role.getRoleByName(RoleName.PEASANT)))
                 peasants.add(unit);
         }
-        details=details.concat("you have "+peasants.size()+" peasants\n");
-        if(peasants.size()==0)
+        details = details.concat("you have " + peasants.size() + " peasants\n");
+        if (peasants.size() == 0)
             return details;
-        details=details.concat("Their hitpoints are: \n");
+        details = details.concat("Their hitpoints are: \n");
         for (Unit peasant : peasants) {
-           details= details.concat(Integer.toString(peasant.getHitPoint())+" - ");
+            details = details.concat(Integer.toString(peasant.getHitPoint()) + " - ");
         }
-        details=details.substring(0,details.length()-2);
-        details=details.concat("\n");
+        details = details.substring(0, details.length() - 2);
+        details = details.concat("\n");
         return details;
     }
 
