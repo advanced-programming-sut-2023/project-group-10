@@ -144,15 +144,15 @@ public class GameMenuController {
         return GameMenuMessages.MOUNT_SUCCESSFUL;
     }
 
-    public static void initializeGame(HashMap<String, String> players,HashMap<String, Coordinate> keeps, org.example.model.game.envirnmont.Map map) {
+    public static void initializeGame(HashMap<String, String> players, HashMap<String, Coordinate> keeps, org.example.model.game.envirnmont.Map map) {
         Government[] governments = new Government[players.size()];
         int x = 0;
 
         for (Map.Entry<String, String> player : players.entrySet()) {
             User owner = User.getUserByUsername(player.getKey());
             Color color = Color.getColorByName(player.getValue());
-            Coordinate keep=keeps.get(player.getKey());
-            Government gov = new Government(owner, color,keep);
+            Coordinate keep = keeps.get(player.getKey());
+            Government gov = new Government(owner, color, keep);
             gov.addItem(Item.WOOD, 20);
             gov.addItem(Item.STONE, 20);
             gov.setGold(20);
@@ -222,7 +222,6 @@ public class GameMenuController {
         Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         moveAllUnits(currentGovernment);
         attackAllUnits(currentGovernment);
-        //farms and etc. should produce at every turn(if their rates matches)
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
             produceItems(government);
         }
@@ -392,13 +391,12 @@ public class GameMenuController {
         return closestEnemyUnit;
     }
 
-    private static void cutWoods(Government government) {
-//??
-    }
-
 
     private static void addPeasants(Government government) {
-        int newPeasants=government.getExcessFood()/5;
-        government.addUnit(new Unit(government.getKeep(),RoleName.PEASANT,government));
+        int newPeasants = government.getExcessFood() / 5;
+        for (int i = 0; i < newPeasants; i++) {
+            government.addUnit(new Unit(government.getKeep(), RoleName.PEASANT, government));
+
+        }
     }
 }
