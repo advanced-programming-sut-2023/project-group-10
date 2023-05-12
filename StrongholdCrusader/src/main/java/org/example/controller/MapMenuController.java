@@ -69,9 +69,9 @@ public class MapMenuController {
                 count++;
             }
         }
-        details = details.concat(" Military People count : " + count + "\n");
+        details = details.concat("Military People count : " + count + "\n");
         for (java.util.Map.Entry<MilitaryPersonRole, Integer> militaryPersonRoleIntegerEntry : militaryPeople.entrySet()) {
-            details = details.concat(militaryPersonRoleIntegerEntry.getValue() + " of " + militaryPersonRoleIntegerEntry.getKey() + "\n");
+            details = details.concat(militaryPersonRoleIntegerEntry.getValue() + " of " + militaryPersonRoleIntegerEntry.getKey().getName().toString() + "\n");
         }
         return details;
     }

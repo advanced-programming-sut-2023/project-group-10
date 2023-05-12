@@ -37,6 +37,8 @@ public class Government {
         this.popularity = NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
         this.color = color;
         this.keep = keep;
+        for (Item item : Item.values())
+            itemList.put(item, 0.0);
     }
 
     public Coordinate getKeep() {

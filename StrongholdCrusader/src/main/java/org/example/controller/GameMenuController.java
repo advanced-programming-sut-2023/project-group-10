@@ -128,7 +128,7 @@ public class GameMenuController {
 
     public static String showCurrentPlayer() {
         User player = GameMenuController.currentPlayer();
-        return ("player \" " + player.getNickname() + "\" with username : " + player.getUsername() + "is about to play!");
+        return ("player \"" + player.getNickname() + "\" with username : " + player.getUsername() + " is about to play!");
     }
 
     public static GameMenuMessages selectBuilding(Coordinate position) {
