@@ -14,7 +14,6 @@ public class User {
     private String questionNumber;
     private String questionAnswer;
     private int highScore;
-    //I think it should be moved in the game class or whatever
     private static ArrayList<User> users = new ArrayList<>();
     static final Gson gson = new Gson();
 
@@ -119,7 +118,6 @@ public class User {
         return null;
     }
 
-    //TODO: discuss the type
     public void setSecurityQuestion(String number, String answer) {
         questionNumber = number;
         questionAnswer = answer;
@@ -145,9 +143,12 @@ public class User {
     public void setHighScore(int highScore) {
         if (this.highScore <= highScore)
             this.highScore = highScore;
+        Stronghold.dataBase.saveUsersToFile();
     }
 
     public int getRank() {
+        Stronghold.dataBase.loadUsersFromFile();
+
         return 0;
     }
 
