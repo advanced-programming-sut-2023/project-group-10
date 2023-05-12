@@ -73,10 +73,10 @@ public class InputProcessor {
         String rate = "";
         Pattern pattern = Pattern.compile(".*-r\\s*(?<rate>-?\\S+).*");
         Matcher matcher = pattern.matcher(input);
-        if(matcher.matches()){
-            rate=matcher.group("rate");
-           input= input.replaceFirst("-r","");
-           input=input.replaceFirst(rate,"");
+        if (matcher.matches()) {
+            rate = matcher.group("rate");
+            input = input.replaceFirst("-r", "");
+            input = input.replaceFirst(rate, "");
         }
         HashMap<String, String> options = InputProcessor.separateInput(input);
         for (Map.Entry<String, String> option : options.entrySet()) {

@@ -2,7 +2,6 @@ package org.example.model.game.buildings.buildingconstants;
 
 import org.example.model.game.Item;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class ItemProducingBuildingType extends BuildingType {
@@ -10,6 +9,14 @@ public class ItemProducingBuildingType extends BuildingType {
     private final int itemCountProducedPerProduction;
     private final boolean isFarm;
     private final Item[] items;
+
+    public ItemProducingBuildingType(BuildingTypeName name, int maxHitPoint, int buildingCost, Map<Item, Integer> resourcesNeeded, int employeeCount, boolean isRepairable, int rate, int itemCountProducedPerProduction, boolean isFarm, Item... items) {
+        super(name, maxHitPoint, buildingCost, resourcesNeeded, employeeCount, isRepairable);
+        this.rate = rate;
+        this.itemCountProducedPerProduction = itemCountProducedPerProduction;
+        this.isFarm = isFarm;
+        this.items = items;
+    }
 
     public static void initializeTypes() {
         new ItemProducingBuildingType(BuildingTypeName.MILL, defaultHitPoint * 3, 0, Map.of(Item.WOOD, 20), 3, false, 2, 5, false, Item.FLOUR);
@@ -31,14 +38,6 @@ public class ItemProducingBuildingType extends BuildingType {
         new ItemProducingBuildingType(BuildingTypeName.HUNTER_POST, defaultHitPoint * 2, 0, Map.of(Item.WOOD, 5), 1, false, 1, 3, false, Item.MEAT);
         new ItemProducingBuildingType(BuildingTypeName.BAKERY, defaultHitPoint * 3, 0, Map.of(Item.WOOD, 10), 1, false, 2, 3, true, Item.BREAD);
         new ItemProducingBuildingType(BuildingTypeName.BREWERY, defaultHitPoint * 3, 0, Map.of(Item.WOOD, 10), 1, false, 1, 2, true, Item.ALE);
-    }
-
-    public ItemProducingBuildingType(BuildingTypeName name, int maxHitPoint, int buildingCost, Map<Item, Integer> resourcesNeeded, int employeeCount, boolean isRepairable, int rate, int itemCountProducedPerProduction, boolean isFarm, Item... items) {
-        super(name, maxHitPoint, buildingCost, resourcesNeeded, employeeCount, isRepairable);
-        this.rate = rate;
-        this.itemCountProducedPerProduction = itemCountProducedPerProduction;
-        this.isFarm = isFarm;
-        this.items = items;
     }
 
     public int getRate() {

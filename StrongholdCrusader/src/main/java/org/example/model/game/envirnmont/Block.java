@@ -13,9 +13,9 @@ import org.example.model.game.units.Unit;
 import java.util.ArrayList;
 
 public class Block {
+    private final ArrayList<Unit> units;
     private BlockTexture texture;
     private Droppable droppable;
-    private final ArrayList<Unit> units;
     private boolean onFire;
     private boolean isKeep;
 
@@ -28,6 +28,10 @@ public class Block {
 
     public BlockTexture getTexture() {
         return texture;
+    }
+
+    public void setTexture(BlockTexture texture) {
+        this.texture = texture;
     }
 
     public Droppable getDroppable() {
@@ -70,10 +74,6 @@ public class Block {
 
     public void setKeep(boolean keep) {
         isKeep = keep;
-    }
-
-    public void setTexture(BlockTexture texture) {
-        this.texture = texture;
     }
 
     public void clearBlock() {

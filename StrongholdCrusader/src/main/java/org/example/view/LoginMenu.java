@@ -153,7 +153,7 @@ public class LoginMenu {
         return password;
     }
 
-    private static void loginSuccessful(){
+    private static void loginSuccessful() {
         CaptchaGenerator.run();
         System.out.println("User logged in successfully!");
         MainMenu.run();

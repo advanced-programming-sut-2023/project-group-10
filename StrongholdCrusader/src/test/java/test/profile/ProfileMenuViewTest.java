@@ -107,8 +107,9 @@ public class ProfileMenuViewTest {
         String response = ProfileMenu.changeEmail("profile change -e ");
         Assertions.assertEquals("No email provided!", response);
     }
+
     @Test
-    public void changeEmailInvalidFormat(){
+    public void changeEmailInvalidFormat() {
 
         String response = ProfileMenu.changeEmail("profile change -e me.mail@mail");
         Assertions.assertEquals("Invalid email format!", response);
@@ -139,7 +140,6 @@ public class ProfileMenuViewTest {
 //        Assertions.assertEquals(User.getUserByUsername("mehrazin001").getEmail(),"mehrazin@gmail.com");
 //
 //    }
-
 
 
 }

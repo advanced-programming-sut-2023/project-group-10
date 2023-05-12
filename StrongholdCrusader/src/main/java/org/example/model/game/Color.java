@@ -15,15 +15,15 @@ public enum Color {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public static Color getColorByName(String name){
-        for(Color color : Color.values()){
-            if(color.getName().equals(name))
+    public static Color getColorByName(String name) {
+        for (Color color : Color.values()) {
+            if (color.getName().equals(name))
                 return color;
         }
         return null;
+    }
+
+    public String getName() {
+        return name;
     }
 }

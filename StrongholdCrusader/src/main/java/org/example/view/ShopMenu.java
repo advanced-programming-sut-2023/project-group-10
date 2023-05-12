@@ -17,7 +17,7 @@ public class ShopMenu {
         while (true) {
             input = scanner.nextLine();
             if ((ShopMenuCommands.getMatcher(input, ShopMenuCommands.SHOW_LIST)) != null) showPriceList();
-            else if(ShopMenuCommands.getMatcher(input, ShopMenuCommands.SHOW_GOLD) != null)
+            else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.SHOW_GOLD) != null)
                 System.out.println(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold());
             else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.SELL) != null) sell(input);
             else if (ShopMenuCommands.getMatcher(input, ShopMenuCommands.BUY) != null) buy(input);

@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class RandomGenerator {
-    private static int tradeNumber = 0;
     private static final String[] slogans = {
             "I have dispatched another of our enemies, my friend. The struggle continues!",
             "You fight well, my friend. You have struck a mighty blow for our cause.",
@@ -20,6 +19,7 @@ public class RandomGenerator {
             "Your time on this earth is limited. Time to say your prayers!",
             "I will kill you soon! You and all your vermin!"
     };
+    private static int tradeNumber = 0;
 
     public static String getRandomSlogan() {
         Random random = new Random();
@@ -27,9 +27,9 @@ public class RandomGenerator {
     }
 
     public static String generateSecurePassword() {
-        Random randomNumberOfLetters=new Random();
-        String upperCaseStr = RandomStringUtils.random(randomNumberOfLetters.nextInt(4)+2, 65, 90, true, true);
-        String lowerCaseStr = RandomStringUtils.random(randomNumberOfLetters.nextInt(4)+2, 97, 122, true, true);
+        Random randomNumberOfLetters = new Random();
+        String upperCaseStr = RandomStringUtils.random(randomNumberOfLetters.nextInt(4) + 2, 65, 90, true, true);
+        String lowerCaseStr = RandomStringUtils.random(randomNumberOfLetters.nextInt(4) + 2, 97, 122, true, true);
         String numbersStr = RandomStringUtils.randomNumeric(2);
         String specialCharStr = RandomStringUtils.random(2, 33, 47, false, false);
         String totalCharsStr = RandomStringUtils.randomAlphanumeric(2);

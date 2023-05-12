@@ -4,8 +4,6 @@ import org.example.model.Stronghold;
 import org.example.model.game.Government;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
-import org.example.model.game.units.unitconstants.MilitaryUnitRole;
-import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 
 public class Engineer extends MilitaryUnit {

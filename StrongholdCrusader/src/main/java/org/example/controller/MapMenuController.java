@@ -62,13 +62,13 @@ public class MapMenuController {
                     map.getBlockByRowAndColumn(position).getBuilding().getHitPoint() + "\n");
         }
         int count = 0;
-        ArrayList<MilitaryUnit> militaryUnits = map.getBlockByRowAndColumn(position).getAllMilitaryUnits();
+        ArrayList<MilitaryUnit> militaryUnits = map.getBlockByRowAndColumn(position).getMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         HashMap<String, ArrayList<MilitaryPerson>> militaryPeople = new HashMap<>();
-        ArrayList<MilitaryPerson> newUnits = new ArrayList<>();
+        ArrayList<MilitaryPerson> newUnits;
         for (MilitaryUnit militaryUnit : militaryUnits) {
             if ((militaryUnit instanceof MilitaryPerson)) {
 
-                if (militaryPeople.containsKey(militaryUnit.getRole().toString())) {
+                if (militaryPeople.containsKey(militaryUnit.getRole().getName().toString())) {
                     newUnits = militaryPeople.get(militaryUnit.getRole().getName().toString());
                     newUnits.add((MilitaryPerson) militaryUnit);
                     militaryPeople.put(militaryUnit.getRole().getName().toString(), newUnits);

@@ -9,10 +9,10 @@ public class Trade {
     private final String recipientId;
     private final String senderId;
     private final HashMap<String, String> messages = new HashMap<>();
-    private boolean isDisplayedInHistory;
     private final Item item;
     private final int amount;
     private final int price;
+    private boolean isDisplayedInHistory;
     private boolean acceptedStatus;
 
 
@@ -26,6 +26,10 @@ public class Trade {
         this.price = price;
         this.acceptedStatus = false;
         this.isDisplayedInHistory = false;
+    }
+
+    public static void tradeItem(Trade trade) {
+
     }
 
     public String getId() {
@@ -72,16 +76,11 @@ public class Trade {
         this.acceptedStatus = acceptedStatus;
     }
 
-
-    public static void tradeItem(Trade trade) {
-
+    public boolean isDisplayedInHistory() {
+        return isDisplayedInHistory;
     }
 
     public void setDisplayedInHistory(boolean displayedInHistory) {
         isDisplayedInHistory = displayedInHistory;
-    }
-
-    public boolean isDisplayedInHistory() {
-        return isDisplayedInHistory;
     }
 }

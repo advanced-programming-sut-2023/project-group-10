@@ -16,23 +16,25 @@ public enum MapDirections {
         this.name = name;
         this.number = number;
     }
-    public static MapDirections getRandom(){
+
+    public static MapDirections getRandom() {
         Random ran = new Random();
         return MapDirections.getByNumber(ran.nextInt(4));
     }
 
     public static MapDirections getByNumber(int number) {
         for (MapDirections value : MapDirections.values()) {
-         if(value.number==number)
-             return value;
+            if (value.number == number)
+                return value;
         }
         return null;
     }
-    public static MapDirections getByName(String name){
+
+    public static MapDirections getByName(String name) {
         for (MapDirections value : MapDirections.values()) {
             if (value.name.equals(name))
                 return value;
-            else if( name.equals("r"))
+            else if (name.equals("r"))
                 return MapDirections.getRandom();
 
         }

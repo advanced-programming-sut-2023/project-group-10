@@ -15,15 +15,15 @@ public abstract class Entity implements Droppable {
         return position;
     }
 
+    protected void setPosition(Coordinate newCoordinate) {
+        this.position = newCoordinate;
+    }
+
     public Government getGovernment() {
         return government;
     }
 
     public void setGovernment(Government government) {
         this.government = government;
-    }
-
-    protected void setPosition(Coordinate newCoordinate) {
-        this.position = newCoordinate;
     }
 }

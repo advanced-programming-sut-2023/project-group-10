@@ -16,39 +16,42 @@ public class LoginMenuControllerTest {
     public void testForUserExists() {
 
         LoginMenuController loginMenuController = Mockito.mock(LoginMenuController.class);
-        LoginMenuMessages response= loginMenuController.login("mehrazin002","password",false);
-        Assertions.assertEquals(LoginMenuMessages.USERNAME_DOESNT_EXIST,response);
+        LoginMenuMessages response = loginMenuController.login("mehrazin002", "password", false);
+        Assertions.assertEquals(LoginMenuMessages.USERNAME_DOESNT_EXIST, response);
 
     }
 
     @Test
-    public void testForForgetPasswordWrongSecurityAnswer(){
+    public void testForForgetPasswordWrongSecurityAnswer() {
 
         LoginMenuController loginMenuController = Mockito.mock(LoginMenuController.class);
-        LoginMenuMessages response= loginMenuController.forgetPassword("mehrazin001","answer","newPassword");
-        Assertions.assertEquals(LoginMenuMessages.SECURITY_ANSWER_WRONG,response);
+        LoginMenuMessages response = loginMenuController.forgetPassword("mehrazin001", "answer", "newPassword");
+        Assertions.assertEquals(LoginMenuMessages.SECURITY_ANSWER_WRONG, response);
     }
+
     @Test
-    public void testForForgetPasswordLength(){
+    public void testForForgetPasswordLength() {
 
         LoginMenuController loginMenuController = Mockito.mock(LoginMenuController.class);
 
         LoginMenuMessages response = loginMenuController.forgetPassword
-                ("mehrazin001","Father's name","pass");
-        Assertions.assertEquals(LoginMenuMessages.SHORT_PASSWORD,response);
+                ("mehrazin001", "Father's name", "pass");
+        Assertions.assertEquals(LoginMenuMessages.SHORT_PASSWORD, response);
     }
+
     @Test
     public void testForgetPasswordLowerCaseUse() {
         LoginMenuController loginMenuController = Mockito.mock(LoginMenuController.class);
 
-        LoginMenuMessages response = loginMenuController.forgetPassword("mehrazin001","Father's name","PASSWORD");
+        LoginMenuMessages response = loginMenuController.forgetPassword("mehrazin001", "Father's name", "PASSWORD");
         Assertions.assertEquals(LoginMenuMessages.NO_LOWERCASE_LETTER, response);
     }
+
     @Test
     public void testForgetPasswordUpperCaseUse() {
         LoginMenuController loginMenuController = Mockito.mock(LoginMenuController.class);
 
-        LoginMenuMessages response = loginMenuController.forgetPassword("mehrazin001","Father's name","password");
+        LoginMenuMessages response = loginMenuController.forgetPassword("mehrazin001", "Father's name", "password");
         Assertions.assertEquals(LoginMenuMessages.NO_UPPERCASE_LETTER, response);
     }
 
@@ -57,7 +60,7 @@ public class LoginMenuControllerTest {
     public void testForgetPasswordContainsNumber() {
         LoginMenuController loginMenuController = Mockito.mock(LoginMenuController.class);
 
-        LoginMenuMessages response= loginMenuController.forgetPassword("mehrazin001","Father's name","PASSword");
+        LoginMenuMessages response = loginMenuController.forgetPassword("mehrazin001", "Father's name", "PASSword");
         Assertions.assertEquals(LoginMenuMessages.NO_NUMBER, response);
     }
 
@@ -65,7 +68,7 @@ public class LoginMenuControllerTest {
     public void testForgetPasswordForSpecialCharacters() {
         LoginMenuController loginMenuController = Mockito.mock(LoginMenuController.class);
 
-        LoginMenuMessages response= LoginMenuController.forgetPassword("mehrazin001","Father's name","PASSword123");
+        LoginMenuMessages response = LoginMenuController.forgetPassword("mehrazin001", "Father's name", "PASSword123");
         Assertions.assertEquals(LoginMenuMessages
                 .NO_SPECIAL_CHARACTER, response);
     }

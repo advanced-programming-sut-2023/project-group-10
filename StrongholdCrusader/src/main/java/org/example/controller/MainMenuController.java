@@ -28,7 +28,7 @@ public class MainMenuController {
         return MainMenuMessages.SUCCESSFUL_LOGOUT;
     }
 
-    public static MainMenuMessages getPlayers(String username, String color, HashMap<String, String> players, HashMap<String, Coordinate> keeps,Coordinate keep) {
+    public static MainMenuMessages getPlayers(String username, String color, HashMap<String, String> players, HashMap<String, Coordinate> keeps, Coordinate keep) {
         User myUser = User.getUserByUsername(username);
         if (myUser == null) {
             return MainMenuMessages.INVALID_USERNAME;
@@ -43,7 +43,7 @@ public class MainMenuController {
         }
         if (players.containsValue(myColor.getName()))
             return MainMenuMessages.TAKEN_COLOR;
-        if(keeps.containsValue(keep))
+        if (keeps.containsValue(keep))
             return MainMenuMessages.TAKEN_POSITION_FOR_KEEP;
 
         return MainMenuMessages.SUCCESS;

@@ -8,6 +8,13 @@ public class Role {
     private final int maxHitPoint;
     private final Quality speed;
 
+    protected Role(RoleName name, int maxHitPoint, Quality speed) {
+        this.name = name;
+        this.maxHitPoint = maxHitPoint;
+        this.speed = speed;
+        allRoles.add(this);
+    }
+
     public static void initializeRoles() {
         new Role(RoleName.PEASANT, 50, Quality.AVERAGE);
         new Role(RoleName.LADY, 400, Quality.LOW);
@@ -17,13 +24,6 @@ public class Role {
         new Role(RoleName.CHILD, 50, Quality.AVERAGE);
         new Role(RoleName.MOTHER_AND_BABIES, 50, Quality.AVERAGE);
         new Role(RoleName.DRUNKARD, 50, Quality.LOW);
-    }
-
-    protected Role(RoleName name, int maxHitPoint, Quality speed) {
-        this.name = name;
-        this.maxHitPoint = maxHitPoint;
-        this.speed = speed;
-        allRoles.add(this);
     }
 
     public static Role getRoleByName(RoleName name) {

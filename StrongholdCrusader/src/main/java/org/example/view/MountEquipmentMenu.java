@@ -35,7 +35,7 @@ public class MountEquipmentMenu {
                     System.out.println("no engineers are available at this block");
                 else if (result == MountEquipmentMenuMessages.SELECTION_SUCCESSFUL) {
                     count = MountEquipmentMenuController.getUnselectedEngineersCount();
-                    System.out.println("engineer(s) selected successfully, "+count+" engineers left to go.");
+                    System.out.println("engineer(s) selected successfully, " + count + " engineers left to go.");
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());

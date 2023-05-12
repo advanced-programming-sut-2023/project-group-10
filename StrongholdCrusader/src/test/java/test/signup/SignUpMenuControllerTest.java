@@ -14,9 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 
 public class SignUpMenuControllerTest {
-@Mock
+    @Mock
     DataBase dataBase;
-@InjectMocks
+    @InjectMocks
     SignupMenuController signupMenuController;
 
     @Test
@@ -103,6 +103,7 @@ public class SignUpMenuControllerTest {
         Assertions.assertEquals(SignupMenuMessages.SHOW_QUESTIONS, signupMenuMessage);
 
     }
+
     @Test
     public void testEmailFormat1() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
@@ -144,7 +145,7 @@ public class SignUpMenuControllerTest {
 
     @Test
     public void testTakenEmail() throws Exception {
-         signupMenuController = Mockito.mock(SignupMenuController.class);
+        signupMenuController = Mockito.mock(SignupMenuController.class);
         signupMenuController.pickSecurityQuestionAndCreateUser
                 ("1", "Father's name", "Father's name",
                         "rozhin001", "R0zhin001", "RozhTagh", "noSlogan", "rozhin@mail.com");

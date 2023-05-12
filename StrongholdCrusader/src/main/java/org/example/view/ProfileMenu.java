@@ -287,7 +287,7 @@ public class ProfileMenu {
         String result = "";
         result = result.concat("Username: " + user.getUsername() + "\n");
         result = result.concat("Nickname: " + user.getNickname() + "\n");
-        result = result.concat("Email: " + user.getEmail());
+        result = result.concat("Email: " + user.getEmail() + "\n");
 
         if (user.getSlogan() != null)
             result = result.concat("Slogan: " + user.getSlogan() + "\n");

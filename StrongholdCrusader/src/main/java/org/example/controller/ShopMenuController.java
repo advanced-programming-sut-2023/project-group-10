@@ -9,7 +9,7 @@ public class ShopMenuController {
     public static String showPriceList() {
         String list = "~~~ PRICE LIST ~~~";
         for (Item item : Item.values()) {
-            if(item.isSellable()) {
+            if (item.isSellable()) {
                 list += "\nname: " + item.getName();
                 list += "\nprice: " + item.getBuyPrice();
                 list += "\nyou have " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(item) + " of this item";

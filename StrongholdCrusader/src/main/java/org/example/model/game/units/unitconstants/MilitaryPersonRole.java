@@ -14,6 +14,15 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
     private final boolean canClimbLadders;
     private final boolean canDigMoats;
 
+    private MilitaryPersonRole(RoleName name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost, BuildingTypeName producingBuilding, Item weapon, boolean canClimbLadders, boolean canDigMoats, Item... armors) {
+        super(name, maxHitPoint, speed, attackRating, attackRange, accuracy, cost);
+        this.producingBuilding = producingBuilding;
+        this.weapon = weapon;
+        this.armors = armors;
+        this.canClimbLadders = canClimbLadders;
+        this.canDigMoats = canDigMoats;
+    }
+
     public static void initializeRoles() {
         new MilitaryPersonRole(RoleName.LORD, defaultHitPoint * Quality.EXTREMELY_HIGH.getValue(), Quality.LOW, Quality.EXTREMELY_HIGH, Quality.ZERO, Quality.EXTREMELY_HIGH, 0, null, null, false, false);
         new MilitaryPersonRole(RoleName.ARCHER, defaultHitPoint * Quality.LOW.getValue(), Quality.HIGH, Quality.LOW, Quality.AVERAGE, Quality.AVERAGE, 12, BuildingTypeName.BARRACKS, Item.BOW, true, true);
@@ -34,15 +43,6 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
         new MilitaryPersonRole(RoleName.HORSE_ARCHER, defaultHitPoint * Quality.AVERAGE.getValue(), Quality.VERY_HIGH, Quality.HIGH, Quality.AVERAGE, Quality.AVERAGE, 60, BuildingTypeName.MERCENARY_POST, null, false, false);
         new MilitaryPersonRole(RoleName.ARABIAN_SWORDSMAN, defaultHitPoint * Quality.HIGH.getValue(), Quality.VERY_HIGH, Quality.HIGH, Quality.ZERO, Quality.EXTREMELY_HIGH, 80, BuildingTypeName.MERCENARY_POST, null, false, false);
         new MilitaryPersonRole(RoleName.FIRE_THROWER, defaultHitPoint * Quality.LOW.getValue(), Quality.VERY_HIGH, Quality.HIGH, Quality.AVERAGE, Quality.AVERAGE, 100, BuildingTypeName.MERCENARY_POST, null, false, false);
-    }
-
-    private MilitaryPersonRole(RoleName name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost, BuildingTypeName producingBuilding, Item weapon, boolean canClimbLadders, boolean canDigMoats, Item... armors) {
-        super(name, maxHitPoint, speed, attackRating, attackRange, accuracy, cost);
-        this.producingBuilding = producingBuilding;
-        this.weapon = weapon;
-        this.armors = armors;
-        this.canClimbLadders = canClimbLadders;
-        this.canDigMoats = canDigMoats;
     }
 
     public static MilitaryPersonRole[] getRolesProducedInBuilding(BuildingTypeName buildingTypeName) {
