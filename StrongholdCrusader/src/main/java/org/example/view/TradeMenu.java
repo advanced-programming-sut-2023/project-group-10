@@ -23,7 +23,7 @@ public class TradeMenu {
             else if (TradeMenuCommands.getMatcher(input, TradeMenuCommands.TRADE_LIST) != null) showTradeList();
             else if (TradeMenuCommands.getMatcher(input, TradeMenuCommands.HISTORY) != null) showHistory();
             else if (TradeMenuCommands.getMatcher(input, TradeMenuCommands.BACK) != null) return;
-            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("trade menu");
+            else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("trade menu");
             else System.out.println("Invalid command!");
         }
     }

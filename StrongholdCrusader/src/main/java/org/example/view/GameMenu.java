@@ -12,8 +12,8 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class GameMenu {
-    public static void run(HashMap<String, String> players, Map map) {
-        GameMenuController.initializeGame(players, map);
+    public static void run(HashMap<String, String> players, HashMap<String, Coordinate> keeps, Map map) {
+        GameMenuController.initializeGame(players, keeps, map);
         getCurrentPlayer();
         Scanner scanner = new Scanner(System.in);
         String input;

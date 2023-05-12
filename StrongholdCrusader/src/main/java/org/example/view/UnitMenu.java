@@ -31,6 +31,7 @@ public class UnitMenu {
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.FILL_MOAT) != null) fillMoat(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.BUILD) != null) build(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.STOP) != null) stop();
+            else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.CAPTURE) != null) capture(input);
             else if (UnitMenuCommands.getMatcher(input, UnitMenuCommands.DISBAND) != null) {
                 disband();
                 if (UnitMenuController.selectedMilitaryUnits == null) return;
@@ -253,11 +254,11 @@ public class UnitMenu {
         if (result == UnitMenuMessages.SUCCESSFUL_DISBAND) System.out.println("units were disbanded");
     }
 
-    private static void capture(String input){
+    private static void capture(String input) {
         try {
             Coordinate destination = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             UnitMenuMessages result = UnitMenuController.captureBuilding(destination);
-            switch (result){
+            switch (result) {
                 case NO_CAPTURING_UNITS:
                     System.out.println("you don't have any units which can capture1");
                     break;

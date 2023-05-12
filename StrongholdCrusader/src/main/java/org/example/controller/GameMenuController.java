@@ -144,14 +144,15 @@ public class GameMenuController {
         return GameMenuMessages.MOUNT_SUCCESSFUL;
     }
 
-    public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {
+    public static void initializeGame(HashMap<String, String> players,HashMap<String, Coordinate> keeps, org.example.model.game.envirnmont.Map map) {
         Government[] governments = new Government[players.size()];
         int x = 0;
 
         for (Map.Entry<String, String> player : players.entrySet()) {
             User owner = User.getUserByUsername(player.getKey());
             Color color = Color.getColorByName(player.getValue());
-            Government gov = new Government(owner, color);
+            Coordinate keep=keeps.get(player.getKey());
+            Government gov = new Government(owner, color,keep);
             gov.addItem(Item.WOOD, 20);
             gov.addItem(Item.STONE, 20);
             gov.setGold(20);
@@ -395,13 +396,9 @@ public class GameMenuController {
 //??
     }
 
-    public static GameMenuMessages captureBuilding(Coordinate position) {
-        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() == null)
-            return GameMenuMessages.NO_BUILDING;
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding().getBuildingType().getName().equals(BuildingTypeName.SMALL_STONE_GATEHOUSE) && !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding().getBuildingType().getName().equals(BuildingTypeName.LARGE_STONE_GATEHOUSE))
-            return GameMenuMessages.UNCAPTURABLE_BUILDING_TYPE;
 
-
-        return GameMenuMessages.GATEHOUSE_CAPTURED_SUCCESSFULLY;
+    private static void addPeasants(Government government) {
+        int newPeasants=government.getExcessFood()/5;
+        government.addUnit(new Unit(government.getKeep(),RoleName.PEASANT,government));
     }
 }

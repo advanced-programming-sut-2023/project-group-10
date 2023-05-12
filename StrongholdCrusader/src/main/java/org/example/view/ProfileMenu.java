@@ -49,7 +49,7 @@ public class ProfileMenu {
             else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.DISPLAY_PROFILE) != null)
                 showProfile();
 
-            else if(command.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+            else if (command.matches("^\\s*show\\s+menu\\s+name\\s*$"))
                 System.out.println("profile menu");
 
             else if (ProfileMenuCommands.getMatcher(command, ProfileMenuCommands.BACK) != null)

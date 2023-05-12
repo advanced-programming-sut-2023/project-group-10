@@ -16,7 +16,8 @@ public enum UnitMenuCommands {
     BUILD("\\s*build.*"),
     DISBAND("\\s*disband\\s+unit\\s*"),
     BACK("\\s*back\\s*"),
-    STOP("\\s*stop\\s*");
+    STOP("\\s*stop\\s*"),
+    CAPTURE("^\\s*capture\\s+-.+$");
 
     private final String regex;
 

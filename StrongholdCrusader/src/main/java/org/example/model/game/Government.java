@@ -28,14 +28,20 @@ public class Government {
     private int taxRate;
     private int fearRate;
     private final ArrayList<Trade> tradeList = new ArrayList<>();
+    private final Coordinate keep;
 
-    public Government(User owner, Color color) {
+    public Government(User owner, Color color, Coordinate keep) {
 
         this.owner = owner;
         //TODO: set lord's position to keep's position
         this.lord = new MilitaryPerson(new Coordinate(0, 0), RoleName.LORD, this);
         this.popularity = NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
         this.color = color;
+        this.keep = keep;
+    }
+
+    public Coordinate getKeep() {
+        return keep;
     }
 
     public User getOwner() {
@@ -50,8 +56,8 @@ public class Government {
         return popularity;
     }
 
-    public void changePopularity(int value,String factor) {
-        popularityFactors.put(factor,value);
+    public void changePopularity(int value, String factor) {
+        popularityFactors.put(factor, value);
         popularity += value;
     }
 
@@ -75,7 +81,7 @@ public class Government {
         popularityFactors.put("food", popularityFactors.get("food") + foodRate);
     }
 
-    public void setGold (double gold){
+    public void setGold(double gold) {
         this.gold = gold;
     }
 
@@ -112,7 +118,7 @@ public class Government {
     }
 
     public Double getItemCount(Item item) {
-        return itemList.getOrDefault(item, (double)0);
+        return itemList.getOrDefault(item, (double) 0);
     }
 
     public void changeGold(double change) {
@@ -122,7 +128,7 @@ public class Government {
     public void addItem(Item item, int amount) {
         if (itemList.containsKey(item))
             itemList.put(item, itemList.get(item) + amount);
-        else itemList.put(item, (double)amount);
+        else itemList.put(item, (double) amount);
 
         gold -= item.getBuyPrice() * amount;
 
@@ -132,7 +138,7 @@ public class Government {
         Item item = trade.getItem();
         if (itemList.containsKey(item))
             itemList.put(item, itemList.get(item) + trade.getAmount());
-        else itemList.put(item, (double)trade.getAmount());
+        else itemList.put(item, (double) trade.getAmount());
         gold -= trade.getPrice() * trade.getAmount();
 
     }
@@ -154,7 +160,7 @@ public class Government {
     }
 
     public void changeItemCount(Item item, double change) {
-        itemList.put(item, itemList.getOrDefault(item, (double)0) + change);
+        itemList.put(item, itemList.getOrDefault(item, (double) 0) + change);
     }
 
 

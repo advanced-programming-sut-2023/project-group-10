@@ -1,10 +1,13 @@
 package org.example.view;
 
+import org.example.controller.GameMenuController;
 import org.example.controller.MainMenuController;
 import org.example.model.Stronghold;
 import org.example.model.game.Color;
+import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.MainMenuCommands;
+import org.example.view.enums.messages.GameMenuMessages;
 import org.example.view.enums.messages.MainMenuMessages;
 
 import java.util.HashMap;
@@ -82,6 +85,7 @@ public class MainMenu {
 
         Scanner scanner = new Scanner(System.in);
         HashMap<String, String> players = new HashMap<>();
+        HashMap<String, Coordinate> keeps = new HashMap<>();
         System.out.println("pick a color for your own government [color name]");
         String colors = "";
         for (Color value : Color.values()) {
@@ -101,61 +105,85 @@ public class MainMenu {
             System.out.println("You've taken all your chances,If you wish to start a new game, try again!");
             return;
         }
+        System.out.println("Enter your keeps position: [in -x -y format]");
+        while (true){
+            try {
+                Coordinate position = InputProcessor.getCoordinateFromXYInput(scanner.nextLine(), "-x", "-y");
+                keeps.put(Stronghold.getCurrentUser().getUsername(),position);
+                System.out.println("You've chosen keep successfully, now choose players you wish to play with and their keeps!");
+                break;
+            } catch (Exception exception) {
+                System.out.println(exception.getMessage() + ", Try to enter coordinates again");
+            }
+        }
+
         players.put(Stronghold.getCurrentUser().getUsername(), myOwnColor);
 
-        // input format : -u <player's username> -c <selected color>
+        // input format : -u <player's username> -c <selected color> -x keep's x -y keeps y
         System.out.println("Enter usernames of players you wish to play with: ");
         int enteredCount = 0;
         while (enteredCount < governmentCount - 1) {
-            if (getUsersForGame(players))
+            if (getUsersForGame(players,keeps))
                 enteredCount++;
 
         }
-        GameMenu.run(players, new org.example.model.game.envirnmont.Map(mapSize));
+        GameMenu.run(players,keeps, new org.example.model.game.envirnmont.Map(mapSize));
     }
 
-    private static boolean getUsersForGame(HashMap<String, String> players) {
+    private static boolean getUsersForGame(HashMap<String, String> players,HashMap<String, Coordinate> keeps) {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         HashMap<String, String> options = InputProcessor.separateInput(input);
-        String color = "";
-        String username = "";
+        String username = options.getOrDefault("-u","");;
 
-        for (Map.Entry<String, String> option : options.entrySet()) {
-            switch (option.getKey()) {
-                case "-u":
-                    username = option.getValue();
-                    break;
-                case "-c":
-                    color = option.getValue();
-                    break;
-                default:
-                    System.out.println("Invalid option!");
-                    return false;
-            }
-        }
-        if (color.equals("") || username.equals("")) {
-            System.out.println("missing option!");
+        if (username == null) {
+            System.out.println("empty username filed");
             return false;
         }
-        MainMenuMessages message = MainMenuController.getPlayers(username, color, players);
-        switch (message) {
-            case SUCCESS:
-                System.out.println("player with username " + username + " added to the game successfully with color " + color);
-                break;
-            case USER_IN_THE_BATTLE:
-                System.out.println("Player with username " + username + " is already added!");
-                return false;
-            case TAKEN_COLOR:
-                System.out.println("You've already assigned this color to a player, choose a new color!");
-                return false;
-            case INVALID_USERNAME:
-                System.out.println("Player with " + username + " doesn't seem to exist!");
-                return false;
-            case INVALID_COLOR:
-                System.out.println("You've entered an invalid color name!");
-                return false;
+        if (username.isEmpty()) {
+            System.out.println("missing username");
+            return false;
         }
+        options.remove("-u");
+        String color =options.getOrDefault("-c", "");
+        if (color == null) {
+            System.out.println("empty color filed");
+            return false;
+        }
+        if (color.isEmpty()) {
+            System.out.println("missing color");
+            return false;
+        }
+        options.remove("-c");
+        Coordinate position;
+        try {
+             position = InputProcessor.getCoordinateFromXYInput(options, "-x", "-y");
+            MainMenuMessages message = MainMenuController.getPlayers(username, color,players,keeps,position);
+            switch (message) {
+                case SUCCESS:
+                    System.out.println("player with username " + username + " added to the game successfully with color " + color);
+                    break;
+                case USER_IN_THE_BATTLE:
+                    System.out.println("Player with username " + username + " is already added!");
+                    return false;
+                case TAKEN_COLOR:
+                    System.out.println("You've already assigned this color to a player, choose a new color!");
+                    return false;
+                case INVALID_USERNAME:
+                    System.out.println("Player with " + username + " doesn't seem to exist!");
+                    return false;
+                case INVALID_COLOR:
+                    System.out.println("You've entered an invalid color name!");
+                    return false;
+                case TAKEN_POSITION_FOR_KEEP:
+                    System.out.println("The coordinate you entered for keep is another player's keep");
+                    return false;
+            }
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            return  false;
+        }
+        keeps.put(username, position);
         players.put(username, color);
         return true;
     }

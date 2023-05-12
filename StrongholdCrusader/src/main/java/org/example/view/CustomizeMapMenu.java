@@ -25,8 +25,7 @@ public class CustomizeMapMenu {
             else if (CustomizeMapCommands.getMatcher(input, CustomizeMapCommands.END_CUSTOMIZATION) != null) {
 
                 return CustomizeMapController.getMap();
-            }
-            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("customize map menu");
+            } else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("customize map menu");
             else System.out.println("invalid command!");
         }
     }
@@ -45,7 +44,7 @@ public class CustomizeMapMenu {
         CustomizeMapMessages message = null;
         if (input.contains("-x1") && input.contains("-y1") && input.contains("-x2") && input.contains("-y2"))
             message = setTextureRectangleOfBlocks(options);
-       else if (input.contains("-x") && input.contains("-y")) message = setTextureSingleBlock(options);
+        else if (input.contains("-x") && input.contains("-y")) message = setTextureSingleBlock(options);
 
         else System.out.println("You haven't entered your inputs in a valid format");
         if (message == null) return;

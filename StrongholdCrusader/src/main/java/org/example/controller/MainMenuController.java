@@ -1,8 +1,10 @@
 package org.example.controller;
 
+import org.checkerframework.checker.units.qual.C;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.Color;
+import org.example.model.game.envirnmont.Coordinate;
 import org.example.view.enums.messages.MainMenuMessages;
 
 import java.util.HashMap;
@@ -27,12 +29,14 @@ public class MainMenuController {
         return MainMenuMessages.SUCCESSFUL_LOGOUT;
     }
 
-    public static MainMenuMessages getPlayers(String username, String color, HashMap<String, String> players) {
+    public static MainMenuMessages getPlayers(String username, String color, HashMap<String, String> players, HashMap<String, Coordinate> keeps,Coordinate keep) {
         User myUser = User.getUserByUsername(username);
-        if (myUser == null)
+        if (myUser == null) {
             return MainMenuMessages.INVALID_USERNAME;
-        if (players.containsKey(username))
+        }
+        if (players.containsKey(username)) {
             return MainMenuMessages.USER_IN_THE_BATTLE;
+        }
 
         Color myColor = MainMenuController.isColorValid(color);
         if (myColor == null) {
@@ -40,6 +44,8 @@ public class MainMenuController {
         }
         if (players.containsValue(myColor.getName()))
             return MainMenuMessages.TAKEN_COLOR;
+        if(keeps.containsValue(keep))
+            return MainMenuMessages.TAKEN_POSITION_FOR_KEEP;
 
         return MainMenuMessages.SUCCESS;
     }

@@ -20,7 +20,7 @@ public class BuildingMenu {
                 createUnit(input);
             else if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.REPAIR) != null)
                 repair();
-            else if(input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
+            else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$"))
                 System.out.println("building menu");
             else if (BuildingMenuCommands.getMatcher(input, BuildingMenuCommands.BACK) != null)
                 return;
@@ -28,6 +28,7 @@ public class BuildingMenu {
                 System.out.println("invalid command!");
         }
     }
+
     private static void createUnit(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String type = "";
