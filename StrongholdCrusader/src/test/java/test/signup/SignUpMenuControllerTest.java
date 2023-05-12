@@ -103,8 +103,6 @@ public class SignUpMenuControllerTest {
         Assertions.assertEquals(SignupMenuMessages.SHOW_QUESTIONS, signupMenuMessage);
 
     }
-    //TODO: find a way to check taken username and taken email
-
     @Test
     public void testEmailFormat1() {
         signupMenuController = Mockito.mock(SignupMenuController.class);

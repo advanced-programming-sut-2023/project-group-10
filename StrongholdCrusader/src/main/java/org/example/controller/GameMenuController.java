@@ -126,8 +126,6 @@ public class GameMenuController {
             new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
-
-    // TODO: add this to the menu
     public static int showRoundsPlayed() {
         return Stronghold.getCurrentBattle().getTurnsPassed();
     }

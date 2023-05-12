@@ -20,10 +20,6 @@ public class LoginMenuControllerTest {
         Assertions.assertEquals(LoginMenuMessages.USERNAME_DOESNT_EXIST,response);
 
     }
-    @Test
-    public void testForWrongPassword() {
-        // TODO: how to test it here,Ask @Rozhin
-    }
 
     @Test
     public void testForForgetPasswordWrongSecurityAnswer(){

@@ -7,8 +7,6 @@ import org.example.view.enums.messages.ProfileMenuMessages;
 
 import java.util.Scanner;
 
-//TODO all functions needed to be checked with Mehrazin
-
 public class ProfileMenuController {
     public static ProfileMenuMessages changeUsername(String username) {
         if (username == null || username.matches("\\s*") || username.length() == 0)
@@ -45,7 +43,6 @@ public class ProfileMenuController {
     }
 
     public static ProfileMenuMessages changePassword(String oldPassword, String newPassword) {
-        //TODO add incorrect captcha
 
         if (oldPassword.matches("\\s*") || newPassword.matches("\\s*"))
             return ProfileMenuMessages.NO_PASSWORD_PROVIDED;
@@ -55,8 +52,8 @@ public class ProfileMenuController {
             return message;
 
         if (!Stronghold.getCurrentUser().getPassword().equals(oldPassword))
-            return ProfileMenuMessages.INCORRECT_PASSWORD; //TODO check with Mehrazin
-// TODO: take it out from Controller!!!!
+            return ProfileMenuMessages.INCORRECT_PASSWORD;
+
         while (oldPassword.equals(newPassword)) {
             System.out.println("Please enter a new password!");
             newPassword = new Scanner(System.in).nextLine();

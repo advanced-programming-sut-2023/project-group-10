@@ -37,7 +37,7 @@ public class MapMenuController {
             for (int j = map.getTopLeftBlockCoordinate().column; j < map.getTopLeftBlockCoordinate().column + blocksInARow; j++) {
                 if (map.getBlockByRowAndColumn(i, j).getAllMilitaryUnits().size() != 0) info = 'S';
                 else if (map.getBlockByRowAndColumn(i, j).getBuilding() != null)
-                    info = 'B'; /*TODO: put W or B based on building type*/
+                    info = 'B';
                 else if (map.getBlockByRowAndColumn(i, j).getDroppable() instanceof Tree) info = 'T';
                 else info = '#';
                 result += map.getBlockByRowAndColumn(i, j).getTexture().getColor().getCode() + info + ASCIIColor.RESET.getCode();
@@ -47,7 +47,6 @@ public class MapMenuController {
         return result;
     }
 
-    //TODO:
     public static String showDetails(Coordinate position) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         if (!map.isIndexInBounds(position))

@@ -12,12 +12,10 @@ public class LoginMenuController {
     public static LoginMenuMessages login(String username, String password, boolean stayLoggedIn) {
         if (User.getUserByUsername(username) == null)
             return LoginMenuMessages.USERNAME_DOESNT_EXIST;
-        //TODO: a function for checking password exists in user,Mehrazin would probably modify it, but try to use that function
 
         if(!User.getUserByUsername(username).checkPassword(password))
             return LoginMenuMessages.WRONG_PASSWORD;
 
-        // not sure about it TODO: check
         if (stayLoggedIn)
             Stronghold.addUserToFile(User.getUserByUsername(username));
         else

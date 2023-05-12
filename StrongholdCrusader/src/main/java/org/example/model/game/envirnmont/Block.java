@@ -83,7 +83,6 @@ public class Block {
         setOnFire(false);
     }
 
-    //TODO: change if's to handle rock, pond, tree
     public boolean setDroppable(Droppable droppable) {
         if (droppable == null) {
             this.droppable = null;

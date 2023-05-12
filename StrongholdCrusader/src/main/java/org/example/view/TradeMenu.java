@@ -13,7 +13,6 @@ public class TradeMenu {
     public static void run() {
         System.out.println("All governments: ");
         System.out.print(TradeMenuController.showAllUsers());
-        //TODO: show notification for trades
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {

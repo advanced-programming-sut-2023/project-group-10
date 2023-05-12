@@ -12,7 +12,6 @@ public class Map {
     public Map(int size) {
         this.size = size;
         blocks = new Block[size][size];
-        //TODO: make templates
         for (int i = 0; i < size; i++)
             for (int j = 0; j < size; j++)
                 blocks[i][j] = new Block(BlockTexture.EARTH);
