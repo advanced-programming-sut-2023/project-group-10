@@ -238,16 +238,19 @@ public class Government {
         return government.getOwner().getUsername().equals(this.getOwner().getUsername());
     }
 
-    public int getPeasant() {
-        int peasant = 0;
+    public int getPeasantsCount() {
+        return getPeasants().size();
+    }
+    public ArrayList<Unit> getPeasants(){
+        ArrayList<Unit> peasant=new ArrayList<>();
         for (Unit unit : units) {
             if (unit.getRole().equals(Role.getRoleByName(RoleName.PEASANT)))
-                peasant++;
+                peasant.add(unit);
         }
         return peasant;
     }
 
-    public int getCitizens() {
+    public int getCitizensCounts() {
         int citizens = 0;
         for (Unit unit : units) {
             if (!(unit instanceof MilitaryUnit))

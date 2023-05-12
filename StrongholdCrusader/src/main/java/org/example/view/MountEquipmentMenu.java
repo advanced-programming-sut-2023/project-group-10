@@ -1,10 +1,10 @@
-package org.example.view.enums.messages;
+package org.example.view;
 
 import org.example.controller.MountEquipmentMenuController;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.units.SiegeEquipment;
 import org.example.model.utils.InputProcessor;
-import org.example.view.MountEquipmentMenuMessages;
+import org.example.view.enums.messages.MountEquipmentMenuMessages;
 
 import java.util.Scanner;
 
