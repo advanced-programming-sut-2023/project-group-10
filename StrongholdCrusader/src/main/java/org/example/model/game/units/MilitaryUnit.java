@@ -130,8 +130,4 @@ public abstract class MilitaryUnit extends Unit {
         Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(newCoordinate).addUnit(this);
         super.setPosition(newCoordinate);
     }
-
-    public boolean isActivated() {
-        return true;
-    }
 }

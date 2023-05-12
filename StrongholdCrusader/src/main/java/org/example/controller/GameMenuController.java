@@ -132,7 +132,7 @@ public class GameMenuController {
     }
 
     public static GameMenuMessages mountEquipment(Coordinate position) {
-        ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        ArrayList<MilitaryUnit> selectedMilitaryUnits = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         SiegeEquipment siegeEquipment = null;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             if (selectedMilitaryUnit instanceof SiegeEquipment) {
@@ -237,26 +237,15 @@ public class GameMenuController {
             countScore(dead);
             Stronghold.getCurrentBattle().removeGovernment(dead);
         }
-        if (aliveLords().size()==1) {
-           countScore(aliveLords().get(0).getGovernment());
-           return GameMenuMessages.GAME_OVER;
+        if (aliveLords().size() == 1) {
+            countScore(aliveLords().get(0).getGovernment());
+            return GameMenuMessages.GAME_OVER;
         }
         Stronghold.getCurrentBattle().goToNextPlayer();
         return GameMenuMessages.NEXT_PLAYER;
     }
 
     private static void produceItems(Government government) {
-        for (Building building : government.getBuildings()) {
-            if (building instanceof ItemProducingBuilding) {
-                ((ItemProducingBuilding) building).produce();
-            }
-        }
-    }
-
-    //TODO: add max population and population rate functions + update produce peasants + add keep position to government (get position in initialize game (?)) + add peasants to keep position
-    // prevent setting unwalkable texture to keep's position in customize map menu
-    // change lord's position to keep position in government constructor
-    private static void producePeasants(Government government) {
         for (Building building : government.getBuildings()) {
             if (building instanceof ItemProducingBuilding) {
                 ((ItemProducingBuilding) building).produce();
@@ -283,11 +272,10 @@ public class GameMenuController {
     private static void modifyFoodRate(Government government) {
         outer:
         while (government.getFoodRate() > -2) {
-            inner:
             for (Map.Entry<Item, Double> itemIntegerEntry : government.getFoodList().entrySet()) {
                 if (itemIntegerEntry.getValue() < government.getCitizens() * (government.getFoodRate() + 2) * (0.5)) {
                     government.setFoodRate(government.getFoodRate() - 1);
-                    break inner;
+                    break;
                 } else break outer;
             }
         }

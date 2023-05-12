@@ -39,7 +39,6 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages setStance(String stance) {
-        //TODO: check and complete doc:pg.23
         MilitaryUnitStance unitStance = MilitaryUnitStance.getStanceByName(stance);
         if (unitStance == null) return UnitMenuMessages.INVALID_STANCE;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
@@ -53,7 +52,7 @@ public class UnitMenuController {
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits) {
             selectedMilitaryUnit.setOnPatrol(false);
             if (selectedMilitaryUnit.getPosition().getDistanceFrom(target) <= selectedMilitaryUnit.getRange()) {
-                if (selectedMilitaryUnit instanceof SiegeEquipment)
+                if (selectedMilitaryUnit instanceof SiegeEquipment && selectedMilitaryUnit.getRole().getName() != RoleName.FIRE_BALLISTA)
                     totalDamageToBuildings += ((MilitaryUnitRole) selectedMilitaryUnit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue();
                 else
                     totalDamageToUnits += ((MilitaryUnitRole) selectedMilitaryUnit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue();
@@ -72,8 +71,10 @@ public class UnitMenuController {
         }
         for (Unit deadUnit : deadUnits)
             deadUnit.killMe();
-        enemyBuilding.changeHitPoint(-totalDamageToBuildings);
-        if (enemyBuilding.getHitPoint() <= 0) enemyBuilding.deleteBuildingFromMapAndGovernment();
+        if (enemyBuilding.getGovernment() != Stronghold.getCurrentBattle().getGovernmentAboutToPlay()) {
+            enemyBuilding.changeHitPoint(-totalDamageToBuildings);
+            if (enemyBuilding.getHitPoint() <= 0) enemyBuilding.deleteBuildingFromMapAndGovernment();
+        }
         return UnitMenuMessages.SUCCESSFUL_ENEMY_ATTACK;
     }
 

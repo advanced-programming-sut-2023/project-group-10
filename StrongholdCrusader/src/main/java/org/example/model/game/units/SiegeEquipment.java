@@ -29,7 +29,7 @@ public class SiegeEquipment extends MilitaryUnit {
     }
 
     @Override
-    public boolean isActivated() {
+    public boolean isSelectable() {
         return getCurrentNeededEngineers() == 0;
     }
 }
