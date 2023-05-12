@@ -8,7 +8,7 @@ public enum GameMenuCommands {
     SHOW_POPULARITY("\\s*show\\s+popularity\\s*"),
     SHOW_FOOD_LIST("\\s*show\\s+food\\s+list\\s*"),
     SHOW_FOOD_RATE("\\s*food\\s+rate\\s+show\\s*"),
-    SET_FOOD_RATE("\\s*food\\s+rate\\s_-.*"),
+    SET_FOOD_RATE("\\s*food\\s+rate\\s+-.*"),
     SET_TAX_RATE("\\s*tax\\s+rate\\s+-.*"),
     SHOW_TAX_RATE("\\s*tax\\s+rate\\s+show\\s*"),
     SET_FEAR_RATE("\\s*fear\\s+rate\\s+-.*"),
