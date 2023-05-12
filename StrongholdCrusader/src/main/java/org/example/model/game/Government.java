@@ -45,6 +45,7 @@ public class Government {
         popularityFactors.put("tax", 0);
         fearRate = 0;
         popularityFactors.put("fear", 0);
+        popularityFactors.put("religion",0);
     }
 
     public Coordinate getKeep() {
