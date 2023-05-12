@@ -80,7 +80,6 @@ public class Government {
     }
 
     public void addReligion() {
-        //TODO: add percentage of blessed units to the mix
         popularityFactors.put("Religion", 1);
     }
 

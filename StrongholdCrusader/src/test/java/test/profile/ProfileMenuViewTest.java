@@ -63,7 +63,6 @@ public class ProfileMenuViewTest {
         Assertions.assertEquals("Username changed successfully", response);
     }
 
-    // TODO: Successful/Later
     @Test
     public void testChangeNicknameInvalidOption() {
 

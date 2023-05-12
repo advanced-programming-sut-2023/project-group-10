@@ -71,7 +71,6 @@ public class BuildingMenu {
                 System.out.println("There's not enough population to create this unit");
                 break;
             case INCOMPATIBLE_TYPES:
-                // TODO: more precise message?
                 System.out.println("A mismatch of types accord");
                 break;
             case CREATE_UNIT_SUCCESSFUL:

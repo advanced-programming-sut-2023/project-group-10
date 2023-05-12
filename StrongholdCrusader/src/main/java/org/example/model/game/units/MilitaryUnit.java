@@ -23,7 +23,6 @@ public abstract class MilitaryUnit extends Unit {
     private Moat moatAboutToBeFilled;
 
     public MilitaryUnit(Coordinate position, RoleName role, Government government) {
-        //TODO: check if required resources are available
         super(position, role, government);
         stance = MilitaryUnitStance.STAND_GROUND;
         destination = DestinationIndicator.NONE;

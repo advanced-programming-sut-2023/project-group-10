@@ -18,7 +18,6 @@ public class CheckFormatAndEncrypt {
     }
 
     public static String isPasswordWeak(String password) {
-        //TODO: you should check if the fields are w/ spaces before even checking their formats
         if (password.length() < 6)
             return "short password";
 

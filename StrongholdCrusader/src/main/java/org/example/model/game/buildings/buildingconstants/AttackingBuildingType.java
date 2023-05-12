@@ -10,7 +10,6 @@ public class AttackingBuildingType extends BuildingType {
     private final int boostInDefense;
 
     public static void initializeTypes() {
-        // TODO: add attacking building types
         new AttackingBuildingType(BuildingTypeName.LOOKOUT_TOWER, defaultHitPoint * 3, 0, Map.of(Item.STONE, 10), true, 2, 2);
         new AttackingBuildingType(BuildingTypeName.PERIMETER_TOWER, defaultHitPoint * 4, 0, Map.of(Item.STONE, 10), true, 2, 2);
         new AttackingBuildingType(BuildingTypeName.DEFENCE_TURRET, defaultHitPoint * 5, 0, Map.of(Item.STONE, 15), true, 2, 2);

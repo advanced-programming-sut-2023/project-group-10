@@ -35,8 +35,6 @@ public class InputProcessor {
         return optArg;
     }
 
-    //TODO: change location if necessary
-
     public static Coordinate getCoordinateFromXYInput(String input, String flag1, String flag2) throws Exception {
         return getCoordinateFromXYInput(input, flag1, flag2, Stronghold.getCurrentBattle().getBattleMap().getSize());
     }

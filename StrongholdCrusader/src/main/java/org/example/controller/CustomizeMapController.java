@@ -35,7 +35,6 @@ public class CustomizeMapController {
     }
 
     public static CustomizeMapMessages setTexture(String landType, Coordinate point1, Coordinate point2) {
-        // TODO: change here
         if (BlockTexture.getTypeByName(landType) == null)
             return CustomizeMapMessages.INVALID_LAND_TYPE;
         if (BlockTexture.getTypeByName(landType).equals(BlockTexture.LARGE_POND)

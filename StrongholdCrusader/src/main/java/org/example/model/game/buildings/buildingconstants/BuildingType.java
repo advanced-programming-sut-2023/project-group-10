@@ -17,7 +17,6 @@ public class BuildingType {
     private final boolean isRepairable;
 
     public static void initializeTypes() {
-        //TODO: initialize building types
         new BuildingType(BuildingTypeName.SMALL_STONE_GATEHOUSE, defaultHitPoint * 6, 0, null, true);
         new BuildingType(BuildingTypeName.LARGE_STONE_GATEHOUSE, defaultHitPoint * 6, 0, Map.of(Item.STONE, 20), true);
         new BuildingType(BuildingTypeName.DRAWBRIDGE, defaultHitPoint * 2, 0, Map.of(Item.WOOD, 10), true);
