@@ -19,7 +19,7 @@ public abstract class Entity implements Droppable {
         return government;
     }
 
-    public void setPosition(Coordinate newCoordinate) {
-        position = newCoordinate;
+    protected void setPosition(Coordinate newCoordinate) {
+        this.position = newCoordinate;
     }
 }

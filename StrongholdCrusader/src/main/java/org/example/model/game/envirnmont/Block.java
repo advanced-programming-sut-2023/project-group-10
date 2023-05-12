@@ -103,11 +103,11 @@ public class Block {
         units.remove(unit);
     }
 
-    public void clearForces() {
-        ArrayList<Unit> militaryUnits = new ArrayList<>();
+    public void clearForcesOfGovernment(Government government) {
+        ArrayList<Unit> unitsToBeDeleted = new ArrayList<>();
         for (Unit unit : units)
-            if (unit instanceof MilitaryUnit) militaryUnits.add(unit);
-        for (Unit militaryUnit : militaryUnits)
+            if (unit instanceof MilitaryUnit && unit.getGovernment() == government) unitsToBeDeleted.add(unit);
+        for (Unit militaryUnit : unitsToBeDeleted)
             militaryUnit.deleteUnitFromGovernmentAndMap();
     }
 

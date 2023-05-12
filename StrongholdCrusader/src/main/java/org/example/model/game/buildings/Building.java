@@ -31,6 +31,10 @@ public class Building extends Entity {
         this.hitPoint = hitPoint;
     }
 
+    public void changeHitPoint(int change) {
+        hitPoint += change;
+    }
+
     public boolean isClimbable() {
         return climbable;
     }

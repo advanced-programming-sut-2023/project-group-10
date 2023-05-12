@@ -3,11 +3,14 @@ package org.example.model.game.units;
 import org.example.model.Stronghold;
 import org.example.model.game.Government;
 import org.example.model.game.Moat;
+import org.example.model.game.NumericalEnums;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.buildingconstants.AttackingBuildingType;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
+import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.MilitaryUnitStance;
+import org.example.model.game.units.unitconstants.Quality;
 import org.example.model.game.units.unitconstants.RoleName;
 
 public abstract class MilitaryUnit extends Unit {
@@ -88,13 +91,6 @@ public abstract class MilitaryUnit extends Unit {
         this.onPatrol = onPatrol;
     }
 
-    public int getBoostInFireRange() {
-        Map map = Stronghold.getCurrentBattle().getBattleMap();
-        Building building = map.getBlockByRowAndColumn(getPosition()).getBuilding();
-        if (building == null || !(building.getBuildingType() instanceof AttackingBuildingType)) return 0;
-        return ((AttackingBuildingType) building.getBuildingType()).getBoostInFireRange();
-    }
-
     public void setMoatAboutToBeDug(Moat moatAboutToBeDug) {
         this.moatAboutToBeDug = moatAboutToBeDug;
     }
@@ -114,5 +110,24 @@ public abstract class MilitaryUnit extends Unit {
         onPatrol = false;
         moatAboutToBeDug = null;
         moatAboutToBeFilled = null;
+    }
+
+    public int getRange() {
+        return (((MilitaryUnitRole) getRole()).getAttackRange().getValue() + getBoostInFireRange()) * NumericalEnums.RANGE_COEFFICIENT.getValue() + 1;
+    }
+
+    private int getBoostInFireRange() {
+        Map map = Stronghold.getCurrentBattle().getBattleMap();
+        Building building = map.getBlockByRowAndColumn(getPosition()).getBuilding();
+        if (building == null || !(building.getBuildingType() instanceof AttackingBuildingType) || ((MilitaryUnitRole) this.getRole()).getAttackRange() == Quality.ZERO)
+            return 0;
+        return ((AttackingBuildingType) building.getBuildingType()).getBoostInFireRange();
+    }
+
+    @Override
+    public void setPosition(Coordinate newCoordinate) {
+        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(getPosition()).removeUnit(this);
+        Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(newCoordinate).addUnit(this);
+        super.setPosition(newCoordinate);
     }
 }

@@ -2,14 +2,12 @@ package org.example.controller;
 
 import org.example.model.Stronghold;
 import org.example.model.User;
-import org.example.model.game.Battle;
-import org.example.model.game.Color;
-import org.example.model.game.Government;
-import org.example.model.game.Item;
+import org.example.model.game.*;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.ItemProducingBuilding;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.buildings.buildingconstants.PopularityIncreasingBuildingType;
+import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Node;
 import org.example.model.game.units.MilitaryUnit;
@@ -147,7 +145,6 @@ public class GameMenuController {
         return GameMenuMessages.MOUNT_SUCCESSFUL;
     }
 
-
     //TODO: what's this? first String is username --> battle
     public static void initializeGame(HashMap<String, String> players, org.example.model.game.envirnmont.Map map) {
         Government[] governments = new Government[players.size()];
@@ -201,6 +198,20 @@ public class GameMenuController {
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 
+    public static void clearForces(Coordinate destination) {
+        Block target = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination);
+        target.clearForcesOfGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+    }
+
+    public static GameMenuMessages deleteStructure(Coordinate destination) {
+        Block target=Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(destination);
+        Droppable droppable=target.getDroppable();
+        if(droppable==null) return GameMenuMessages.NO_STRUCTURE;
+        if(!(droppable instanceof Entity)) return GameMenuMessages.NOT_YOUR_STRUCTURE;
+        if(droppable instanceof Building) ((Building) droppable).deleteBuildingFromMapAndGovernment();
+        else target.setDroppable(null);
+        return GameMenuMessages.SUCCESSFUL_DELETE_STRUCTURE;
+    }
 
     private static void removeAllUnits(Government government) {
         for (int i = 0; i < Stronghold.getCurrentBattle().getBattleMap().getSize(); i++) {
@@ -339,9 +350,9 @@ public class GameMenuController {
     public static GameMenuMessages captureBuilding(Coordinate position) {
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() == null)
             return GameMenuMessages.NO_BUILDING;
-        if(!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
                 getBuilding().getBuildingType().getName().equals(BuildingTypeName.SMALL_STONE_GATEHOUSE)
-        && !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
+                && !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
                 getBuilding().getBuildingType().getName().equals(BuildingTypeName.LARGE_STONE_GATEHOUSE))
             return GameMenuMessages.UNCAPTURABLE_BUILDING_TYPE;
 

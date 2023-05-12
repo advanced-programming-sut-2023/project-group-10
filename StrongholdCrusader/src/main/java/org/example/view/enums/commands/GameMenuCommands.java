@@ -24,7 +24,9 @@ public enum GameMenuCommands {
     NEXT_TURN("\\s*next\\s+turn\\s*"),
     LEAVE_GAME("\\s*leave\\s+game\\s*"),
     DROP_UNIT("\\s*drop\\s*unit.*"),
-    MOUNT_EQUIPMENT("\\s*mount\\s+equipment.*");
+    MOUNT_EQUIPMENT("\\s*mount\\s+equipment.*"),
+    CLEAR_FORCES("\\s*clear\\s+forces.*"),
+    DELETE_STRUCTURE("\\s*delete\\s+structure.*");
 
     public final String regex;
 

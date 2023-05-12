@@ -13,7 +13,6 @@ import org.example.view.enums.messages.CustomizeMapMessages;
 public class CustomizeMapController {
     private static Map map;
 
-
     public static void initializeMap() {
         map = Stronghold.getCurrentBattle().getBattleMap();
     }
@@ -65,11 +64,11 @@ public class CustomizeMapController {
         }
     }
 
-
     public static CustomizeMapMessages clear(Coordinate position) {
         if (!map.isIndexInBounds(position))
             return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
-        map.getBlockByRowAndColumn(position).clearForces();
+        map.getBlockByRowAndColumn(position).setDroppable(null);
+        map.getBlockByRowAndColumn(position).setTexture(BlockTexture.EARTH);
         return CustomizeMapMessages.SUCCESSFUL_CLEAR;
     }
 

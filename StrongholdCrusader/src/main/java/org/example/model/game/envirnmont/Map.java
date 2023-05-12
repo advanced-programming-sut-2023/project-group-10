@@ -91,7 +91,7 @@ public class Map {
         Node currentNode;
         while (!queue.isEmpty()) {
             currentNode = queue.pollFirst();
-            for (Node neighbor : currentNode.getNeighbors(this)) {
+            for (Node neighbor : currentNode.getNeighbors(this, end.coordinate)) {
                 if (neighbor.visited) continue;
                 neighbor.visited = true;
                 queue.add(neighbor);

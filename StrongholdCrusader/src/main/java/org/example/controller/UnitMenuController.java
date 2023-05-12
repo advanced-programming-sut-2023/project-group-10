@@ -48,24 +48,32 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages attackEnemy(Coordinate target) {
-        int totalDamage = 0;
+        int totalDamageToUnits = 0;
+        int totalDamageToBuildings = 0;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits) {
             selectedMilitaryUnit.setOnPatrol(false);
-            if (selectedMilitaryUnit.getPosition().getDistanceFrom(target) <=
-                    (((MilitaryUnitRole) selectedMilitaryUnit.getRole()).getAttackRange().getValue() + selectedMilitaryUnit.getBoostInFireRange()) * NumericalEnums.RANGE_COEFFICIENT.getValue())
-                totalDamage += ((MilitaryUnitRole) selectedMilitaryUnit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue();
+            if (selectedMilitaryUnit.getPosition().getDistanceFrom(target) <= selectedMilitaryUnit.getRange()) {
+                if (selectedMilitaryUnit instanceof SiegeEquipment)
+                    totalDamageToBuildings += ((MilitaryUnitRole) selectedMilitaryUnit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue();
+                else
+                    totalDamageToUnits += ((MilitaryUnitRole) selectedMilitaryUnit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue();
+            }
         }
-        if (totalDamage == 0) return UnitMenuMessages.TARGET_OUT_OF_RANGE;
+        if (totalDamageToUnits == 0 && totalDamageToBuildings == 0) return UnitMenuMessages.TARGET_OUT_OF_RANGE;
         Block targetBlock = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(target);
         ArrayList<Unit> enemyUnits = targetBlock.getAllAttackableEnemyUnits(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
-        if (enemyUnits.size() == 0) return UnitMenuMessages.NO_ENEMY_HERE;
+        Building enemyBuilding = targetBlock.getBuilding();
+        if (enemyUnits.size() == 0 && enemyBuilding.getGovernment() == Stronghold.getCurrentBattle().getGovernmentAboutToPlay())
+            return UnitMenuMessages.NO_ENEMY_HERE;
         ArrayList<Unit> deadUnits = new ArrayList<>();
         for (Unit unit : enemyUnits) {
-            unit.changeHitPoint(-totalDamage);
+            unit.changeHitPoint(-totalDamageToUnits);
             if (unit.isDead()) deadUnits.add(unit);
         }
         for (Unit deadUnit : deadUnits)
             deadUnit.deleteUnitFromGovernmentAndMap();
+        enemyBuilding.changeHitPoint(-totalDamageToBuildings);
+        if (enemyBuilding.getHitPoint() <= 0) enemyBuilding.deleteBuildingFromMapAndGovernment();
         return UnitMenuMessages.SUCCESSFUL_ENEMY_ATTACK;
     }
 

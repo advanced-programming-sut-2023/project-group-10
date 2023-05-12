@@ -38,6 +38,9 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_UNIT) != null) selectUnit(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.MOUNT_EQUIPMENT) != null)
                 mountEquipment(input);
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.CLEAR_FORCES) != null) clearForces(input);
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DELETE_STRUCTURE) != null)
+                deleteStructure(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.TRADE_MENU) != null) TradeMenu.run();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOP_MENU) != null) ShopMenu.run();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.MAP_MENU) != null) MapMenu.run();
@@ -266,6 +269,30 @@ public class GameMenu {
             GameMenuMessages result = GameMenuController.mountEquipment(position);
             if (result == GameMenuMessages.NO_EQUIPMENT_FOUND)
                 System.out.println("no equipment available at this block");
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private static void clearForces(String input) {
+        try {
+            Coordinate destination = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            GameMenuController.clearForces(destination);
+            System.out.println("units cleared successfully");
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private static void deleteStructure(String input) {
+        try {
+            Coordinate destination = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            GameMenuMessages result = GameMenuController.deleteStructure(destination);
+            if (result == GameMenuMessages.NO_STRUCTURE) System.out.println("you have no property in this block");
+            else if (result == GameMenuMessages.NOT_YOUR_STRUCTURE)
+                System.out.println("you can't delete structures that you don't own");
+            else if (result == GameMenuMessages.SUCCESSFUL_DELETE_STRUCTURE)
+                System.out.println("structure was deleted successfully");
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
         }
