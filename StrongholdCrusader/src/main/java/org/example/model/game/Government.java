@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class Government {
     private final User owner;
-    private final MilitaryPerson lord;
     private final ArrayList<Unit> units = new ArrayList<>();
     private ArrayList<Building> buildings = new ArrayList<>();
     private final HashMap<Item, Double> itemList = new HashMap<>();
@@ -26,18 +25,16 @@ public class Government {
     private final HashMap<String, Integer> popularityFactors = new HashMap<>();
     private double gold;
     private final Color color;
-    private int foodRate=-2;
+    private int foodRate = -2;
     private int excessFood;
-    private int taxRate=0;
+    private int taxRate = 0;
     private int fearRate;
     private final ArrayList<Trade> tradeList = new ArrayList<>();
     private final Coordinate keep;
 
     public Government(User owner, Color color, Coordinate keep) {
-
         this.owner = owner;
-        //TODO: set lord's position to keep's position
-        this.lord = new MilitaryPerson(new Coordinate(keep.row, keep.column), RoleName.LORD, this);
+        new MilitaryPerson(new Coordinate(keep.row, keep.column), RoleName.LORD, this).addToGovernmentAndBlock();
         this.popularity = NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
         this.color = color;
         this.keep = keep;
@@ -52,7 +49,7 @@ public class Government {
     }
 
     public MilitaryPerson getLord() {
-        return lord;
+        return (MilitaryPerson) units.get(0);
     }
 
     public int getPopularity() {
