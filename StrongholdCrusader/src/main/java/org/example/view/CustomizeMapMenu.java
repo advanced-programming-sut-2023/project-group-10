@@ -180,6 +180,9 @@ public class CustomizeMapMenu {
                 case INDEX_OUT_OF_BOUNDS:
                     System.out.println("You've entered numbers less than 0 or grater than the size!");
                     break;
+                case NON_EMPTY_LAND:
+                    System.out.println("You've already dropped something in this location,try again!");
+                    break;
                 case INVALID_TREE_TYPE:
                     System.out.println("You've entered invalid type for tree!");
                     break;

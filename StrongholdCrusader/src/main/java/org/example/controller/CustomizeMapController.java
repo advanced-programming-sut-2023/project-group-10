@@ -88,6 +88,8 @@ public class CustomizeMapController {
     public static CustomizeMapMessages dropTree(Coordinate position, String type) {
         if (!map.isIndexInBounds(position))
             return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
+        if (map.getBlockByRowAndColumn(position).getDroppable() != null)
+            return CustomizeMapMessages.NON_EMPTY_LAND;
         if (TreeType.getTreeTypeByName(type) == null)
             return CustomizeMapMessages.INVALID_TREE_TYPE;
         if (!map.getBlockByRowAndColumn(position).getTexture().isPlantable())
