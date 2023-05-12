@@ -248,4 +248,33 @@ public class UnitMenuController {
             if (selectedMilitaryUnit instanceof Tunneler) return (Tunneler) selectedMilitaryUnit;
         return null;
     }
+
+    public static UnitMenuMessages captureBuilding(Coordinate position) {
+        MilitaryUnit selectedCapturingUnit = getSelectedCapturingUnit();
+        if (selectedCapturingUnit== null)
+            return UnitMenuMessages.NO_CAPTURING_UNITS;
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding() == null)
+            return UnitMenuMessages.NO_BUILDING;
+        if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getBuilding().getGovernment().
+                equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
+            return UnitMenuMessages.YOUR_OWN_BUILDING;
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
+                getBuilding().getBuildingType().getName().equals(BuildingTypeName.SMALL_STONE_GATEHOUSE)
+                && !Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).
+                getBuilding().getBuildingType().getName().equals(BuildingTypeName.LARGE_STONE_GATEHOUSE))
+            return UnitMenuMessages.UNCAPTURABLE_BUILDING_TYPE;
+        if(Stronghold.getCurrentBattle().getBattleMap().findPath(selectedCapturingUnit.getPosition(), position) == null)
+            return UnitMenuMessages.UNREACHABLE_DESTINATION;
+        return UnitMenuMessages.GATEHOUSE_CAPTURED_SUCCESSFULLY;
+    }
+
+    private static MilitaryUnit getSelectedCapturingUnit() {
+        //How to check for RoleName.ASSASSIN and Ladderman
+        for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits) {
+            if (selectedMilitaryUnit instanceof SiegeTower)
+                return selectedMilitaryUnit;
+        }
+        return null;
+    }
+
 }

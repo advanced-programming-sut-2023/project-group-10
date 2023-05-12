@@ -252,4 +252,34 @@ public class UnitMenu {
         UnitMenuMessages result = UnitMenuController.disband();
         if (result == UnitMenuMessages.SUCCESSFUL_DISBAND) System.out.println("units were disbanded");
     }
+
+    private static void capture(String input){
+        try {
+            Coordinate destination = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
+            UnitMenuMessages result = UnitMenuController.captureBuilding(destination);
+            switch (result){
+                case NO_CAPTURING_UNITS:
+                    System.out.println("you don't have any units which can capture1");
+                    break;
+                case NO_BUILDING:
+                    System.out.println("There's no building which you can capture in that block!");
+                    break;
+                case YOUR_OWN_BUILDING:
+                    System.out.println("You can't capture a building of yours!");
+                    break;
+                case UNCAPTURABLE_BUILDING_TYPE:
+                    System.out.println("You can't capture a building of this type!");
+                    break;
+                case UNREACHABLE_DESTINATION:
+                    System.out.println("There's some obstacles in the path,You can't capture right now!");
+                    break;
+                case GATEHOUSE_CAPTURED_SUCCESSFULLY:
+                    System.out.println("Gate house captured successfully");
+                    break;
+
+            }
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
 }
