@@ -8,7 +8,6 @@ import org.example.model.game.Trade;
 import org.example.view.enums.messages.TradeMenuMessages;
 
 public class TradeMenuController {
-    //TODO: check functions
     public static String showAllUsers() {
         String usersOfTheGame = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getNickname() + "(username : " +
                 Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername() + ") : YOU\n";

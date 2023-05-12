@@ -87,6 +87,9 @@ public class BuildingMenu {
             case NOT_CASTLE_BUILDING:
                 System.out.println("You must select a castle building to repair!");
                 break;
+            case AT_MAX_HITPOINT:
+                System.out.println("Building has already its max hitpoint!");
+                break;
             case INSUFFICIENT_STONE:
                 System.out.println("You don't have enough stone to repair this building");
                 break;
