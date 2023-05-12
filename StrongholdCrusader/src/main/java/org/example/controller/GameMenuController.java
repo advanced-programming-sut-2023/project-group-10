@@ -328,6 +328,12 @@ public class GameMenuController {
         if (path == null) return;
         int movesLeft;
         unit.setPosition(path.get((movesLeft = Math.min(moveCount, path.size())) - 1));
+        for (int i = 0; i < movesLeft - 1; i++) {
+            if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(path.get(i)).getBuilding().getBuildingType().getName() == BuildingTypeName.KILLING_PIT) {
+                unit.killMe();
+                return;
+            }
+        }
         if (unit.getDestination().equals(unit.getPosition())) unit.updateDestination();
         if (!unit.isOnPatrol()) return;
         moveCount = moveCount - movesLeft;
@@ -408,8 +414,7 @@ public class GameMenuController {
 
     private static Government deadLord() {
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
-            if (government.getLord().isDead())
-                return government;
+            if (government.getLord().isDead()) return government;
         }
         return null;
     }
@@ -417,8 +422,7 @@ public class GameMenuController {
     private static ArrayList<Unit> aliveLords() {
         ArrayList<Unit> lords = new ArrayList<>();
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
-            if (!government.getLord().isDead())
-                lords.add(government.getLord());
+            if (!government.getLord().isDead()) lords.add(government.getLord());
         }
         return lords;
     }
