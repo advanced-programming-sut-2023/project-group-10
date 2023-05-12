@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import org.checkerframework.checker.units.qual.C;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.Color;

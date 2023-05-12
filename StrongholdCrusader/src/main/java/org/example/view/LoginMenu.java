@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class LoginMenu {
-    Scanner scanner = new Scanner(System.in);
 
     public static void run() {
         Scanner scanner = new Scanner(System.in);

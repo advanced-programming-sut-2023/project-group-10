@@ -15,7 +15,6 @@ public class TradeMenuController {
             if (government != Stronghold.getCurrentBattle().getGovernmentAboutToPlay())
                 usersOfTheGame = usersOfTheGame.concat(government.getOwner().getNickname() + "(username : " + government.getOwner().getUsername() + ")\n");
         }
-        //remember to use .print not .println
         return usersOfTheGame;
     }
 
@@ -89,7 +88,6 @@ public class TradeMenuController {
                 .getTradeFromTradeList(id).setAcceptedStatus(true);
         Stronghold.getCurrentBattle().getGovernmentByOwnerId(Stronghold.getCurrentUser().getUsername()).getTradeFromTradeList(id)
                 .addMessage(Stronghold.getCurrentUser().getUsername(), message);
-        //does it work?
         recipient.addItem(trade);
         sender.reduceItem(trade);
         return TradeMenuMessages.TRADE_SUCCESSFULLY_ACCEPTED;

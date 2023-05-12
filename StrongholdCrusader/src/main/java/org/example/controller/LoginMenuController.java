@@ -1,12 +1,9 @@
 package org.example.controller;
 
-import org.apache.commons.lang3.time.StopWatch;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.LoginMenuMessages;
-
-import java.util.Scanner;
 
 public class LoginMenuController {
     public static LoginMenuMessages login(String username, String password, boolean stayLoggedIn) {
@@ -21,7 +18,6 @@ public class LoginMenuController {
         else
             Stronghold.addUserToFile(User.getUserByUsername(null));
 
-        //login user
         Stronghold.setCurrentUser(User.getUserByUsername(username));
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
