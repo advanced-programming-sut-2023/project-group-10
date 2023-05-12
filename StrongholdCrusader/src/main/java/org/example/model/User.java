@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.example.model.utils.CheckFormatAndEncrypt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class User {
     private String username;
@@ -148,10 +149,32 @@ public class User {
     }
 
     public int getRank() {
+        ArrayList<User> sorted = sortUsers();
+        for(int i = 0; i < sorted.size(); i++){
+            if(sorted.get(i).equals(this))
+                return i+1;
+        }
         return 0;
     }
 
     public static ArrayList<User> getUsers() {
         return users;
+    }
+
+    private static ArrayList<User> sortUsers() {
+        ArrayList<User> toBeSorted = new ArrayList<>();
+        Collections.copy(toBeSorted, users);
+
+        for(int i = 0; i < toBeSorted.size()-1; i++){
+            for(int j = 1; j < toBeSorted.size()-i-1; j++){
+                if(toBeSorted.get(j).getHighScore() < toBeSorted.get(j+1).getHighScore())
+                    Collections.swap(toBeSorted, j, j+1);
+                else if(toBeSorted.get(j).getHighScore() == toBeSorted.get(j+1).getHighScore()){
+                    if(toBeSorted.get(j).getNickname().compareTo(toBeSorted.get(j+1).getNickname()) > 0)
+                        Collections.swap(toBeSorted, j, j+1);
+                }
+            }
+        }
+        return toBeSorted;
     }
 }
