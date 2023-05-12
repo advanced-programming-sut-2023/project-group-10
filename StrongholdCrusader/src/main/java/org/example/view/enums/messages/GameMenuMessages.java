@@ -40,5 +40,6 @@ public enum GameMenuMessages {
     NOT_YOUR_STRUCTURE,
     SUCCESSFUL_DELETE_STRUCTURE,
     NOT_ENOUGH_PEASANTS,
-    NEXT_PLAYER
+    NEXT_PLAYER,
+    IS_KEEP;
 }

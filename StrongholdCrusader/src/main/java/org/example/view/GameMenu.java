@@ -34,7 +34,7 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FEAR_RATE) != null) setFearRate(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING) != null) dropBuilding(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_UNIT) != null) dropUnit(input);
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_GOLD)!= null) showGold();
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_GOLD) != null) showGold();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_BUILDING) != null)
                 selectBuilding(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_UNIT) != null) selectUnit(input);
@@ -53,8 +53,9 @@ public class GameMenu {
             else System.out.println("invalid command!");
         }
     }
-    private static void showGold(){
-        System.out.println("Your gold is "+Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold());
+
+    private static void showGold() {
+        System.out.println("Your gold is " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold());
     }
 
     private static void showRoundsPlayed() {
@@ -219,6 +220,9 @@ public class GameMenu {
                     break;
                 case INCOMPATIBLE_LAND:
                     System.out.println("You cant drop this type of building on this type of texture!");
+                    break;
+                case IS_KEEP:
+                    System.out.println("You can't drop a building in keep's position");
                     break;
                 case BUILDING_EXISTS_IN_THE_BLOCK:
                     System.out.println("This location is full!");
