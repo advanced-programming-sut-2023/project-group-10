@@ -28,7 +28,7 @@ public enum Item {
     PIKE("pike", Map.of(WOOD, 2), 24, 12, false),
     MACE("mace", Map.of(IRON, 1), 32, 16, false),
     SWORD("swords", Map.of(IRON, 1), 32, 16, false),
-    LEATHER_ARMOR("Leather armor", Map.of(COW, 1), 24, 12, false),
+    LEATHER_ARMOR("leather armor", Map.of(COW, 1), 24, 12, false),
     METAL_ARMOR("metal armor", Map.of(IRON, 1), 32, 16, false);
 
     private final String name;
@@ -46,7 +46,7 @@ public enum Item {
     }
 
     public static Item getItemByName(String name) {
-        name = name.replaceAll("[\\s_-]", "").toUpperCase();
+        name = name.toLowerCase();
         for (Item item : Item.values())
             if (item.name.replaceAll("_", "").equals(name)) return item;
         return null;

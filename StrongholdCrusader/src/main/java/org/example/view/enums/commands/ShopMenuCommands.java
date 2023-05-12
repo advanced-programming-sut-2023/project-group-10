@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 public enum ShopMenuCommands {
     SELL("^\\s*sell\\s*.+"),
     SHOW_LIST("^\\s*show\\s+price\\s+list\\s*$"),
+    SHOW_GOLD("^\\s*show\\s+gold\\s*$"),
     BUY("^\\s*buy\\s*.+"),
     BACK("\\s*back\\s*");
     public final String regex;

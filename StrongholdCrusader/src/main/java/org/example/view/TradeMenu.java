@@ -134,6 +134,9 @@ public class TradeMenu {
             case NOT_SUFFICIENT_GOLD:
                 System.out.println("you don't have enough gold");
                 break;
+            case NOT_ENOUGH_ITEMS:
+                System.out.println("you don't have enough of this item");
+                break;
             case TRADE_SUCCESSFULLY_ACCEPTED:
                 System.out.println("the trade was accepted successfully");
                 break;
