@@ -1,6 +1,7 @@
 package org.example.view;
 
 import org.example.controller.GameMenuController;
+import org.example.model.Stronghold;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.utils.InputProcessor;
@@ -33,6 +34,7 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FEAR_RATE) != null) setFearRate(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING) != null) dropBuilding(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_UNIT) != null) dropUnit(input);
+            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_GOLD)!= null) showGold();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_BUILDING) != null)
                 selectBuilding(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_UNIT) != null) selectUnit(input);
@@ -50,6 +52,9 @@ public class GameMenu {
             else if (input.matches("^\\s*show\\s+menu\\s+name\\s*$")) System.out.println("game menu");
             else System.out.println("invalid command!");
         }
+    }
+    private static void showGold(){
+        System.out.println("Your gold is "+Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold());
     }
 
     private static void showRoundsPlayed() {

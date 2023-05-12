@@ -26,7 +26,8 @@ public enum GameMenuCommands {
     DROP_UNIT("\\s*drop\\s*unit.*"),
     MOUNT_EQUIPMENT("\\s*mount\\s+equipment.*"),
     CLEAR_FORCES("\\s*clear\\s+forces.*"),
-    DELETE_STRUCTURE("\\s*delete\\s+structure.*");
+    DELETE_STRUCTURE("\\s*delete\\s+structure.*"),
+    SHOW_GOLD("\\s*show\\s*gold\\s*");
 
     public final String regex;
 
