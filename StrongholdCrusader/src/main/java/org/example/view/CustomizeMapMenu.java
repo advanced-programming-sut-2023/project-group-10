@@ -67,6 +67,9 @@ public class CustomizeMapMenu {
             case SET_TEXTURE_OF_BLOCK_SUCCESSFUL:
                 System.out.println("You've successfully set the texture of block to " + type);
                 return;
+            case IS_KEEP:
+                System.out.println("You can't set the keep's texture to this type");
+                return;
             case SET_TEXTURE_OF_AREA_SUCCESSFUL:
                 System.out.println("You've successfully set the texture of area to " + type);
         }
