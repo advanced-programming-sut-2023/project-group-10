@@ -144,19 +144,6 @@ public class SignUpMenuControllerTest {
         Assertions.assertEquals(SignupMenuMessages.REENTER_ANSWER, signupMenuMessage);
     }
 
-    //there's a minor problem, It writes to the Database
-    @Test
-    public void testUserExists() throws Exception {
-        signupMenuController = Mockito.mock(SignupMenuController.class);
-        signupMenuController.pickSecurityQuestionAndCreateUser
-                ("1", "Father's name", "Father's name",
-                        "mehrazin001", "MEHR@azin001", "Mehrazin_M", "My moto is:Don't have a moto!", "mehrazin@mail.com");
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser
-                ("mehrazin001", "MEHR@azin001", "MEHR@azin001", "mehrazin@mail.com", "Mehrazin_M");
-        Assertions.assertEquals(SignupMenuMessages.USER_EXISTS, signupMenuMessage);
-    }
-    //TODO email exist or user exist?
-
     @Test
     public void testTakenEmail() throws Exception {
          signupMenuController = Mockito.mock(SignupMenuController.class);

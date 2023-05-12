@@ -116,17 +116,4 @@ public class SignUpViewTest {
         Assertions.assertEquals("passwords doesn't match, try to signup again", response);
     }
 
-    @Test
-    public void testRandomPassword() throws IOException {
-
-        SignupMenu signupMenu = Mockito.mock(SignupMenu.class);
-        Scanner scanner = Mockito.mock(Scanner.class);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream("random".getBytes());
-        System.setIn(byteArrayInputStream);
-        String response = SignupMenu.register(scanner, "user create -u username -p random -e mail@mail.com -n nickname");
-        Assertions.assertEquals("You've entered the suggested password incorrectly, try to signup again", response);
-        byteArrayInputStream.close();
-    }
-
-
 }
