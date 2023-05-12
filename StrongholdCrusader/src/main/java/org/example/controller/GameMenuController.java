@@ -6,7 +6,6 @@ import org.example.model.game.*;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.ItemProducingBuilding;
 import org.example.model.game.buildings.Stairs;
-import org.example.model.game.buildings.UnitProducingBuilding;
 import org.example.model.game.buildings.buildingconstants.*;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
@@ -97,20 +96,17 @@ public class GameMenuController {
     public static GameMenuMessages dropBuilding(Coordinate position, String type) {
         if (BuildingTypeName.getBuildingTypeNameByNameString(type) == null)
             return GameMenuMessages.INVALID_BUILDING_TYPE;
-        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getTexture().isBuildable())
+        if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isBuildable())
             return GameMenuMessages.INCOMPATIBLE_LAND;
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getDroppable() != null)
             return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
         BuildingTypeName buildingType = BuildingTypeName.getBuildingTypeNameByNameString(type);
         if (BuildingType.getBuildingTypeByName(buildingType) instanceof ItemProducingBuildingType)
             new ItemProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
-        else if (BuildingType.getBuildingTypeByName(buildingType).equals(BuildingTypeName.STAIRS))
+        else if (buildingType == BuildingTypeName.STAIRS)
             new Stairs(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlock();
-        else if (BuildingType.getBuildingTypeByName(buildingType) instanceof PersonProducingBuildingType)
-            new UnitProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
         else
-
-            new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), BuildingTypeName.getBuildingTypeNameByNameString(type)).addToGovernmentAndBlock();
+            new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 
@@ -166,6 +162,7 @@ public class GameMenuController {
             gov.addItem(Item.WOOD, 20);
             gov.addItem(Item.STONE, 20);
             gov.setGold(20);
+            map.getBlockByRowAndColumn(keep).setKeep(true);
             governments[x] = gov;
             x++;
         }
