@@ -14,7 +14,6 @@ public class UnitProducingBuilding extends Building {
     }
 
     public int produce(MilitaryPersonRole militaryPersonRole, int count) {
-        //returns number of units made (tries to make the specified amount but might fail)
         PersonProducingBuildingType buildingType = (PersonProducingBuildingType) getBuildingType();
         if (!Arrays.asList(buildingType.getProducedPersonType()).contains(militaryPersonRole)) return 0;
         // no units are produced if it's impossible to produce <count> units

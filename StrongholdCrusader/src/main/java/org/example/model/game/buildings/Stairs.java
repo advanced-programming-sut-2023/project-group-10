@@ -7,7 +7,7 @@ import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 
 public class Stairs extends Building {
-    public Stairs(Coordinate position, Government government, String buildingType) {
+    public Stairs(Coordinate position, Government government) {
         super(position, government, BuildingTypeName.STAIRS);
         makeNeighborsClimbable();
     }

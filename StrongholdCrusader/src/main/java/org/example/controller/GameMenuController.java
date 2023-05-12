@@ -5,8 +5,9 @@ import org.example.model.User;
 import org.example.model.game.*;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.ItemProducingBuilding;
-import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
-import org.example.model.game.buildings.buildingconstants.PopularityIncreasingBuildingType;
+import org.example.model.game.buildings.Stairs;
+import org.example.model.game.buildings.UnitProducingBuilding;
+import org.example.model.game.buildings.buildingconstants.*;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Node;
@@ -100,7 +101,16 @@ public class GameMenuController {
             return GameMenuMessages.INCOMPATIBLE_LAND;
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getDroppable() != null)
             return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
-        new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), BuildingTypeName.getBuildingTypeNameByNameString(type)).addToGovernmentAndBlock();
+        BuildingTypeName buildingType = BuildingTypeName.getBuildingTypeNameByNameString(type);
+        if (BuildingType.getBuildingTypeByName(buildingType) instanceof ItemProducingBuildingType)
+            new ItemProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
+        else if (BuildingType.getBuildingTypeByName(buildingType).equals(BuildingTypeName.STAIRS))
+            new Stairs(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlock();
+        else if (BuildingType.getBuildingTypeByName(buildingType) instanceof PersonProducingBuildingType)
+            new UnitProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
+        else
+
+            new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), BuildingTypeName.getBuildingTypeNameByNameString(type)).addToGovernmentAndBlock();
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 
@@ -402,6 +412,23 @@ public class GameMenuController {
 
     private static void addPeasants(Government government) {
         int newPeasants = government.getExcessFood() / NumericalEnums.PEASANT_PRODUCTION_RATE.getValue();
+        int capacity = 0;
+        for (Building building : government.getBuildings()) {
+            switch (building.getBuildingType().getName()) {
+                case LARGE_STONE_GATEHOUSE:
+                    capacity += 10;
+                    break;
+                case SMALL_STONE_GATEHOUSE:
+                case HOVEL:
+                    capacity += 8;
+                    break;
+                default:
+                    break;
+
+            }
+        }
+        if (capacity < newPeasants)
+            newPeasants = capacity;
         for (int i = 0; i < newPeasants; i++) {
             government.addUnit(new Unit(government.getKeep(), RoleName.PEASANT, government));
 
