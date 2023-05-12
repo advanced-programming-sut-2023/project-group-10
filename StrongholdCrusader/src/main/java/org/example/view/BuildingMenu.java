@@ -16,7 +16,7 @@ public class BuildingMenu {
         Scanner scanner = new Scanner(System.in);
         BuildingMenuController.setSelectedBuilding
                 (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(coordinate).getBuilding());
-        System.out.println("hitpoints: " + BuildingMenuController.selectedBuilding.getHitPoint());
+        System.out.println("Hitpoints: " + BuildingMenuController.selectedBuilding.getHitPoint());
 
         while (true) {
             String input = scanner.nextLine();
@@ -45,6 +45,7 @@ public class BuildingMenu {
                     break;
                 case "-t":
                     type = option.getValue();
+                    break;
                 default:
                     System.out.println("invalid option");
                     return;
@@ -64,7 +65,6 @@ public class BuildingMenu {
                 System.out.println("Invalid unit type!");
                 break;
             case INSUFFICIENT_RESOURCES:
-                //should we  mention which resource?
                 System.out.println("You don't have enough resources!");
                 break;
             case INSUFFICIENT_POPULATION:
