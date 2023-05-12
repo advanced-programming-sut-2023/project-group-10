@@ -26,9 +26,9 @@ public class Government {
     private final HashMap<String, Integer> popularityFactors = new HashMap<>();
     private double gold;
     private final Color color;
-    private int foodRate;
+    private int foodRate=-2;
     private int excessFood;
-    private int taxRate;
+    private int taxRate=0;
     private int fearRate;
     private final ArrayList<Trade> tradeList = new ArrayList<>();
     private final Coordinate keep;
@@ -37,7 +37,7 @@ public class Government {
 
         this.owner = owner;
         //TODO: set lord's position to keep's position
-        this.lord = new MilitaryPerson(new Coordinate(0, 0), RoleName.LORD, this);
+        this.lord = new MilitaryPerson(new Coordinate(keep.row, keep.column), RoleName.LORD, this);
         this.popularity = NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
         this.color = color;
         this.keep = keep;
