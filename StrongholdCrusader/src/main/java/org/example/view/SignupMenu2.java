@@ -1,8 +1,6 @@
 package org.example.view;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,6 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.controller.SignupMenuController;
+import org.example.model.User;
+import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.messages.SignupMenuMessages;
 
@@ -28,7 +28,7 @@ public class SignupMenu2 extends Application {
         VBox usernameContainer = new VBox(5);
         usernameContainer.setAlignment(Pos.CENTER);
         TextField username = new TextField();
-        username.setMaxWidth(240);
+        username.setMaxWidth(300);
         username.setPromptText("username");
         Label usernamelabel = new Label();
         usernameContainer.getChildren().addAll(username, usernamelabel);
@@ -41,20 +41,30 @@ public class SignupMenu2 extends Application {
         VBox passwordVbox = new VBox(8);
         passwordVbox.setAlignment(Pos.CENTER);
         PasswordField password = new PasswordField();
-        password.setMinWidth(166);
+        password.setMinWidth(226);
         password.setPromptText("password");
         Label passwordLabel = new Label();
         CheckBox showPassword = new CheckBox("show password");
         Button randomPassword = new Button("random");
+        PasswordField confirmation = new PasswordField();
+        confirmation.setMaxWidth(300);
+        confirmation.setPromptText("confirmation");
+        Label confirmationLabel = new Label();
 
         HBox passwordContainer = new HBox(15);
         passwordContainer.setAlignment(Pos.CENTER);
         passwordContainer.getChildren().addAll(password, randomPassword);
-        passwordVbox.getChildren().addAll(passwordContainer, passwordLabel, showPassword);
+        passwordVbox.getChildren().addAll(passwordContainer, passwordLabel, confirmation, confirmationLabel, showPassword);
         vBox.getChildren().add(passwordVbox);
 
         password.textProperty().addListener((observable, oldValue, newValue) -> {
             checkPassword(newValue, passwordLabel);
+        });
+
+        confirmation.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(!newValue.equals(password.getText()))
+                confirmationLabel.setText("passwords don't match!");
+            else confirmationLabel.setText("passwords match");
         });
 
         showPassword.setOnAction(actionEvent -> {
@@ -69,13 +79,19 @@ public class SignupMenu2 extends Application {
                 String passwordText = password.getPromptText();
                 password.setPromptText("password");
                 password.setText(passwordText);
+                if(password.getText().equals(confirmation.getText()))
+                    confirmationLabel.setText("passwords match");
             }
+        });
+
+        randomPassword.setOnMouseClicked(mouseEvent -> {
+            password.setText(RandomGenerator.generateSecurePassword());
         });
 
         VBox nicknameContainer = new VBox(5);
         nicknameContainer.setAlignment(Pos.CENTER);
         TextField nickname = new TextField();
-        nickname.setMaxWidth(240);
+        nickname.setMaxWidth(300);
         nickname.setPromptText("nickname");
         Label nicknameLabel = new Label();
         nicknameContainer.getChildren().addAll(nickname, nicknameLabel);
@@ -84,7 +100,7 @@ public class SignupMenu2 extends Application {
         VBox emailContainer = new VBox(5);
         emailContainer.setAlignment(Pos.CENTER);
         TextField email = new TextField();
-        email.setMaxWidth(240);
+        email.setMaxWidth(300);
         email.setPromptText("email");
         Label emailLabel = new Label();
         emailContainer.getChildren().addAll(email, emailLabel);
@@ -103,26 +119,58 @@ public class SignupMenu2 extends Application {
         slogan.setMaxWidth(300);
         slogan.setPromptText("slogan");
 
-        Button button = new Button("random");
+        Button randomSlogan = new Button("random");
         ComboBox<String> defaultSlogan = new ComboBox<>();
-        defaultSlogan.setMaxWidth(240);
+        defaultSlogan.setMaxWidth(300);
         defaultSlogan.setPromptText("slogan");
         for(String string : RandomGenerator.getSlogans()){
             defaultSlogan.getItems().add(string);
         }
-        hasSlogan.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                HBox sloganContainer = new HBox(15);
-                sloganContainer.setAlignment(Pos.CENTER);
-                sloganContainer.getChildren().addAll(slogan, button);
-                vBox.getChildren().remove(submitContainer);
-                vBox.getChildren().addAll(sloganContainer, defaultSlogan);
-                vBox.getChildren().add(submitContainer);
-            }
+        hasSlogan.setOnAction(actionEvent -> {
+            HBox sloganContainer = new HBox(15);
+            sloganContainer.setAlignment(Pos.CENTER);
+            sloganContainer.getChildren().addAll(slogan, randomSlogan);
+            vBox.getChildren().remove(submitContainer);
+            vBox.getChildren().addAll(sloganContainer, defaultSlogan);
+            vBox.getChildren().add(submitContainer);
+            randomSlogan.setOnMouseClicked(mouseEvent -> {
+                slogan.setText(RandomGenerator.getRandomSlogan());
+            });
         });
 
-        Scene scene = new Scene(borderPane, 400, 600);
+        submit.setOnMouseClicked(mouseEvent -> {
+            if (username.getText().equals("")) usernamelabel.setText("provide a username!");
+            if(password.getText().equals("")) passwordLabel.setText("provide a password!");
+
+            if(nickname.getText().equals("")) nicknameLabel.setText("provide a nickname!");
+            else if(CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname.getText()))
+                nicknameLabel.setText("invalid nickname format!");
+
+            if(email.getText().equals("")) emailLabel.setText("provide an email!");
+            else if(User.getUserByEmail(email.getText()) != null)
+                emailLabel.setText("email already exists!");
+
+            if (SignupMenuController.createUser(username.getText(), password.getText(), confirmation.getText(),
+                    nickname.getText(), email.getText()).equals(SignupMenuMessages.SHOW_QUESTIONS));
+                //TODO go to show questions menu
+        });
+
+        reset.setOnMouseClicked(mouseEvent -> {
+            username.clear();
+            usernamelabel.setText("");
+            password.clear();
+            passwordLabel.setText("");
+            confirmation.clear();
+            confirmationLabel.setText("");
+            nickname.clear();
+            nicknameLabel.setText("");
+            email.clear();
+            emailLabel.setText("");
+            slogan.clear();
+            defaultSlogan.getSelectionModel().clearSelection();
+        });
+
+        Scene scene = new Scene(borderPane, 450, 650);
         stage.setScene(scene);
         stage.setTitle("signup menu");
         stage.show();
