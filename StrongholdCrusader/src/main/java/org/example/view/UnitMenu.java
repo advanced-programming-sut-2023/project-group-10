@@ -260,7 +260,7 @@ public class UnitMenu {
             UnitMenuMessages result = UnitMenuController.captureBuilding(destination);
             switch (result) {
                 case NO_CAPTURING_UNITS:
-                    System.out.println("you don't have any units which can capture1");
+                    System.out.println("you don't have any units which can capture!");
                     break;
                 case NO_BUILDING:
                     System.out.println("There's no building which you can capture in that block!");

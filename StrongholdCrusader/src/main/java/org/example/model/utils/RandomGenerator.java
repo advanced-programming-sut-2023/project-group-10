@@ -21,6 +21,10 @@ public class RandomGenerator {
             "I will kill you soon! You and all your vermin!"
     };
 
+    public static String[] getSlogans(){
+        return slogans;
+    }
+
     public static String getRandomSlogan() {
         Random random = new Random();
         return slogans[random.nextInt(slogans.length)];

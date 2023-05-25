@@ -98,6 +98,7 @@ public class LoginMenu {
         }
 
         LoginMenuMessages message = LoginMenuController.forgetPassword(username, answer, newPassword);
+        System.out.println(username + answer + newPassword);
 
         switch (message) {
             case SECURITY_ANSWER_WRONG:
