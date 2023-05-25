@@ -40,7 +40,7 @@ public class SignupMenuController {
         return SignupMenuMessages.SUCCESS;
     }
 
-    private static SignupMenuMessages checkPassword(String newPassword) {
+    public static SignupMenuMessages checkPassword(String newPassword) {
         if (CheckFormatAndEncrypt.isPasswordWeak(newPassword).equals("short password"))
             return SignupMenuMessages.SHORT_PASSWORD;
 
@@ -57,5 +57,13 @@ public class SignupMenuController {
             return SignupMenuMessages.NO_SPECIAL_CHARACTER;
 
         else return SignupMenuMessages.STRONG_PASSWORD;
+    }
+
+    public static SignupMenuMessages checkUsername(String username){
+        if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
+            return SignupMenuMessages.INVALID_USERNAME_FORMAT;
+        if (User.getUserByUsername(username) != null)
+            return SignupMenuMessages.USER_EXISTS;
+        else return SignupMenuMessages.VALID_USERNAME;
     }
 }

@@ -7,12 +7,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.example.controller.SignupMenuController;
 import org.example.model.utils.RandomGenerator;
+import org.example.view.enums.messages.SignupMenuMessages;
 
 public class SignupMenu2 extends Application {
 
@@ -20,34 +21,74 @@ public class SignupMenu2 extends Application {
     public void start(Stage stage) throws Exception {
         BorderPane borderPane = new FXMLLoader(SignupMenu2.class.getResource("/view/signupMenu.fxml")).load();
 
-        VBox vBox = new VBox(20);
+        VBox vBox = new VBox(25);
         vBox.setAlignment(Pos.CENTER);
         borderPane.setCenter(vBox);
 
+        VBox usernameContainer = new VBox(5);
+        usernameContainer.setAlignment(Pos.CENTER);
         TextField username = new TextField();
         username.setMaxWidth(240);
         username.setPromptText("username");
-        vBox.getChildren().add(username);
+        Label usernamelabel = new Label();
+        usernameContainer.getChildren().addAll(username, usernamelabel);
+        vBox.getChildren().add(usernameContainer);
 
-        PasswordField passwordField = new PasswordField();
-        passwordField.setMaxWidth(240);
-        passwordField.setPromptText("password");
+        username.textProperty().addListener((observable, olaValue, newValue) -> {
+            checkUsername(newValue, usernamelabel);
+        });
+
+        VBox passwordVbox = new VBox(8);
+        passwordVbox.setAlignment(Pos.CENTER);
+        PasswordField password = new PasswordField();
+        password.setMinWidth(166);
+        password.setPromptText("password");
+        Label passwordLabel = new Label();
+        CheckBox showPassword = new CheckBox("show password");
         Button randomPassword = new Button("random");
 
         HBox passwordContainer = new HBox(15);
         passwordContainer.setAlignment(Pos.CENTER);
-        passwordContainer.getChildren().addAll(passwordField, randomPassword);
-        vBox.getChildren().add(passwordContainer);
+        passwordContainer.getChildren().addAll(password, randomPassword);
+        passwordVbox.getChildren().addAll(passwordContainer, passwordLabel, showPassword);
+        vBox.getChildren().add(passwordVbox);
 
+        password.textProperty().addListener((observable, oldValue, newValue) -> {
+            checkPassword(newValue, passwordLabel);
+        });
+
+        showPassword.setOnAction(actionEvent -> {
+            if(!password.getText().equals("")){
+                String passwordText = password.getText();
+                String label = passwordLabel.getText();
+                password.clear();
+                passwordLabel.setText(label);
+                password.setPromptText(passwordText);
+            }
+            else{
+                String passwordText = password.getPromptText();
+                password.setPromptText("password");
+                password.setText(passwordText);
+            }
+        });
+
+        VBox nicknameContainer = new VBox(5);
+        nicknameContainer.setAlignment(Pos.CENTER);
         TextField nickname = new TextField();
         nickname.setMaxWidth(240);
         nickname.setPromptText("nickname");
-        vBox.getChildren().add(nickname);
+        Label nicknameLabel = new Label();
+        nicknameContainer.getChildren().addAll(nickname, nicknameLabel);
+        vBox.getChildren().add(nicknameContainer);
 
+        VBox emailContainer = new VBox(5);
+        emailContainer.setAlignment(Pos.CENTER);
         TextField email = new TextField();
         email.setMaxWidth(240);
         email.setPromptText("email");
-        vBox.getChildren().add(email);
+        Label emailLabel = new Label();
+        emailContainer.getChildren().addAll(email, emailLabel);
+        vBox.getChildren().add(emailContainer);
 
         CheckBox hasSlogan = new CheckBox("create slogan");
         vBox.getChildren().add(hasSlogan);
@@ -89,5 +130,31 @@ public class SignupMenu2 extends Application {
 
     public static void main(String[] args) {
         Application.launch(SignupMenu2.class, args);
+    }
+
+    private void checkUsername(String username, Label label){
+        SignupMenuMessages message = SignupMenuController.checkUsername(username);
+
+        if(message.equals(SignupMenuMessages.INVALID_USERNAME_FORMAT))
+            label.setText("invalid username format!");
+        else if(message.equals(SignupMenuMessages.USER_EXISTS))
+            label.setText("username exists!");
+        else label.setText("valid username!");
+    }
+
+    private void checkPassword(String password, Label label){
+        SignupMenuMessages messages = SignupMenuController.checkPassword(password);
+
+        if(messages.equals(SignupMenuMessages.SHORT_PASSWORD))
+            label.setText("short Password!");
+        else if(messages.equals(SignupMenuMessages.NO_LOWERCASE_LETTER))
+            label.setText("password must have a lowercase letter");
+        else if(messages.equals(SignupMenuMessages.NO_UPPERCASE_LETTER))
+            label.setText("password must have an uppercase letter");
+        else if(messages.equals(SignupMenuMessages.NO_NUMBER))
+            label.setText("password must have a digit");
+        else if(messages.equals(SignupMenuMessages.NO_SPECIAL_CHARACTER))
+            label.setText("password must have a special character");
+        else label.setText("valid password!");
     }
 }
