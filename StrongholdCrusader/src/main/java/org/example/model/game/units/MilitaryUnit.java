@@ -40,6 +40,10 @@ public abstract class MilitaryUnit extends Unit {
         return onPatrol;
     }
 
+    public void setOnPatrol(boolean onPatrol) {
+        this.onPatrol = onPatrol;
+    }
+
     public void changeStance(MilitaryUnitStance newStance) {
         stance = newStance;
     }
@@ -84,10 +88,6 @@ public abstract class MilitaryUnit extends Unit {
             destination = DestinationIndicator.NONE;
             startingPoint = endPoint = null;
         }
-    }
-
-    public void setOnPatrol(boolean onPatrol) {
-        this.onPatrol = onPatrol;
     }
 
     public void setMoatAboutToBeDug(Moat moatAboutToBeDug) {

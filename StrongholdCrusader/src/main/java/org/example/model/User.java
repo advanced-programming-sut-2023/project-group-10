@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class User {
+    static final Gson gson = new Gson();
+    private static ArrayList<User> users = new ArrayList<>();
     private String username;
     private String password;
     private String nickname;
@@ -15,8 +17,6 @@ public class User {
     private String questionNumber;
     private String questionAnswer;
     private int highScore;
-    private static ArrayList<User> users = new ArrayList<>();
-    static final Gson gson = new Gson();
 
 
     public User(String username, String password, String nickname, String email, String slogan, String questionNumber,
@@ -51,6 +51,51 @@ public class User {
         users.addAll(createdUsers);
     }
 
+    public static User getUserByUsername(String username) {
+        Stronghold.dataBase.loadUsersFromFile();
+        if (users.size() == 0)
+            return null;
+        for (User user : users) {
+            if (user.getUsername().equals(username))
+                return user;
+        }
+        return null;
+    }
+
+    public static User getUserByEmail(String email) {
+        Stronghold.dataBase.loadUsersFromFile();
+        if (users.size() == 0)
+            return null;
+        email = email.toLowerCase();
+        for (User user : users) {
+
+            if (user.email.toLowerCase().equals(email))
+                return user;
+        }
+        return null;
+    }
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
+    private static ArrayList<User> sortUsers() {
+        Stronghold.dataBase.loadUsersFromFile();
+        ArrayList<User> toBeSorted = new ArrayList<>(users);
+
+        for (int i = 0; i < toBeSorted.size() - 1; i++) {
+            for (int j = 1; j < toBeSorted.size() - i - 1; j++) {
+                if (toBeSorted.get(j).getHighScore() < toBeSorted.get(j + 1).getHighScore())
+                    Collections.swap(toBeSorted, j, j + 1);
+                else if (toBeSorted.get(j).getHighScore() == toBeSorted.get(j + 1).getHighScore()) {
+                    if (toBeSorted.get(j).getNickname().compareTo(toBeSorted.get(j + 1).getNickname()) > 0)
+                        Collections.swap(toBeSorted, j, j + 1);
+                }
+            }
+        }
+        return toBeSorted;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -78,13 +123,13 @@ public class User {
         Stronghold.dataBase.saveUsersToFile();
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
         Stronghold.dataBase.saveUsersToFile();
-    }
-
-    public String getNickname() {
-        return nickname;
     }
 
     public String getSlogan() {
@@ -93,30 +138,6 @@ public class User {
 
     public void setSlogan(String slogan) {
         this.slogan = slogan;
-    }
-
-    public static User getUserByUsername(String username) {
-        Stronghold.dataBase.loadUsersFromFile();
-        if (users.size() == 0)
-            return null;
-        for (User user : users) {
-            if (user.getUsername().equals(username))
-                return user;
-        }
-        return null;
-    }
-
-    public static User getUserByEmail(String email) {
-        Stronghold.dataBase.loadUsersFromFile();
-        if (users.size() == 0)
-            return null;
-        email = email.toLowerCase();
-        for (User user : users) {
-
-            if (user.email.toLowerCase().equals(email))
-                return user;
-        }
-        return null;
     }
 
     public void setSecurityQuestion(String number, String answer) {
@@ -138,6 +159,7 @@ public class User {
     }
 
     public int getHighScore() {
+        Stronghold.dataBase.loadUsersFromFile();
         return highScore;
     }
 
@@ -149,32 +171,10 @@ public class User {
 
     public int getRank() {
         ArrayList<User> sorted = sortUsers();
-        for(int i = 0; i < sorted.size(); i++){
-            if(sorted.get(i).equals(this))
-                return i+1;
+        for (int i = 0; i < sorted.size(); i++) {
+            if (sorted.get(i).equals(this))
+                return i + 1;
         }
         return 0;
-    }
-
-    public static ArrayList<User> getUsers() {
-        return users;
-    }
-
-    private static ArrayList<User> sortUsers() {
-        Stronghold.dataBase.loadUsersFromFile();
-        ArrayList<User> toBeSorted = new ArrayList<>();
-        Collections.copy(toBeSorted, users);
-
-        for(int i = 0; i < toBeSorted.size()-1; i++){
-            for(int j = 1; j < toBeSorted.size()-i-1; j++){
-                if(toBeSorted.get(j).getHighScore() < toBeSorted.get(j+1).getHighScore())
-                    Collections.swap(toBeSorted, j, j+1);
-                else if(toBeSorted.get(j).getHighScore() == toBeSorted.get(j+1).getHighScore()){
-                    if(toBeSorted.get(j).getNickname().compareTo(toBeSorted.get(j+1).getNickname()) > 0)
-                        Collections.swap(toBeSorted, j, j+1);
-                }
-            }
-        }
-        return toBeSorted;
     }
 }

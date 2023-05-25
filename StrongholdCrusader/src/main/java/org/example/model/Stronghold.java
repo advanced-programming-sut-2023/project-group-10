@@ -16,9 +16,9 @@ import java.nio.file.Paths;
 import static org.example.model.User.gson;
 
 public class Stronghold {
+    public static DataBase dataBase = new DataBase();
     private static User currentUser;
     private static Battle currentBattle;
-    public static DataBase dataBase = new DataBase();
 
     public static User getCurrentUser() {
         return currentUser;

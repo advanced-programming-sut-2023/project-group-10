@@ -6,6 +6,11 @@ public class WorkerRole extends Role {
     private final static int defaultHitPoint = 50;
     private final BuildingTypeName workplaceTypeName;
 
+    private WorkerRole(RoleName name, int maxHitPoint, Quality speed, BuildingTypeName workplaceTypeName) {
+        super(name, maxHitPoint, speed);
+        this.workplaceTypeName = workplaceTypeName;
+    }
+
     public static void initializeRoles() {
         new WorkerRole(RoleName.WOODCUTTER, defaultHitPoint, Quality.AVERAGE, BuildingTypeName.WOODCUTTER);
         new WorkerRole(RoleName.HUNTER, defaultHitPoint, Quality.AVERAGE, BuildingTypeName.HUNTER_POST);
@@ -27,11 +32,6 @@ public class WorkerRole extends Role {
         new WorkerRole(RoleName.BLACKSMITH, defaultHitPoint, Quality.AVERAGE, BuildingTypeName.BLACKSMITH);
         new WorkerRole(RoleName.MARKET_TRADER, defaultHitPoint, Quality.AVERAGE, BuildingTypeName.MARKET);
         new WorkerRole(RoleName.PRIEST, defaultHitPoint, Quality.AVERAGE, BuildingTypeName.CATHEDRAL);
-    }
-
-    private WorkerRole(RoleName name, int maxHitPoint, Quality speed, BuildingTypeName workplaceTypeName) {
-        super(name, maxHitPoint, speed);
-        this.workplaceTypeName = workplaceTypeName;
     }
 
     public static RoleName getRoleNameByWorkplace(BuildingTypeName buildingTypeName) {

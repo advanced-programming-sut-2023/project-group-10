@@ -7,15 +7,15 @@ import java.util.Scanner;
 
 public class CaptchaGenerator {
 
-    public static void run(){
+    public static void run() {
         Scanner scanner = new Scanner(System.in);
-        while(true){
+        while (true) {
             String key = randomNumberGenerator();
             captchaGenerator(key);
             String answer = scanner.nextLine();
-            if(answer.equals(key))
+            if (answer.equals(key))
                 break;
-            if(answer.equals("change captcha")) continue;
+            if (answer.equals("change captcha")) continue;
             System.out.println("Wrong! Complete captcha again");
         }
     }
@@ -58,13 +58,13 @@ public class CaptchaGenerator {
         }
     }
 
-    public static String randomNumberGenerator(){
+    public static String randomNumberGenerator() {
         Random random = new Random();
         int length = random.nextInt(5) + 4;
         String producer = "0123456789";
         String captcha = "";
 
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             captcha += producer.charAt(random.nextInt(10));
         }
         return captcha;

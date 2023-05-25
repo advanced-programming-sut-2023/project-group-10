@@ -10,7 +10,7 @@ public class LoginMenuController {
         if (User.getUserByUsername(username) == null)
             return LoginMenuMessages.USERNAME_DOESNT_EXIST;
 
-        if(!User.getUserByUsername(username).checkPassword(password))
+        if (!User.getUserByUsername(username).checkPassword(password))
             return LoginMenuMessages.WRONG_PASSWORD;
 
         if (stayLoggedIn)

@@ -19,18 +19,18 @@ import java.util.Map;
 public class Government {
     private final User owner;
     private final ArrayList<Unit> units = new ArrayList<>();
-    private ArrayList<Building> buildings = new ArrayList<>();
     private final HashMap<Item, Double> itemList = new HashMap<>();
-    private int popularity;
     private final HashMap<String, Integer> popularityFactors = new HashMap<>();
-    private double gold;
     private final Color color;
+    private final ArrayList<Trade> tradeList = new ArrayList<>();
+    private final Coordinate keep;
+    private ArrayList<Building> buildings = new ArrayList<>();
+    private int popularity;
+    private double gold;
     private int foodRate;
     private int excessFood;
     private int taxRate;
     private int fearRate;
-    private final ArrayList<Trade> tradeList = new ArrayList<>();
-    private final Coordinate keep;
 
     public Government(User owner, Color color, Coordinate keep) {
         this.owner = owner;
@@ -69,31 +69,17 @@ public class Government {
         popularity += value;
     }
 
-    public void setTaxRate(int taxRate) {
-        this.taxRate = taxRate;
-        popularityFactors.put("Tax", popularityFactors.get("Tax") + taxRate);
-    }
-
-    public void setFearRate(int fearRate) {
-        this.fearRate = fearRate;
-        popularityFactors.put("Fear", popularityFactors.get("Fear") + fearRate);
-    }
-
     public void addReligion() {
         popularityFactors.put("Religion", 1);
+    }
+
+    public int getFoodRate() {
+        return foodRate;
     }
 
     public void setFoodRate(int foodRate) {
         this.foodRate = foodRate;
         popularityFactors.put("Food", popularityFactors.get("Food") + foodRate);
-    }
-
-    public void setGold(double gold) {
-        this.gold = gold;
-    }
-
-    public int getFoodRate() {
-        return foodRate;
     }
 
     public int getExcessFood() {
@@ -108,8 +94,17 @@ public class Government {
         return gold;
     }
 
+    public void setGold(double gold) {
+        this.gold = gold;
+    }
+
     public int getTaxRate() {
         return taxRate;
+    }
+
+    public void setTaxRate(int taxRate) {
+        this.taxRate = taxRate;
+        popularityFactors.put("Tax", popularityFactors.get("Tax") + taxRate);
     }
 
     public ArrayList<Unit> getUnits() {
@@ -170,7 +165,6 @@ public class Government {
         itemList.put(item, itemList.getOrDefault(item, (double) 0) + change);
     }
 
-
     public void addToTradeList(Trade trade) {
         tradeList.add(trade);
     }
@@ -178,7 +172,6 @@ public class Government {
     public ArrayList<Trade> getTradeList() {
         return tradeList;
     }
-
 
     public HashMap<String, Integer> getPopularityFactors() {
         return popularityFactors;
@@ -194,6 +187,11 @@ public class Government {
 
     public int getFearRate() {
         return fearRate;
+    }
+
+    public void setFearRate(int fearRate) {
+        this.fearRate = fearRate;
+        popularityFactors.put("Fear", popularityFactors.get("Fear") + fearRate);
     }
 
     public HashMap<Item, Double> getFoodList() {
@@ -240,8 +238,9 @@ public class Government {
     public int getPeasantsCount() {
         return getPeasants().size();
     }
-    public ArrayList<Unit> getPeasants(){
-        ArrayList<Unit> peasant=new ArrayList<>();
+
+    public ArrayList<Unit> getPeasants() {
+        ArrayList<Unit> peasant = new ArrayList<>();
         for (Unit unit : units) {
             if (unit.getRole().equals(Role.getRoleByName(RoleName.PEASANT)))
                 peasant.add(unit);

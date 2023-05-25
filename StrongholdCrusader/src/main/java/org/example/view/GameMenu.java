@@ -310,8 +310,10 @@ public class GameMenu {
     }
 
     private static GameMenuMessages endTurn() {
-
-        return GameMenuController.goToNextPlayer();
+        GameMenuMessages result = GameMenuController.goToNextPlayer();
+        if (result == GameMenuMessages.GAME_OVER)
+            System.out.println(Stronghold.getCurrentBattle().getAliveGovernment().getOwner().getUsername() + " has won!");
+        return result;
     }
 
 }
