@@ -31,7 +31,7 @@ public class LoginMenuController {
         if (!message.equals(LoginMenuMessages.STRONG_PASSWORD))
             return message;
 
-        Stronghold.getCurrentUser().setPassword(newPassword);
+        User.getUserByUsername(username).setPassword(newPassword);
         Stronghold.dataBase.saveUsersToFile();
         return LoginMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }

@@ -101,7 +101,7 @@ public class User {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        User.getUserByUsername(this.username).username=username;
         Stronghold.dataBase.saveUsersToFile();
     }
 
@@ -110,7 +110,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        User.getUserByUsername(this.username).password = CheckFormatAndEncrypt.encryptString(password);
         Stronghold.dataBase.saveUsersToFile();
     }
 
@@ -119,7 +119,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        User.getUserByUsername(this.username).email=email;
         Stronghold.dataBase.saveUsersToFile();
     }
 
@@ -128,7 +128,7 @@ public class User {
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        User.getUserByUsername(this.username).nickname=nickname;
         Stronghold.dataBase.saveUsersToFile();
     }
 
@@ -165,7 +165,7 @@ public class User {
 
     public void setHighScore(int highScore) {
         if (this.highScore <= highScore)
-            this.highScore = highScore;
+            User.getUserByUsername(this.username).highScore=highScore;
         Stronghold.dataBase.saveUsersToFile();
     }
 
