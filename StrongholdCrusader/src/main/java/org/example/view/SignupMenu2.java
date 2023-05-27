@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.controller.SignupMenuController;
 import org.example.model.User;
@@ -16,9 +17,11 @@ import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 public class SignupMenu2 extends Application {
+    public static Stage stage;
 
     @Override
     public void start(Stage stage) throws Exception {
+        SignupMenu2.stage = stage;
         BorderPane borderPane = new FXMLLoader(SignupMenu2.class.getResource("/view/signupMenu.fxml")).load();
 
         VBox vBox = new VBox(25);
@@ -115,8 +118,18 @@ public class SignupMenu2 extends Application {
         submitContainer.setAlignment(Pos.CENTER);
         vBox.getChildren().add(submitContainer);
 
+        Text loginMenu = new Text("already have and account? click HERE!");
+        loginMenu.setUnderline(true);
+        loginMenu.setOnMouseClicked(mouseEvent -> {
+            try {
+                goToLSecurityMenu();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         TextField slogan = new TextField();
-        slogan.setMaxWidth(300);
+        slogan.setMinWidth(226);
         slogan.setPromptText("slogan");
 
         Button randomSlogan = new Button("random");
@@ -152,7 +165,13 @@ public class SignupMenu2 extends Application {
 
             if (SignupMenuController.createUser(username.getText(), password.getText(), confirmation.getText(),
                     nickname.getText(), email.getText()).equals(SignupMenuMessages.SHOW_QUESTIONS));
-                //TODO go to show questions menu
+            else {
+                try {
+                    goToLSecurityMenu();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
         });
 
         reset.setOnMouseClicked(mouseEvent -> {
@@ -204,5 +223,13 @@ public class SignupMenu2 extends Application {
         else if(messages.equals(SignupMenuMessages.NO_SPECIAL_CHARACTER))
             label.setText("password must have a special character");
         else label.setText("valid password!");
+    }
+
+    private void goToLSecurityMenu() throws Exception{
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Signup Successful!");
+        alert.setContentText("you have entered \"security question\" menu!");
+        alert.show();
+        new SecurityMenu().start(stage);
     }
 }
