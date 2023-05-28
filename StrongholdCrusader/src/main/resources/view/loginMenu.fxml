@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<Pane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.view.LoginMenu2"
+      prefHeight="400.0" prefWidth="600.0" fx:id="pane">
+    <VBox alignment="CENTER" spacing="20" translateX="100" translateY="100">
+        <VBox alignment="CENTER" spacing="10">
+            <TextField promptText="username" fx:id="username"/>
+            <Text fx:id="usernameText"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="10">
+            <PasswordField promptText="password" fx:id="password"/>
+            <Text fx:id="passwordText"/>
+        </VBox>
+        <HBox alignment="CENTER" spacing="5">
+            <Text text="forget your password?"/>
+            <Text text="click HERE" onMouseClicked="#forgetPassword"/>
+        </HBox>
+        <CheckBox text="stay logged in" fx:id="stayLoggedIn"/>
+        <Button text="submit" onMouseClicked="#submit"/>
+    </VBox>
+
+</Pane>
