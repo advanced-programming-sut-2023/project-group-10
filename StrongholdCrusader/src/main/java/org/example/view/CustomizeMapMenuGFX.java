@@ -8,15 +8,14 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 
-public class PopularityFactorsMenuGFX extends Application {
+public class CustomizeMapMenuGFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        URL popularityFactorsMenuFXML = PopularityFactorsMenuGFX.class.getResource("/view/popularityFactorsMenu.fxml");
-        FXMLLoader loader = new FXMLLoader(popularityFactorsMenuFXML);
+        URL customizeMapMenuFXML = CustomizeMapMenuGFX.class.getResource("/view/customizeMapMenu.fxml");
+        FXMLLoader loader=new FXMLLoader(customizeMapMenuFXML);
         Pane rootPane = loader.load();
         Scene gameScene = new Scene(rootPane);
         primaryStage.setScene(gameScene);
-        primaryStage.show();
-        ((PopularityFactorsMenuController) loader.getController()).prepare(primaryStage);
+        ((CustomizeMapMenuController)loader.getController()).prepareGame(primaryStage);
     }
 }

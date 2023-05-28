@@ -19,5 +19,4 @@ public class GameMenuGFX extends Application {
         primaryStage.setScene(gameScene);
         ((GameMenuController)loader.getController()).prepareGame(primaryStage);
     }
-
 }
