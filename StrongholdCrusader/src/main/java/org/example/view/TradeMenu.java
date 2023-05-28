@@ -28,7 +28,6 @@ public class TradeMenu {
     }
 
     private static void sendRequest(String input) {
-        // process input
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String resourceType = "";
         String resourceAmountString = "";
