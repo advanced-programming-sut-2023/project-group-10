@@ -2,7 +2,6 @@ package test.profile;
 
 import org.example.model.Stronghold;
 import org.example.model.User;
-import org.example.view.ProfileMenu;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

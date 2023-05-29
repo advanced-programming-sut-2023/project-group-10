@@ -2,7 +2,6 @@ package org.example;
 
 import org.example.model.Stronghold;
 import org.example.view.MainMenu;
-import org.example.view.SignupMenu;
 
 public class Main {
     public static void main(String[] args) {
