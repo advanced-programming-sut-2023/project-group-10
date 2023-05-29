@@ -193,6 +193,6 @@ public class MainMenu {
     }
 
     private static void goToProfileMenu() {
-        ProfileMenu.run();
+        //ProfileMenu.run();
     }
 }

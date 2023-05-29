@@ -213,7 +213,7 @@ public class SignupMenu2 extends Application {
         SignupMenuMessages messages = SignupMenuController.checkPassword(password);
 
         if(messages.equals(SignupMenuMessages.SHORT_PASSWORD))
-            label.setText("short Password!");
+            label.setText("short password!");
         else if(messages.equals(SignupMenuMessages.NO_LOWERCASE_LETTER))
             label.setText("password must have a lowercase letter");
         else if(messages.equals(SignupMenuMessages.NO_UPPERCASE_LETTER))

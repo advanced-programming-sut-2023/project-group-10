@@ -81,7 +81,45 @@ public class ProfileMenu2 extends Application {
     }
 
     public void changePassword(){
+        VBox change = new VBox(20);
+        change.setTranslateX(200);
+        change.setTranslateY(100);
+        change.setAlignment(Pos.CENTER);
 
+        TextField currentPassword = new TextField();
+        currentPassword.setPromptText("current password");
+        Text currentPassDetail = new Text();
+        TextField newPassword = new TextField();
+        newPassword.setPromptText("new password");
+        Text newPassDetail = new Text();
+
+        Button submit = new Button("submit");
+        submit.setOnMouseClicked(mouseEvent -> {
+            if(newPassDetail.getText().equals("valid password!")) {
+                if(!Stronghold.getCurrentUser().getPassword().equals(currentPassword.getText()))
+                    currentPassDetail.setText("wrong password!");
+                else {
+                    try {
+                        Stronghold.getCurrentUser().setPassword(newPassword.getText());
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Password change successful");
+                        alert.setContentText("Your password was changed successfully");
+                        mainPane.getChildren().remove(1);
+                        mainPane.getChildren().add(mainButtons);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+
+        change.getChildren().addAll(currentPassword, currentPassDetail, newPassword, newPassDetail);
+        newPassword.textProperty().addListener((observable, oldValue, newValue) -> {
+            checkPassword(newValue, newPassDetail);
+        });
+
+        mainPane.getChildren().remove(1);
+        mainPane.getChildren().add(change);
     }
 
     public void changeNickname(){
@@ -178,5 +216,30 @@ public class ProfileMenu2 extends Application {
         if(!CheckFormatAndEncrypt.isEmailFormatInvalid(email))
             emailDetail.setText("invalid email format!");
         else emailDetail.setText("valid email!");
+    }
+
+    private void checkPassword(String newPassword, Text newPassDetail){
+        String result = CheckFormatAndEncrypt.isPasswordWeak(newPassword);
+
+        switch (result) {
+            case "short password":
+                newPassDetail.setText("short password!");
+                break;
+            case "no lowercase letter":
+                newPassDetail.setText("password must have a lowercase letter");
+                break;
+            case "no uppercase letter":
+                newPassDetail.setText("password must have an uppercase letter");
+                break;
+            case "no number":
+                newPassDetail.setText("password must have a digit");
+                break;
+            case "no special character":
+                newPassDetail.setText("password must have a special character");
+                break;
+            default:
+                newPassDetail.setText("valid password!");
+                break;
+        }
     }
 }
