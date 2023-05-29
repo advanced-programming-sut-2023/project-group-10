@@ -113,7 +113,7 @@ public class ProfileMenu2 extends Application {
             }
         });
 
-        change.getChildren().addAll(currentPassword, currentPassDetail, newPassword, newPassDetail);
+        change.getChildren().addAll(currentPassword, currentPassDetail, newPassword, newPassDetail, submit);
         newPassword.textProperty().addListener((observable, oldValue, newValue) -> {
             checkPassword(newValue, newPassDetail);
         });
