@@ -22,8 +22,14 @@ public class ProfileMenuController {
             return ProfileMenuMessages.USERNAME_EXISTS;
 
         else {
-            Stronghold.getCurrentUser().setUsername(username);
-            Stronghold.dataBase.saveUsersToFile();
+            if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+                Stronghold.getCurrentUser().setUsername(username);
+                Stronghold.dataBase.saveUsersToFile();
+                Stronghold.addUserToFile(Stronghold.getCurrentUser());
+            } else {
+                Stronghold.getCurrentUser().setUsername(username);
+                Stronghold.dataBase.saveUsersToFile();
+            }
             return ProfileMenuMessages.CHANGE_USERNAME_SUCCESSFUL;
         }
     }
@@ -36,8 +42,14 @@ public class ProfileMenuController {
             return ProfileMenuMessages.INVALID_NICKNAME;
 
         else {
-            Stronghold.getCurrentUser().setNickname(nickname);
-            Stronghold.dataBase.saveUsersToFile();
+            if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+                Stronghold.getCurrentUser().setNickname(nickname);
+                Stronghold.dataBase.saveUsersToFile();
+                Stronghold.addUserToFile(Stronghold.getCurrentUser());
+            } else {
+                Stronghold.getCurrentUser().setNickname(nickname);
+                Stronghold.dataBase.saveUsersToFile();
+            }
             return ProfileMenuMessages.CHANGE_NICKNAME_SUCCESSFUL;
         }
     }
@@ -58,9 +70,15 @@ public class ProfileMenuController {
             System.out.println("Please enter a new password!");
             newPassword = new Scanner(System.in).nextLine();
         }
+        if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+            Stronghold.getCurrentUser().setPassword(newPassword);
+            Stronghold.dataBase.saveUsersToFile();
+            Stronghold.addUserToFile(Stronghold.getCurrentUser());
+        } else {
+            Stronghold.getCurrentUser().setPassword(newPassword);
+            Stronghold.dataBase.saveUsersToFile();
+        }
 
-        Stronghold.getCurrentUser().setPassword(newPassword);
-        Stronghold.dataBase.saveUsersToFile();
         return ProfileMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 
@@ -78,8 +96,15 @@ public class ProfileMenuController {
             return ProfileMenuMessages.EMAIL_EXISTS;
 
         else {
-            Stronghold.getCurrentUser().setEmail(email);
-            Stronghold.dataBase.saveUsersToFile();
+            if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+                Stronghold.getCurrentUser().setEmail(email);
+                Stronghold.dataBase.saveUsersToFile();
+                Stronghold.addUserToFile(Stronghold.getCurrentUser());
+            } else {
+                Stronghold.getCurrentUser().setEmail(email);
+                Stronghold.dataBase.saveUsersToFile();
+
+            }
             return ProfileMenuMessages.CHANGE_EMAIL_SUCCESSFUL;
         }
     }
@@ -89,8 +114,15 @@ public class ProfileMenuController {
             return ProfileMenuMessages.NO_SLOGAN_PROVIDED;
 
         else {
-            Stronghold.getCurrentUser().setSlogan(slogan);
-            Stronghold.dataBase.saveUsersToFile();
+            if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+                Stronghold.getCurrentUser().setSlogan(slogan);
+                Stronghold.dataBase.saveUsersToFile();
+                Stronghold.addUserToFile(Stronghold.getCurrentUser());
+            } else {
+                Stronghold.getCurrentUser().setSlogan(slogan);
+                Stronghold.dataBase.saveUsersToFile();
+
+            }
             return ProfileMenuMessages.CHANGE_SLOGAN_SUCCESSFUL;
         }
     }
