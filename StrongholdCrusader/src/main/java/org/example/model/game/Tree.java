@@ -6,7 +6,7 @@ public class Tree implements Droppable {
 
     public Tree(TreeType type) {
         this.type = type;
-        this.woodStorage = TreeType.getMaxWoodStorage(this.type);
+        this.woodStorage = type.getMaxWoodStorage();
     }
 
     public TreeType getType() {

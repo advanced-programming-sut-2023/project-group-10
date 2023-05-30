@@ -1,17 +1,34 @@
 package org.example.model.game;
 
+import org.example.model.game.envirnmont.BlockTexture;
+
+import java.util.LinkedHashMap;
+
 public enum TreeType {
-    DESSERT_SHRUB("dessert shrub"),
-    CHERRY_PALM("cherry palm"),
-    OLIVE_TREE("olive tree"),
-    COCONUT_PALM("coconut palm"),
-    DATE_PALM("date palm");
+    DESERT_SHRUB1("dessert shrub", 0, "desert-shrub1.png"),
+    DESERT_SHRUB2("dessert shrub", 0, "desert-shrub2.png"),
+    DESERT_SHRUB3("dessert shrub", 0, "desert-shrub3.png"),
+    DESERT_SHRUB4("dessert shrub", 0, "desert-shrub4.png"),
+    DESERT_SHRUB5("dessert shrub", 0, "desert-shrub5.png"),
+    DESERT_SHRUB6("dessert shrub", 0, "desert-shrub6.png"),
+    CHERRY_PALM("cherry palm", 50, "cherry-palm.png"),
+    OLIVE_TREE("olive tree", 50, "olive-tree.png"),
+    COCONUT_PALM("coconut palm", 50, "coconut-palm.png"),
+    DATE_PALM("date palm", 50, "date-palm.png");
 
+    private static final String treeListAssetsFolderPath = TreeType.class.getResource("/images/plants/list").toExternalForm();
     private final String name;
-    private final int maxWoodStorage = 50;
+    private final int maxWoodStorage;
+    private final String listAssetFileName;
 
-    TreeType(String name) {
+    TreeType(String name, int maxWoodStorage, String listAssetFileName) {
         this.name = name;
+        this.maxWoodStorage = maxWoodStorage;
+        this.listAssetFileName = listAssetFileName;
+    }
+
+    public static String getTreeListAssetsFolderPath() {
+        return treeListAssetsFolderPath;
     }
 
     public static TreeType getTreeTypeByName(String name) {
@@ -21,11 +38,22 @@ public enum TreeType {
         return null;
     }
 
-    public static int getMaxWoodStorage(TreeType treeType) {
-        return treeType.maxWoodStorage;
+    public static LinkedHashMap<String, String> getItemNameFileNameMap() {
+        LinkedHashMap<String, String> result = new LinkedHashMap<>();
+        for (TreeType value : values())
+            result.put(value.getName(), value.getListAssetFileName());
+        return result;
     }
 
     public String getName() {
         return name.replace("_", " ").toLowerCase();
+    }
+
+    public int getMaxWoodStorage() {
+        return maxWoodStorage;
+    }
+
+    public String getListAssetFileName() {
+        return listAssetFileName;
     }
 }

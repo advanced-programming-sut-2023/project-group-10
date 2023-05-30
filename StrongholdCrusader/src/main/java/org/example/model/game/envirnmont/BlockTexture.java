@@ -2,38 +2,49 @@ package org.example.model.game.envirnmont;
 
 import org.example.model.utils.ASCIIColor;
 
+import java.util.LinkedHashMap;
+
 public enum BlockTexture {
     //on land
-    EARTH(false, true, true, true, ASCIIColor.RED_BACKGROUND),
-    EARTH_AND_STONES(false, true, true, true, ASCIIColor.RESET),
-    BOULDERS(false, true, true, true, ASCIIColor.YELLOW_BACKGROUND),
-    ROCKS(false, false, false, false, ASCIIColor.YELLOW_BACKGROUND),
-    IRON(false, true, true, false, ASCIIColor.RED_BACKGROUND),
-    GRASS(true, true, true, true, ASCIIColor.GREEN_BACKGROUND),
-    SCRUB(false, true, true, true, ASCIIColor.GREEN_BACKGROUND),
-    THICK_SCRUB(false, true, true, true, ASCIIColor.GREEN_BACKGROUND),
+    EARTH("earth", false, true, true, true, ASCIIColor.RED_BACKGROUND, "earth.png"),
+    EARTH_AND_STONES("earth and stones", false, true, true, true, ASCIIColor.RESET, "earth-and-stones.png"),
+    BOULDERS("boulders", false, true, true, true, ASCIIColor.YELLOW_BACKGROUND, "boulders.png"),
+    ROCKS("rocks", false, false, false, false, ASCIIColor.YELLOW_BACKGROUND, "rocks.png"),
+    IRON("iron", false, true, true, false, ASCIIColor.RED_BACKGROUND, "iron.png"),
+    GRASS("grass", true, true, true, true, ASCIIColor.GREEN_BACKGROUND, "grass.png"),
+    SCRUB("scrub", false, true, true, true, ASCIIColor.GREEN_BACKGROUND, "scrub.png"),
+    THICK_SCRUB("thick scrub", false, true, true, true, ASCIIColor.GREEN_BACKGROUND, "thick-scrub.png"),
     //on water
-    OIL(false, false, true, false, ASCIIColor.BLACK_BACKGROUND),
-    MARSH(false, false, true, false, ASCIIColor.PURPLE_BACKGROUND), /* units can spawn or walk here but drown if they do */
-    FORD(false, false, true, false, ASCIIColor.CYAN_BACKGROUND),
-    RIVER(false, false, false, false, ASCIIColor.BLUE_BACKGROUND),
-    SMALL_POND(false, false, false, false, ASCIIColor.CYAN_BACKGROUND),
-    LARGE_POND(false, false, false, false, ASCIIColor.CYAN_BACKGROUND),
-    BEACH(false, true, true, true, ASCIIColor.WHITE_BACKGROUND),
-    SEA(false, false, false, false, ASCIIColor.BLUE_BACKGROUND);
+    OIL("oil", false, false, true, false, ASCIIColor.BLACK_BACKGROUND, "oil.png"),
+    MARSH("marsh", false, false, true, false, ASCIIColor.PURPLE_BACKGROUND, "marsh.png"), /* units can spawn or walk here but drown if they do */
+    FORD("ford", false, false, true, false, ASCIIColor.CYAN_BACKGROUND, "ford.png"),
+    RIVER("river", false, false, false, false, ASCIIColor.BLUE_BACKGROUND, "river.png"),
+    SMALL_POND("small pond", false, false, false, false, ASCIIColor.CYAN_BACKGROUND, "small-pond.png"),
+    LARGE_POND("large pond", false, false, false, false, ASCIIColor.CYAN_BACKGROUND, "large-pond.png"),
+    BEACH("beach", false, true, true, true, ASCIIColor.WHITE_BACKGROUND, "beach.png"),
+    SEA("sea", false, false, false, false, ASCIIColor.BLUE_BACKGROUND, "sea.png");
 
+    private static final String textureListAssetsFolderPath = BlockTexture.class.getResource("/images/textures/list").toExternalForm();
+    private final String name;
     private final boolean fertile;
     private final boolean buildable;
     private final boolean walkable;
     private final boolean isPlantable;
     private final ASCIIColor color;
+    private final String listAssetFileName;
 
-    BlockTexture(boolean fertile, boolean buildable, boolean walkable, boolean plantable, ASCIIColor color) {
+    BlockTexture(String name, boolean fertile, boolean buildable, boolean walkable, boolean plantable, ASCIIColor color, String listAssetFileName) {
+        this.name = name;
         this.isPlantable = plantable;
         this.fertile = fertile;
         this.buildable = buildable;
         this.walkable = walkable;
         this.color = color;
+        this.listAssetFileName = listAssetFileName;
+    }
+
+    public static String getTextureListAssetsFolderPath() {
+        return textureListAssetsFolderPath;
     }
 
     public static BlockTexture getTypeByName(String landType) {
@@ -42,6 +53,17 @@ public enum BlockTexture {
             if (blockTexture.toString().replaceAll("_", "").equalsIgnoreCase(landType))
                 return blockTexture;
         return null;
+    }
+
+    public static LinkedHashMap<String, String> getItemNameFileNameMap() {
+        LinkedHashMap<String, String> result = new LinkedHashMap<>();
+        for (BlockTexture value : values())
+            result.put(value.getName(), value.getListAssetFileName());
+        return result;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean isFertile() {
@@ -62,5 +84,9 @@ public enum BlockTexture {
 
     public ASCIIColor getColor() {
         return color;
+    }
+
+    public String getListAssetFileName() {
+        return listAssetFileName;
     }
 }

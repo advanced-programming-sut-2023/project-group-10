@@ -16,6 +16,8 @@ public class CustomizeMapMenuGFX extends Application {
         Pane rootPane = loader.load();
         Scene gameScene = new Scene(rootPane);
         primaryStage.setScene(gameScene);
+        primaryStage.setMaximized(true);
+        primaryStage.show();
         ((CustomizeMapMenuController)loader.getController()).prepareGame(primaryStage);
     }
 }

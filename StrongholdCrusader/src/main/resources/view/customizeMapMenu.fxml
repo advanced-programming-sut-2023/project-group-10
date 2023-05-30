@@ -7,20 +7,17 @@
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.CustomizeMapMenuController"
-      prefHeight="400.0" prefWidth="600.0">
+      stylesheets="@../CSS/customizeMapStyle.css">
 
     <Pane fx:id="mapBox">
         <Label text="map"/>
     </Pane>
     <VBox fx:id="itemsBox">
-        <ScrollPane fx:id="texturesBox">
-            <Label text="textures"/>
-        </ScrollPane>
-        <ScrollPane fx:id="treeTypesBox">
-            <Label text="tree types"/>
-        </ScrollPane>
-        <ScrollPane fx:id="rockDirectionsBox">
-            <Label text="rock directions"/>
-        </ScrollPane>
+        <ListView fx:id="texturesBox">
+        </ListView>
+        <ListView fx:id="treeTypesBox">
+        </ListView>
+        <ListView fx:id="rockDirectionsBox">
+        </ListView>
     </VBox>
 </HBox>
