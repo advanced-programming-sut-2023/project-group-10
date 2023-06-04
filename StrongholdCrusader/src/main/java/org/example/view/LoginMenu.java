@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import org.example.controller.LoginMenuController;
 import org.example.view.enums.messages.LoginMenuMessages;
 
-public class LoginMenu2 extends Application {
+public class LoginMenu extends Application {
 
     public TextField username;
     public PasswordField password;
@@ -26,7 +26,7 @@ public class LoginMenu2 extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Pane pane = new FXMLLoader(LoginMenu2.class.getResource("/view/loginMenu.fxml")).load();
+        Pane pane = new FXMLLoader(LoginMenu.class.getResource("/view/loginMenu.fxml")).load();
         Scene scene = new Scene(pane, 400, 500);
         stage.setScene(scene);
         stage.setTitle("Login Menu");

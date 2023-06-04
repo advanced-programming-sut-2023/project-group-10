@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Text?>
 <Pane xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.example.view.LoginMenu2"
+      fx:controller="org.example.view.LoginMenu"
       prefHeight="400.0" prefWidth="600.0" fx:id="pane">
     <VBox alignment="CENTER" spacing="20" translateX="100" translateY="100">
         <VBox alignment="CENTER" spacing="10">

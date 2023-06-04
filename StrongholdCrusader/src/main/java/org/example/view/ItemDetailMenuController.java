@@ -94,7 +94,7 @@ public class ItemDetailMenuController {
 
     public void cancel(MouseEvent mouseEvent) throws Exception {
         // how did Rozhin handle this?
-        new ShopMenuGFX().start(SignupMenu2.stage);
+        new ShopMenuGFX().start(SignupMenu.stage);
     }
 
     public void sell(MouseEvent mouseEvent) {

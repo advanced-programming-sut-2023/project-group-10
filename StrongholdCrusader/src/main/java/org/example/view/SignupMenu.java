@@ -5,9 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.controller.SignupMenuController;
@@ -16,16 +15,19 @@ import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.messages.SignupMenuMessages;
 
-public class SignupMenu2 extends Application {
+public class SignupMenu extends Application {
     public static Stage stage;
 
     @Override
     public void start(Stage stage) throws Exception {
-        SignupMenu2.stage = stage;
-        BorderPane borderPane = new FXMLLoader(SignupMenu2.class.getResource("/view/signupMenu.fxml")).load();
+        SignupMenu.stage = stage;
+        BorderPane borderPane = new FXMLLoader(SignupMenu.class.getResource("/view/signupMenu.fxml")).load();
+        Background background = new Background(setBackground("/images/backgrounds/background2.png"));
+        borderPane.setBackground(background);
 
         VBox vBox = new VBox(25);
         vBox.setAlignment(Pos.CENTER);
+        vBox.setTranslateX(300);
         borderPane.setCenter(vBox);
 
         VBox usernameContainer = new VBox(5);
@@ -122,7 +124,7 @@ public class SignupMenu2 extends Application {
         loginMenu.setUnderline(true);
         loginMenu.setOnMouseClicked(mouseEvent -> {
             try {
-                goToLSecurityMenu();
+                goToSecurityMenu();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -160,14 +162,14 @@ public class SignupMenu2 extends Application {
                 nicknameLabel.setText("invalid nickname format!");
 
             if(email.getText().equals("")) emailLabel.setText("provide an email!");
+            else if(CheckFormatAndEncrypt.isEmailFormatInvalid(email.getText())) emailLabel.setText("invalid email format!");
             else if(User.getUserByEmail(email.getText()) != null)
                 emailLabel.setText("email already exists!");
 
             if (SignupMenuController.createUser(username.getText(), password.getText(), confirmation.getText(),
-                    nickname.getText(), email.getText()).equals(SignupMenuMessages.SHOW_QUESTIONS));
-            else {
+                    nickname.getText(), email.getText()).equals(SignupMenuMessages.SHOW_QUESTIONS)) {
                 try {
-                    goToLSecurityMenu();
+                    goToSecurityMenu();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -192,11 +194,12 @@ public class SignupMenu2 extends Application {
         Scene scene = new Scene(borderPane, 450, 650);
         stage.setScene(scene);
         stage.setTitle("signup menu");
+        stage.setFullScreen(true);
         stage.show();
     }
 
     public static void main(String[] args) {
-        Application.launch(SignupMenu2.class, args);
+        Application.launch(SignupMenu.class, args);
     }
 
     private void checkUsername(String username, Label label){
@@ -225,11 +228,21 @@ public class SignupMenu2 extends Application {
         else label.setText("valid password!");
     }
 
-    private void goToLSecurityMenu() throws Exception{
+    private void goToSecurityMenu() throws Exception{
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Signup Successful!");
         alert.setContentText("you have entered \"security question\" menu!");
         alert.show();
         new SecurityMenu().start(stage);
+    }
+
+    private BackgroundImage setBackground(String url){
+        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440 ,900, false, false);
+        BackgroundImage backgroundImage = new BackgroundImage(image,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+        return backgroundImage;
     }
 }
