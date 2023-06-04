@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -46,6 +47,11 @@ public class ProfileMenu2 extends Application {
     }
 
     public void changeUsername() {
+        Button back = new Button("back");
+        back.setTranslateX(120);
+        back.setTranslateY(160);
+        mainPane.getChildren().add(back);
+
         VBox change = new VBox(20);
         change.setTranslateX(200);
         change.setTranslateY(100);
@@ -63,7 +69,7 @@ public class ProfileMenu2 extends Application {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Username change successful");
                     alert.setContentText("Your username was changed successfully");
-                    mainPane.getChildren().remove(1);
+                    mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -71,16 +77,26 @@ public class ProfileMenu2 extends Application {
             }
         });
 
+        back.setOnMouseClicked(mouseEvent -> {
+            mainPane.getChildren().removeAll(change, back);
+            mainPane.getChildren().add(mainButtons);
+        });
+
         change.getChildren().addAll(currentUsername, newUsername, usernameDetail, submit);
         newUsername.textProperty().addListener((observable, oldValue, newValue) -> {
             checkUsername(newValue, usernameDetail);
         });
 
-        mainPane.getChildren().remove(1);
+        mainPane.getChildren().remove(mainButtons);
         mainPane.getChildren().add(change);
     }
 
     public void changePassword(){
+        Button back = new Button("back");
+        back.setTranslateX(120);
+        back.setTranslateY(160);
+        mainPane.getChildren().add(back);
+
         VBox change = new VBox(20);
         change.setTranslateX(200);
         change.setTranslateY(100);
@@ -104,7 +120,7 @@ public class ProfileMenu2 extends Application {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Password change successful");
                         alert.setContentText("Your password was changed successfully");
-                        mainPane.getChildren().remove(1);
+                        mainPane.getChildren().remove(change);
                         mainPane.getChildren().add(mainButtons);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
@@ -113,16 +129,26 @@ public class ProfileMenu2 extends Application {
             }
         });
 
+        back.setOnMouseClicked(mouseEvent -> {
+            mainPane.getChildren().removeAll(change, back);
+            mainPane.getChildren().add(mainButtons);
+        });
+
         change.getChildren().addAll(currentPassword, currentPassDetail, newPassword, newPassDetail, submit);
         newPassword.textProperty().addListener((observable, oldValue, newValue) -> {
             checkPassword(newValue, newPassDetail);
         });
 
-        mainPane.getChildren().remove(1);
+        mainPane.getChildren().remove(mainButtons);
         mainPane.getChildren().add(change);
     }
 
     public void changeNickname(){
+        Button back = new Button("back");
+        back.setTranslateX(120);
+        back.setTranslateY(160);
+        mainPane.getChildren().add(back);
+
         VBox change = new VBox(20);
         change.setTranslateX(200);
         change.setTranslateY(100);
@@ -140,7 +166,7 @@ public class ProfileMenu2 extends Application {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Nickname change successful");
                     alert.setContentText("Your nickname was changed successfully");
-                    mainPane.getChildren().remove(1);
+                    mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -153,11 +179,21 @@ public class ProfileMenu2 extends Application {
             checkNickname(newValue, nicknameDetail);
         });
 
-        mainPane.getChildren().remove(1);
+        back.setOnMouseClicked(mouseEvent -> {
+            mainPane.getChildren().removeAll(change, back);
+            mainPane.getChildren().add(mainButtons);
+        });
+
+        mainPane.getChildren().remove(mainButtons);
         mainPane.getChildren().add(change);
     }
 
     public void changeEmail(){
+        Button back = new Button("back");
+        back.setTranslateX(120);
+        back.setTranslateY(160);
+        mainPane.getChildren().add(back);
+
         VBox change = new VBox(20);
         change.setTranslateX(200);
         change.setTranslateY(100);
@@ -181,6 +217,11 @@ public class ProfileMenu2 extends Application {
                     throw new RuntimeException(e);
                 }
             }
+        });
+
+        back.setOnMouseClicked(mouseEvent -> {
+            mainPane.getChildren().removeAll(change, back);
+            mainPane.getChildren().add(mainButtons);
         });
 
         change.getChildren().addAll(currentEmail, newEmail, emailDetail, submit);
@@ -241,5 +282,9 @@ public class ProfileMenu2 extends Application {
                 newPassDetail.setText("valid password!");
                 break;
         }
+    }
+
+    public void goToMainMenu(MouseEvent mouseEvent) {
+        //TODO go to main menu
     }
 }

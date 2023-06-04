@@ -9,6 +9,7 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.ProfileMenu2"
       prefHeight="400.0" prefWidth="600.0" fx:id="mainPane">
+    <Button text="main menu" translateX="120" translateY="160" onMouseClicked="#goToMainMenu"/>
 
     <VBox alignment="CENTER" spacing="20" translateX="100" translateY="50">
         <Circle fx:id="avatar" radius="40"/>
