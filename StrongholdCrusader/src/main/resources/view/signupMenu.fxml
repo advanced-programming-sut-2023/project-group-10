@@ -33,12 +33,12 @@
 
             <VBox fx:id="nicknameContainer" alignment="CENTER" spacing="5">
                 <TextField fx:id="nickname" maxWidth="300" promptText="nickname"/>
-                <Label fx:id="nicknameLabel"/>
+                <Label fx:id="nicknameLabel" textFill="red"/>
             </VBox>
 
             <VBox fx:id="emailContainer" alignment="CENTER" spacing="5">
                 <TextField fx:id="email" maxWidth="300" promptText="email"/>
-                <Label fx:id="emailLabel"/>
+                <Label fx:id="emailLabel" textFill="red"/>
             </VBox>
 
             <CheckBox fx:id="hasSlogan" text="has slogan"/>

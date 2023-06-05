@@ -8,14 +8,13 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.example.controller.SignupMenuController;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.messages.SignupMenuMessages;
-
-import java.awt.event.MouseEvent;
 
 public class SignupMenu extends Application {
     public static Stage stage;
@@ -119,7 +118,7 @@ public class SignupMenu extends Application {
             emailLabel.setText("email already exists!");
 
         if (SignupMenuController.createUser(username.getText(), password.getText(), confirmation.getText(),
-                nickname.getText(), email.getText()).equals(SignupMenuMessages.SHOW_QUESTIONS)) {
+                email.getText(), nickname.getText()).equals(SignupMenuMessages.SHOW_QUESTIONS)) {
             try {
                 DataBank.setUsername(username.getText());
                 DataBank.setPassword(password.getText());
@@ -196,10 +195,12 @@ public class SignupMenu extends Application {
     }
 
     private void goToSecurityMenu() throws Exception{
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Signup Successful!");
-        alert.setContentText("you have entered \"security question\" menu!");
-        alert.show();
+        Popup popup = new Popup();
+        Label label = new Label("you have entered \"security question\" menu!");
+        label.setBackground(new Background(setBackground("/images/backgrounds/background2.png")));
+        popup.getContent().add(label);
+        popup.setAutoHide(true);
+        popup.show(stage);
         new SecurityQuestionMenu().start(stage);
     }
 
