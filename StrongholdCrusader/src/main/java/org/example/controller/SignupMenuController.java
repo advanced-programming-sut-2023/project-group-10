@@ -5,7 +5,7 @@ import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 public class SignupMenuController {
-    private static void createUser(String securityQuestionNumber, String securityAnswer,
+    public static void createUser(String securityQuestionNumber, String securityAnswer,
                                    String username, String password, String nickname, String slogan, String email) {
         User.addUser(username, password, nickname, email, slogan, securityQuestionNumber, securityAnswer);
     }

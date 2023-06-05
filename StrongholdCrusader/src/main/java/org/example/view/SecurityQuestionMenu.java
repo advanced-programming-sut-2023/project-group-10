@@ -1,42 +1,37 @@
 package org.example.view;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.example.controller.SignupMenuController;
 import org.example.model.SecurityQuestion;
 
-import java.util.Map;
-
 public class SecurityQuestionMenu extends Application {
-    @FXML
+
     public RadioButton question1;
-    @FXML
     public RadioButton question2;
-    @FXML
     public RadioButton question3;
-    @FXML
-    public VBox pane;
-    @FXML
     public TextField answer;
-    @FXML
     public Button submit;
     private String question;
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(SecurityQuestionMenu.class.getResource("/view/securityQuestion.fxml"));
+        BorderPane borderPane = new FXMLLoader(SecurityQuestionMenu.class.getResource("/view/securityQuestion.fxml")).load();
+        Background background = new Background(setBackground("/images/backgrounds/background2.png"));
+        borderPane.setBackground(background);
 
-        Scene scene = new Scene(fxmlLoader.load(), 300, 300);
+        Scene scene = new Scene(borderPane, 1390, 850);
         stage.setScene(scene);
         stage.setTitle("Security Question");
+        stage.setFullScreen(true);
         stage.show();
     }
 
@@ -47,24 +42,36 @@ public class SecurityQuestionMenu extends Application {
         question3.setText(SecurityQuestion.getQuestionByNumber("3"));
     }
 
-    public void question1(ActionEvent actionEvent) {
+    public void question1() {
         answer.setVisible(true);
         submit.setVisible(true);
-        question = question1.getText();
+        question = "1";
     }
 
-    public void question2(ActionEvent actionEvent) {
+    public void question2() {
         answer.setVisible(true);
         submit.setVisible(true);
-        question = question2.getText();
+        question = "2";
     }
 
-    public void question3(ActionEvent actionEvent) {
+    public void question3() {
         answer.setVisible(true);
         submit.setVisible(true);
-        question = question3.getText();
+        question = "3";
     }
 
-    public void submit(MouseEvent mouseEvent) {
+    public void submit() {
+        SignupMenuController.createUser(question, answer.getText(), DataBank.getUsername(),
+                DataBank.getPassword(), DataBank.getNickname(), DataBank.getSlogan(), DataBank.getEmail());
+    }
+
+    private BackgroundImage setBackground(String url){
+        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440 ,900, false, false);
+        BackgroundImage backgroundImage = new BackgroundImage(image,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+        return backgroundImage;
     }
 }

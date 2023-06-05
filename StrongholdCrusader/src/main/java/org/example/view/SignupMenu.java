@@ -17,6 +17,11 @@ import org.example.view.enums.messages.SignupMenuMessages;
 
 public class SignupMenu extends Application {
     public static Stage stage;
+    private String username;
+    private String password;
+    private String nickname;
+    private String email;
+    private String slogan;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -169,6 +174,11 @@ public class SignupMenu extends Application {
             if (SignupMenuController.createUser(username.getText(), password.getText(), confirmation.getText(),
                     nickname.getText(), email.getText()).equals(SignupMenuMessages.SHOW_QUESTIONS)) {
                 try {
+                    DataBank.setUsername(username.getText());
+                    DataBank.setPassword(password.getText());
+                    DataBank.setNickname(nickname.getText());
+                    DataBank.setEmail(email.getText());
+                    DataBank.setSlogan(slogan.getText());
                     goToSecurityMenu();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -191,7 +201,7 @@ public class SignupMenu extends Application {
             defaultSlogan.getSelectionModel().clearSelection();
         });
 
-        Scene scene = new Scene(borderPane, 450, 650);
+        Scene scene = new Scene(borderPane, 1390, 850);
         stage.setScene(scene);
         stage.setTitle("signup menu");
         stage.setFullScreen(true);
@@ -233,7 +243,7 @@ public class SignupMenu extends Application {
         alert.setTitle("Signup Successful!");
         alert.setContentText("you have entered \"security question\" menu!");
         alert.show();
-        new SecurityMenu().start(stage);
+        new SecurityQuestionMenu().start(stage);
     }
 
     private BackgroundImage setBackground(String url){

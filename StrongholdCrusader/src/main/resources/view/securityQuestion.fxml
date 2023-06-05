@@ -7,22 +7,23 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.text.Text?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.example.view.SecurityQuestionMenu"
-      prefHeight="400.0" prefWidth="600.0"
-      fx:id="pane" spacing="20" alignment="CENTER">
-
-    <fx:define>
-        <ToggleGroup fx:id="tg"/>
-    </fx:define>
-    <Text text="choose your question"/>
-    <VBox alignment="CENTER" spacing="10">
-        <RadioButton fx:id="question1" toggleGroup="$tg" onAction="#question1"/>
-        <RadioButton fx:id="question2" toggleGroup="$tg" onAction="#question2"/>
-        <RadioButton fx:id="question3" toggleGroup="$tg" onAction="#question3"/>
-    </VBox>
-    <TextField promptText="answer" fx:id="answer" visible="false" maxWidth="240"/>
-    <Button text="submit" fx:id="submit" onMouseClicked="#submit" visible="false"/>
-
-</VBox>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.view.SecurityQuestionMenu"
+            prefHeight="400.0" prefWidth="600.0">
+    <center>
+        <VBox alignment="CENTER_LEFT" spacing="20" translateX="900">
+            <fx:define>
+                <ToggleGroup fx:id="tg"/>
+            </fx:define>
+            <Text text="choose your question"/>
+            <VBox alignment="CENTER_LEFT" spacing="10">
+                <RadioButton fx:id="question1" toggleGroup="$tg" onAction="#question1"/>
+                <RadioButton fx:id="question2" toggleGroup="$tg" onAction="#question2"/>
+                <RadioButton fx:id="question3" toggleGroup="$tg" onAction="#question3"/>
+            </VBox>
+            <TextField promptText="answer" fx:id="answer" visible="false" maxWidth="240"/>
+            <Button text="submit" fx:id="submit" onMouseClicked="#submit" visible="false"/>
+        </VBox>
+    </center>
+</BorderPane>
