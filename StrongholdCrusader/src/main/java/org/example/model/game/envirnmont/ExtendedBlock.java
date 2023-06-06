@@ -7,8 +7,8 @@ import javafx.scene.shape.Polygon;
 import java.util.HashMap;
 
 public class ExtendedBlock {
-    private static final double WIDTH = 32;
-    private static final double HEIGHT = 16;
+    private static final double WIDTH = 64;
+    private static final double HEIGHT = 32;
     private final Block block;
     private final Polygon blockView;
     private static final HashMap<BlockTexture, ImagePattern> textureImageMap;
