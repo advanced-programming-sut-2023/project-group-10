@@ -4,20 +4,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.Group?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.CustomizeMapMenuController"
       stylesheets="@../CSS/customizeMapStyle.css">
 
-    <Pane fx:id="mapBox">
-        <Label text="map"/>
-    </Pane>
+    <ScrollPane fx:id="mapBox">
+        <Group fx:id="mapPane">
+        </Group>
+    </ScrollPane>
     <VBox fx:id="itemsBox">
-        <ListView fx:id="texturesBox">
-        </ListView>
-        <ListView fx:id="treeTypesBox">
-        </ListView>
-        <ListView fx:id="rockDirectionsBox">
+        <HBox fx:id="selectListBox">
+        </HBox>
+        <ListView fx:id="itemList">
         </ListView>
     </VBox>
 </HBox>
