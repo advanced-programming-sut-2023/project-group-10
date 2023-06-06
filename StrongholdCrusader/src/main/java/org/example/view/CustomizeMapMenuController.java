@@ -8,8 +8,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
-import org.example.model.game.Rock;
+import org.example.controller.CustomizeMapController;
+import org.example.model.game.RockType;
 import org.example.model.game.TreeType;
 import org.example.model.game.envirnmont.BlockTexture;
 import org.example.model.game.envirnmont.Coordinate;
@@ -65,7 +67,7 @@ public class CustomizeMapMenuController {
                         customizationMode = CustomizationMode.TREE;
                         break;
                     case "rock":
-                        itemList.getItems().addAll(generateOptions(Rock.getRockListAssetsFolderPath(), Rock.getItemNameFileNameMap()));
+                        itemList.getItems().addAll(generateOptions(RockType.getRockListAssetsFolderPath(), RockType.getItemNameFileNameMap()));
                         customizationMode = CustomizationMode.ROCK;
                 }
             }
@@ -97,7 +99,7 @@ public class CustomizeMapMenuController {
         mapBox.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         mapBox.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         mapBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getButton() != MouseButton.MIDDLE) mapBox.setPannable(false);
+            if (event.getButton() != MouseButton.SECONDARY) mapBox.setPannable(false);
         });
         mapBox.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             mapBox.setPannable(true);
@@ -105,6 +107,7 @@ public class CustomizeMapMenuController {
         // TODO: link with start game
 //        org.example.model.game.envirnmont.Map map = CustomizeMapController.getMap();
         org.example.model.game.envirnmont.Map map = new org.example.model.game.envirnmont.Map(200);
+        CustomizeMapController.setMap(map);
         HashMap<Polygon, Coordinate> polygonCoordinateMap = new HashMap<>();
         int size = map.getSize();
         double x0 = size * ExtendedBlock.getWidth() / 2;
@@ -118,9 +121,19 @@ public class CustomizeMapMenuController {
                 mapPane.getChildren().add(blockView);
                 blockView.setOnMousePressed(event -> {
                     if (event.isPrimaryButtonDown()) {
-                        if (customizationMode == CustomizationMode.TEXTURE) {
-                            Coordinate coordinate = polygonCoordinateMap.get(blockView);
-                            mapView[coordinate.row][coordinate.column].setTexture(BlockTexture.getTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
+                        Coordinate coordinate = polygonCoordinateMap.get(blockView);
+                        if (customizationMode == CustomizationMode.TEXTURE)
+                            mapView[coordinate.row][coordinate.column].setTexture(BlockTexture.getTypeByName(itemList.getSelectionModel().getSelectedItem().getId()), coordinate);
+                        else {
+                            Shape object = null;
+                            if (customizationMode == CustomizationMode.TREE)
+                                object = mapView[coordinate.row][coordinate.column].setTree(coordinate, TreeType.getTreeTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
+                            else if (customizationMode == CustomizationMode.ROCK)
+                                object = mapView[coordinate.row][coordinate.column].setRock(coordinate, RockType.getRockTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
+                            if (object != null) {
+                                object.setMouseTransparent(true);
+                                mapPane.getChildren().add(object);
+                            }
                         }
                     }
                 });

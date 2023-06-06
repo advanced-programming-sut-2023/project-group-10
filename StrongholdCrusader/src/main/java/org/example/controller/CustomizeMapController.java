@@ -1,8 +1,8 @@
 package org.example.controller;
 
 import org.example.model.Stronghold;
-import org.example.model.game.MapDirections;
 import org.example.model.game.Rock;
+import org.example.model.game.RockType;
 import org.example.model.game.Tree;
 import org.example.model.game.TreeType;
 import org.example.model.game.envirnmont.BlockTexture;
@@ -21,38 +21,38 @@ public class CustomizeMapController {
         return map;
     }
 
-    public static CustomizeMapMessages setTexture(String landType, Coordinate position) {
+    public static CustomizeMapMessages setTexture(BlockTexture texture, Coordinate position) {
         if (!map.isIndexInBounds(position))
             return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
-        if (BlockTexture.getTypeByName(landType) == null)
-            return CustomizeMapMessages.INVALID_LAND_TYPE;
-        if (map.getBlockByRowAndColumn(position).getDroppable() != null)
+        if (map.getBlockByRowAndColumn(position).getBuilding() != null)
             return CustomizeMapMessages.DROPPABLE_IN_THE_BLOCK;
-        if (map.getBlockByRowAndColumn(position).isKeep() && !BlockTexture.getTypeByName(landType).isWalkable())
+        if (map.getBlockByRowAndColumn(position).getDroppable() instanceof Tree && !texture.isPlantable())
+            return CustomizeMapMessages.DROPPABLE_IN_THE_BLOCK;
+        if (map.getBlockByRowAndColumn(position).isKeep() && !texture.isWalkable())
             return CustomizeMapMessages.IS_KEEP;
-        map.setTextureSingleBlock(BlockTexture.getTypeByName(landType), position.row, position.column);
+        map.setTextureSingleBlock(texture, position.row, position.column);
         return CustomizeMapMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL;
     }
 
-    public static CustomizeMapMessages setTexture(String landType, Coordinate point1, Coordinate point2) {
-        if (BlockTexture.getTypeByName(landType) == null)
-            return CustomizeMapMessages.INVALID_LAND_TYPE;
-        if (BlockTexture.getTypeByName(landType).equals(BlockTexture.LARGE_POND)
-                || BlockTexture.getTypeByName(landType).equals(BlockTexture.SMALL_POND))
-            return CustomizeMapMessages.POND_ENTERED;
-
-        for (int i = point1.row; i <= point2.row; i++) {
-            for (int j = point1.column; j <= point2.column; j++) {
-                if (map.getBlockByRowAndColumn(i, j).getDroppable() != null)
-                    return CustomizeMapMessages.DROPPABlE_IN_THE_AREA;
-                if (map.getBlockByRowAndColumn(i, j).isKeep() && !BlockTexture.getTypeByName(landType).isWalkable())
-                    return CustomizeMapMessages.IS_KEEP;
-            }
-        }
-        arrangePoints(point1, point2);
-        map.setTextureRectangleOfBlocks(BlockTexture.getTypeByName(landType), point1.row, point1.column, point2.row, point2.column);
-        return CustomizeMapMessages.SET_TEXTURE_OF_AREA_SUCCESSFUL;
-    }
+//    public static CustomizeMapMessages setTexture(String landType, Coordinate point1, Coordinate point2) {
+//        if (BlockTexture.getTypeByName(landType) == null)
+//            return CustomizeMapMessages.INVALID_LAND_TYPE;
+//        if (BlockTexture.getTypeByName(landType).equals(BlockTexture.LARGE_POND)
+//                || BlockTexture.getTypeByName(landType).equals(BlockTexture.SMALL_POND))
+//            return CustomizeMapMessages.POND_ENTERED;
+//
+//        for (int i = point1.row; i <= point2.row; i++) {
+//            for (int j = point1.column; j <= point2.column; j++) {
+//                if (map.getBlockByRowAndColumn(i, j).getDroppable() != null)
+//                    return CustomizeMapMessages.DROPPABlE_IN_THE_AREA;
+//                if (map.getBlockByRowAndColumn(i, j).isKeep() && !BlockTexture.getTypeByName(landType).isWalkable())
+//                    return CustomizeMapMessages.IS_KEEP;
+//            }
+//        }
+//        arrangePoints(point1, point2);
+//        map.setTextureRectangleOfBlocks(BlockTexture.getTypeByName(landType), point1.row, point1.column, point2.row, point2.column);
+//        return CustomizeMapMessages.SET_TEXTURE_OF_AREA_SUCCESSFUL;
+//    }
 
     private static void arrangePoints(Coordinate p1, Coordinate p2) {
         if (p2.row < p1.row) {
@@ -75,27 +75,28 @@ public class CustomizeMapController {
         return CustomizeMapMessages.SUCCESSFUL_CLEAR;
     }
 
-    public static CustomizeMapMessages dropRock(Coordinate position, String direction) {
+    public static CustomizeMapMessages dropRock(Coordinate position, RockType rockType) {
         if (map.getBlockByRowAndColumn(position).getDroppable() != null)
             return CustomizeMapMessages.NON_EMPTY_LAND;
         if (map.getBlockByRowAndColumn(position).isKeep())
             return CustomizeMapMessages.IS_KEEP;
-        map.getBlockByRowAndColumn(position).setDroppable(new Rock(MapDirections.getByName(direction)));
+        map.getBlockByRowAndColumn(position).setDroppable(new Rock(rockType));
         return CustomizeMapMessages.DROP_ROCK_SUCCESSFUL;
     }
 
-    public static CustomizeMapMessages dropTree(Coordinate position, String type) {
-        if (!map.isIndexInBounds(position))
-            return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
+    public static CustomizeMapMessages dropTree(Coordinate position, TreeType treeType) {
         if (map.getBlockByRowAndColumn(position).getDroppable() != null)
             return CustomizeMapMessages.NON_EMPTY_LAND;
-        if (TreeType.getTreeTypeByName(type) == null)
-            return CustomizeMapMessages.INVALID_TREE_TYPE;
         if (!map.getBlockByRowAndColumn(position).getTexture().isPlantable())
             return CustomizeMapMessages.INCOMPATIBLE_LAND;
         if (map.getBlockByRowAndColumn(position).isKeep())
             return CustomizeMapMessages.IS_KEEP;
-        map.getBlockByRowAndColumn(position).setDroppable(new Tree(TreeType.getTreeTypeByName(type)));
+        map.getBlockByRowAndColumn(position).setDroppable(new Tree(treeType));
         return CustomizeMapMessages.SUCCESSFUL_TREE_DROP;
+    }
+
+    public static void setMap(Map map) {
+        // TODO: initialize map instead of this when start game is complete
+        CustomizeMapController.map = map;
     }
 }
