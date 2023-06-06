@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import org.example.controller.CustomizeMapController;
@@ -29,7 +30,6 @@ public class CustomizeMapMenuController {
     public VBox itemsBox;
     public ListView<HBox> itemList;
     public HBox selectListBox;
-    private ToggleGroup selectListToggle;
     private ExtendedBlock[][] mapView;
     private CustomizationMode customizationMode;
 
@@ -45,7 +45,7 @@ public class CustomizeMapMenuController {
     }
 
     private void initializeSelectListBox() {
-        selectListToggle = new ToggleGroup();
+        ToggleGroup selectListToggle = new ToggleGroup();
         ToggleButton texture = new ToggleButton("texture");
         texture.setToggleGroup(selectListToggle);
         ToggleButton tree = new ToggleButton("tree");
@@ -70,10 +70,10 @@ public class CustomizeMapMenuController {
                         itemList.getItems().addAll(generateOptions(RockType.getRockListAssetsFolderPath(), RockType.getItemNameFileNameMap()));
                         customizationMode = CustomizationMode.ROCK;
                 }
+                itemList.getSelectionModel().select(0);
             }
         });
         selectListToggle.selectToggle(texture);
-        itemList.getSelectionModel().select(0);
     }
 
     private ArrayList<HBox> generateOptions(String assetsFolderName, LinkedHashMap<String, String> itemNameFileNameMap) {
@@ -133,6 +133,13 @@ public class CustomizeMapMenuController {
                             if (object != null) {
                                 object.setMouseTransparent(true);
                                 mapPane.getChildren().add(object);
+                                Rectangle frontTree;
+                                for (int k = coordinate.row + 1, l = coordinate.column + 1; k < size && l < size; k++, l++) {
+                                    if ((frontTree = mapView[k][l].getObject()) != null) {
+                                        mapPane.getChildren().remove(frontTree);
+                                        mapPane.getChildren().add(frontTree);
+                                    }
+                                }
                             }
                         }
                     }

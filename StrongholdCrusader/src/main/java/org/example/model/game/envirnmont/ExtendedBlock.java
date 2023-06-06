@@ -59,6 +59,10 @@ public class ExtendedBlock {
         return blockView;
     }
 
+    public Rectangle getObject() {
+        return object;
+    }
+
     public void setTexture(BlockTexture texture, Coordinate position) {
         if (CustomizeMapController.setTexture(texture, position) != CustomizeMapMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL)
             return;
@@ -84,9 +88,11 @@ public class ExtendedBlock {
     }
 
     private void setObjectProperties(int row, int column) {
+        ImagePattern paint = (ImagePattern) object.getFill();
+        double heightToWidthRatio = paint.getImage().getHeight() / paint.getImage().getWidth();
         object.setWidth(WIDTH / 2);
-        object.setHeight(HEIGHT);
-        object.relocate(WIDTH / 2 * (column - row + 0.5) + x0, HEIGHT / 2 * (row + column + 0.5));
+        object.setHeight(heightToWidthRatio * WIDTH / 2);
+        object.relocate(WIDTH / 2 * (column - row) + x0 + object.getWidth() / 2, HEIGHT / 2 * (row + column + 2) - object.getHeight());
     }
 
     private void setPosition(int row, int column) {
