@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -95,7 +94,7 @@ public class SignupMenu extends Application {
 
         loginMenu.setOnMouseClicked(mouseEvent -> {
             try {
-                goToSecurityMenu();
+                new LoginMenu().start(stage);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
