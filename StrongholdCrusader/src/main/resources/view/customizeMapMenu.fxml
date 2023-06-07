@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.CustomizeMapMenuController"
@@ -20,9 +17,12 @@
         </HBox>
         <ListView fx:id="itemList">
         </ListView>
-        <HBox fx:id="controlsBox" alignment="CENTER">
-            <Button text="eraser" onMouseClicked="#goToEraserMode"/>
-            <Button text="done" onMouseClicked="#goToGame"/>
-        </HBox>
+        <VBox  fx:id="controlsBox"  alignment="CENTER">
+            <Label fx:id="errorMessage" wrapText="true"/>
+            <HBox alignment="CENTER">
+                <Button text="eraser" onMouseClicked="#goToEraserMode"/>
+                <Button text="done" onMouseClicked="#goToGame"/>
+            </HBox>
+        </VBox>
     </VBox>
 </HBox>

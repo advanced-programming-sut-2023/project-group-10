@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import org.example.controller.CustomizeMapController;
 import org.example.model.game.RockType;
 import org.example.model.game.TreeType;
@@ -63,28 +62,31 @@ public class ExtendedBlock {
         return object;
     }
 
-    public void setTexture(BlockTexture texture, Coordinate position) {
-        if (CustomizeMapController.setTexture(texture, position) != CustomizeMapMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL)
-            return;
-        blockView.setFill(textureImageMap.get(texture));
+    public CustomizeMapMessages setTexture(BlockTexture texture, Coordinate position) {
+        CustomizeMapMessages result = CustomizeMapController.setTexture(texture, position);
+        if (result == CustomizeMapMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL)
+            blockView.setFill(textureImageMap.get(texture));
+        return result;
     }
 
-    public Shape setTree(Coordinate position, TreeType treeType) {
-        if (CustomizeMapController.dropTree(position, treeType) != CustomizeMapMessages.SUCCESSFUL_TREE_DROP)
-            return null;
-        object = new Rectangle();
-        object.setFill(treeImageMap.get(treeType));
-        setObjectProperties(position.row, position.column);
-        return object;
+    public CustomizeMapMessages setTree(Coordinate position, TreeType treeType) {
+        CustomizeMapMessages result = CustomizeMapController.dropTree(position, treeType);
+        if (result == CustomizeMapMessages.SUCCESSFUL_TREE_DROP) {
+            object = new Rectangle();
+            object.setFill(treeImageMap.get(treeType));
+            setObjectProperties(position.row, position.column);
+        }
+        return result;
     }
 
-    public Shape setRock(Coordinate position, RockType rockType) {
-        if (CustomizeMapController.dropRock(position, rockType) != CustomizeMapMessages.DROP_ROCK_SUCCESSFUL)
-            return null;
-        object = new Rectangle();
-        object.setFill(rockImageMap.get(rockType));
-        setObjectProperties(position.row, position.column);
-        return object;
+    public CustomizeMapMessages setRock(Coordinate position, RockType rockType) {
+        CustomizeMapMessages result = CustomizeMapController.dropRock(position, rockType);
+        if (result == CustomizeMapMessages.DROP_ROCK_SUCCESSFUL) {
+            object = new Rectangle();
+            object.setFill(rockImageMap.get(rockType));
+            setObjectProperties(position.row, position.column);
+        }
+        return result;
     }
 
     private void setObjectProperties(int row, int column) {
@@ -99,9 +101,9 @@ public class ExtendedBlock {
         blockView.relocate(WIDTH / 2 * (column - row) + x0, HEIGHT / 2 * (row + column + 1));
     }
 
-    public void erase(Coordinate position) {
+    public CustomizeMapMessages erase(Coordinate position) {
         setTexture(BlockTexture.EARTH, position);
-        CustomizeMapController.clear(position);
         object = null;
+        return CustomizeMapController.clear(position);
     }
 }

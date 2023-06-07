@@ -115,10 +115,7 @@ public class CustomizeMapMenu {
         try {
             Coordinate position = InputProcessor.getCoordinateFromXYInput(input, "-x", "-y");
             CustomizeMapMessages message = CustomizeMapController.clear(position);
-            if (message == CustomizeMapMessages.INDEX_OUT_OF_BOUNDS) {
-                System.out.println("You've entered numbers less than 0 or grater than the size!");
-                return;
-            } else if (message == CustomizeMapMessages.SUCCESSFUL_CLEAR)
+            if (message == CustomizeMapMessages.SUCCESSFUL_CLEAR)
                 System.out.println("You successfully cleared the block!");
 
         } catch (Exception exception) {

@@ -1,7 +1,6 @@
 package org.example.view;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -18,6 +17,7 @@ import org.example.model.game.TreeType;
 import org.example.model.game.envirnmont.BlockTexture;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
+import org.example.view.enums.messages.CustomizeMapMessages;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +31,8 @@ public class CustomizeMapMenuController {
     public VBox actionsPane;
     public ListView<HBox> itemList;
     public HBox selectListBox;
-    public HBox controlsBox;
+    public Label errorMessage;
+    public VBox controlsBox;
     private ExtendedBlock[][] mapView;
     private CustomizationMode customizationMode;
 
@@ -40,7 +41,7 @@ public class CustomizeMapMenuController {
         selectListBox.setPrefWidth(primaryStage.getWidth() / 5);
         initializeSelectListBox();
         itemList.setPrefWidth(primaryStage.getWidth() / 5);
-        itemList.setPrefHeight(primaryStage.getHeight() - selectListBox.getHeight()-controlsBox.getHeight());
+        itemList.setPrefHeight(primaryStage.getHeight() - selectListBox.getHeight() - controlsBox.getHeight());
         mapBox.setPrefWidth(primaryStage.getWidth() - actionsPane.getWidth());
         initializeMapView();
     }
@@ -102,11 +103,8 @@ public class CustomizeMapMenuController {
         mapBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             if (event.getButton() != MouseButton.SECONDARY) mapBox.setPannable(false);
         });
-        mapBox.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
-            mapBox.setPannable(true);
-        });
+        mapBox.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> mapBox.setPannable(true));
         org.example.model.game.envirnmont.Map map = CustomizeMapController.getMap();
-        CustomizeMapController.setMap(map);
         HashMap<Polygon, Coordinate> polygonCoordinateMap = new HashMap<>();
         int size = map.getSize();
         double x0 = size * ExtendedBlock.getWidth() / 2;
@@ -121,18 +119,19 @@ public class CustomizeMapMenuController {
                 blockView.setOnMousePressed(event -> {
                     if (event.isPrimaryButtonDown()) {
                         Coordinate coordinate = polygonCoordinateMap.get(blockView);
+                        CustomizeMapMessages result = null;
                         if (customizationMode == CustomizationMode.TEXTURE)
-                            mapView[coordinate.row][coordinate.column].setTexture(BlockTexture.getTypeByName(itemList.getSelectionModel().getSelectedItem().getId()), coordinate);
+                            result = mapView[coordinate.row][coordinate.column].setTexture(BlockTexture.getTypeByName(itemList.getSelectionModel().getSelectedItem().getId()), coordinate);
                         else if (customizationMode == CustomizationMode.ERASER) {
                             mapPane.getChildren().remove(mapView[coordinate.row][coordinate.column].getObject());
-                            mapView[coordinate.row][coordinate.column].erase(coordinate);
+                            result = mapView[coordinate.row][coordinate.column].erase(coordinate);
                         } else {
-                            Shape object = null;
                             if (customizationMode == CustomizationMode.TREE)
-                                object = mapView[coordinate.row][coordinate.column].setTree(coordinate, TreeType.getTreeTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
+                                result = mapView[coordinate.row][coordinate.column].setTree(coordinate, TreeType.getTreeTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
                             else if (customizationMode == CustomizationMode.ROCK)
-                                object = mapView[coordinate.row][coordinate.column].setRock(coordinate, RockType.getRockTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
-                            if (object != null) {
+                                result = mapView[coordinate.row][coordinate.column].setRock(coordinate, RockType.getRockTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
+                            Shape object = mapView[coordinate.row][coordinate.column].getObject();
+                            if (object != null && !mapPane.getChildren().contains(object)) {
                                 object.setMouseTransparent(true);
                                 mapPane.getChildren().add(object);
                                 Rectangle frontTree;
@@ -143,6 +142,8 @@ public class CustomizeMapMenuController {
                                     }
                             }
                         }
+                        assert result != null;
+                        updateMessage(result.getMessage());
                     }
                 });
             }
@@ -155,6 +156,10 @@ public class CustomizeMapMenuController {
         mapBox.setHvalue(0.5);
     }
 
+    private void updateMessage(String message) {
+        errorMessage.setText(message);
+    }
+
     public void goToGame() throws Exception {
         new GameMenuGFX().start(SignupMenu.stage);
     }
@@ -162,4 +167,5 @@ public class CustomizeMapMenuController {
     public void goToEraserMode() {
         customizationMode = CustomizationMode.ERASER;
     }
+
 }
