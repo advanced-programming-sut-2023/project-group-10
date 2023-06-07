@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.example.controller.SignupMenuController;
+import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.model.utils.RandomGenerator;
@@ -173,6 +174,7 @@ public class SignupMenu extends Application {
     }
 
     public static void main(String[] args) {
+        Stronghold.initializeApp();
         Application.launch(SignupMenu.class, args);
     }
 

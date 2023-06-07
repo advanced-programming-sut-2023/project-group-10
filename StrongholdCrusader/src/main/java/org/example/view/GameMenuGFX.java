@@ -4,23 +4,11 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.example.controller.GameMenuController;
-import org.example.model.game.envirnmont.Coordinate;
-import org.example.model.game.envirnmont.Map;
 
 import java.net.URL;
-import java.util.HashMap;
 
 public class GameMenuGFX extends Application {
-    public GameMenuGFX(HashMap<String, Color> colors, HashMap<String, Coordinate> keeps, Map map) throws Exception {
-        GameMenuController.initializeGame(colors, keeps, map);
-    }
-
-    public GameMenuGFX() {
-    }
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL gameMenuFXML = GameMenuGFX.class.getResource("/view/gameMenu.fxml");

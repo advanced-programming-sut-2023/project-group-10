@@ -7,6 +7,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.example.controller.GameMenuController;
+import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
@@ -82,7 +84,8 @@ public class StartGameMenuController {
             colors.put(playerInfo.username.getText(), playerInfo.colorPicker.getValue());
             keeps.put(playerInfo.username.getText(), new Coordinate(Integer.parseInt(playerInfo.row.getText()), Integer.parseInt(playerInfo.column.getText())));
         }
-        new GameMenuGFX(colors, keeps, new Map(getSize())).start(SignupMenu.stage);
+        GameMenuController.initializeGame(colors, keeps, new Map(getSize()));
+        new CustomizeMapMenuGFX().start(SignupMenu.stage);
     }
 
     public void goBackToMainMenu() throws Exception {
@@ -110,9 +113,7 @@ public class StartGameMenuController {
             username = new TextField();
             if (isLoggedIn) {
                 username.setEditable(false);
-                // TODO: link to logged in user
-//                username.setText(Stronghold.getCurrentUser().getUsername());
-                username.setText("placeholder");
+                username.setText(Stronghold.getCurrentUser().getUsername());
             } else username.setPromptText("username");
             colorPicker = new ColorPicker();
             row = new TextField();
