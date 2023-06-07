@@ -182,6 +182,7 @@ public class SignupMenu extends Application {
     }
 
     public static void main(String[] args) {
+        Stronghold.initializeApp();
         Application.launch(SignupMenu.class, args);
     }
 
