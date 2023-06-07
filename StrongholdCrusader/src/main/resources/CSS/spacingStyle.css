@@ -1,3 +1,7 @@
 .moderate-spacing {
     -fx-padding: 15;
 }
+
+.narrow-padding {
+    -fx-padding: 5 10;
+}

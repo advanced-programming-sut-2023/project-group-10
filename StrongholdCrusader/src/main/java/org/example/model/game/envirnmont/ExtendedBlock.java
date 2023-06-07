@@ -98,4 +98,10 @@ public class ExtendedBlock {
     private void setPosition(int row, int column) {
         blockView.relocate(WIDTH / 2 * (column - row) + x0, HEIGHT / 2 * (row + column + 1));
     }
+
+    public void erase(Coordinate position) {
+        setTexture(BlockTexture.EARTH, position);
+        CustomizeMapController.clear(position);
+        object = null;
+    }
 }

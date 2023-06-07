@@ -1,6 +1,7 @@
 package org.example.view;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -27,9 +28,10 @@ import java.util.Map;
 public class CustomizeMapMenuController {
     public ScrollPane mapBox;
     public Group mapPane;
-    public VBox itemsBox;
+    public VBox actionsPane;
     public ListView<HBox> itemList;
     public HBox selectListBox;
+    public HBox controlsBox;
     private ExtendedBlock[][] mapView;
     private CustomizationMode customizationMode;
 
@@ -38,8 +40,8 @@ public class CustomizeMapMenuController {
         selectListBox.setPrefWidth(primaryStage.getWidth() / 5);
         initializeSelectListBox();
         itemList.setPrefWidth(primaryStage.getWidth() / 5);
-        itemList.setPrefHeight(primaryStage.getHeight() - selectListBox.getHeight());
-        mapBox.setPrefWidth(primaryStage.getWidth() - itemsBox.getWidth());
+        itemList.setPrefHeight(primaryStage.getHeight() - selectListBox.getHeight()-controlsBox.getHeight());
+        mapBox.setPrefWidth(primaryStage.getWidth() - actionsPane.getWidth());
         initializeMapView();
     }
 
@@ -82,7 +84,7 @@ public class CustomizeMapMenuController {
         Label label;
         for (Map.Entry<String, String> entry : itemNameFileNameMap.entrySet()) {
             label = new Label(entry.getKey());
-            label.getStyleClass().add("item-name");
+            label.getStyleClass().add("narrow-padding");
             imageView = new ImageView(assetsFolderName + entry.getValue());
             imageView.setPreserveRatio(true);
             imageView.setFitWidth(50);
@@ -121,7 +123,10 @@ public class CustomizeMapMenuController {
                         Coordinate coordinate = polygonCoordinateMap.get(blockView);
                         if (customizationMode == CustomizationMode.TEXTURE)
                             mapView[coordinate.row][coordinate.column].setTexture(BlockTexture.getTypeByName(itemList.getSelectionModel().getSelectedItem().getId()), coordinate);
-                        else {
+                        else if (customizationMode == CustomizationMode.ERASER) {
+                            mapPane.getChildren().remove(mapView[coordinate.row][coordinate.column].getObject());
+                            mapView[coordinate.row][coordinate.column].erase(coordinate);
+                        } else {
                             Shape object = null;
                             if (customizationMode == CustomizationMode.TREE)
                                 object = mapView[coordinate.row][coordinate.column].setTree(coordinate, TreeType.getTreeTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
@@ -131,12 +136,11 @@ public class CustomizeMapMenuController {
                                 object.setMouseTransparent(true);
                                 mapPane.getChildren().add(object);
                                 Rectangle frontTree;
-                                for (int k = coordinate.row + 1, l = coordinate.column + 1; k < size && l < size; k++, l++) {
+                                for (int k = coordinate.row + 1, l = coordinate.column + 1; k < size && l < size; k++, l++)
                                     if ((frontTree = mapView[k][l].getObject()) != null) {
                                         mapPane.getChildren().remove(frontTree);
                                         mapPane.getChildren().add(frontTree);
                                     }
-                                }
                             }
                         }
                     }
@@ -149,5 +153,13 @@ public class CustomizeMapMenuController {
                 mapView[i][j].getBlockView().setVisible(true);
 
         mapBox.setHvalue(0.5);
+    }
+
+    public void goToGame() throws Exception {
+        new GameMenuGFX().start(SignupMenu.stage);
+    }
+
+    public void goToEraserMode() {
+        customizationMode = CustomizationMode.ERASER;
     }
 }

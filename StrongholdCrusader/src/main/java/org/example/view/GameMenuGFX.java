@@ -18,6 +18,9 @@ public class GameMenuGFX extends Application {
         GameMenuController.initializeGame(colors, keeps, map);
     }
 
+    public GameMenuGFX() {
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL gameMenuFXML = GameMenuGFX.class.getResource("/view/gameMenu.fxml");
