@@ -12,11 +12,11 @@ public class CustomizeMapMenuGFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL customizeMapMenuFXML = CustomizeMapMenuGFX.class.getResource("/view/customizeMapMenu.fxml");
-        FXMLLoader loader=new FXMLLoader(customizeMapMenuFXML);
+        FXMLLoader loader = new FXMLLoader(customizeMapMenuFXML);
         Pane rootPane = loader.load();
         Scene gameScene = primaryStage.getScene();
         gameScene.setRoot(rootPane);
         primaryStage.setMaximized(true);
-        ((CustomizeMapMenuController)loader.getController()).prepareGame(primaryStage);
+        ((CustomizeMapMenuController) loader.getController()).prepareGame(primaryStage);
     }
 }

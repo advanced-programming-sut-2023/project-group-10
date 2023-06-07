@@ -1,13 +1,21 @@
 package org.example.view.enums.messages;
 
 public enum CustomizeMapMessages {
-    DROPPABLE_IN_THE_BLOCK,
-    SET_TEXTURE_OF_BLOCK_SUCCESSFUL,
-    DROPPABlE_IN_THE_AREA,
-    SET_TEXTURE_OF_AREA_SUCCESSFUL,
-    SUCCESSFUL_CLEAR,
-    NON_EMPTY_LAND,
-    DROP_ROCK_SUCCESSFUL,
-    SUCCESSFUL_DROP,
-    INVALID_LAND_TYPE, INDEX_OUT_OF_BOUNDS, SUCCESSFUL_TREE_DROP, INVALID_TREE_TYPE, POND_ENTERED, IS_KEEP, INCOMPATIBLE_LAND
+    INVALID_TEXTURE_FOR_TREE("this texture can't be used in tiles with trees"),
+    SET_TEXTURE_OF_BLOCK_SUCCESSFUL(""),
+    SUCCESSFUL_CLEAR(""),
+    NON_EMPTY_LAND("tile is already full"),
+    DROP_ROCK_SUCCESSFUL(""),
+    SUCCESSFUL_TREE_DROP(""),
+    IS_KEEP("invalid choice, keep's tile should be walkable and empty"),
+    INCOMPATIBLE_LAND("can't drop a tree on this texture");
+    private final String message;
+
+    CustomizeMapMessages(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

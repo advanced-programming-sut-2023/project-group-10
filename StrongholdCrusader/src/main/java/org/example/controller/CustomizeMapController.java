@@ -22,49 +22,12 @@ public class CustomizeMapController {
     }
 
     public static CustomizeMapMessages setTexture(BlockTexture texture, Coordinate position) {
-        if (!map.isIndexInBounds(position))
-            return CustomizeMapMessages.INDEX_OUT_OF_BOUNDS;
-        if (map.getBlockByRowAndColumn(position).getBuilding() != null)
-            return CustomizeMapMessages.DROPPABLE_IN_THE_BLOCK;
         if (map.getBlockByRowAndColumn(position).getDroppable() instanceof Tree && !texture.isPlantable())
-            return CustomizeMapMessages.DROPPABLE_IN_THE_BLOCK;
+            return CustomizeMapMessages.INVALID_TEXTURE_FOR_TREE;
         if (map.getBlockByRowAndColumn(position).isKeep() && !texture.isWalkable())
             return CustomizeMapMessages.IS_KEEP;
         map.setTextureSingleBlock(texture, position.row, position.column);
         return CustomizeMapMessages.SET_TEXTURE_OF_BLOCK_SUCCESSFUL;
-    }
-
-//    public static CustomizeMapMessages setTexture(String landType, Coordinate point1, Coordinate point2) {
-//        if (BlockTexture.getTypeByName(landType) == null)
-//            return CustomizeMapMessages.INVALID_LAND_TYPE;
-//        if (BlockTexture.getTypeByName(landType).equals(BlockTexture.LARGE_POND)
-//                || BlockTexture.getTypeByName(landType).equals(BlockTexture.SMALL_POND))
-//            return CustomizeMapMessages.POND_ENTERED;
-//
-//        for (int i = point1.row; i <= point2.row; i++) {
-//            for (int j = point1.column; j <= point2.column; j++) {
-//                if (map.getBlockByRowAndColumn(i, j).getDroppable() != null)
-//                    return CustomizeMapMessages.DROPPABlE_IN_THE_AREA;
-//                if (map.getBlockByRowAndColumn(i, j).isKeep() && !BlockTexture.getTypeByName(landType).isWalkable())
-//                    return CustomizeMapMessages.IS_KEEP;
-//            }
-//        }
-//        arrangePoints(point1, point2);
-//        map.setTextureRectangleOfBlocks(BlockTexture.getTypeByName(landType), point1.row, point1.column, point2.row, point2.column);
-//        return CustomizeMapMessages.SET_TEXTURE_OF_AREA_SUCCESSFUL;
-//    }
-
-    private static void arrangePoints(Coordinate p1, Coordinate p2) {
-        if (p2.row < p1.row) {
-            int tmp = p1.row;
-            p1.row = p2.row;
-            p2.row = tmp;
-        }
-        if (p2.column < p1.column) {
-            int tmp = p1.column;
-            p1.column = p2.column;
-            p2.column = tmp;
-        }
     }
 
     public static CustomizeMapMessages clear(Coordinate position) {
@@ -91,10 +54,5 @@ public class CustomizeMapController {
             return CustomizeMapMessages.IS_KEEP;
         map.getBlockByRowAndColumn(position).setDroppable(new Tree(treeType));
         return CustomizeMapMessages.SUCCESSFUL_TREE_DROP;
-    }
-
-    public static void setMap(Map map) {
-        // TODO: initialize map instead of this when start game is complete
-        CustomizeMapController.map = map;
     }
 }
