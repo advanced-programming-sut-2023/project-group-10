@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import javafx.scene.paint.Color;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.*;
@@ -19,7 +20,9 @@ import org.example.model.game.units.SiegeEquipment;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.*;
 import org.example.view.CustomizeMapMenu;
+import org.example.view.CustomizeMapMenuGFX;
 import org.example.view.MountEquipmentMenu;
+import org.example.view.SignupMenu;
 import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.ArrayList;
@@ -166,15 +169,14 @@ public class GameMenuController {
         return GameMenuMessages.MOUNT_SUCCESSFUL;
     }
 
-    public static void initializeGame(HashMap<String, String> players, HashMap<String, Coordinate> keeps, org.example.model.game.envirnmont.Map map) {
-        Government[] governments = new Government[players.size()];
+    public static void initializeGame(HashMap<String, Color> colors, HashMap<String, Coordinate> keeps, org.example.model.game.envirnmont.Map map) throws Exception {
+        Government[] governments = new Government[colors.size()];
         int x = 0;
 
-        for (Map.Entry<String, String> player : players.entrySet()) {
+        for (Map.Entry<String, javafx.scene.paint.Color> player : colors.entrySet()) {
             User owner = User.getUserByUsername(player.getKey());
-            Color color = Color.getColorByName(player.getValue());
             Coordinate keep = keeps.get(player.getKey());
-            Government gov = new Government(owner, color, keep);
+            Government gov = new Government(owner, player.getValue(), keep);
             gov.addItem(Item.WOOD, 20);
             gov.addItem(Item.STONE, 20);
             gov.setGold(20);
@@ -191,7 +193,7 @@ public class GameMenuController {
             for (int i = 0; i < 10; i++)
                 new Unit(government.getKeep(), RoleName.PEASANT, government).addToGovernmentAndBlock();
         }
-        CustomizeMapMenu.run();
+        new CustomizeMapMenuGFX().start(SignupMenu.stage);
     }
 
     public static GameMenuMessages dropUnit(Coordinate position, String type, int count) {

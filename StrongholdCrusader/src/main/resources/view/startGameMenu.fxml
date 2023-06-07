@@ -19,6 +19,10 @@
             </HBox>
             <GridPane fx:id="playersInfoBox"  alignment="CENTER">
             </GridPane>
+            <HBox alignment="CENTER">
+                <Button text="done" onMouseClicked="#startGame" />
+                <Button text="cancel" onMouseClicked="#goBackToMainMenu" />
+            </HBox>
         </VBox>
     </center>
 </BorderPane>

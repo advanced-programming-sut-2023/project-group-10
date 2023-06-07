@@ -14,10 +14,9 @@ public class CustomizeMapMenuGFX extends Application {
         URL customizeMapMenuFXML = CustomizeMapMenuGFX.class.getResource("/view/customizeMapMenu.fxml");
         FXMLLoader loader=new FXMLLoader(customizeMapMenuFXML);
         Pane rootPane = loader.load();
-        Scene gameScene = new Scene(rootPane);
-        primaryStage.setScene(gameScene);
+        Scene gameScene = primaryStage.getScene();
+        gameScene.setRoot(rootPane);
         primaryStage.setMaximized(true);
-        primaryStage.show();
         ((CustomizeMapMenuController)loader.getController()).prepareGame(primaryStage);
     }
 }

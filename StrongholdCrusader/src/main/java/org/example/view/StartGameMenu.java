@@ -15,10 +15,9 @@ public class StartGameMenu extends Application {
         URL startGameMenuFXML = CustomizeMapMenuGFX.class.getResource("/view/startGameMenu.fxml");
         FXMLLoader loader = new FXMLLoader(startGameMenuFXML);
         Pane rootPane = loader.load();
-        Scene gameScene = new Scene(rootPane);
-        primaryStage.setScene(gameScene);
+        Scene gameScene = primaryStage.getScene();
+        gameScene.setRoot(rootPane);
         primaryStage.setMaximized(true);
-        primaryStage.show();
         ((StartGameMenuController) loader.getController()).prepareMenu(primaryStage);
     }
 }

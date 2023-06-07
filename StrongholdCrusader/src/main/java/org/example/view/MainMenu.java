@@ -1,26 +1,19 @@
 package org.example.view;
 
-import javafx.scene.input.MouseEvent;
 import org.example.controller.MainMenuController;
-import org.example.model.Stronghold;
-import org.example.model.game.Color;
-import org.example.model.game.envirnmont.Coordinate;
-import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.MainMenuCommands;
 import org.example.view.enums.messages.MainMenuMessages;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class MainMenu {
-    public static void run() {
+    public static void run() throws Exception {
         Scanner scanner = new Scanner(System.in);
         String input;
         while (true) {
             input = scanner.nextLine();
-            if (MainMenuCommands.getMatcher(input, MainMenuCommands.START_GAME) != null)
-                startGame(input);
+            if (MainMenuCommands.getMatcher(input, MainMenuCommands.START_GAME) != null);
+                //startGame(input);
             else if (MainMenuCommands.getMatcher(input, MainMenuCommands.LOGOUT) != null) {
                 logout();
                 return;
@@ -35,7 +28,8 @@ public class MainMenu {
         }
     }
 
-    private static void startGame(String input) {
+    /*
+    private static void startGame(String input) throws Exception {
         // input format : start game -c <government count> -s <map size>
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String count = "";
@@ -186,6 +180,7 @@ public class MainMenu {
         players.put(username, color);
         return true;
     }
+     */
 
     private static void logout() {
         MainMenuMessages message = MainMenuController.logout();

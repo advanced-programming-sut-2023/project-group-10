@@ -5,10 +5,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.example.model.User;
+import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.Map;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class StartGameMenuController {
     private Stage stage;
@@ -63,6 +67,28 @@ public class StartGameMenuController {
         return Integer.parseInt(((RadioButton) sizeToggleGroup.getSelectedToggle()).getText());
     }
 
+    public void startGame() throws Exception {
+        if (!PlayerInfoStartGame.isInfoValid()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("invalid information");
+            alert.setHeaderText("");
+            alert.setContentText("invalid information, check fields and try again");
+            alert.showAndWait();
+            return;
+        }
+        HashMap<String, Color> colors = new HashMap<>();
+        HashMap<String, Coordinate> keeps = new HashMap<>();
+        for (PlayerInfoStartGame playerInfo : PlayerInfoStartGame.allPlayerInfos) {
+            colors.put(playerInfo.username.getText(), playerInfo.colorPicker.getValue());
+            keeps.put(playerInfo.username.getText(), new Coordinate(Integer.parseInt(playerInfo.row.getText()), Integer.parseInt(playerInfo.column.getText())));
+        }
+        new GameMenuGFX(colors, keeps, new Map(getSize())).start(SignupMenu.stage);
+    }
+
+    public void goBackToMainMenu() throws Exception {
+        new MainMenuGFX().start(SignupMenu.stage);
+    }
+
     static class PlayerInfoStartGame {
         static final ArrayList<PlayerInfoStartGame> allPlayerInfos = new ArrayList<>();
         final VBox container;
@@ -96,7 +122,7 @@ public class StartGameMenuController {
             errorMessage = new Label();
             errorMessage.setWrapText(true);
             username.textProperty().addListener(observable -> {
-                isUsernameValid = User.getUserByUsername(username.getText()) != null;
+                isUsernameValid = User.getUserByUsername(username.getText()) != null && !duplicateUsername();
                 updateErrorMessage();
             });
             addPositionValidityListener(controller, row);
@@ -110,13 +136,22 @@ public class StartGameMenuController {
                 if (!number.getText().matches("\\d*") || !number.getText().isEmpty() && Integer.parseInt(number.getText()) > controller.getSize())
                     number.setText(oldValue);
                 else {
-                    isKeepPositionValid = !duplicateCoordinate(controller);
+                    isKeepPositionValid = !duplicateCoordinate();
                     updateErrorMessage();
                 }
             });
         }
 
-        private boolean duplicateCoordinate(StartGameMenuController controller) {
+        public static boolean isInfoValid() {
+            for (PlayerInfoStartGame playerInfo : allPlayerInfos) {
+                if (!playerInfo.isUsernameValid || !playerInfo.isKeepPositionValid) return false;
+                if (playerInfo.username.getText().isEmpty() || playerInfo.row.getText().isEmpty() || playerInfo.column.getText().isEmpty())
+                    return false;
+            }
+            return true;
+        }
+
+        private boolean duplicateCoordinate() {
             if (row.getText().isEmpty() || column.getText().isEmpty()) return false;
             for (PlayerInfoStartGame playerInfo : allPlayerInfos)
                 if (playerInfo != this && playerInfo.row.getText().equals(this.row.getText()) && playerInfo.column.getText().equals(this.column.getText()))
@@ -124,10 +159,19 @@ public class StartGameMenuController {
             return false;
         }
 
+        private boolean duplicateUsername() {
+            if (username.getText().isEmpty()) return false;
+            for (PlayerInfoStartGame playerInfo : allPlayerInfos)
+                if (playerInfo != this && playerInfo.username.getText().equals(username.getText())) return true;
+            return false;
+        }
+
         private void updateErrorMessage() {
             if (!isKeepPositionValid) errorMessage.setText("duplicate keep position");
-            else if (!isUsernameValid) errorMessage.setText("user with this username doesn't seam to exist");
-            else errorMessage.setText("");
+            else if (!isUsernameValid) {
+                if (duplicateUsername()) errorMessage.setText("user has already been entered");
+                else errorMessage.setText("user doesn't seem to exist");
+            } else errorMessage.setText("");
         }
     }
 }

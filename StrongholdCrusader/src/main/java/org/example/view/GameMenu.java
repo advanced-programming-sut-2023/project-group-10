@@ -1,5 +1,6 @@
 package org.example.view;
 
+import javafx.scene.paint.Color;
 import org.example.controller.GameMenuController;
 import org.example.model.Stronghold;
 import org.example.model.game.envirnmont.Coordinate;
@@ -13,8 +14,8 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class GameMenu {
-    public static void run(HashMap<String, String> players, HashMap<String, Coordinate> keeps, Map map) {
-        GameMenuController.initializeGame(players, keeps, map);
+    public static void run(HashMap<String, Color> colors, HashMap<String, Coordinate> keeps, Map map) throws Exception {
+        GameMenuController.initializeGame(colors, keeps, map);
         getCurrentPlayer();
         Scanner scanner = new Scanner(System.in);
         String input;

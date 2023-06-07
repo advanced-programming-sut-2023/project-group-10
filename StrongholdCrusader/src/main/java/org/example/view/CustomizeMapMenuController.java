@@ -34,8 +34,7 @@ public class CustomizeMapMenuController {
     private CustomizationMode customizationMode;
 
     public void prepareGame(Stage primaryStage) {
-        // TODO: link with start game
-//        CustomizeMapController.initializeMap();
+        CustomizeMapController.initializeMap();
         selectListBox.setPrefWidth(primaryStage.getWidth() / 5);
         initializeSelectListBox();
         itemList.setPrefWidth(primaryStage.getWidth() / 5);
@@ -104,9 +103,7 @@ public class CustomizeMapMenuController {
         mapBox.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
             mapBox.setPannable(true);
         });
-        // TODO: link with start game
-//        org.example.model.game.envirnmont.Map map = CustomizeMapController.getMap();
-        org.example.model.game.envirnmont.Map map = new org.example.model.game.envirnmont.Map(200);
+        org.example.model.game.envirnmont.Map map = CustomizeMapController.getMap();
         CustomizeMapController.setMap(map);
         HashMap<Polygon, Coordinate> polygonCoordinateMap = new HashMap<>();
         int size = map.getSize();

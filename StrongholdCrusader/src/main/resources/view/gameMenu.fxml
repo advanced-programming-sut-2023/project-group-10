@@ -7,7 +7,7 @@
 <?import javafx.scene.control.Label?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.example.view.GameMenuController"
+      fx:controller="org.example.view.GameMenuGFXController"
       prefHeight="400.0" prefWidth="600.0">
 
     <Pane fx:id="mapBox">

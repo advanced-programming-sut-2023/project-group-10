@@ -10,6 +10,7 @@ module StrongholdCrusader {
 
     opens org.example.view to javafx.fxml;
     exports org.example.view;
+    exports org.example.model.game.envirnmont;
     //exports org.example.model;
     //exports org.example.controller;
 }

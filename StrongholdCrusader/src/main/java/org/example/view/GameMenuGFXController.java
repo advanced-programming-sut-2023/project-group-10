@@ -5,7 +5,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class GameMenuController {
+public class GameMenuGFXController {
     public Pane mapBox;
     public HBox controlBox;
     public ScrollPane buildingBox;
