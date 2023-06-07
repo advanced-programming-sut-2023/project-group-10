@@ -11,8 +11,6 @@ import java.net.URL;
 public class MainMenuGFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // TODO: remove later
-        SignupMenu.stage=primaryStage;
         Pane mainMenu = FXMLLoader.load(
                 new URL(MainMenuGFX.class.getResource("/view/mainMenu.fxml").toExternalForm()));
         Scene scene = new Scene(mainMenu);

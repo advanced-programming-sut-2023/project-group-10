@@ -40,10 +40,8 @@ public class StartGameMenuController {
             preparePlayersInfo();
         });
         playerCountSlider.setMin(2);
-        // TODO: uncomment this later
-//        playerCountSlider.setMax(Math.min(8, User.getUsers().size()));
-        playerCountSlider.setMax(8);
-        playerCountSlider.setValue(4);
+        playerCountSlider.setMax(Math.min(8, User.getUsers().size()) + 0.1);
+        playerCountSlider.setValue(playerCountSlider.getMin());
     }
 
     private void prepareSize() {
