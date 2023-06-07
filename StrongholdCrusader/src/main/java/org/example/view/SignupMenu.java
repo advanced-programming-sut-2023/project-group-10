@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.example.controller.SignupMenuController;
+import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.model.utils.RandomGenerator;
@@ -45,15 +46,23 @@ public class SignupMenu extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         SignupMenu.stage = stage;
-        BorderPane borderPane = new FXMLLoader(SignupMenu.class.getResource("/view/signupMenu.fxml")).load();
-        Background background = new Background(setBackground("/images/backgrounds/background2.png"));
-        borderPane.setBackground(background);
 
-        Scene scene = new Scene(borderPane, 1390, 850);
-        stage.setScene(scene);
-        stage.setTitle("signup menu");
-        stage.setFullScreen(true);
-        stage.show();
+        Stronghold.initializeApp();
+        if (Stronghold.getLoggedInUserFromFile() != null) {
+            Stronghold.setCurrentUser(Stronghold.getLoggedInUserFromFile());
+            new MainMenuGFX().start(stage);
+        }
+        else {
+            BorderPane borderPane = new FXMLLoader(SignupMenu.class.getResource("/view/signupMenu.fxml")).load();
+            Background background = new Background(setBackground("/images/backgrounds/background2.png"));
+            borderPane.setBackground(background);
+
+            Scene scene = new Scene(borderPane, 1390, 850);
+            stage.setScene(scene);
+            stage.setTitle("signup menu");
+            stage.setFullScreen(true);
+            stage.show();
+        }
     }
 
     @FXML
