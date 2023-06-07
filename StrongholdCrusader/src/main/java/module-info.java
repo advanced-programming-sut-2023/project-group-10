@@ -12,6 +12,7 @@ module StrongholdCrusader {
     exports org.example.view;
     exports org.example.model.game.envirnmont;
     exports org.example.model.game;
-    //exports org.example.model;
+    exports org.example.model;
+    opens org.example.model to com.google.gson;
     //exports org.example.controller;
 }
