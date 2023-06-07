@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -83,7 +85,13 @@ public class SignupMenu extends Application {
 
         submit.setOnMouseClicked(MouseEvent -> submitUser());
 
-        reset.setOnMouseClicked(mouseEvent -> resetInputs());
+        reset.setOnMouseClicked(mouseEvent -> {
+            try {
+                resetInputs();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         loginMenu.setOnMouseClicked(mouseEvent -> {
             try {
@@ -132,7 +140,7 @@ public class SignupMenu extends Application {
         }
     }
 
-    private void resetInputs(){
+    private void resetInputs() throws Exception {
         username.clear();
         usernameLabel.setText("");
         password.clear();
@@ -145,6 +153,7 @@ public class SignupMenu extends Application {
         emailLabel.setText("");
         slogan.clear();
         defaultSlogan.getSelectionModel().clearSelection();
+        goToSecurityMenu();
     }
 
     private void setShowPassword(){
@@ -197,7 +206,8 @@ public class SignupMenu extends Application {
     private void goToSecurityMenu() throws Exception{
         Popup popup = new Popup();
         Label label = new Label("you have entered \"security question\" menu!");
-        label.setBackground(new Background(setBackground("/images/backgrounds/background2.png")));
+        label.setTextFill(Color.BROWN);
+        //label.setBackground(new Background(setBackground("/images/backgrounds/background2.png")));
         popup.getContent().add(label);
         popup.setAutoHide(true);
         popup.show(stage);

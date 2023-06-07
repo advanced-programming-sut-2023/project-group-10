@@ -21,9 +21,11 @@ public class SecurityQuestionMenu extends Application {
     public TextField answer;
     public Button submit;
     private String question;
+    private static Stage stage;
 
     @Override
     public void start(Stage stage) throws Exception {
+        SecurityQuestionMenu.stage = stage;
         BorderPane borderPane = new FXMLLoader(SecurityQuestionMenu.class.getResource("/view/securityQuestion.fxml")).load();
         Background background = new Background(setBackground("/images/backgrounds/background2.png"));
         borderPane.setBackground(background);
@@ -60,9 +62,10 @@ public class SecurityQuestionMenu extends Application {
         question = "3";
     }
 
-    public void submit() {
+    public void submit() throws Exception{
         SignupMenuController.createUser(question, answer.getText(), DataBank.getUsername(),
                 DataBank.getPassword(), DataBank.getNickname(), DataBank.getSlogan(), DataBank.getEmail());
+        new LoginMenu().start(stage);
     }
 
     private BackgroundImage setBackground(String url){

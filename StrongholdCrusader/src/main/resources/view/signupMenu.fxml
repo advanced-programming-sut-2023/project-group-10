@@ -28,7 +28,7 @@
                 <Label fx:id="passwordLabel"/>
                 <PasswordField fx:id="confirmation" maxWidth="300" promptText="confirmation"/>
                 <Label fx:id="confirmationLabel"/>
-                <CheckBox fx:id="showPassword"/>
+                <CheckBox fx:id="showPassword" text="show password"/>
             </VBox>
 
             <VBox fx:id="nicknameContainer" alignment="CENTER" spacing="5">

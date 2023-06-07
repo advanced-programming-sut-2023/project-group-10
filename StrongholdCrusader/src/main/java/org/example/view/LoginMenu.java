@@ -26,9 +26,11 @@ public class LoginMenu extends Application {
     public Text passwordText;
     @FXML
     private Pane pane;
+    private static Stage stage;
 
     @Override
     public void start(Stage stage) throws Exception {
+        LoginMenu.stage = stage;
         Pane pane = new FXMLLoader(LoginMenu.class.getResource("/view/loginMenu.fxml")).load();
         Scene scene = new Scene(pane, 400, 500);
         stage.setScene(scene);
@@ -73,7 +75,7 @@ public class LoginMenu extends Application {
         });
     }
 
-    public void submit(MouseEvent mouseEvent) {
+    public void submit() throws Exception{
         LoginMenuMessages message = LoginMenuController.login(username.getText(), password.getText(), stayLoggedIn.isSelected());
         if(message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST)){
             usernameText.setText("username does not exist");
@@ -84,6 +86,6 @@ public class LoginMenu extends Application {
             passwordText.setText("wrong password");
         }
 
-        //TODO login
+        else new MainMenuGFX().start(stage);
     }
 }
