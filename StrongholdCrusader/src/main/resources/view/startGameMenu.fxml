@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -18,7 +17,7 @@
             <HBox alignment="CENTER" fx:id="sizeBox">
                 <Label text="map size = " styleClass="moderate-spacing"/>
             </HBox>
-            <GridPane fx:id="playersInfoBox">
+            <GridPane fx:id="playersInfoBox"  alignment="CENTER">
             </GridPane>
         </VBox>
     </center>

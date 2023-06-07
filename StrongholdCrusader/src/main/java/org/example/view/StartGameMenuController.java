@@ -1,6 +1,5 @@
 package org.example.view;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -24,11 +23,10 @@ public class StartGameMenuController {
         this.stage = stage;
         preparePlayerCount();
         prepareSize();
-        preparePlayersInfo();
     }
 
     private void preparePlayerCount() {
-        settingsContainer.setMaxWidth(stage.getWidth() / 4);
+        settingsContainer.setMaxWidth(stage.getWidth() / 2);
         playerCountSlider.valueProperty().addListener(observable -> {
             playerCountLabel.setText("player count = " + (int) playerCountSlider.getValue());
             playersInfoBox.getChildren().clear();
@@ -56,8 +54,9 @@ public class StartGameMenuController {
     }
 
     private void preparePlayersInfo() {
-        for (int i = 0; i < (int) playerCountSlider.getValue(); i++)
-            playersInfoBox.add(new PlayerInfoStartGame(i + 1, this).container, i % 4, i / 4);
+        playersInfoBox.add(new PlayerInfoStartGame("you", this, true).container, 0, 0);
+        for (int i = 1; i < (int) playerCountSlider.getValue(); i++)
+            playersInfoBox.add(new PlayerInfoStartGame("player" + (i + 1), this, false).container, i % 4, i / 4);
     }
 
     public int getSize() {
@@ -73,18 +72,22 @@ public class StartGameMenuController {
         final TextField row;
         final TextField column;
         final Label errorMessage;
-        private boolean isUsernameValid=true;
-        private boolean isKeepPositionValid=true;
+        private boolean isUsernameValid = true;
+        private boolean isKeepPositionValid = true;
 
-        public PlayerInfoStartGame(int number, StartGameMenuController controller) {
+        public PlayerInfoStartGame(String headerText, StartGameMenuController controller, boolean isLoggedIn) {
             container = new VBox();
             container.setAlignment(Pos.BOTTOM_CENTER);
             container.setSpacing(10);
             container.getStyleClass().add("moderate-spacing");
-            container.getStyleClass().add("parent--moderate-spacing");
-            header = new Label("player" + number);
+            header = new Label(headerText);
             username = new TextField();
-            username.setPromptText("username");
+            if (isLoggedIn) {
+                username.setEditable(false);
+                // TODO: link to logged in user
+//                username.setText(Stronghold.getCurrentUser().getUsername());
+                username.setText("placeholder");
+            } else username.setPromptText("username");
             colorPicker = new ColorPicker();
             row = new TextField();
             row.setPromptText("keep's row");
@@ -96,29 +99,24 @@ public class StartGameMenuController {
                 isUsernameValid = User.getUserByUsername(username.getText()) != null;
                 updateErrorMessage();
             });
-            row.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (!row.getText().matches("\\d*") || !row.getText().isEmpty() && Integer.parseInt(row.getText()) > controller.getSize()) {
-                    row.setText(oldValue);
-                    errorMessage.setText("invalid row number");
-                } else {
-                    isKeepPositionValid = !duplicateCoordinate();
-                    updateErrorMessage();
-                }
-            });
-            column.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (!column.getText().matches("\\d*") || !column.getText().isEmpty() && Integer.parseInt(column.getText()) > controller.getSize()) {
-                    column.setText(oldValue);
-                    errorMessage.setText("invalid column number");
-                } else {
-                    isKeepPositionValid = !duplicateCoordinate();
-                    updateErrorMessage();
-                }
-            });
+            addPositionValidityListener(controller, row);
+            addPositionValidityListener(controller, column);
             container.getChildren().addAll(header, username, colorPicker, row, column, errorMessage);
             allPlayerInfos.add(this);
         }
 
-        private boolean duplicateCoordinate() {
+        public void addPositionValidityListener(StartGameMenuController controller, TextField number) {
+            number.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!number.getText().matches("\\d*") || !number.getText().isEmpty() && Integer.parseInt(number.getText()) > controller.getSize())
+                    number.setText(oldValue);
+                else {
+                    isKeepPositionValid = !duplicateCoordinate(controller);
+                    updateErrorMessage();
+                }
+            });
+        }
+
+        private boolean duplicateCoordinate(StartGameMenuController controller) {
             if (row.getText().isEmpty() || column.getText().isEmpty()) return false;
             for (PlayerInfoStartGame playerInfo : allPlayerInfos)
                 if (playerInfo != this && playerInfo.row.getText().equals(this.row.getText()) && playerInfo.column.getText().equals(this.column.getText()))
@@ -132,5 +130,4 @@ public class StartGameMenuController {
             else errorMessage.setText("");
         }
     }
-
 }
