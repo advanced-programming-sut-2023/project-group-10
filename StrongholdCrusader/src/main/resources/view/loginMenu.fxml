@@ -8,7 +8,11 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.LoginMenu"
       prefHeight="400.0" prefWidth="600.0" fx:id="pane">
-    <VBox alignment="CENTER" spacing="20" translateX="100" translateY="100">
+    <VBox fx:id="login" alignment="CENTER" spacing="20" translateX="170" translateY="60">
+        <VBox alignment="CENTER" spacing="10">
+            <Text text="welcome to login menu"/>
+            <Text text="enter username and password to login"/>
+        </VBox>
         <VBox alignment="CENTER" spacing="10">
             <TextField promptText="username" fx:id="username"/>
             <Text fx:id="usernameText"/>
@@ -17,10 +21,16 @@
             <PasswordField promptText="password" fx:id="password"/>
             <Text fx:id="passwordText"/>
         </VBox>
-        <HBox alignment="CENTER" spacing="5">
-            <Text text="forget your password? click"/>
-            <Text text="HERE" onMouseClicked="#forgetPassword"/>
-        </HBox>
+        <VBox spacing="7" alignment="CENTER">
+            <HBox alignment="CENTER" spacing="5">
+                <Text text="forget your password? click"/>
+                <Text text="HERE" onMouseClicked="#forgetPassword"/>
+            </HBox>
+            <HBox alignment="CENTER" spacing="5">
+                <Text text="don't have an account? click"/>
+                <Text text="HERE" onMouseClicked="#signupMenu"/>
+            </HBox>
+        </VBox>
         <CheckBox text="stay logged in" fx:id="stayLoggedIn"/>
         <Button text="submit" onMouseClicked="#submit"/>
     </VBox>
