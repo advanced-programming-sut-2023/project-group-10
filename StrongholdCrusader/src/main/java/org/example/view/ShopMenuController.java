@@ -5,16 +5,20 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import org.example.model.game.Item;
 
 import java.io.File;
 
 public class ShopMenuController {
     public GridPane tableOfItems;
+    public HBox buttons;
 
     @FXML
     private void initialize() {
         setTableOfItems();
+        buttons.setTranslateY(740);
+        buttons.setTranslateX(630);
     }
 
     private void setTableOfItems() {
@@ -28,18 +32,19 @@ public class ShopMenuController {
             allFiles[j] = new File("src/main/resources/images/items/" + items[i].getName() + ".png");
             j++;
         }
-        int columnCount = 10;
+        int columnCount = 5;
         for (int i = 0; i < allFiles.length; i++) {
             ImageView imageView = new ImageView();
-            Image image = new Image(allFiles[i].toURI().toString(), 70, 70, false, false);
+            Image image = new Image(allFiles[i].toURI().toString(), 150, 150, false, false);
             imageView.setImage(image);
             imageView.setPreserveRatio(true);
-            imageView.setFitWidth(70);
-            imageView.setFitHeight(70);
+            imageView.setFitWidth(150);
+            imageView.setFitHeight(150);
             imageView.setOnMouseClicked(this::chooseItem);
             tableOfItems.getChildren().add(imageView);
             GridPane.setConstraints(imageView, i % columnCount, i / columnCount);
         }
+        tableOfItems.setTranslateX(350);
         tableOfItems.setTranslateY(100);
     }
 
