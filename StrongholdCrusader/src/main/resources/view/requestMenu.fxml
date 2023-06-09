@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0"
+      prefWidth="1440.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.view.TradeRequestMenuController">
+    <children>
+        <HBox layoutX="326.0" layoutY="68.0" prefHeight="219.0" prefWidth="756.0">
+            <children>
+                <ListView fx:id="usersListView">
+
+                </ListView>
+                <VBox prefHeight="224.0" prefWidth="388.0">
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="selected user to trade with:"
+                              textAlignment="CENTER" wrappingWidth="399.21630859375">
+                            <font>
+                                <Font name="Didot" size="20.0"/>
+                            </font>
+                        </Text>
+                        <Label fx:id="selectedUserLabel" prefHeight="102.0" prefWidth="403.0"/>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <HBox layoutX="98.0" layoutY="301.0" prefHeight="515.0" prefWidth="1246.0">
+            <children>
+                <ListView fx:id="selectedUserResources" prefHeight="358.0" prefWidth="429.0"
+                          style="-fx-background-color: lightgray;"/>
+                <VBox prefHeight="515.0" prefWidth="826.0">
+                    <children>
+                        <HBox prefHeight="274.0" prefWidth="822.0">
+                            <children>
+                                <HBox fx:id="itemInfo" prefHeight="301.0" prefWidth="822.0">
+                                    <children>
+                                        <ImageView fx:id="itemImage" fitHeight="273.0" fitWidth="302.0"
+                                                   pickOnBounds="true" preserveRatio="true"/>
+                                        <VBox prefHeight="255.0" prefWidth="533.0">
+                                            <children>
+                                                <Label fx:id="itemNameLabel" prefHeight="72.0" prefWidth="530.0">
+                                                    <font>
+                                                        <Font size="20.0"/>
+                                                    </font>
+                                                </Label>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                    <children>
+                                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Storage :"
+                                                              wrappingWidth="175.75604248046875">
+                                                            <font>
+                                                                <Font name="Didot" size="30.0"/>
+                                                            </font>
+                                                        </Text>
+                                                        <Label fx:id="itemStorage" prefHeight="100.0"
+                                                               prefWidth="353.0"/>
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefHeight="79.0" prefWidth="520.0">
+                                                    <children>
+                                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Amount :"
+                                                              wrappingWidth="175.75604248046875">
+                                                            <font>
+                                                                <Font name="Didot" size="30.0"/>
+                                                            </font>
+                                                        </Text>
+                                                        <Spinner fx:id="itemAmount" prefHeight="72.0"
+                                                                 prefWidth="344.0"/>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="66.0" prefWidth="822.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Price :"
+                                      wrappingWidth="223.52392578125">
+                                    <font>
+                                        <Font name="Didot" size="30.0"/>
+                                    </font>
+                                </Text>
+                                <TextField fx:id="price" prefHeight="64.0" prefWidth="612.0">
+                                    <font>
+                                        <Font name="Hiragino Sans GB W3" size="26.0"/>
+                                    </font>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="95.0" prefWidth="822.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Messge:"
+                                      wrappingWidth="221.87677001953125">
+                                    <font>
+                                        <Font name="Didot" size="30.0"/>
+                                    </font>
+                                </Text>
+                                <TextArea fx:id="messageField" prefHeight="70.0" prefWidth="600.0">
+                                    <font>
+                                        <Font size="32.0"/>
+                                    </font>
+                                </TextArea>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="90.0" prefWidth="822.0">
+                            <children>
+                                <Button fx:id="request" mnemonicParsing="false" onMouseClicked="#selectRequest"
+                                        prefHeight="50.0" prefWidth="410.0"
+                                        style="-fx-background-color: snow; -fx-border-color: black;" text="REQUEST">
+                                    <font>
+                                        <Font name="Kai Regular" size="30.0"/>
+                                    </font>
+                                </Button>
+                                <Button fx:id="donate" mnemonicParsing="false" onMouseClicked="#donateSelected"
+                                        prefHeight="50.0" prefWidth="423.0"
+                                        style="-fx-background-color: snow; -fx-border-color: black;" text="DONATE">
+                                    <font>
+                                        <Font name="Kai Regular" size="30.0"/>
+                                    </font>
+                                </Button>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <Button layoutX="857.0" layoutY="824.0" mnemonicParsing="false" onMouseClicked="#submit" prefHeight="39.0"
+                prefWidth="107.0" style="-fx-background-color: palegreen;" text="submit">
+            <font>
+                <Font name="PT Mono Bold" size="16.0"/>
+            </font>
+        </Button>
+        <Button layoutX="1335.0" layoutY="21.0" mnemonicParsing="false" onMouseClicked="#cancel" prefHeight="48.0"
+                prefWidth="85.0" style="-fx-background-color: red;" text="cancel"/>
+    </children>
+</Pane>
