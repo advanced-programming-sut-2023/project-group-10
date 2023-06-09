@@ -64,5 +64,10 @@ public class ShopMenuController {
     }
 
     public void tradeMenu(MouseEvent mouseEvent) {
+        try {
+            new TradeMenuGFX().start(SignupMenu.stage);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

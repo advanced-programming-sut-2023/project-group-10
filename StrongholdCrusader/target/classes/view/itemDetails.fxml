@@ -8,9 +8,9 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
       prefWidth="500.0" xmlns="http://javafx.com/javafx/19"
       fx:controller="org.example.view.ItemDetailMenuController" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
+
         <HBox fx:id="infos" spacing="130">
-            <children>
+
                 <VBox spacing="25">
                     <Label fx:id="name">
                     </Label>
@@ -19,7 +19,7 @@
 
                 </VBox>
                 <VBox  fx:id="rightBox" spacing="45">
-                    <children>
+
 
                         <HBox   fx:id="storageInfo">
 
@@ -34,12 +34,11 @@
                             <Label fx:id="itemAmount">
                             </Label>
                         </VBox>
-                    </children>
+
                 </VBox>
 
-            </children>
         </HBox>
         <Button layoutX="300" layoutY="8.0" mnemonicParsing="false" text="Back" onMouseClicked="#cancel"/>
 
-    </children>
+
 </Pane>

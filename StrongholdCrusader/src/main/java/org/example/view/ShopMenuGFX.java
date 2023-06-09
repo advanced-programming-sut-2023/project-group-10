@@ -23,7 +23,7 @@ public class ShopMenuGFX extends Application {
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         shopMenuPane.setBackground(new Background(backgroundImage));
         Scene scene = new Scene(shopMenuPane);
-        stage.setMaximized(true);
+        stage.setFullScreen(true);
         stage.setScene(scene);
         stage.show();
     }

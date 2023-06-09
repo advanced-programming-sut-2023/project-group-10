@@ -30,6 +30,13 @@ public class GameMenuGFX extends Application {
                     throw new RuntimeException(e);
                 }
             }
+            if (event.getCode() == KeyCode.TAB) {
+                try {
+                    new ShopMenuGFX().start(SignupMenu.stage);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
         });
     }
