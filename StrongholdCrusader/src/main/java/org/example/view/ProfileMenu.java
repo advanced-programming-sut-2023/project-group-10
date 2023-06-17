@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -18,6 +19,8 @@ import org.example.model.Stronghold;
 import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.SignupMenuMessages;
 
+import java.io.IOException;
+
 public class ProfileMenu extends Application {
     public Circle avatar;
     public Text username;
@@ -26,9 +29,11 @@ public class ProfileMenu extends Application {
     public Text email;
     public VBox mainButtons;
     public Pane mainPane;
+    private static Stage stage;
 
     @Override
     public void start(Stage stage) throws Exception {
+        ProfileMenu.stage = stage;
         Pane pane = new FXMLLoader(ProfileMenu.class.getResource("/view/profileMenu.fxml")).load();
         Scene scene = new Scene(pane);
         stage.setScene(scene);
@@ -285,5 +290,9 @@ public class ProfileMenu extends Application {
 
     public void goToMainMenu() {
         //TODO go to main menu
+    }
+
+    public void scoreboard(MouseEvent mouseEvent) throws Exception {
+        new Scoreboard().start(stage);
     }
 }

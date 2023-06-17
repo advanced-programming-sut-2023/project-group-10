@@ -79,7 +79,7 @@ public class User {
         return users;
     }
 
-    private static ArrayList<User> sortUsers() {
+    public static ArrayList<User> sortUsers() {
         Stronghold.dataBase.loadUsersFromFile();
         ArrayList<User> toBeSorted = new ArrayList<>(users);
 
