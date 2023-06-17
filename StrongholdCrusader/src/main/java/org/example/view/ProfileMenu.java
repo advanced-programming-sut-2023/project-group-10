@@ -52,6 +52,8 @@ public class ProfileMenu extends Application {
 
     @FXML
     public void initialize(){
+    Stronghold.setCurrentUser(new User("Rozhin", "Rozhin23@", "rozhintzn", "rozhin@gmail.com", "yo yo", "1", "hamid"));
+    //TODO delete this line
     avatar.setFill(new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
     username.setText("username: " + Stronghold.getCurrentUser().getUsername());
     //password.setText(Stronghold.getCurrentUser().getPassword());

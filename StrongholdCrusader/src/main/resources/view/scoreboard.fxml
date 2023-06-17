@@ -6,9 +6,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.example.view.Scoreboard"
             prefHeight="400.0" prefWidth="600.0" fx:id="pane">
+    <center>
+        <HBox alignment="CENTER" spacing="5" maxHeight="350">
+            <ListView fx:id="rank"/>
+            <ListView fx:id="username"/>
+            <ListView fx:id="avatar"/>
+            <ListView fx:id="highScore"/>
+        </HBox>
+    </center>
 
-</Pane>
+</BorderPane>
