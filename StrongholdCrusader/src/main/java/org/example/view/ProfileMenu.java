@@ -1,22 +1,30 @@
 package org.example.view;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.controller.SignupMenuController;
 import org.example.model.Stronghold;
+import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
+import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 import java.io.IOException;
@@ -24,11 +32,11 @@ import java.io.IOException;
 public class ProfileMenu extends Application {
     public Circle avatar;
     public Text username;
-    public Text password;
     public Text nickname;
     public Text email;
     public VBox mainButtons;
-    public Pane mainPane;
+    public VBox info;
+    public HBox mainPane;
     private static Stage stage;
 
     @Override
@@ -37,35 +45,34 @@ public class ProfileMenu extends Application {
         Pane pane = new FXMLLoader(ProfileMenu.class.getResource("/view/profileMenu.fxml")).load();
         Scene scene = new Scene(pane);
         stage.setScene(scene);
-        stage.setTitle("Main Menu");
+        stage.setTitle("Profile Menu");
         stage.show();
     }
 
     @FXML
     public void initialize(){
-        //TODO set avatar
-        /*username.setText(Stronghold.getCurrentUser().getUsername());
-        password.setText(Stronghold.getCurrentUser().getPassword());
-        nickname.setText(Stronghold.getCurrentUser().getNickname());
-        email.setText(Stronghold.getCurrentUser().getEmail());*/
+    Stronghold.setCurrentUser(new User("Rozhin", "Rozhin23@", "rozhintzn", "rozhin@gmail.com", "yo yo", "1", "hamid"));
+    String path = Stronghold.class.getResource(Stronghold.getCurrentUser().getAvatar()).toExternalForm();
+    avatar.setFill(new ImagePattern(new Image(path)));
+    username.setText("username: " + Stronghold.getCurrentUser().getUsername());
+    //password.setText(Stronghold.getCurrentUser().getPassword());
+    nickname.setText("nickname: " + Stronghold.getCurrentUser().getNickname());
+    email.setText("email: " + Stronghold.getCurrentUser().getEmail());
     }
 
     public void changeUsername() {
-        Button back = new Button("back");
-        back.setTranslateX(120);
-        back.setTranslateY(160);
-        mainPane.getChildren().add(back);
-
         VBox change = new VBox(20);
-        change.setTranslateX(200);
-        change.setTranslateY(100);
         change.setAlignment(Pos.CENTER);
 
         Text currentUsername = new Text(Stronghold.getCurrentUser().getUsername());
         TextField newUsername = new TextField();
         newUsername.setPromptText("new username");
         Text usernameDetail = new Text();
+        HBox buttons = new HBox(10);
+        buttons.setAlignment(Pos.CENTER);
         Button submit = new Button("submit");
+        Button back = new Button("back");
+        buttons.getChildren().addAll(back, submit);
         submit.setOnMouseClicked(mouseEvent -> {
             if(usernameDetail.getText().equals("valid username!")) {
                 try {
@@ -82,11 +89,11 @@ public class ProfileMenu extends Application {
         });
 
         back.setOnMouseClicked(mouseEvent -> {
-            mainPane.getChildren().removeAll(change, back);
+            mainPane.getChildren().removeAll(change);
             mainPane.getChildren().add(mainButtons);
         });
 
-        change.getChildren().addAll(currentUsername, newUsername, usernameDetail, submit);
+        change.getChildren().addAll(currentUsername, newUsername, usernameDetail, buttons);
         newUsername.textProperty().addListener((observable, oldValue, newValue) -> {
             checkUsername(newValue, usernameDetail);
         });
@@ -96,14 +103,7 @@ public class ProfileMenu extends Application {
     }
 
     public void changePassword(){
-        Button back = new Button("back");
-        back.setTranslateX(120);
-        back.setTranslateY(160);
-        mainPane.getChildren().add(back);
-
         VBox change = new VBox(20);
-        change.setTranslateX(200);
-        change.setTranslateY(100);
         change.setAlignment(Pos.CENTER);
 
         TextField currentPassword = new TextField();
@@ -113,7 +113,11 @@ public class ProfileMenu extends Application {
         newPassword.setPromptText("new password");
         Text newPassDetail = new Text();
 
+        HBox buttons = new HBox(10);
+        buttons.setAlignment(Pos.CENTER);
         Button submit = new Button("submit");
+        Button back = new Button("back");
+        buttons.getChildren().addAll(back, submit);
         submit.setOnMouseClicked(mouseEvent -> {
             if(newPassDetail.getText().equals("valid password!")) {
                 if(!Stronghold.getCurrentUser().getPassword().equals(currentPassword.getText()))
@@ -134,11 +138,11 @@ public class ProfileMenu extends Application {
         });
 
         back.setOnMouseClicked(mouseEvent -> {
-            mainPane.getChildren().removeAll(change, back);
+            mainPane.getChildren().removeAll(change);
             mainPane.getChildren().add(mainButtons);
         });
 
-        change.getChildren().addAll(currentPassword, currentPassDetail, newPassword, newPassDetail, submit);
+        change.getChildren().addAll(currentPassword, currentPassDetail, newPassword, newPassDetail, buttons);
         newPassword.textProperty().addListener((observable, oldValue, newValue) -> {
             checkPassword(newValue, newPassDetail);
         });
@@ -148,21 +152,18 @@ public class ProfileMenu extends Application {
     }
 
     public void changeNickname(){
-        Button back = new Button("back");
-        back.setTranslateX(120);
-        back.setTranslateY(160);
-        mainPane.getChildren().add(back);
-
         VBox change = new VBox(20);
-        change.setTranslateX(200);
-        change.setTranslateY(100);
         change.setAlignment(Pos.CENTER);
 
-        Text currentNickname = new Text();
+        Text currentNickname = new Text(Stronghold.getCurrentUser().getNickname());
         TextField newNickname = new TextField();
         newNickname.setPromptText("new nickname");
         Text nicknameDetail = new Text();
+        HBox buttons = new HBox(10);
+        buttons.setAlignment(Pos.CENTER);
         Button submit = new Button("submit");
+        Button back = new Button("back");
+        buttons.getChildren().addAll(back, submit);
         submit.setOnMouseClicked(mouseEvent -> {
             if(nicknameDetail.getText().equals("valid nickname!")) {
                 try {
@@ -178,13 +179,13 @@ public class ProfileMenu extends Application {
             }
         });
 
-        change.getChildren().addAll(currentNickname, newNickname, nicknameDetail, submit);
+        change.getChildren().addAll(currentNickname, newNickname, nicknameDetail, buttons);
         newNickname.textProperty().addListener((observable, oldValue, newValue) -> {
             checkNickname(newValue, nicknameDetail);
         });
 
         back.setOnMouseClicked(mouseEvent -> {
-            mainPane.getChildren().removeAll(change, back);
+            mainPane.getChildren().removeAll(change);
             mainPane.getChildren().add(mainButtons);
         });
 
@@ -193,21 +194,18 @@ public class ProfileMenu extends Application {
     }
 
     public void changeEmail(){
-        Button back = new Button("back");
-        back.setTranslateX(120);
-        back.setTranslateY(160);
-        mainPane.getChildren().add(back);
-
         VBox change = new VBox(20);
-        change.setTranslateX(200);
-        change.setTranslateY(100);
         change.setAlignment(Pos.CENTER);
 
-        Text currentEmail = new Text();
+        Text currentEmail = new Text(Stronghold.getCurrentUser().getEmail());
         TextField newEmail = new TextField();
-        newEmail.setPromptText("new nickname");
+        newEmail.setPromptText("new email");
         Text emailDetail = new Text();
+        HBox buttons = new HBox(10);
+        buttons.setAlignment(Pos.CENTER);
         Button submit = new Button("submit");
+        Button back = new Button("back");
+        buttons.getChildren().addAll(back, submit);
         submit.setOnMouseClicked(mouseEvent -> {
             if(emailDetail.getText().equals("valid email!")) {
                 try {
@@ -215,7 +213,7 @@ public class ProfileMenu extends Application {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Email change successful");
                     alert.setContentText("Your email was changed successfully");
-                    mainPane.getChildren().remove(1);
+                    mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -224,16 +222,81 @@ public class ProfileMenu extends Application {
         });
 
         back.setOnMouseClicked(mouseEvent -> {
-            mainPane.getChildren().removeAll(change, back);
+            mainPane.getChildren().removeAll(change);
             mainPane.getChildren().add(mainButtons);
         });
 
-        change.getChildren().addAll(currentEmail, newEmail, emailDetail, submit);
+        change.getChildren().addAll(currentEmail, newEmail, emailDetail, buttons);
         newEmail.textProperty().addListener((observable, oldValue, newValue) -> {
             checkEmail(newValue, emailDetail);
         });
 
-        mainPane.getChildren().remove(1);
+        mainPane.getChildren().remove(mainButtons);
+        mainPane.getChildren().add(change);
+    }
+
+    public void changeSlogan() {
+        VBox change = new VBox(20);
+        change.setAlignment(Pos.CENTER);
+
+        HBox sloganContainer = new HBox(15);
+        sloganContainer.setAlignment(Pos.CENTER);
+
+        TextField slogan = new TextField();
+        slogan.setMinWidth(175);
+        slogan.setPromptText("slogan");
+
+        Button random = new Button("random");
+        sloganContainer.getChildren().addAll(slogan, random);
+
+        ComboBox<String> defaultSlogans = new ComboBox<>();
+        defaultSlogans.setMaxWidth(250);
+        defaultSlogans.setPromptText("slogan");
+        defaultSlogans.getItems().add("None");
+        for(String defaultSlogan : RandomGenerator.getSlogans()){
+            defaultSlogans.getItems().add(defaultSlogan);
+        }
+
+        defaultSlogans.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                if(newValue.equals("None"))
+                    slogan.setDisable(false);
+                else {
+                    slogan.setDisable(true);
+                    slogan.clear();
+                }
+            }
+        });
+
+        HBox buttons = new HBox(10);
+        buttons.setAlignment(Pos.CENTER);
+        Button submit = new Button("submit");
+        Button back = new Button("back");
+        buttons.getChildren().addAll(back, submit);
+
+        back.setOnMouseClicked(mouseEvent -> {
+            mainPane.getChildren().removeAll(change);
+            mainPane.getChildren().add(mainButtons);
+        });
+
+        submit.setOnMouseClicked(mouseEvent -> {
+            if(slogan.isDisable()) Stronghold.getCurrentUser().setSlogan(defaultSlogans.getValue());
+            else Stronghold.getCurrentUser().setSlogan(slogan.getText());
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Slogan change successful");
+            alert.setContentText("Your slogan was changed successfully");
+            mainPane.getChildren().remove(change);
+            mainPane.getChildren().add(mainButtons);
+        });
+
+        random.setOnMouseClicked(mouseEvent -> {
+            slogan.setText(RandomGenerator.getRandomSlogan());
+        });
+
+        change.getChildren().addAll(sloganContainer, defaultSlogans, buttons);
+
+        mainPane.getChildren().remove(mainButtons);
         mainPane.getChildren().add(change);
     }
 
@@ -252,13 +315,13 @@ public class ProfileMenu extends Application {
     }
 
     private void checkNickname(String nickname, Text nicknameDetail){
-        if(!CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
+        if(CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
             nicknameDetail.setText("invalid nickname format!");
         else nicknameDetail.setText("valid nickname!");
     }
 
     private void checkEmail(String email, Text emailDetail){
-        if(!CheckFormatAndEncrypt.isEmailFormatInvalid(email))
+        if(CheckFormatAndEncrypt.isEmailFormatInvalid(email))
             emailDetail.setText("invalid email format!");
         else emailDetail.setText("valid email!");
     }
@@ -288,11 +351,11 @@ public class ProfileMenu extends Application {
         }
     }
 
-    public void goToMainMenu() {
-        //TODO go to main menu
+    public void goToMainMenu() throws Exception{
+        new MainMenuGFX().start(stage);
     }
 
-    public void scoreboard(MouseEvent mouseEvent) throws Exception {
+    public void scoreboard() throws Exception {
         new Scoreboard().start(stage);
     }
 }

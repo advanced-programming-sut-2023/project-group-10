@@ -5,6 +5,7 @@ import org.example.model.utils.CheckFormatAndEncrypt;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 public class User {
     static final Gson gson = new Gson();
@@ -16,6 +17,7 @@ public class User {
     private String slogan;
     private String questionNumber;
     private String questionAnswer;
+    private String avatar;
     private int highScore;
 
 
@@ -28,7 +30,7 @@ public class User {
         this.slogan = slogan;
         this.questionNumber = questionNumber;
         this.questionAnswer = CheckFormatAndEncrypt.encryptString(securityAnswer);
-
+        this.avatar = "/images/avatar/avatar" + randomNumber() + ".png";
     }
 
     public static void addUser(String username, String password, String nickname, String email, String slogan,
@@ -140,6 +142,14 @@ public class User {
         this.slogan = slogan;
     }
 
+    public String getAvatar(){
+        return this.avatar;
+    }
+
+    public void setAvatar(String avatar){
+        this.avatar = avatar;
+    }
+
     public void setSecurityQuestion(String number, String answer) {
         questionNumber = number;
         questionAnswer = answer;
@@ -176,5 +186,10 @@ public class User {
                 return i + 1;
         }
         return 0;
+    }
+
+    private int randomNumber(){
+        Random random = new Random();
+        return random.nextInt(28)+1; //TODO set bound
     }
 }

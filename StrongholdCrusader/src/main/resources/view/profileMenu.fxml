@@ -5,27 +5,28 @@
 
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Text?>
-<Pane xmlns="http://javafx.com/javafx"
+<HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.ProfileMenu"
-      prefHeight="400.0" prefWidth="600.0" fx:id="mainPane">
-    <Button text="main menu" translateX="120" translateY="160" onMouseClicked="#goToMainMenu"/>
+      prefHeight="400.0" prefWidth="600.0"
+      spacing="30" alignment="CENTER" fx:id="mainPane">
 
-    <VBox alignment="CENTER" spacing="20" translateX="100" translateY="50">
+    <VBox alignment="CENTER" spacing="20" fx:id="info">
         <Circle fx:id="avatar" radius="40"/>
         <Text fx:id="username"/>
-        <Text fx:id="password"/>
         <Text fx:id="nickname"/>
         <Text fx:id="email"/>
+        <Button text="main menu" onMouseClicked="#goToMainMenu"/>
     </VBox>
 
-    <VBox fx:id="mainButtons" alignment="CENTER" spacing="20" translateX="200" translateY="50">
+    <VBox fx:id="mainButtons" alignment="CENTER" spacing="20">
         <Button text="change username" onMouseClicked="#changeUsername"/>
         <Button text="change password" onMouseClicked="#changePassword"/>
         <Button text="change nickname" onMouseClicked="#changeNickname"/>
         <Button text="change email" onMouseClicked="#changeEmail"/>
+        <Button text="change slogan" onMouseClicked="#changeSlogan"/>
         <Button text="change avatar" onMouseClicked="#changeAvatar"/>
         <Button text="scoreboard" onMouseClicked="#scoreboard"/>
     </VBox>
 
-</Pane>
+</HBox>
