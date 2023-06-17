@@ -30,7 +30,7 @@ public class User {
         this.slogan = slogan;
         this.questionNumber = questionNumber;
         this.questionAnswer = CheckFormatAndEncrypt.encryptString(securityAnswer);
-        this.avatar = "/images/avatar/avatar" + randomNumber() + ".png";
+        this.avatar = User.class.getResource("/images/avatar/avatar" + randomNumber() + ".png").toExternalForm();
     }
 
     public static void addUser(String username, String password, String nickname, String email, String slogan,

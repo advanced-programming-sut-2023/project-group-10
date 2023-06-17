@@ -9,13 +9,14 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.ProfileMenu"
       prefHeight="400.0" prefWidth="600.0"
-      spacing="30" alignment="CENTER" fx:id="mainPane">
+      spacing="100" alignment="CENTER" fx:id="mainPane">
 
     <VBox alignment="CENTER" spacing="20" fx:id="info">
         <Circle fx:id="avatar" radius="40"/>
         <Text fx:id="username"/>
         <Text fx:id="nickname"/>
         <Text fx:id="email"/>
+        <Text fx:id="slogan"/>
         <Button text="main menu" onMouseClicked="#goToMainMenu"/>
     </VBox>
 

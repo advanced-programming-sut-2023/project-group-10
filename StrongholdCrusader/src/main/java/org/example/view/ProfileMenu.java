@@ -34,6 +34,7 @@ public class ProfileMenu extends Application {
     public Text username;
     public Text nickname;
     public Text email;
+    public Text slogan;
     public VBox mainButtons;
     public VBox info;
     public HBox mainPane;
@@ -51,13 +52,13 @@ public class ProfileMenu extends Application {
 
     @FXML
     public void initialize(){
-    Stronghold.setCurrentUser(new User("Rozhin", "Rozhin23@", "rozhintzn", "rozhin@gmail.com", "yo yo", "1", "hamid"));
-    String path = Stronghold.class.getResource(Stronghold.getCurrentUser().getAvatar()).toExternalForm();
-    avatar.setFill(new ImagePattern(new Image(path)));
+    avatar.setFill(new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
     username.setText("username: " + Stronghold.getCurrentUser().getUsername());
     //password.setText(Stronghold.getCurrentUser().getPassword());
     nickname.setText("nickname: " + Stronghold.getCurrentUser().getNickname());
     email.setText("email: " + Stronghold.getCurrentUser().getEmail());
+    if(Stronghold.getCurrentUser().getSlogan() == null || Stronghold.getCurrentUser().getSlogan().equals("")) slogan.setText("slogan in empty!");
+    else slogan.setText("slogan: " + Stronghold.getCurrentUser().getSlogan());
     }
 
     public void changeUsername() {
@@ -80,6 +81,7 @@ public class ProfileMenu extends Application {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Username change successful");
                     alert.setContentText("Your username was changed successfully");
+                    username.setText(Stronghold.getCurrentUser().getUsername());
                     mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
                 } catch (Exception e) {
@@ -171,6 +173,7 @@ public class ProfileMenu extends Application {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Nickname change successful");
                     alert.setContentText("Your nickname was changed successfully");
+                    nickname.setText(Stronghold.getCurrentUser().getNickname());
                     mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
                 } catch (Exception e) {
@@ -213,6 +216,7 @@ public class ProfileMenu extends Application {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Email change successful");
                     alert.setContentText("Your email was changed successfully");
+                    email.setText(Stronghold.getCurrentUser().getEmail());
                     mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
                 } catch (Exception e) {
@@ -242,12 +246,12 @@ public class ProfileMenu extends Application {
         HBox sloganContainer = new HBox(15);
         sloganContainer.setAlignment(Pos.CENTER);
 
-        TextField slogan = new TextField();
-        slogan.setMinWidth(175);
-        slogan.setPromptText("slogan");
+        TextField newSlogan = new TextField();
+        newSlogan.setMinWidth(175);
+        newSlogan.setPromptText("slogan");
 
         Button random = new Button("random");
-        sloganContainer.getChildren().addAll(slogan, random);
+        sloganContainer.getChildren().addAll(newSlogan, random);
 
         ComboBox<String> defaultSlogans = new ComboBox<>();
         defaultSlogans.setMaxWidth(250);
@@ -257,15 +261,12 @@ public class ProfileMenu extends Application {
             defaultSlogans.getItems().add(defaultSlogan);
         }
 
-        defaultSlogans.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if(newValue.equals("None"))
-                    slogan.setDisable(false);
-                else {
-                    slogan.setDisable(true);
-                    slogan.clear();
-                }
+        defaultSlogans.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            if(newValue.equals("None"))
+                newSlogan.setDisable(false);
+            else {
+                newSlogan.setDisable(true);
+                newSlogan.clear();
             }
         });
 
@@ -273,7 +274,8 @@ public class ProfileMenu extends Application {
         buttons.setAlignment(Pos.CENTER);
         Button submit = new Button("submit");
         Button back = new Button("back");
-        buttons.getChildren().addAll(back, submit);
+        Button removeSlogan = new Button("remove slogan");
+        buttons.getChildren().addAll(back, submit, removeSlogan);
 
         back.setOnMouseClicked(mouseEvent -> {
             mainPane.getChildren().removeAll(change);
@@ -281,17 +283,28 @@ public class ProfileMenu extends Application {
         });
 
         submit.setOnMouseClicked(mouseEvent -> {
-            if(slogan.isDisable()) Stronghold.getCurrentUser().setSlogan(defaultSlogans.getValue());
-            else Stronghold.getCurrentUser().setSlogan(slogan.getText());
+            if(newSlogan.isDisable()) Stronghold.getCurrentUser().setSlogan(defaultSlogans.getValue());
+            else Stronghold.getCurrentUser().setSlogan(newSlogan.getText());
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Slogan change successful");
             alert.setContentText("Your slogan was changed successfully");
+            slogan.setText("slogan: " + Stronghold.getCurrentUser().getSlogan());
             mainPane.getChildren().remove(change);
             mainPane.getChildren().add(mainButtons);
         });
 
         random.setOnMouseClicked(mouseEvent -> {
-            slogan.setText(RandomGenerator.getRandomSlogan());
+            newSlogan.setText(RandomGenerator.getRandomSlogan());
+        });
+
+        removeSlogan.setOnMouseClicked(mouseEvent -> {
+            Stronghold.getCurrentUser().setSlogan("");
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Slogan removed successful");
+            alert.setContentText("Your slogan was removed successfully");
+            slogan.setText("slogan is empty");
+            mainPane.getChildren().remove(change);
+            mainPane.getChildren().add(mainButtons);
         });
 
         change.getChildren().addAll(sloganContainer, defaultSlogans, buttons);
@@ -300,8 +313,8 @@ public class ProfileMenu extends Application {
         mainPane.getChildren().add(change);
     }
 
-    public void changeAvatar(){
-
+    public void changeAvatar() throws Exception{
+        new ChangeAvatarMenu().start(stage);
     }
 
     private void checkUsername(String username, Text usernameDetail){
