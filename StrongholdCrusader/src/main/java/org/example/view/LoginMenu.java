@@ -38,7 +38,7 @@ public class LoginMenu extends Application {
         Scene scene = new Scene(pane, 1390, 850);
         stage.setScene(scene);
         stage.setTitle("Login Menu");
-        stage.setFullScreen(true);
+        stage.setMaximized(true);
         stage.show();
     }
 

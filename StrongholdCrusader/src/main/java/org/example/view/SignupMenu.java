@@ -60,7 +60,7 @@ public class SignupMenu extends Application {
             Scene scene = new Scene(borderPane, 1390, 850);
             stage.setScene(scene);
             stage.setTitle("signup menu");
-            stage.setFullScreen(true);
+            stage.setMaximized(true);
             stage.show();
         }
     }

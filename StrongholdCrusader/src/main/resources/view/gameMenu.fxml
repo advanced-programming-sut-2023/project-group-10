@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.GameMenuGFXController"
@@ -14,9 +15,9 @@
         <Label text="map"/>
     </Pane>
     <HBox fx:id="controlBox">
-        <ScrollPane fx:id="buildingBox">
+        <ListView orientation="HORIZONTAL" fx:id="buildingBox">
             <Label text="buildings and categories"/>
-        </ScrollPane>
+        </ListView>
         <Pane fx:id="miniMapBox">
             <Label text="map"/>
         </Pane>

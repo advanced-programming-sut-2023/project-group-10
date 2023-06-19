@@ -47,6 +47,7 @@ public class ProfileMenu extends Application {
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.setTitle("Profile Menu");
+        stage.setMaximized(true);
         stage.show();
     }
 
