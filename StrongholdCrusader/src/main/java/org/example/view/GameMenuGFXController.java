@@ -4,15 +4,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 public class GameMenuGFXController {
     public Pane mapBox;
@@ -36,5 +39,26 @@ public class GameMenuGFXController {
         String[] files = path.list();
         for(int i = 0; i < files.length; i++)
             buildingBox.getItems().add(new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + files[i]).toString()))));
+    }
+
+    public void castle() {
+        buildingBox.getItems().clear();
+        ArrayList<BuildingTypeName> buildings = new ArrayList<>();
+
+    }
+
+    public void farm() {
+    }
+
+    public void foodProcessing() {
+    }
+
+    public void industry() {
+    }
+
+    public void town() {
+    }
+
+    public void weapon() {
     }
 }

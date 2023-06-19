@@ -14,9 +14,14 @@ import javafx.stage.Stage;
 import org.example.controller.SignupMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.game.buildings.buildingconstants.BuildingType;
+import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.messages.SignupMenuMessages;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class SignupMenu extends Application {
     public static Stage stage;
@@ -62,6 +67,15 @@ public class SignupMenu extends Application {
             stage.setTitle("signup menu");
             stage.setMaximized(true);
             stage.show();
+
+            ArrayList<String> names = new ArrayList<>();
+            for(BuildingTypeName buildingTypeName : BuildingTypeName.values()){
+                names.add(buildingTypeName.toString().toLowerCase());
+            }
+            Collections.sort(names);
+            for(String string : names){
+                System.out.println(string);
+            }
         }
     }
 

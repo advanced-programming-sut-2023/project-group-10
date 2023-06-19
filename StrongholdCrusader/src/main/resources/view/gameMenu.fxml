@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Button?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.GameMenuGFXController"
@@ -15,9 +16,19 @@
         <Label text="map"/>
     </Pane>
     <HBox fx:id="controlBox">
-        <ListView orientation="HORIZONTAL" fx:id="buildingBox">
-            <Label text="buildings and categories"/>
-        </ListView>
+        <VBox>
+            <ListView orientation="HORIZONTAL" fx:id="buildingBox">
+                <Label text="buildings and categories"/>
+            </ListView>
+            <HBox>
+                <Button text="Castle" onMouseClicked="#castle"/>
+                <Button text="Farm" onMouseClicked="#farm"/>
+                <Button text="Food Processing" onMouseClicked="#foodProcessing"/>
+                <Button text="Industry" onMouseClicked="#industry"/>
+                <Button text="Town" onMouseClicked="#town"/>
+                <Button text="Weapon" onMouseClicked="#weapon"/>
+            </HBox>
+        </VBox>
         <Pane fx:id="miniMapBox">
             <Label text="map"/>
         </Pane>
