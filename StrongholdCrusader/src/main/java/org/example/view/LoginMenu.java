@@ -15,6 +15,7 @@ import org.example.controller.LoginMenuController;
 import org.example.controller.SignupMenuController;
 import org.example.model.SecurityQuestion;
 import org.example.model.User;
+import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.messages.LoginMenuMessages;
 import org.example.view.enums.messages.SignupMenuMessages;
 
@@ -34,7 +35,7 @@ public class LoginMenu extends Application {
     public void start(Stage stage) throws Exception {
         LoginMenu.stage = stage;
         Pane pane = new FXMLLoader(LoginMenu.class.getResource("/view/loginMenu.fxml")).load();
-        pane.setBackground(new Background(setBackground("/images/backgrounds/background1.jpeg")));
+        pane.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/background1.jpeg")));
         Scene scene = new Scene(pane, 1390, 850);
         stage.setScene(scene);
         stage.setTitle("Login Menu");
@@ -120,16 +121,6 @@ public class LoginMenu extends Application {
         }
 
         else new MainMenuGFX().start(stage);
-    }
-
-    private BackgroundImage setBackground(String url){
-        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440 ,900, false, false);
-        BackgroundImage backgroundImage = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-        return backgroundImage;
     }
 
     private void checkPassword(String password, Label label){

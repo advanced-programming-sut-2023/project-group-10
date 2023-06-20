@@ -60,7 +60,7 @@ public class SignupMenu extends Application {
         }
         else {
             BorderPane borderPane = new FXMLLoader(SignupMenu.class.getResource("/view/signupMenu.fxml")).load();
-            Background background = new Background(setBackground("/images/backgrounds/background2.png"));
+            Background background = new Background(RandomGenerator.setBackground("/images/backgrounds/background2.png"));
             borderPane.setBackground(background);
 
             Scene scene = new Scene(borderPane, 1390, 850);
@@ -227,15 +227,5 @@ public class SignupMenu extends Application {
         popup.setAutoHide(true);
         popup.show(stage);
         new SecurityQuestionMenu().start(stage);
-    }
-
-    private BackgroundImage setBackground(String url){
-        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440 ,900, false, false);
-        BackgroundImage backgroundImage = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-        return backgroundImage;
     }
 }

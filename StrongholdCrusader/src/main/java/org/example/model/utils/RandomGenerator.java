@@ -1,6 +1,12 @@
 package org.example.model.utils;
 
+import javafx.scene.image.Image;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.example.view.GameMenu;
 
 import java.util.Collections;
 import java.util.List;
@@ -53,5 +59,15 @@ public class RandomGenerator {
     public static String tradeId() {
         tradeNumber++;
         return Integer.toString(tradeNumber);
+    }
+
+    public static BackgroundImage setBackground(String url){
+        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440 ,900, false, false);
+        BackgroundImage backgroundImage = new BackgroundImage(image,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+        return backgroundImage;
     }
 }

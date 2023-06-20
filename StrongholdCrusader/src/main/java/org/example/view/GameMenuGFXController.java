@@ -4,15 +4,14 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import org.example.model.game.buildings.buildingconstants.BuildingCategory;
 import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
+import org.example.model.utils.RandomGenerator;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
