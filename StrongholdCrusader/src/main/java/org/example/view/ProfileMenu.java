@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -20,11 +17,13 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.example.controller.ProfileMenuController;
 import org.example.controller.SignupMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.model.utils.RandomGenerator;
+import org.example.view.enums.messages.ProfileMenuMessages;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 import java.io.IOException;
@@ -53,11 +52,8 @@ public class ProfileMenu extends Application {
 
     @FXML
     public void initialize(){
-    Stronghold.setCurrentUser(new User("Rozhin", "Rozhin23@", "rozhintzn", "rozhin@gmail.com", "yo yo", "1", "hamid"));
-    //TODO delete this line
     avatar.setFill(new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
     username.setText("username: " + Stronghold.getCurrentUser().getUsername());
-    //password.setText(Stronghold.getCurrentUser().getPassword());
     nickname.setText("nickname: " + Stronghold.getCurrentUser().getNickname());
     email.setText("email: " + Stronghold.getCurrentUser().getEmail());
     if(Stronghold.getCurrentUser().getSlogan() == null || Stronghold.getCurrentUser().getSlogan().equals("")) slogan.setText("slogan in empty!");
@@ -80,13 +76,16 @@ public class ProfileMenu extends Application {
         submit.setOnMouseClicked(mouseEvent -> {
             if(usernameDetail.getText().equals("valid username!")) {
                 try {
-                    Stronghold.getCurrentUser().setUsername(newUsername.getText());
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Username change successful");
-                    alert.setContentText("Your username was changed successfully");
-                    username.setText(Stronghold.getCurrentUser().getUsername());
-                    mainPane.getChildren().remove(change);
-                    mainPane.getChildren().add(mainButtons);
+                    if(usernameDetail.getText().equals("valid username!")) {
+                        ProfileMenuController.changeUsername(username.getText());
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Username change successful");
+                        alert.setContentText("Your username was changed successfully");
+                        username.setText("username: " + Stronghold.getCurrentUser().getUsername());
+                        mainPane.getChildren().remove(change);
+                        mainPane.getChildren().add(mainButtons);
+                        //TODO username does not change in database
+                    }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -111,11 +110,13 @@ public class ProfileMenu extends Application {
         VBox change = new VBox(20);
         change.setAlignment(Pos.CENTER);
 
-        TextField currentPassword = new TextField();
+        PasswordField currentPassword = new PasswordField();
         currentPassword.setPromptText("current password");
+        currentPassword.setMinWidth(230);
         Text currentPassDetail = new Text();
-        TextField newPassword = new TextField();
+        PasswordField newPassword = new PasswordField();
         newPassword.setPromptText("new password");
+        newPassword.setMinWidth(230);
         Text newPassDetail = new Text();
 
         HBox buttons = new HBox(10);
@@ -125,7 +126,7 @@ public class ProfileMenu extends Application {
         buttons.getChildren().addAll(back, submit);
         submit.setOnMouseClicked(mouseEvent -> {
             if(newPassDetail.getText().equals("valid password!")) {
-                if(!Stronghold.getCurrentUser().getPassword().equals(currentPassword.getText()))
+                if(!Stronghold.getCurrentUser().getPassword().equals(CheckFormatAndEncrypt.encryptString(currentPassword.getText())))
                     currentPassDetail.setText("wrong password!");
                 else {
                     try {
@@ -172,11 +173,11 @@ public class ProfileMenu extends Application {
         submit.setOnMouseClicked(mouseEvent -> {
             if(nicknameDetail.getText().equals("valid nickname!")) {
                 try {
-                    Stronghold.getCurrentUser().setNickname(newNickname.getText());
+                    ProfileMenuController.changeNickname(newNickname.getText());
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Nickname change successful");
                     alert.setContentText("Your nickname was changed successfully");
-                    nickname.setText(Stronghold.getCurrentUser().getNickname());
+                    nickname.setText("nickname: " + Stronghold.getCurrentUser().getNickname());
                     mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
                 } catch (Exception e) {
@@ -215,13 +216,15 @@ public class ProfileMenu extends Application {
         submit.setOnMouseClicked(mouseEvent -> {
             if(emailDetail.getText().equals("valid email!")) {
                 try {
-                    Stronghold.getCurrentUser().setEmail(newEmail.getText());
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Email change successful");
-                    alert.setContentText("Your email was changed successfully");
-                    email.setText(Stronghold.getCurrentUser().getEmail());
-                    mainPane.getChildren().remove(change);
-                    mainPane.getChildren().add(mainButtons);
+                    if(emailDetail.getText().equals("valid email!")) {
+                        ProfileMenuController.changeEmail(newEmail.getText());
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Email change successful");
+                        alert.setContentText("Your email was changed successfully");
+                        email.setText(Stronghold.getCurrentUser().getEmail());
+                        mainPane.getChildren().remove(change);
+                        mainPane.getChildren().add(mainButtons);
+                    }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -286,8 +289,8 @@ public class ProfileMenu extends Application {
         });
 
         submit.setOnMouseClicked(mouseEvent -> {
-            if(newSlogan.isDisable()) Stronghold.getCurrentUser().setSlogan(defaultSlogans.getValue());
-            else Stronghold.getCurrentUser().setSlogan(newSlogan.getText());
+            if(newSlogan.isDisable()) ProfileMenuController.changeSlogan(defaultSlogans.getValue());
+            else ProfileMenuController.changeSlogan(newSlogan.getText());
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Slogan change successful");
             alert.setContentText("Your slogan was changed successfully");
@@ -321,11 +324,13 @@ public class ProfileMenu extends Application {
     }
 
     private void checkUsername(String username, Text usernameDetail){
-        SignupMenuMessages message = SignupMenuController.checkUsername(username);
+        ProfileMenuMessages message = ProfileMenuController.changeUsername(username);
 
-        if(message.equals(SignupMenuMessages.INVALID_USERNAME_FORMAT))
+        if(message.equals(ProfileMenuMessages.INVALID_USERNAME))
             usernameDetail.setText("invalid username format!");
-        else if(message.equals(SignupMenuMessages.USER_EXISTS))
+        else if(message.equals(ProfileMenuMessages.OLD_USERNAME_ENTERED))
+            usernameDetail.setText("enter a new username!");
+        else if(message.equals(ProfileMenuMessages.USERNAME_EXISTS))
             usernameDetail.setText("username exists!");
         else usernameDetail.setText("valid username!");
     }
@@ -339,6 +344,10 @@ public class ProfileMenu extends Application {
     private void checkEmail(String email, Text emailDetail){
         if(CheckFormatAndEncrypt.isEmailFormatInvalid(email))
             emailDetail.setText("invalid email format!");
+        else if(Stronghold.getCurrentUser().getEmail().equals(email))
+            emailDetail.setText("enter a new email!");
+        else if(User.getUserByEmail(email) != null)
+            emailDetail.setText("email exists!");
         else emailDetail.setText("valid email!");
     }
 

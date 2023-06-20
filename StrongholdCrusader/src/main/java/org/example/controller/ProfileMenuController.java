@@ -22,7 +22,8 @@ public class ProfileMenuController {
             return ProfileMenuMessages.USERNAME_EXISTS;
 
         else {
-            if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+            if (Stronghold.getLoggedInUserFromFile() != null &&
+                    Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
                 Stronghold.getCurrentUser().setUsername(username);
                 Stronghold.dataBase.saveUsersToFile();
                 Stronghold.addUserToFile(Stronghold.getCurrentUser());
@@ -34,23 +35,15 @@ public class ProfileMenuController {
         }
     }
 
-    public static ProfileMenuMessages changeNickname(String nickname) {
-        if (nickname == null || nickname.length() == 0 || nickname.matches("\\s*"))
-            return ProfileMenuMessages.NO_NICKNAME_PROVIDED;
-
-        if (CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
-            return ProfileMenuMessages.INVALID_NICKNAME;
-
-        else {
-            if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
-                Stronghold.getCurrentUser().setNickname(nickname);
-                Stronghold.dataBase.saveUsersToFile();
-                Stronghold.addUserToFile(Stronghold.getCurrentUser());
-            } else {
-                Stronghold.getCurrentUser().setNickname(nickname);
-                Stronghold.dataBase.saveUsersToFile();
-            }
-            return ProfileMenuMessages.CHANGE_NICKNAME_SUCCESSFUL;
+    public static void changeNickname(String nickname) {
+        if (Stronghold.getLoggedInUserFromFile() != null &&
+                Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+            Stronghold.getCurrentUser().setNickname(nickname);
+            Stronghold.dataBase.saveUsersToFile();
+            Stronghold.addUserToFile(Stronghold.getCurrentUser());
+        } else {
+            Stronghold.getCurrentUser().setNickname(nickname);
+            Stronghold.dataBase.saveUsersToFile();
         }
     }
 
@@ -82,48 +75,27 @@ public class ProfileMenuController {
         return ProfileMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 
-    public static ProfileMenuMessages changeEmail(String email) {
-        if (email == null || email.length() == 0 || email.matches("\\s*"))
-            return ProfileMenuMessages.NO_EMAIL_PROVIDED;
+    public static void changeEmail(String email) {
+        if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+            Stronghold.getCurrentUser().setEmail(email);
+            Stronghold.dataBase.saveUsersToFile();
+            Stronghold.addUserToFile(Stronghold.getCurrentUser());
+        } else {
+            Stronghold.getCurrentUser().setEmail(email);
+            Stronghold.dataBase.saveUsersToFile();
 
-        else if (CheckFormatAndEncrypt.isEmailFormatInvalid(email))
-            return ProfileMenuMessages.INVALID_EMAIL;
-
-        else if (email.equals(Stronghold.getCurrentUser().getEmail()))
-            return ProfileMenuMessages.OLD_EMAIL_ENTERED;
-
-        else if (User.getUserByEmail(email) != null)
-            return ProfileMenuMessages.EMAIL_EXISTS;
-
-        else {
-            if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
-                Stronghold.getCurrentUser().setEmail(email);
-                Stronghold.dataBase.saveUsersToFile();
-                Stronghold.addUserToFile(Stronghold.getCurrentUser());
-            } else {
-                Stronghold.getCurrentUser().setEmail(email);
-                Stronghold.dataBase.saveUsersToFile();
-
-            }
-            return ProfileMenuMessages.CHANGE_EMAIL_SUCCESSFUL;
         }
     }
 
-    public static ProfileMenuMessages changeSlogan(String slogan) {
-        if (slogan.matches("\\s*"))
-            return ProfileMenuMessages.NO_SLOGAN_PROVIDED;
+    public static void changeSlogan(String slogan) {
+        if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+            Stronghold.getCurrentUser().setSlogan(slogan);
+            Stronghold.dataBase.saveUsersToFile();
+            Stronghold.addUserToFile(Stronghold.getCurrentUser());
+        } else {
+            Stronghold.getCurrentUser().setSlogan(slogan);
+            Stronghold.dataBase.saveUsersToFile();
 
-        else {
-            if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
-                Stronghold.getCurrentUser().setSlogan(slogan);
-                Stronghold.dataBase.saveUsersToFile();
-                Stronghold.addUserToFile(Stronghold.getCurrentUser());
-            } else {
-                Stronghold.getCurrentUser().setSlogan(slogan);
-                Stronghold.dataBase.saveUsersToFile();
-
-            }
-            return ProfileMenuMessages.CHANGE_SLOGAN_SUCCESSFUL;
         }
     }
 

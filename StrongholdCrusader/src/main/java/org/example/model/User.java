@@ -103,7 +103,7 @@ public class User {
     }
 
     public void setUsername(String username) {
-        User.getUserByUsername(this.username).username=username;
+        this.username = username;
         Stronghold.dataBase.saveUsersToFile();
     }
 
@@ -130,7 +130,7 @@ public class User {
     }
 
     public void setNickname(String nickname) {
-        User.getUserByUsername(this.username).nickname=nickname;
+        this.nickname = nickname;
         Stronghold.dataBase.saveUsersToFile();
     }
 
