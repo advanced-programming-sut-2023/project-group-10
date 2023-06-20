@@ -9,11 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.example.controller.ProfileMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
 
@@ -26,6 +28,7 @@ public class Scoreboard extends Application {
     public Circle currentPlayerAvatar;
     public Text currentPlayerUsername;
     public Text currentPlayerScore;
+    private String path;
 
 
     @Override
@@ -47,11 +50,17 @@ public class Scoreboard extends Application {
 
         List<User> sortedUsers = new ArrayList<>(User.sortUsers());
 
-        for(int i = 1; i <= sortedUsers.size(); i++){
-            rank.getItems().add(i);
-            username.getItems().add(sortedUsers.get(i-1).getUsername());
-            avatar.getItems().add(new Circle(30, new ImagePattern(new Image(sortedUsers.get(i-1).getAvatar()))));
-            highScore.getItems().add(sortedUsers.get(i-1).getHighScore());
+        for(int i = 0; i < sortedUsers.size(); i++){
+            rank.getItems().add(i+1);
+            username.getItems().add(sortedUsers.get(i).getUsername());
+            Circle circle = new Circle(30, new ImagePattern(new Image(sortedUsers.get(i).getAvatar())));
+            circle.setOnDragDetected(mouseEvent -> {
+                ImagePattern imagePattern = (ImagePattern) circle.getFill();
+                path = imagePattern.getImage().getUrl();
+                System.out.println(path);
+            });
+            avatar.getItems().add(circle);
+            highScore.getItems().add(sortedUsers.get(i).getHighScore());
         }
 
         HBox hBox = new HBox(rank, avatar, username, highScore);
@@ -65,7 +74,7 @@ public class Scoreboard extends Application {
         stage.setTitle("Scoreboard");
         stage.show();
 
-        bind(rank, username, highScore);
+        bind(rank, avatar, username, highScore);
     }
 
     @FXML
@@ -79,7 +88,7 @@ public class Scoreboard extends Application {
         new ProfileMenu().start(stage);
     }
 
-    public static void bind(ListView<Integer> rank, ListView<String> username, ListView<Integer> highScore){
+    public static void bind(ListView<Integer> rank, ListView<Circle> avatar, ListView<String> username, ListView<Integer> highScore){
         Node n1 = rank.lookup(".scroll-bar");
         if (n1 instanceof ScrollBar) {
             final ScrollBar bar1 = (ScrollBar) n1;
@@ -93,6 +102,17 @@ public class Scoreboard extends Application {
                 final ScrollBar bar3 = (ScrollBar) n3;
                 bar1.valueProperty().bindBidirectional(bar3.valueProperty());
             }
+            Node n4 = avatar.lookup(".scroll-bar");
+            if(n4 instanceof ScrollBar){
+                final ScrollBar bar4 = (ScrollBar) n4;
+                bar1.valueProperty().bindBidirectional(bar4.valueProperty());
+            }
         }
+    }
+
+    public void changeAvatar() {
+        System.out.println("yes");
+        ProfileMenuController.changeAvatar(path);
+        //currentPlayerAvatar.setFill(new ImagePattern(new Image(path)));
     }
 }
