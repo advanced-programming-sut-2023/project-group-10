@@ -10,7 +10,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -19,7 +18,6 @@ import org.example.model.Stronghold;
 import org.example.model.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -36,15 +34,18 @@ public class Scoreboard extends Application {
 
         ListView<Integer> rank = new ListView<>();
         rank.setMaxWidth(70);
+        rank.setFixedCellSize(70);
         ListView<Circle> avatar = new ListView<>();
         avatar.setMaxWidth(150);
+        avatar.setFixedCellSize(70);
         ListView<String> username = new ListView<>();
         username.setMaxWidth(150);
+        username.setFixedCellSize(70);
         ListView<Integer> highScore = new ListView<>();
         highScore.setMaxWidth(100);
+        highScore.setFixedCellSize(70);
 
-        List<User> sortedUsers = new ArrayList<>();
-        Collections.copy(sortedUsers, User.sortUsers());
+        List<User> sortedUsers = new ArrayList<>(User.sortUsers());
 
         for(int i = 1; i <= sortedUsers.size(); i++){
             rank.getItems().add(i);
@@ -52,12 +53,6 @@ public class Scoreboard extends Application {
             avatar.getItems().add(new Circle(30, new ImagePattern(new Image(sortedUsers.get(i-1).getAvatar()))));
             highScore.getItems().add(sortedUsers.get(i-1).getHighScore());
         }
-
-        /*for(int i = 1; i <= 50; i++){
-            rank.getItems().add(i-1);
-            username.getItems().add(Integer.toString(i));
-            highScore.getItems().add(i+1);
-        }*/
 
         HBox hBox = new HBox(rank, avatar, username, highScore);
         hBox.setAlignment(Pos.CENTER);
