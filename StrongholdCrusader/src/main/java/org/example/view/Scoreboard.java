@@ -113,6 +113,6 @@ public class Scoreboard extends Application {
     public void changeAvatar() {
         System.out.println("yes");
         ProfileMenuController.changeAvatar(path);
-        //currentPlayerAvatar.setFill(new ImagePattern(new Image(path)));
+        currentPlayerAvatar.setFill(new ImagePattern(new Image(path)));
     }
 }

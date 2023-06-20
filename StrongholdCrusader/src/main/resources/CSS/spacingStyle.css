@@ -5,3 +5,6 @@
 .narrow-padding {
     -fx-padding: 5 10;
 }
+.list-cell {
+    -fx-padding: 0px;
+}

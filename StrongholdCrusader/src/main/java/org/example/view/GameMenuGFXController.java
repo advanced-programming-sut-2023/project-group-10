@@ -1,5 +1,6 @@
 package org.example.view;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -13,7 +14,6 @@ import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.utils.RandomGenerator;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class GameMenuGFXController {
@@ -34,9 +34,15 @@ public class GameMenuGFXController {
         miniMapBox.setStyle("-fx-background-color: #6c6cb4");
         infoBox.setPrefWidth(stage.getWidth() / 6);
         infoBox.setStyle("-fx-background-color: #ee9a73");
+        allBuildings();
+    }
+
+    private void allBuildings(){
         for(BuildingTypeName buildingTypeName : BuildingTypeName.values()){
             VBox vBox = new VBox(2);
             vBox.setAlignment(Pos.CENTER);
+            vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
+            vBox.setPadding(new Insets(0, 10, 0, 10));
             buildingBox.getItems().add(vBox);
             vBox.getChildren().add(new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingTypeName.toString().toLowerCase() + ".png").toString()))));
             vBox.getChildren().add(new Label(BuildingType.getBuildingTypeByName(buildingTypeName).getName().toString().replaceAll("_", " ")));
@@ -79,6 +85,8 @@ public class GameMenuGFXController {
         for(BuildingType buildingType : buildings){
             VBox vBox = new VBox(2); //TODO set spacing
             vBox.setAlignment(Pos.CENTER);
+            vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
+            vBox.setPadding(new Insets(0, 10, 0, 10));
             buildingBox.getItems().add(vBox);
             vBox.getChildren().add(new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingType.getName() + ".png").toString()))));
             vBox.getChildren().add(new Label(buildingType.getName().toString().replaceAll("_", " ")));
