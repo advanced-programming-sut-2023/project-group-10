@@ -1,9 +1,12 @@
 package org.example.view;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -17,11 +20,11 @@ import java.util.ArrayList;
 public class GameMenuGFXController {
     public Pane mapBox;
     public HBox controlBox;
-    public ListView<Circle> buildingBox;
+    public ListView<VBox> buildingBox;
     public Pane miniMapBox;
     public Pane infoBox;
 
-    public void prepareGame(Stage stage) throws URISyntaxException {
+    public void prepareGame(Stage stage) {
         System.out.println(stage.getHeight());
         controlBox.setPrefHeight(stage.getHeight() / 5);
         controlBox.setStyle("-fx-background-color: #171817");
@@ -32,6 +35,13 @@ public class GameMenuGFXController {
         miniMapBox.setStyle("-fx-background-color: #6c6cb4");
         infoBox.setPrefWidth(stage.getWidth() / 6);
         infoBox.setStyle("-fx-background-color: #ee9a73");
+        for(BuildingTypeName buildingTypeName : BuildingTypeName.values()){
+            VBox vBox = new VBox(2);
+            vBox.setAlignment(Pos.CENTER);
+            buildingBox.getItems().add(vBox);
+            vBox.getChildren().add(new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingTypeName.toString().toLowerCase() + ".png").toString()))));
+            vBox.getChildren().add(new Label(BuildingType.getBuildingTypeByName(buildingTypeName).getName().toString().replaceAll("_", " ")));
+        }
     }
 
     public void castle() {
@@ -68,7 +78,11 @@ public class GameMenuGFXController {
         }
 
         for(BuildingType buildingType : buildings){
-            buildingBox.getItems().add(new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingType.getName() + ".png").toString()))));
+            VBox vBox = new VBox(2); //TODO set spacing
+            vBox.setAlignment(Pos.CENTER);
+            buildingBox.getItems().add(vBox);
+            vBox.getChildren().add(new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingType.getName() + ".png").toString()))));
+            vBox.getChildren().add(new Label(buildingType.getName().toString().replaceAll("_", " ")));
         }
     }
 }

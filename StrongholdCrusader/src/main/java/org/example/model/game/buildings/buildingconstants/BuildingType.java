@@ -16,6 +16,7 @@ public class BuildingType {
     private final int employeeCount;
     private final boolean isRepairable;
     private final BuildingCategory category;
+    private final String buildingImage;
 
     protected BuildingType(BuildingTypeName name, int maxHitPoint, int buildingCost, Map<Item, Integer> resourcesNeeded, int employeeCount, boolean isRepairable, BuildingCategory category) {
         this.name = name;
@@ -26,6 +27,7 @@ public class BuildingType {
         this.isRepairable = isRepairable;
         allBuildingTypes.add(this);
         this.category = category;
+        this.buildingImage = "/images/buildings/" + name.toString().toLowerCase() + ".png";
     }
 
     protected BuildingType(BuildingTypeName name, int maxHitPoint, int buildingCost, Map<Item, Integer> resourcesNeeded, boolean isRepairable, BuildingCategory category) {
