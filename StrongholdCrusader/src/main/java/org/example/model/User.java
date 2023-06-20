@@ -148,6 +148,7 @@ public class User {
 
     public void setAvatar(String avatar){
         this.avatar = avatar;
+        Stronghold.dataBase.saveUsersToFile();
     }
 
     public void setSecurityQuestion(String number, String answer) {

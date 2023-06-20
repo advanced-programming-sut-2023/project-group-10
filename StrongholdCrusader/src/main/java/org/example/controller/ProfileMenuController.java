@@ -76,26 +76,38 @@ public class ProfileMenuController {
     }
 
     public static void changeEmail(String email) {
-        if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+        if (Stronghold.getLoggedInUserFromFile() != null &&
+                Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
             Stronghold.getCurrentUser().setEmail(email);
             Stronghold.dataBase.saveUsersToFile();
             Stronghold.addUserToFile(Stronghold.getCurrentUser());
         } else {
             Stronghold.getCurrentUser().setEmail(email);
             Stronghold.dataBase.saveUsersToFile();
-
         }
     }
 
     public static void changeSlogan(String slogan) {
-        if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+        if (Stronghold.getLoggedInUserFromFile() != null &&
+                Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
             Stronghold.getCurrentUser().setSlogan(slogan);
             Stronghold.dataBase.saveUsersToFile();
             Stronghold.addUserToFile(Stronghold.getCurrentUser());
         } else {
             Stronghold.getCurrentUser().setSlogan(slogan);
             Stronghold.dataBase.saveUsersToFile();
+        }
+    }
 
+    public static void changeAvatar(String path){
+        if (Stronghold.getLoggedInUserFromFile() != null &&
+                Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
+            Stronghold.getCurrentUser().setAvatar(path);
+            Stronghold.dataBase.saveUsersToFile();
+            Stronghold.addUserToFile(Stronghold.getCurrentUser());
+        } else {
+            Stronghold.getCurrentUser().setAvatar(path);
+            Stronghold.dataBase.saveUsersToFile();
         }
     }
 

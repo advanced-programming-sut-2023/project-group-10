@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import org.example.controller.ProfileMenuController;
 import org.example.model.Stronghold;
 
 import java.io.File;
@@ -82,7 +83,7 @@ public class ChangeAvatarMenu extends Application {
 
     public void choosePhoto(DragEvent dragEvent) {
         File file = dragEvent.getDragboard().getFiles().get(0);
-        Stronghold.getCurrentUser().setAvatar(file.toURI().toString());
+        ProfileMenuController.changeAvatar(file.toURI().toString());
         dropHere.setFill(new ImagePattern(new Image(file.toURI().toString())));
     }
 
@@ -96,7 +97,7 @@ public class ChangeAvatarMenu extends Application {
             Circle circle = (Circle) avatarList.getSelectionModel().getSelectedItem();
             ImagePattern imagePattern = (ImagePattern) circle.getFill();
             String path = imagePattern.getImage().getUrl();
-            Stronghold.getCurrentUser().setAvatar(path);
+            ProfileMenuController.changeAvatar(path);
             new ProfileMenu().start(stage);
         }
     }
