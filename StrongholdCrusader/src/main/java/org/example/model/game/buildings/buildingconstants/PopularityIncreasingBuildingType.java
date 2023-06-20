@@ -17,6 +17,8 @@ public class PopularityIncreasingBuildingType extends BuildingType {
         new PopularityIncreasingBuildingType(BuildingTypeName.INN, defaultHitPoint * 3, 100, Map.of(Item.WOOD, 20), 1, false, 1, BuildingCategory.FOOD_PROCESSING);
         new PopularityIncreasingBuildingType(BuildingTypeName.CHAPEL, defaultHitPoint * 3, 250, new HashMap<>(), 0, false, 2, BuildingCategory.TOWN);
         new PopularityIncreasingBuildingType(BuildingTypeName.CATHEDRAL, defaultHitPoint * 3, 1000, new HashMap<>(), 1, false, 2, BuildingCategory.TOWN);
+        new PopularityIncreasingBuildingType(BuildingTypeName.GOOD_THINGS, defaultHitPoint * 3, 20, new HashMap<>(), 0, false, 2, BuildingCategory.TOWN);
+        new PopularityIncreasingBuildingType(BuildingTypeName.BAD_THINGS, defaultHitPoint * 3, 40, new HashMap<>(), 0, false, -2, BuildingCategory.TOWN);
 
     }
 

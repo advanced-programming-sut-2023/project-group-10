@@ -83,4 +83,10 @@ public class BuildingType {
     public boolean isCapturable() {
         return name == BuildingTypeName.SMALL_STONE_GATEHOUSE || name == BuildingTypeName.LARGE_STONE_GATEHOUSE;
     }
+
+    public BuildingCategory getCategory() {
+        if(this.category == null)
+            return BuildingCategory.UNKNOWN;
+        else return category;
+    }
 }
