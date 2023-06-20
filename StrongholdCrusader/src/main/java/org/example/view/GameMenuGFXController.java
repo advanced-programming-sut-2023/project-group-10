@@ -8,13 +8,17 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import org.example.model.game.Item;
 import org.example.model.game.buildings.buildingconstants.BuildingCategory;
 import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.utils.RandomGenerator;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GameMenuGFXController {
     public Pane mapBox;
@@ -22,8 +26,10 @@ public class GameMenuGFXController {
     public ListView<VBox> buildingBox;
     public Pane miniMapBox;
     public Pane infoBox;
+    private static Stage stage;
 
     public void prepareGame(Stage stage) {
+        GameMenuGFXController.stage = stage;
         System.out.println(stage.getHeight());
         controlBox.setPrefHeight(stage.getHeight() / 5);
         controlBox.setStyle("-fx-background-color: #171817");
@@ -90,6 +96,31 @@ public class GameMenuGFXController {
             buildingBox.getItems().add(vBox);
             vBox.getChildren().add(new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingType.getName() + ".png").toString()))));
             vBox.getChildren().add(new Label(buildingType.getName().toString().replaceAll("_", " ")));
+
+            Popup popup = createPopup(buildingType);
+            vBox.hoverProperty().addListener((Observable, oldValue, newValue) -> {
+                if(newValue) popup.show(stage);
+                else popup.hide();
+            });
         }
+    }
+
+    private static Popup createPopup(BuildingType buildingType){
+        Popup popup = new Popup();
+        Label label = new Label();
+        String string = "hitpoint: " + buildingType.getMaxHitPoint();
+        string += "\ncost: " + buildingType.getBuildingCost();
+        if(buildingType.getResourcesNeeded() != null) {
+            for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet()) {
+                string += ("\n" + entry.getKey().getName() + " needed: " + entry.getValue());
+            }
+        }
+
+        string += ("\nemployee count: " + buildingType.getEmployeeCount());
+        popup.getContent().add(label);
+        label.setText(string);
+        popup.setAnchorX(500);
+        popup.setAnchorY(300);
+        return popup;
     }
 }
