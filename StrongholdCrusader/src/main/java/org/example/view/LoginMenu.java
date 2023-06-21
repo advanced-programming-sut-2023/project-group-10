@@ -3,18 +3,27 @@ package org.example.view;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.controller.LoginMenuController;
 import org.example.controller.SignupMenuController;
 import org.example.model.SecurityQuestion;
 import org.example.model.User;
+import org.example.model.utils.CaptchaGenerator;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.messages.LoginMenuMessages;
 import org.example.view.enums.messages.SignupMenuMessages;
@@ -27,6 +36,10 @@ public class LoginMenu extends Application {
     public Text usernameText;
     public Text passwordText;
     public VBox login;
+    public TextField input;
+    public Text captchaText;
+    public Text captchaNumber;
+    public Rectangle box;
     @FXML
     private Pane pane;
     private static Stage stage;
@@ -41,6 +54,12 @@ public class LoginMenu extends Application {
         stage.setTitle("Login Menu");
         stage.setMaximized(true);
         stage.show();
+    }
+
+    @FXML
+    public void initialize(){
+        box.setFill(new ImagePattern(new Image(LoginMenu.class.getResource("/images/backgrounds/dotted.jpeg").toExternalForm())));
+        generateCaptcha();
     }
 
     public void forgetPassword() {
@@ -109,15 +128,33 @@ public class LoginMenu extends Application {
         });
     }
 
+    private void generateCaptcha(){
+        captchaNumber.setText(CaptchaGenerator.randomNumberGenerator());
+        captchaNumber.setFill(Color.DARKGRAY);
+        captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
+        captchaNumber.setStrikethrough(true);
+        box.setWidth(captchaNumber.getText().length() * 15);
+    }
+
     public void submit() throws Exception{
+        if(!input.getText().equals(captchaNumber.getText())){
+            captchaText.setText("incorrect captcha!");
+            usernameText.setText("");
+            passwordText.setText("");
+            generateCaptcha();
+            return;
+        }
+
         LoginMenuMessages message = LoginMenuController.login(username.getText(), password.getText(), stayLoggedIn.isSelected());
         if(message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST)){
             usernameText.setText("username does not exist");
             passwordText.setText("");
+            captchaText.setText("");
         }
         else if(message.equals(LoginMenuMessages.WRONG_PASSWORD)){
             usernameText.setText("");
             passwordText.setText("wrong password");
+            captchaText.setText("");
         }
 
         else new MainMenuGFX().start(stage);
