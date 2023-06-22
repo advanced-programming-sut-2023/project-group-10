@@ -48,7 +48,7 @@ public class LoginMenu extends Application {
     public void start(Stage stage) throws Exception {
         LoginMenu.stage = stage;
         Pane pane = new FXMLLoader(LoginMenu.class.getResource("/view/loginMenu.fxml")).load();
-        pane.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/background1.jpeg")));
+        pane.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/background6.jpeg")));
         Scene scene = new Scene(pane, 1390, 850);
         stage.setScene(scene);
         stage.setTitle("Login Menu");
@@ -128,6 +128,7 @@ public class LoginMenu extends Application {
         });
     }
 
+    @FXML
     private void generateCaptcha(){
         captchaNumber.setText(CaptchaGenerator.randomNumberGenerator());
         captchaNumber.setFill(Color.DARKGRAY);

@@ -60,11 +60,10 @@ public class CaptchaGenerator {
 
     public static String randomNumberGenerator() {
         Random random = new Random();
-        int length = random.nextInt(5) + 4;
         String producer = "0123456789";
         String captcha = "";
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < 6; i++) {
             captcha += producer.charAt(random.nextInt(10));
         }
         return captcha;
