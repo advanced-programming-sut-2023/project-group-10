@@ -8,10 +8,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.controller.SignupMenuController;
 import org.example.model.SecurityQuestion;
+import org.example.model.utils.CaptchaGenerator;
 
 public class SecurityQuestionMenu extends Application {
 
@@ -20,6 +28,11 @@ public class SecurityQuestionMenu extends Application {
     public RadioButton question3;
     public TextField answer;
     public Button submit;
+    public Rectangle box;
+    public Text captchaNumber;
+    public TextField input;
+    public Text captchaText;
+    public VBox captchaContainer;
     private String question;
     private static Stage stage;
 
@@ -27,7 +40,7 @@ public class SecurityQuestionMenu extends Application {
     public void start(Stage stage) throws Exception {
         SecurityQuestionMenu.stage = stage;
         BorderPane borderPane = new FXMLLoader(SecurityQuestionMenu.class.getResource("/view/securityQuestion.fxml")).load();
-        Background background = new Background(setBackground("/images/backgrounds/background2.png"));
+        Background background = new Background(setBackground("/images/backgrounds/background7.jpeg"));
         borderPane.setBackground(background);
 
         Scene scene = new Scene(borderPane, 1390, 850);
@@ -42,27 +55,39 @@ public class SecurityQuestionMenu extends Application {
         question1.setText(SecurityQuestion.getQuestionByNumber("1"));
         question2.setText(SecurityQuestion.getQuestionByNumber("2"));
         question3.setText(SecurityQuestion.getQuestionByNumber("3"));
+
+        box.setFill(new ImagePattern(new Image(LoginMenu.class.getResource("/images/backgrounds/dotted.jpeg").toExternalForm())));
+        generateCaptcha();
     }
 
     public void question1() {
         answer.setVisible(true);
         submit.setVisible(true);
+        captchaContainer.setVisible(true);
         question = "1";
     }
 
     public void question2() {
         answer.setVisible(true);
         submit.setVisible(true);
+        captchaContainer.setVisible(true);
         question = "2";
     }
 
     public void question3() {
         answer.setVisible(true);
         submit.setVisible(true);
+        captchaContainer.setVisible(true);
         question = "3";
     }
 
     public void submit() throws Exception{
+        if(!input.getText().equals(captchaNumber.getText())){
+            captchaText.setText("incorrect captcha!");
+            generateCaptcha();
+            return;
+        }
+
         SignupMenuController.createUser(question, answer.getText(), DataBank.getUsername(),
                 DataBank.getPassword(), DataBank.getNickname(), DataBank.getSlogan(), DataBank.getEmail());
         new LoginMenu().start(stage);
@@ -76,5 +101,13 @@ public class SecurityQuestionMenu extends Application {
                 BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
         return backgroundImage;
+    }
+
+    public void generateCaptcha() {
+        captchaNumber.setText(CaptchaGenerator.randomNumberGenerator());
+        captchaNumber.setFill(Color.DARKGRAY);
+        captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
+        captchaNumber.setStrikethrough(true);
+        box.setWidth(captchaNumber.getText().length() * 15);
     }
 }
