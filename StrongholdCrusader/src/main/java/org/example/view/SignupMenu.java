@@ -219,13 +219,10 @@ public class SignupMenu extends Application {
     }
 
     private void goToSecurityMenu() throws Exception{
-        Popup popup = new Popup();
-        Label label = new Label("you have entered \"security question\" menu!");
-        label.setTextFill(Color.BROWN);
-        //label.setBackground(new Background(setBackground("/images/backgrounds/background2.png")));
-        popup.getContent().add(label);
-        popup.setAutoHide(true);
-        popup.show(stage);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Signup Successful!");
+        alert.setContentText("You will now enter \"security question\" menu!");
+        alert.showAndWait();
         new SecurityQuestionMenu().start(stage);
     }
 }

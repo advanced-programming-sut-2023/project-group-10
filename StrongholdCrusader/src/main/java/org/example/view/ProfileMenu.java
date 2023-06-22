@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -43,6 +44,7 @@ public class ProfileMenu extends Application {
     public void start(Stage stage) throws Exception {
         ProfileMenu.stage = stage;
         Pane pane = new FXMLLoader(ProfileMenu.class.getResource("/view/profileMenu.fxml")).load();
+        pane.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/background6.jpeg")));
         Scene scene = new Scene(pane);
         stage.setScene(scene);
         stage.setTitle("Profile Menu");
