@@ -2,34 +2,51 @@ package org.example.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import org.example.controller.MapMenuController;
+import org.example.model.Stronghold;
 import org.example.model.game.Item;
-import org.example.model.game.buildings.Building;
+import org.example.model.game.RockType;
+import org.example.model.game.TreeType;
 import org.example.model.game.buildings.buildingconstants.BuildingCategory;
 import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
+import org.example.model.game.envirnmont.Block;
+import org.example.model.game.envirnmont.BlockTexture;
+import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.utils.RandomGenerator;
+import org.example.view.enums.messages.CustomizeMapMessages;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class GameMenuGFXController {
-    public Pane mapBox;
+    public ScrollPane mapBox;
+    private ExtendedBlock[][] mapView;
     public HBox controlBox;
     public ListView<VBox> buildingBox;
     public Pane miniMapBox;
     public Pane infoBox;
     private static Stage stage;
+    private static Popup showingBlockInfoPopup;
 
     public void prepareGame(Stage stage) {
         GameMenuGFXController.stage = stage;
@@ -37,13 +54,39 @@ public class GameMenuGFXController {
         controlBox.setPrefHeight(stage.getHeight() / 5);
         controlBox.setStyle("-fx-background-color: #171817");
         mapBox.setPrefHeight(stage.getHeight() - controlBox.getPrefHeight());
-        mapBox.setStyle("-fx-background-color: #796e59");
+        initializeMapView();
         buildingBox.setPrefWidth(stage.getWidth()*4/6);
         miniMapBox.setPrefWidth(stage.getWidth() / 6);
         miniMapBox.setStyle("-fx-background-color: #6c6cb4");
         infoBox.setPrefWidth(stage.getWidth() / 6);
         infoBox.setStyle("-fx-background-color: #ee9a73");
         allBuildings();
+    }
+
+    private void initializeMapView() {
+        CommonGFXActions.setMapScrollPaneProperties(mapBox);
+        mapView=Stronghold.getCurrentMapGraphics();
+        for (int i = 0; i < mapView.length; i++) {
+            for (int j = 0; j < mapView.length; j++) {
+                Polygon blockView = mapView[i][j].getBlockView();
+                Coordinate coordinate = Stronghold.getPolygonCoordinateMap().get(blockView);
+                blockView.setOnMousePressed(event -> {
+                    if (event.isSecondaryButtonDown()) {
+                        // TODO: add selection actions
+                    }
+                });
+                blockView.setOnMouseEntered(mouseEvent -> {
+                    if(mouseEvent.isPrimaryButtonDown() || mouseEvent.isSecondaryButtonDown()) return;
+                    showingBlockInfoPopup=createBlockInfoPopup(coordinate);
+                    showingBlockInfoPopup.setAnchorX(mouseEvent.getSceneX());
+                    showingBlockInfoPopup.setAnchorY(mouseEvent.getSceneY());
+                    showingBlockInfoPopup.show(stage);
+                });
+                blockView.setOnMouseExited(mouseEvent -> showingBlockInfoPopup.hide());
+            }
+        }
+        mapBox.setContent(Stronghold.getMapGroupGFX());
+        mapBox.setHvalue(0.5);
     }
 
     private void allBuildings(){
@@ -124,6 +167,19 @@ public class GameMenuGFXController {
         label.setText(string);
         popup.setAnchorX(500);
         popup.setAnchorY(300);
+        return popup;
+    }
+
+    private Popup createBlockInfoPopup(Coordinate blockPosition) {
+        Popup popup=new Popup();
+        Label label=new Label(MapMenuController.showDetailsExtended(blockPosition));
+        label.setStyle("-fx-text-fill: rgba(211,234,216,0.78)");
+        VBox container=new VBox(label);
+        container.setBackground(Background.fill(new Color(0, 0, 0, 1)));
+        container.setMouseTransparent(true);
+        container.setPadding(new Insets(5));
+        container.setAlignment(Pos.CENTER);
+        popup.getContent().add(container);
         return popup;
     }
 }

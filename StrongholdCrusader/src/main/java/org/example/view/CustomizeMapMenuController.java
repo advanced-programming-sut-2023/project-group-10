@@ -3,8 +3,6 @@ package org.example.view;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Polygon;
@@ -12,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import org.example.controller.CustomizeMapController;
+import org.example.model.Stronghold;
 import org.example.model.game.RockType;
 import org.example.model.game.TreeType;
 import org.example.model.game.envirnmont.BlockTexture;
@@ -97,15 +96,8 @@ public class CustomizeMapMenuController {
     }
 
     private void initializeMapView() {
-        mapBox.setPannable(true);
-        mapBox.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        mapBox.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        mapBox.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
-            if (event.getButton() != MouseButton.SECONDARY) mapBox.setPannable(false);
-        });
-        mapBox.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> mapBox.setPannable(true));
+        CommonGFXActions.setMapScrollPaneProperties(mapBox);
         org.example.model.game.envirnmont.Map map = CustomizeMapController.getMap();
-        HashMap<Polygon, Coordinate> polygonCoordinateMap = new HashMap<>();
         int size = map.getSize();
         double x0 = size * ExtendedBlock.getWidth() / 2;
         mapView = new ExtendedBlock[size][size];
@@ -113,12 +105,11 @@ public class CustomizeMapMenuController {
             for (int j = 0; j < size; j++) {
                 mapView[i][j] = new ExtendedBlock(map.getBlockByRowAndColumn(i, j), i, j, x0);
                 Polygon blockView = mapView[i][j].getBlockView();
-                blockView.setVisible(false);
-                polygonCoordinateMap.put(blockView, new Coordinate(i, j));
+                Stronghold.getPolygonCoordinateMap().put(blockView, new Coordinate(i, j));
                 mapPane.getChildren().add(blockView);
                 blockView.setOnMousePressed(event -> {
-                    if (event.isPrimaryButtonDown()) {
-                        Coordinate coordinate = polygonCoordinateMap.get(blockView);
+                    if (event.isSecondaryButtonDown()) {
+                        Coordinate coordinate = Stronghold.getPolygonCoordinateMap().get(blockView);
                         CustomizeMapMessages result = null;
                         if (customizationMode == CustomizationMode.TEXTURE)
                             result = mapView[coordinate.row][coordinate.column].setTexture(BlockTexture.getTypeByName(itemList.getSelectionModel().getSelectedItem().getId()), coordinate);
@@ -148,11 +139,6 @@ public class CustomizeMapMenuController {
                 });
             }
         }
-
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-                mapView[i][j].getBlockView().setVisible(true);
-
         mapBox.setHvalue(0.5);
     }
 
@@ -161,6 +147,8 @@ public class CustomizeMapMenuController {
     }
 
     public void goToGame() throws Exception {
+        Stronghold.setCurrentMapGraphics(mapView);
+        Stronghold.setMapGroupGFX(mapPane);
         new GameMenuGFX().start(SignupMenu.stage);
     }
 

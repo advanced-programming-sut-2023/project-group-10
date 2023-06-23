@@ -193,7 +193,6 @@ public class GameMenuController {
             for (int i = 0; i < 10; i++)
                 new Unit(government.getKeep(), RoleName.PEASANT, government).addToGovernmentAndBlock();
         }
-        new CustomizeMapMenuGFX().start(SignupMenu.stage);
     }
 
     public static GameMenuMessages dropUnit(Coordinate position, String type, int count) {

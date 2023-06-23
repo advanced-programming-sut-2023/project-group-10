@@ -54,7 +54,7 @@ public class StartGameMenuController {
             option.getStyleClass().add("moderate-spacing");
             sizeBox.getChildren().add(option);
         }
-        sizeToggleGroup.selectToggle(option);
+        sizeToggleGroup.selectToggle(sizeToggleGroup.getToggles().get(0));
     }
 
     private void preparePlayersInfo() {
