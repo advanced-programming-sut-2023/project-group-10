@@ -18,6 +18,7 @@ public class PersonProducingBuildingType extends BuildingType {
         new PersonProducingBuildingType(BuildingTypeName.BARRACKS, defaultHitPoint * 4, 0, Map.of(Item.STONE, 15), true, BuildingCategory.CASTLE, MilitaryPersonRole.getRolesProducedInBuilding(BuildingTypeName.BARRACKS));
         new PersonProducingBuildingType(BuildingTypeName.MERCENARY_POST, defaultHitPoint * 4, 0, Map.of(Item.WOOD, 10), true, BuildingCategory.CASTLE, MilitaryPersonRole.getRolesProducedInBuilding(BuildingTypeName.MERCENARY_POST));
         new PersonProducingBuildingType(BuildingTypeName.ENGINEER_GUILD, defaultHitPoint * 4, 100, Map.of(Item.WOOD, 10), true, BuildingCategory.CASTLE, MilitaryPersonRole.getRolesProducedInBuilding(BuildingTypeName.ENGINEER_GUILD));
+        new PersonProducingBuildingType(BuildingTypeName.TUNNELER_GUILD, defaultHitPoint * 4, 10, Map.of(Item.WOOD, 10), true, BuildingCategory.CASTLE, MilitaryPersonRole.getRolesProducedInBuilding(BuildingTypeName.TUNNELER_GUILD));
     }
 
     public Role[] getProducedPersonType() {

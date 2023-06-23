@@ -38,6 +38,7 @@ public class ItemProducingBuildingType extends BuildingType {
         new ItemProducingBuildingType(BuildingTypeName.HUNTER_POST, defaultHitPoint * 2, 0, Map.of(Item.WOOD, 5), 1, false, 1, 3, false, BuildingCategory.FARM, Item.MEAT);
         new ItemProducingBuildingType(BuildingTypeName.BAKERY, defaultHitPoint * 3, 0, Map.of(Item.WOOD, 10), 1, false, 2, 3, true, BuildingCategory.FOOD_PROCESSING, Item.BREAD);
         new ItemProducingBuildingType(BuildingTypeName.BREWERY, defaultHitPoint * 3, 0, Map.of(Item.WOOD, 10), 1, false, 1, 2, true, BuildingCategory.FOOD_PROCESSING, Item.ALE);
+        new ItemProducingBuildingType(BuildingTypeName.TANNER, defaultHitPoint * 3, 100, Map.of(Item.WOOD, 10), 1, false, 1, 3, false, BuildingCategory.WEAPON, Item.LEATHER_ARMOR);
     }
 
     public int getRate() {

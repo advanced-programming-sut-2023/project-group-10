@@ -43,10 +43,10 @@ public enum BuildingTypeName {
     CATHEDRAL,
     GOOD_THINGS,
     BAD_THINGS,
-    TANNER,
     ARMOURER,
     BLACKSMITH,
     FLETCHER,
+    TANNER,
     POLETURNER;
 
     public static BuildingTypeName getBuildingTypeNameByNameString(String name) {
