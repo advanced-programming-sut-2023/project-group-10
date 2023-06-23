@@ -35,7 +35,7 @@ public class GameMenuController {
     }
 
     public static int showPopularity() {
-        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity();
+        return Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().get();
     }
 
     public static String showPopularityFactors() {

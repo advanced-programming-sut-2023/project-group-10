@@ -1,5 +1,7 @@
 package org.example.model.game;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
 import org.example.model.User;
 import org.example.model.game.buildings.Building;
@@ -26,7 +28,7 @@ public class Government {
     private final ArrayList<Trade> tradeList = new ArrayList<>();
     private final Coordinate keep;
     private ArrayList<Building> buildings = new ArrayList<>();
-    private int popularity;
+    private final SimpleIntegerProperty popularity = new SimpleIntegerProperty();
     private double gold;
     private int foodRate;
     private int excessFood;
@@ -35,7 +37,7 @@ public class Government {
 
     public Government(User owner, Color color, Coordinate keep) {
         this.owner = owner;
-        this.popularity = NumericalEnums.INITIAL_POPULARITY_VALUE.getValue();
+        this.popularity.set(NumericalEnums.INITIAL_POPULARITY_VALUE.getValue());
         this.color = color;
         this.keep = keep;
         for (Item item : Item.values())
@@ -61,13 +63,13 @@ public class Government {
         return (MilitaryPerson) units.get(0);
     }
 
-    public int getPopularity() {
+    public IntegerProperty getPopularity() {
         return popularity;
     }
 
     public void changePopularity(int value, String factor) {
         popularityFactors.put(factor, value);
-        popularity += value;
+        popularity.set(popularity.get() + value);
     }
 
     public void addReligion() {
