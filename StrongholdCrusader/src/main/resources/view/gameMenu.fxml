@@ -17,7 +17,7 @@
     <ScrollPane fx:id="mapBox">
     </ScrollPane>
     <HBox fx:id="controlBox">
-        <VBox>
+        <VBox fx:id="buildingContainer">
             <ListView orientation="HORIZONTAL" fx:id="buildingBox">
                 <Label text="buildings and categories"/>
             </ListView>

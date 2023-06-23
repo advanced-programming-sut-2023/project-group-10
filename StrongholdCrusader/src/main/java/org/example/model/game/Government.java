@@ -34,6 +34,7 @@ public class Government {
     private int excessFood;
     private int taxRate;
     private int fearRate;
+    private int religionCount;
 
     public Government(User owner, Color color, Coordinate keep) {
         this.owner = owner;
@@ -48,6 +49,7 @@ public class Government {
         popularityFactors.put("Tax", 0);
         fearRate = 0;
         popularityFactors.put("Fear", 0);
+        religionCount = 0;
         popularityFactors.put("Religion", 0);
     }
 
@@ -74,6 +76,11 @@ public class Government {
 
     public void addReligion() {
         popularityFactors.put("Religion", 1);
+        religionCount = 1;
+    }
+
+    public int getReligionCount() {
+        return religionCount;
     }
 
     public int getFoodRate() {
