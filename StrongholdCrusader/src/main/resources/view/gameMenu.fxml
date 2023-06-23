@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.shape.Rectangle?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.GameMenuGFXController"
@@ -32,8 +33,13 @@
         <Pane fx:id="miniMapBox">
             <Label text="map"/>
         </Pane>
-        <Pane fx:id="infoBox">
+        <HBox fx:id="infoBox">
             <Label text="info"/>
-        </Pane>
+            <VBox>
+                <Rectangle fx:id="faceImage" width="120" height="81.1" translateX="16" translateY="6"/>
+                <Rectangle fx:id="bookImage" width="90" height="77" translateX="30" translateY="3"/>
+            </VBox>
+            <Rectangle fx:id="edge" width="120" height="162.2"/>
+        </HBox>
     </HBox>
 </VBox>

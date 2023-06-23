@@ -1,5 +1,8 @@
 package org.example.view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -37,9 +40,13 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class GameMenuGFXController {
     public ScrollPane mapBox;
+    public Rectangle faceImage;
+    public Rectangle bookImage;
+    public Rectangle edge;
     private ExtendedBlock[][] mapView;
     public HBox controlBox;
     public ListView<VBox> buildingBox;
@@ -61,6 +68,17 @@ public class GameMenuGFXController {
         infoBox.setPrefWidth(stage.getWidth() / 6);
         infoBox.setStyle("-fx-background-color: #ee9a73");
         allBuildings();
+    }
+
+    @FXML
+    public void initialize(){
+        bookImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/book.jpeg")).toString())));
+        edge.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/edge.png")).toString())));
+        int popularity = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().get();
+        faceImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/faces/face" + popularity / 10 + ".png")).toString())));
+        Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().addListener((observable, oldValue, newValue) -> {
+            faceImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/faces/face" + newValue.intValue() / 10 + ".png")).toString())));
+        });
     }
 
     private void initializeMapView() {
