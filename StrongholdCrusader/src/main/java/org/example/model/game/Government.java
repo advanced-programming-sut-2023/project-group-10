@@ -65,6 +65,10 @@ public class Government {
         return (MilitaryPerson) units.get(0);
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     public IntegerProperty getPopularity() {
         return popularity;
     }

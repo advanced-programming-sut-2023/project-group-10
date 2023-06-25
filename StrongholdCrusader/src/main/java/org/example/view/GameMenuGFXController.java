@@ -12,9 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
@@ -32,6 +30,7 @@ import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.utils.RandomGenerator;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -42,6 +41,7 @@ public class GameMenuGFXController {
     public Rectangle currentPlayerAvatar;
     public Label currentPlayerName;
     public Button nextPlayerButton;
+    public VBox selectedTroopsInfoPane;
     public Rectangle faceImage;
     public Rectangle bookImage;
     public Rectangle edge;
@@ -50,11 +50,12 @@ public class GameMenuGFXController {
     public ListView<VBox> buildingBox;
     public Pane miniMapBox;
     public Pane infoBox;
-    private static Stage stage;
-    private static Popup showingBlockInfoPopup;
+    private Stage stage;
+    private Popup showingBlockInfoPopup;
+    private LinkedList<ExtendedBlock> selectedBlocks;
 
     public void prepareGame(Stage stage) {
-        GameMenuGFXController.stage = stage;
+        this.stage = stage;
         scrollPaneContent = Stronghold.getMapGroupGFX();
         System.out.println(stage.getHeight());
         controlBox.setPrefHeight(stage.getHeight() / 5);
@@ -73,6 +74,7 @@ public class GameMenuGFXController {
         infoBox.setPrefWidth(stage.getWidth() / 6);
         infoBox.setStyle("-fx-background-color: #ee9a73");
         allBuildings();
+        selectedBlocks = new LinkedList<>();
     }
 
     @FXML
@@ -96,23 +98,58 @@ public class GameMenuGFXController {
             for (int j = 0; j < mapView.length; j++) {
                 Polygon blockView = mapView[i][j].getBlockView();
                 Coordinate coordinate = gameMap.getPolygonCoordinateMap().get(blockView);
-                blockView.setOnMousePressed(event -> {
-                    if (event.isSecondaryButtonDown()) {
-                        // TODO: add selection actions
+                blockView.setOnMouseEntered(mouseEvent -> {
+                    if (mouseEvent.isSecondaryButtonDown()) changeSelectionState(coordinate);
+                    else if (!mouseEvent.isPrimaryButtonDown()) {
+                        showingBlockInfoPopup = createBlockInfoPopup(coordinate);
+                        showingBlockInfoPopup.setAnchorX(mouseEvent.getSceneX());
+                        showingBlockInfoPopup.setAnchorY(mouseEvent.getSceneY());
+                        showingBlockInfoPopup.show(stage);
                     }
                 });
-                blockView.setOnMouseEntered(mouseEvent -> {
-                    if (mouseEvent.isPrimaryButtonDown() || mouseEvent.isSecondaryButtonDown()) return;
-                    showingBlockInfoPopup = createBlockInfoPopup(coordinate);
-                    showingBlockInfoPopup.setAnchorX(mouseEvent.getSceneX());
-                    showingBlockInfoPopup.setAnchorY(mouseEvent.getSceneY());
-                    showingBlockInfoPopup.show(stage);
+                blockView.setOnMousePressed(mouseEvent -> {
+                    if (showingBlockInfoPopup != null) {
+                        showingBlockInfoPopup.hide();
+                        showingBlockInfoPopup = null;
+                    }
+                    if (mouseEvent.isSecondaryButtonDown()) changeSelectionState(coordinate);
                 });
-                blockView.setOnMouseExited(mouseEvent -> showingBlockInfoPopup.hide());
+                blockView.setOnMouseExited(mouseEvent -> {
+                    if (showingBlockInfoPopup != null) {
+                        showingBlockInfoPopup.hide();
+                        showingBlockInfoPopup = null;
+                    }
+                });
             }
         }
         mapBox.setContent(scrollPaneContent);
         mapBox.setHvalue(0.5);
+    }
+
+    private void changeSelectionState(Coordinate coordinate) {
+        ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
+        if (selectedBlocks.contains(extendedBlock)) {
+            unselectBlockView(extendedBlock);
+            selectedBlocks.remove(extendedBlock);
+        } else selectBlock(extendedBlock);
+    }
+
+    private void unselectBlockView(ExtendedBlock extendedBlock) {
+        extendedBlock.getBlockView().setStroke(null);
+        updateSelectedBlocksPane();
+    }
+
+    private void selectBlock(ExtendedBlock extendedBlock) {
+        selectedBlocks.add(extendedBlock);
+        extendedBlock.getBlockView().setStroke(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getColor());
+        extendedBlock.getBlockView().setStrokeType(StrokeType.INSIDE);
+        extendedBlock.getBlockView().setStrokeLineCap(StrokeLineCap.ROUND);
+        extendedBlock.getBlockView().setStrokeLineJoin(StrokeLineJoin.ROUND);
+        extendedBlock.getBlockView().setStrokeWidth(3);
+        updateSelectedBlocksPane();
+    }
+
+    private void updateSelectedBlocksPane() {
     }
 
     private void initializeControls() {
@@ -356,10 +393,11 @@ public class GameMenuGFXController {
     private Popup createBlockInfoPopup(Coordinate blockPosition) {
         Popup popup = new Popup();
         Label label = new Label(MapMenuController.showDetailsExtended(blockPosition));
-        label.setStyle("-fx-text-fill: rgba(211,234,216,0.78)");
+        label.setStyle("-fx-text-fill: white");
         VBox container = new VBox(label);
         container.setBackground(Background.fill(new Color(0, 0, 0, 1)));
         container.setMouseTransparent(true);
+        label.setMouseTransparent(true);
         container.setPadding(new Insets(5));
         container.setAlignment(Pos.CENTER);
         popup.getContent().add(container);
@@ -370,6 +408,9 @@ public class GameMenuGFXController {
         // TODO: handle animations and potential bugs
         Stronghold.getCurrentBattle().goToNextPlayer();
         updateCurrentPlayerInfo();
+        for (ExtendedBlock selectedBlock : selectedBlocks)
+            unselectBlockView(selectedBlock);
+        selectedBlocks.clear();
     }
 
     private void updateCurrentPlayerInfo() {

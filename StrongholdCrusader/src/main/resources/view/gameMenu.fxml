@@ -19,6 +19,8 @@
                     <Label fx:id="currentPlayerName"/>
                     <Button fx:id="nextPlayerButton" text="end turn" onMouseClicked="#goToNextPlayer"
                             alignment="CENTER"/>
+                    <VBox fx:id="selectedTroopsInfoPane">
+                    </VBox>
                 </VBox>
             </center>
         </BorderPane>
@@ -26,7 +28,6 @@
     <HBox fx:id="controlBox">
         <VBox fx:id="buildingContainer">
             <ListView orientation="HORIZONTAL" fx:id="buildingBox">
-                <Label text="buildings and categories"/>
             </ListView>
             <HBox>
                 <Button text="Castle" onMouseClicked="#castle"/>
