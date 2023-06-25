@@ -101,15 +101,17 @@ public class CustomizeMapMenuController {
         int size = map.getSize();
         double x0 = size * ExtendedBlock.getWidth() / 2;
         mapView = new ExtendedBlock[size][size];
+        Stronghold.getCurrentBattle().getBattleMap().setBlocksGraphics(mapView);
+        HashMap<Polygon, Coordinate> polygonCoordinateMap=Stronghold.getCurrentBattle().getBattleMap().getPolygonCoordinateMap();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 mapView[i][j] = new ExtendedBlock(map.getBlockByRowAndColumn(i, j), i, j, x0);
                 Polygon blockView = mapView[i][j].getBlockView();
-                Stronghold.getPolygonCoordinateMap().put(blockView, new Coordinate(i, j));
+                polygonCoordinateMap.put(blockView, new Coordinate(i, j));
                 mapPane.getChildren().add(blockView);
                 blockView.setOnMousePressed(event -> {
                     if (event.isSecondaryButtonDown()) {
-                        Coordinate coordinate = Stronghold.getPolygonCoordinateMap().get(blockView);
+                        Coordinate coordinate = polygonCoordinateMap.get(blockView);
                         CustomizeMapMessages result = null;
                         if (customizationMode == CustomizationMode.TEXTURE)
                             result = mapView[coordinate.row][coordinate.column].setTexture(BlockTexture.getTypeByName(itemList.getSelectionModel().getSelectedItem().getId()), coordinate);
@@ -137,6 +139,10 @@ public class CustomizeMapMenuController {
                         updateMessage(result.getMessage());
                     }
                 });
+                if(map.getBlockByRowAndColumn(i, j).isKeep()) {
+                    mapView[i][j].setKeep(i, j);
+                    mapPane.getChildren().add(mapView[i][j].getObject());
+                }
             }
         }
         mapBox.setHvalue(0.5);
@@ -147,7 +153,6 @@ public class CustomizeMapMenuController {
     }
 
     public void goToGame() throws Exception {
-        Stronghold.setCurrentMapGraphics(mapView);
         Stronghold.setMapGroupGFX(mapPane);
         new GameMenuGFX().start(SignupMenu.stage);
     }

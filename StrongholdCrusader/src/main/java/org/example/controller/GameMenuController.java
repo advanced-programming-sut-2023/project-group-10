@@ -18,11 +18,11 @@ import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.SiegeEquipment;
 import org.example.model.game.units.Unit;
-import org.example.model.game.units.unitconstants.*;
-import org.example.view.CustomizeMapMenu;
-import org.example.view.CustomizeMapMenuGFX;
+import org.example.model.game.units.unitconstants.MilitaryUnitRole;
+import org.example.model.game.units.unitconstants.MilitaryUnitStance;
+import org.example.model.game.units.unitconstants.RoleName;
+import org.example.model.game.units.unitconstants.WorkerRole;
 import org.example.view.MountEquipmentMenu;
-import org.example.view.SignupMenu;
 import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.ArrayList;
@@ -97,20 +97,17 @@ public class GameMenuController {
     }
 
 
-    public static GameMenuMessages dropBuilding(Coordinate position, String type) {
+    public static GameMenuMessages dropBuilding(Coordinate position, BuildingTypeName buildingTypeName) {
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).getDroppable() != null)
             return GameMenuMessages.BUILDING_EXISTS_IN_THE_BLOCK;
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isKeep())
             return GameMenuMessages.IS_KEEP;
-        if (BuildingTypeName.getBuildingTypeNameByNameString(type) == null)
-            return GameMenuMessages.INVALID_BUILDING_TYPE;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isBuildable())
             return GameMenuMessages.INCOMPATIBLE_LAND;
-        BuildingTypeName buildingType = BuildingTypeName.getBuildingTypeNameByNameString(type);
-        int neededPeasants = BuildingType.getBuildingTypeByName(buildingType).getEmployeeCount();
+        int neededPeasants = BuildingType.getBuildingTypeByName(buildingTypeName).getEmployeeCount();
         if (neededPeasants > Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasantsCount())
             return GameMenuMessages.NOT_ENOUGH_PEASANTS;
-        RoleName workerRole = WorkerRole.getRoleNameByWorkplace(BuildingTypeName.getBuildingTypeNameByNameString(type));
+        RoleName workerRole = WorkerRole.getRoleNameByWorkplace(buildingTypeName);
         if (workerRole != null)
             Unit.produceUnits(workerRole, neededPeasants, position);
         if (neededPeasants != 0) {
@@ -121,12 +118,12 @@ public class GameMenuController {
                     if (neededPeasants == 0) break;
                 }
         }
-        if (BuildingType.getBuildingTypeByName(buildingType) instanceof ItemProducingBuildingType)
-            new ItemProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
-        else if (buildingType == BuildingTypeName.STAIRS)
+        if (BuildingType.getBuildingTypeByName(buildingTypeName) instanceof ItemProducingBuildingType)
+            new ItemProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingTypeName).addToGovernmentAndBlock();
+        else if (buildingTypeName == BuildingTypeName.STAIRS)
             new Stairs(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlock();
         else
-            new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingType).addToGovernmentAndBlock();
+            new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingTypeName).addToGovernmentAndBlock();
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 
@@ -169,7 +166,7 @@ public class GameMenuController {
         return GameMenuMessages.MOUNT_SUCCESSFUL;
     }
 
-    public static void initializeGame(HashMap<String, Color> colors, HashMap<String, Coordinate> keeps, org.example.model.game.envirnmont.Map map) throws Exception {
+    public static void initializeGame(HashMap<String, Color> colors, HashMap<String, Coordinate> keeps, org.example.model.game.envirnmont.Map map) {
         Government[] governments = new Government[colors.size()];
         int x = 0;
 
@@ -195,14 +192,11 @@ public class GameMenuController {
         }
     }
 
-    public static GameMenuMessages dropUnit(Coordinate position, String type, int count) {
-        if (Role.getRoleByName(RoleName.getRoleNameByNameString(type)) == null)
-            return GameMenuMessages.INVALID_UNIT_TYPE;
-
+    public static GameMenuMessages dropUnit(Coordinate position, RoleName type, int count) {
         if (count < 0) return GameMenuMessages.INVALID_UNIT_COUNT;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canUnitsGoHere(false))
             return GameMenuMessages.UNWALKABLE_LAND;
-        for (Unit producedUnit : Unit.produceUnits(RoleName.getRoleNameByNameString(type), count, position)) {
+        for (Unit producedUnit : Unit.produceUnits(type, count, position)) {
             producedUnit.addToGovernmentAndBlock();
         }
         return GameMenuMessages.SUCCESSFUL_DROP;

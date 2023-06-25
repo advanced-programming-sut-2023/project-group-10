@@ -24,9 +24,7 @@ public class Stronghold {
     public static DataBase dataBase = new DataBase();
     private static User currentUser;
     private static Battle currentBattle;
-    private static ExtendedBlock[][] currentMapGraphics;
     private static Group mapGroupGFX;
-    private static HashMap<Polygon, Coordinate> polygonCoordinateMap = new HashMap<>();
     public static User getCurrentUser() {
         return currentUser;
     }
@@ -43,24 +41,12 @@ public class Stronghold {
         currentBattle = newBattle;
     }
 
-    public static ExtendedBlock[][] getCurrentMapGraphics() {
-        return currentMapGraphics;
-    }
-
-    public static void setCurrentMapGraphics(ExtendedBlock[][] currentMapGraphics) {
-        Stronghold.currentMapGraphics = currentMapGraphics;
-    }
-
     public static Group getMapGroupGFX() {
         return mapGroupGFX;
     }
 
     public static void setMapGroupGFX(Group mapGroupGFX) {
         Stronghold.mapGroupGFX = mapGroupGFX;
-    }
-
-    public static HashMap<Polygon, Coordinate> getPolygonCoordinateMap() {
-        return polygonCoordinateMap;
     }
 
     public static User getLoggedInUserFromFile() {

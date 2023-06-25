@@ -1,12 +1,17 @@
 package org.example.model.game.envirnmont;
 
+import javafx.scene.shape.Polygon;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Map {
     int size;
-    Block[][] blocks;
+    private final Block[][] blocks;
+    private ExtendedBlock[][] blocksGraphics;
+    private final HashMap<Polygon, Coordinate> polygonCoordinateMap = new HashMap<>();
     Coordinate topLeftBlockCoordinate;
 
     public Map(int size) {
@@ -21,8 +26,22 @@ public class Map {
         return size;
     }
 
-    public Block[][] getBlocks() {
-        return blocks;
+
+    public ExtendedBlock[][] getBlocksGraphics() {
+        return blocksGraphics;
+    }
+
+    public void setBlocksGraphics(ExtendedBlock[][] blocksGraphics) {
+        this.blocksGraphics = blocksGraphics;
+    }
+
+    public HashMap<Polygon, Coordinate> getPolygonCoordinateMap() {
+        return polygonCoordinateMap;
+    }
+
+    public ExtendedBlock getExtendedBlockByRowAndColumn(Coordinate position) {
+        if(!isIndexInBounds(position)) return null;
+        return blocksGraphics[position.row][position.column];
     }
 
     public Block getBlockByRowAndColumn(int row, int column) {

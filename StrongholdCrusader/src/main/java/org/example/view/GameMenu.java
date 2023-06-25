@@ -11,7 +11,6 @@ import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class GameMenu {
     public static void run(HashMap<String, Color> colors, HashMap<String, Coordinate> keeps, Map map) throws Exception {
@@ -33,8 +32,8 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_TAX_RATE) != null) setTaxRate(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_FEAR_RATE) != null) showFearRate();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SET_FEAR_RATE) != null) setFearRate(input);
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING) != null) dropBuilding(input);
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_UNIT) != null) dropUnit(input);
+//            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_BUILDING) != null) dropBuilding(input);
+//            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DROP_UNIT) != null) dropUnit(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOW_GOLD) != null) showGold();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SELECT_BUILDING) != null)
                 selectBuilding(input);
@@ -149,6 +148,7 @@ public class GameMenu {
         }
     }
 
+    /*
     public static void dropUnit(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String type = options.getOrDefault("-t", "");
@@ -199,7 +199,9 @@ public class GameMenu {
             System.out.println(exception.getMessage());
         }
     }
+     */
 
+    /*
     private static void dropBuilding(String input) {
         HashMap<String, String> options = InputProcessor.separateInput(input);
         String type = options.getOrDefault("-t", "");
@@ -243,6 +245,7 @@ public class GameMenu {
             System.out.println(exception.getMessage());
         }
     }
+     */
 
     private static void selectBuilding(String input) {
         try {

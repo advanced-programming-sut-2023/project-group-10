@@ -1,18 +1,11 @@
 package org.example.view;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -20,7 +13,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
@@ -29,22 +21,14 @@ import javafx.stage.Stage;
 import org.example.controller.MapMenuController;
 import org.example.model.Stronghold;
 import org.example.model.game.Item;
-import org.example.model.game.RockType;
-import org.example.model.game.TreeType;
 import org.example.model.game.buildings.buildingconstants.BuildingCategory;
 import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
-import org.example.model.game.envirnmont.Block;
-import org.example.model.game.envirnmont.BlockTexture;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.utils.RandomGenerator;
-import org.example.view.enums.messages.CustomizeMapMessages;
 
-import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -92,11 +76,12 @@ public class GameMenuGFXController {
 
     private void initializeMapView() {
         CommonGFXActions.setMapScrollPaneProperties(mapBox);
-        mapView=Stronghold.getCurrentMapGraphics();
+        org.example.model.game.envirnmont.Map gameMap= Stronghold.getCurrentBattle().getBattleMap();
+        mapView=gameMap.getBlocksGraphics();
         for (int i = 0; i < mapView.length; i++) {
             for (int j = 0; j < mapView.length; j++) {
                 Polygon blockView = mapView[i][j].getBlockView();
-                Coordinate coordinate = Stronghold.getPolygonCoordinateMap().get(blockView);
+                Coordinate coordinate = gameMap.getPolygonCoordinateMap().get(blockView);
                 blockView.setOnMousePressed(event -> {
                     if (event.isSecondaryButtonDown()) {
                         // TODO: add selection actions
