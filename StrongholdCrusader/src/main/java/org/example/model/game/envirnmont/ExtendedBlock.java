@@ -117,6 +117,7 @@ public class ExtendedBlock {
     }
 
     public void setKeep(int row, int column) {
+        // TODO: set keep boolean in block object to true if necessary
         object = new Rectangle();
         object.setFill(new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/keep").toExternalForm() + "keep" + (int) (Math.random() * 4 + 1) + ".png")));
         setObjectProperties(row, column);

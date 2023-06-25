@@ -177,7 +177,7 @@ public class GameMenuController {
             gov.addItem(Item.WOOD, 20);
             gov.addItem(Item.STONE, 20);
             gov.setGold(20);
-            map.getBlockByRowAndColumn(keep).setKeep(true);
+            map.getBlockByRowAndColumn(keep).setKeep(gov);
             governments[x] = gov;
             x++;
         }

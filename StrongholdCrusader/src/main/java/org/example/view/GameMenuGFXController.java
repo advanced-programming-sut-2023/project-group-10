@@ -3,14 +3,16 @@ package org.example.view;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
@@ -18,6 +20,7 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.example.controller.MapMenuController;
 import org.example.model.Stronghold;
+import org.example.model.User;
 import org.example.model.game.Item;
 import org.example.model.game.buildings.buildingconstants.BuildingCategory;
 import org.example.model.game.buildings.buildingconstants.BuildingType;
@@ -27,40 +30,55 @@ import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.utils.RandomGenerator;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 
 public class GameMenuGFXController {
     public ScrollPane mapBox;
+    private Group scrollPaneContent;
+    public BorderPane turnPane;
+    public Rectangle currentPlayerAvatar;
+    public Label currentPlayerName;
+    public Button nextPlayerButton;
+    public VBox selectedTroopsInfoPane;
     public Rectangle faceImage;
     public Rectangle bookImage;
     public Rectangle edge;
     public VBox buildingContainer;
-    private ExtendedBlock[][] mapView;
     public HBox controlBox;
     public ListView<VBox> buildingBox;
     public Pane miniMapBox;
     public Pane infoBox;
-    private static Stage stage;
-    private static Popup showingBlockInfoPopup;
+    private Stage stage;
+    private Popup showingBlockInfoPopup;
+    private LinkedList<ExtendedBlock> selectedBlocks;
 
     public void prepareGame(Stage stage) {
-        GameMenuGFXController.stage = stage;
+        this.stage = stage;
+        scrollPaneContent = Stronghold.getMapGroupGFX();
         System.out.println(stage.getHeight());
         controlBox.setPrefHeight(stage.getHeight() / 5);
         controlBox.setStyle("-fx-background-color: #171817");
+        mapBox.setPrefWidth(stage.getWidth() * 5 / 6);
         mapBox.setPrefHeight(stage.getHeight() - controlBox.getPrefHeight());
+        turnPane.setPrefWidth(stage.getWidth() / 6);
+        turnPane.setPrefHeight(mapBox.getPrefHeight());
+        currentPlayerAvatar.setWidth(turnPane.getPrefWidth() / 2);
+        currentPlayerAvatar.setHeight(turnPane.getPrefWidth() / 2);
         initializeMapView();
-        buildingBox.setPrefWidth(stage.getWidth()* 4/6);
+        initializeControls();
+        buildingBox.setPrefWidth(stage.getWidth() * 4 / 6);
         miniMapBox.setPrefWidth(stage.getWidth() / 6);
         miniMapBox.setStyle("-fx-background-color: #6c6cb4");
         infoBox.setPrefWidth(stage.getWidth() / 6);
         infoBox.setStyle("-fx-background-color: #ee9a73");
         allBuildings();
+        selectedBlocks = new LinkedList<>();
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         bookImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/book.jpeg")).toString())));
         edge.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/edge.png")).toString())));
 
@@ -74,33 +92,73 @@ public class GameMenuGFXController {
 
     private void initializeMapView() {
         CommonGFXActions.setMapScrollPaneProperties(mapBox);
-        org.example.model.game.envirnmont.Map gameMap= Stronghold.getCurrentBattle().getBattleMap();
-        mapView=gameMap.getBlocksGraphics();
+        org.example.model.game.envirnmont.Map gameMap = Stronghold.getCurrentBattle().getBattleMap();
+        ExtendedBlock[][] mapView = gameMap.getBlocksGraphics();
         for (int i = 0; i < mapView.length; i++) {
             for (int j = 0; j < mapView.length; j++) {
                 Polygon blockView = mapView[i][j].getBlockView();
                 Coordinate coordinate = gameMap.getPolygonCoordinateMap().get(blockView);
-                blockView.setOnMousePressed(event -> {
-                    if (event.isSecondaryButtonDown()) {
-                        // TODO: add selection actions
+                blockView.setOnMouseEntered(mouseEvent -> {
+                    if (mouseEvent.isSecondaryButtonDown()) changeSelectionState(coordinate);
+                    else if (!mouseEvent.isPrimaryButtonDown()) {
+                        showingBlockInfoPopup = createBlockInfoPopup(coordinate);
+                        showingBlockInfoPopup.setAnchorX(mouseEvent.getSceneX());
+                        showingBlockInfoPopup.setAnchorY(mouseEvent.getSceneY());
+                        showingBlockInfoPopup.show(stage);
                     }
                 });
-                blockView.setOnMouseEntered(mouseEvent -> {
-                    if(mouseEvent.isPrimaryButtonDown() || mouseEvent.isSecondaryButtonDown()) return;
-                    showingBlockInfoPopup=createBlockInfoPopup(coordinate);
-                    showingBlockInfoPopup.setAnchorX(mouseEvent.getSceneX() + 2);
-                    showingBlockInfoPopup.setAnchorY(mouseEvent.getSceneY() + 2);
-                    showingBlockInfoPopup.show(stage);
+                blockView.setOnMousePressed(mouseEvent -> {
+                    if (showingBlockInfoPopup != null) {
+                        showingBlockInfoPopup.hide();
+                        showingBlockInfoPopup = null;
+                    }
+                    if (mouseEvent.isSecondaryButtonDown()) changeSelectionState(coordinate);
                 });
-                blockView.setOnMouseExited(mouseEvent -> showingBlockInfoPopup.hide());
+                blockView.setOnMouseExited(mouseEvent -> {
+                    if (showingBlockInfoPopup != null) {
+                        showingBlockInfoPopup.hide();
+                        showingBlockInfoPopup = null;
+                    }
+                });
             }
         }
-        mapBox.setContent(Stronghold.getMapGroupGFX());
+        mapBox.setContent(scrollPaneContent);
         mapBox.setHvalue(0.5);
     }
 
-    private void allBuildings(){
-        for(BuildingTypeName buildingTypeName : BuildingTypeName.values()){
+    private void changeSelectionState(Coordinate coordinate) {
+        ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
+        if (selectedBlocks.contains(extendedBlock)) {
+            unselectBlockView(extendedBlock);
+            selectedBlocks.remove(extendedBlock);
+        } else selectBlock(extendedBlock);
+    }
+
+    private void unselectBlockView(ExtendedBlock extendedBlock) {
+        extendedBlock.getBlockView().setStroke(null);
+        updateSelectedBlocksPane();
+    }
+
+    private void selectBlock(ExtendedBlock extendedBlock) {
+        selectedBlocks.add(extendedBlock);
+        extendedBlock.getBlockView().setStroke(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getColor());
+        extendedBlock.getBlockView().setStrokeType(StrokeType.INSIDE);
+        extendedBlock.getBlockView().setStrokeLineCap(StrokeLineCap.ROUND);
+        extendedBlock.getBlockView().setStrokeLineJoin(StrokeLineJoin.ROUND);
+        extendedBlock.getBlockView().setStrokeWidth(3);
+        updateSelectedBlocksPane();
+    }
+
+    private void updateSelectedBlocksPane() {
+    }
+
+    private void initializeControls() {
+        // TODO: add other initialization processes (state of troops, resources, ...)
+        updateCurrentPlayerInfo();
+    }
+
+    private void allBuildings() {
+        for (BuildingTypeName buildingTypeName : BuildingTypeName.values()) {
             VBox vBox = new VBox(2);
             vBox.setAlignment(Pos.CENTER);
             vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
@@ -145,25 +203,19 @@ public class GameMenuGFXController {
 
     private void popularityFactors() {
         HBox mainPane = new HBox(30);
-        mainPane.setPrefHeight(stage.getHeight()/5);
-        mainPane.setPrefWidth(stage.getWidth() * 4/6);
+        mainPane.setPrefHeight(stage.getHeight() / 5);
+        mainPane.setPrefWidth(stage.getWidth() * 4 / 6);
         mainPane.setAlignment(Pos.CENTER);
         mainPane.setBackground(Background.fill(new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/backgrounds/menu.jpeg").toString()))));
 
         VBox first = new VBox(10);
-        Button button = new Button("change rate");
-        button.setOnMouseClicked(mouseEvent -> {
-            Popup popup = changePopularityMenu();
-            popup.show(stage);
-            System.out.println(popup.getWidth() + " " + popup.getHeight());
-        });
         first.setTranslateX(-100);
         first.setAlignment(Pos.CENTER);
         Text popularity = new Text("Popularity");
         popularity.setFont(Font.font("Helvetica", FontPosture.ITALIC, 20));
         ImagePattern backImage = new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/icons/back.png").toString()));
         Rectangle back = new Rectangle(30, 30, backImage);
-        first.getChildren().addAll(popularity, button, back);
+        first.getChildren().addAll(popularity, back);
         back.setOnMouseClicked(mouseEvent -> {
             controlBox.getChildren().remove(0);
             controlBox.getChildren().add(0, buildingContainer);
@@ -188,7 +240,7 @@ public class GameMenuGFXController {
         controlBox.getChildren().add(0, mainPane);
     }
 
-    private static VBox faces(){
+    private static VBox faces() {
         VBox vbox = new VBox(10);
         vbox.setAlignment(Pos.CENTER);
         vbox.setTranslateX(-30);
@@ -201,7 +253,7 @@ public class GameMenuGFXController {
         return vbox;
     }
 
-    private static VBox foodAndTax(int foodRateNum, int taxRateNum){
+    private static VBox foodAndTax(int foodRateNum, int taxRateNum) {
         VBox vBox1 = new VBox(10);
         vBox1.setAlignment(Pos.CENTER);
 
@@ -214,8 +266,8 @@ public class GameMenuGFXController {
         food.setFont(Font.font("Helvetica", 15));
         hBox1.getChildren().addAll(rate, foodFace, food);
         String color;
-        if(foodRateNum > 0) color = "green";
-        else if(foodRateNum == 0) color = "yellow";
+        if (foodRateNum > 0) color = "green";
+        else if (foodRateNum == 0) color = "yellow";
         else color = "red";
         foodFace.setFill(new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/faces/" + color + "Face.png").toString())));
 
@@ -227,8 +279,8 @@ public class GameMenuGFXController {
         taxRate.setFont(Font.font("Helvetica", 15));
         tax.setFont(Font.font("Helvetica", 15));
         hBox2.getChildren().addAll(taxRate, taxFace, tax);
-        if(taxRateNum > 0) color = "green";
-        else if(taxRateNum == 0) color = "yellow";
+        if (taxRateNum > 0) color = "green";
+        else if (taxRateNum == 0) color = "yellow";
         else color = "red";
         taxFace.setFill(new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/faces/" + color + "Face.png").toString())));
 
@@ -236,7 +288,7 @@ public class GameMenuGFXController {
         return vBox1;
     }
 
-    private static VBox fearAndReligion(int fearRateNum, int religionRateNum){
+    private static VBox fearAndReligion(int fearRateNum, int religionRateNum) {
         VBox vBox2 = new VBox(10);
         vBox2.setAlignment(Pos.CENTER);
 
@@ -249,8 +301,8 @@ public class GameMenuGFXController {
         fearRate.setFont(Font.font("Helvetica", 15));
         fearContainer.getChildren().addAll(fearRate, fearFace, fear);
         String color;
-        if(fearRateNum > 0) color = "red";
-        else if(fearRateNum == 0) color = "yellow";
+        if (fearRateNum > 0) color = "red";
+        else if (fearRateNum == 0) color = "yellow";
         else color = "green";
         fearFace.setFill(new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/faces/" + color + "Face.png").toExternalForm())));
 
@@ -262,7 +314,7 @@ public class GameMenuGFXController {
         religionRate.setFont(Font.font("Helvetica", 15));
         religion.setFont(Font.font("Helvetica", 15));
         religionContainer.getChildren().addAll(religionRate, religionFace, religion);
-        if(religionRateNum > 0) color = "green";
+        if (religionRateNum > 0) color = "green";
         else color = "yellow";
         religionFace.setFill(new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/faces/" + color + "Face.png").toExternalForm())));
 
@@ -270,17 +322,17 @@ public class GameMenuGFXController {
         return vBox2;
     }
 
-    private static HBox comingMonth(int total){
+    private static HBox comingMonth(int total) {
         String totalCount;
-        if(total > 0) totalCount = "+" + total;
+        if (total > 0) totalCount = "+" + total;
         else totalCount = Integer.toString(total);
         HBox totalContainer = new HBox(10);
         totalContainer.setAlignment(Pos.CENTER);
         totalContainer.getChildren().add(new Text("In the coming month: " + totalCount));
 
         String color;
-        if(total > 0) color = "green";
-        else if(total == 0) color = "yellow";
+        if (total > 0) color = "green";
+        else if (total == 0) color = "yellow";
         else color = "red";
 
         ImagePattern imagePattern = new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/faces/" + color + "Face.png").toString()));
@@ -289,16 +341,16 @@ public class GameMenuGFXController {
         return totalContainer;
     }
 
-    private void setBuildingBox(BuildingCategory category){
+    private void setBuildingBox(BuildingCategory category) {
         buildingBox.getItems().clear();
         ArrayList<BuildingType> buildings = new ArrayList<>();
-        for(BuildingTypeName buildingTypeName : BuildingTypeName.values()){
-            if(BuildingType.getBuildingTypeByName(buildingTypeName) == null) continue; //TODO delete this line
-            if(BuildingType.getBuildingTypeByName(buildingTypeName).getCategory().equals(category))
+        for (BuildingTypeName buildingTypeName : BuildingTypeName.values()) {
+            if (BuildingType.getBuildingTypeByName(buildingTypeName) == null) continue; //TODO delete this line
+            if (BuildingType.getBuildingTypeByName(buildingTypeName).getCategory().equals(category))
                 buildings.add(BuildingType.getBuildingTypeByName(buildingTypeName));
         }
 
-        for(BuildingType buildingType : buildings){
+        for (BuildingType buildingType : buildings) {
             VBox vBox = new VBox(2); //TODO set spacing
             vBox.setAlignment(Pos.CENTER);
             vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
@@ -318,12 +370,12 @@ public class GameMenuGFXController {
         }
     }
 
-    private static Popup createPopup(BuildingType buildingType){
+    private static Popup createPopup(BuildingType buildingType) {
         Popup popup = new Popup();
         Label label = new Label();
         String string = "hitpoint: " + buildingType.getMaxHitPoint();
         string += "\ncost: " + buildingType.getBuildingCost();
-        if(buildingType.getResourcesNeeded() != null) {
+        if (buildingType.getResourcesNeeded() != null) {
             for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet()) {
                 string += ("\n" + entry.getKey().getName() + " needed: " + entry.getValue());
             }
@@ -339,64 +391,31 @@ public class GameMenuGFXController {
     }
 
     private Popup createBlockInfoPopup(Coordinate blockPosition) {
-        Popup popup=new Popup();
-        Label label=new Label(MapMenuController.showDetailsExtended(blockPosition));
-        label.setStyle("-fx-text-fill: rgba(211,234,216,0.78)");
-        VBox container=new VBox(label);
+        Popup popup = new Popup();
+        Label label = new Label(MapMenuController.showDetailsExtended(blockPosition));
+        label.setStyle("-fx-text-fill: white");
+        VBox container = new VBox(label);
         container.setBackground(Background.fill(new Color(0, 0, 0, 1)));
         container.setMouseTransparent(true);
+        label.setMouseTransparent(true);
         container.setPadding(new Insets(5));
         container.setAlignment(Pos.CENTER);
         popup.getContent().add(container);
         return popup;
     }
 
-    private Popup changePopularityMenu(){
-        Popup popup = new Popup();
+    public void goToNextPlayer() {
+        // TODO: handle animations and potential bugs
+        Stronghold.getCurrentBattle().goToNextPlayer();
+        updateCurrentPlayerInfo();
+        for (ExtendedBlock selectedBlock : selectedBlocks)
+            unselectBlockView(selectedBlock);
+        selectedBlocks.clear();
+    }
 
-        VBox sliders = new VBox(20);
-        sliders.setAlignment(Pos.CENTER);
-
-        Slider foodRateSlider = new Slider(-2, 2, Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFoodRate());
-        foodRateSlider.setBlockIncrement(1);
-        Text foodRateText = new Text("food rate: " + (int) foodRateSlider.getValue());
-        foodRateSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            foodRateText.setText("food rate: " + newValue.intValue());
-            Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFoodRate(newValue.intValue());
-        });
-        VBox foodRateContainer = new VBox(5, foodRateSlider, foodRateText);
-
-        Slider taxRateSlider = new Slider(-3, 8, Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTaxRate());
-        taxRateSlider.setBlockIncrement(1);
-        Text taxRateText = new Text("tax rate: " + (int) taxRateSlider.getValue());
-        taxRateSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            taxRateText.setText("tax rate: " + newValue.intValue());
-            Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setTaxRate(newValue.intValue());
-        });
-        VBox taxRateContainer = new VBox(5, taxRateSlider, taxRateText);
-
-        Slider fearRateSlider = new Slider(-5, 5, Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFearRate());
-        Text fearRateText = new Text("fear rate: " + (int) fearRateSlider.getValue());
-        fearRateSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            fearRateText.setText("fear rate: " + newValue.intValue());
-            Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFearRate(newValue.intValue());
-        });
-        VBox fearRateContainer = new VBox(5, fearRateSlider, fearRateText);
-
-        Rectangle back = new Rectangle(50, 30, new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/icons/backHand.png")).toString())));
-        back.setOnMouseClicked(mouseEvent -> popup.hide());
-
-        sliders.getChildren().addAll(foodRateContainer, taxRateContainer, fearRateContainer, back);
-        sliders.setPadding(new Insets(25));
-        Image image = new Image(GameMenu.class.getResource("/images/backgrounds/greenSheet.jpeg").toExternalForm(), 180 , 248, false, false);
-        BackgroundImage backgroundImage = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-        sliders.setBackground(new Background(backgroundImage));
-        popup.getContent().add(sliders);
-
-        return popup;
+    private void updateCurrentPlayerInfo() {
+        User currentPlayer = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner();
+        currentPlayerAvatar.setFill(new ImagePattern(new Image(currentPlayer.getAvatar())));
+        currentPlayerName.setText(currentPlayer.getUsername() + "\n~" + currentPlayer.getNickname() + "~");
     }
 }

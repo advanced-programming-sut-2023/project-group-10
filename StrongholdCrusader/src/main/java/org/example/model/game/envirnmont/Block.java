@@ -17,7 +17,7 @@ public class Block {
     private BlockTexture texture;
     private Droppable droppable;
     private boolean onFire;
-    private boolean isKeep;
+    private Government keepGovernment;
 
     Block(BlockTexture texture) {
         this.texture = texture;
@@ -41,6 +41,10 @@ public class Block {
     public Building getBuilding() {
         if (droppable instanceof Building) return ((Building) droppable);
         return null;
+    }
+
+    public Government getKeepGovernment() {
+        return keepGovernment;
     }
 
     public ArrayList<Unit> getAllUnits() {
@@ -69,11 +73,11 @@ public class Block {
     }
 
     public boolean isKeep() {
-        return isKeep;
+        return keepGovernment != null;
     }
 
-    public void setKeep(boolean keep) {
-        isKeep = keep;
+    public void setKeep(Government owner) {
+        keepGovernment = owner;
     }
 
     public void clearBlock() {
@@ -127,7 +131,7 @@ public class Block {
     }
 
     public boolean isBuildable() {
-        return droppable == null && !onFire && texture.isBuildable() && !isKeep;
+        return droppable == null && !onFire && texture.isBuildable() && !isKeep();
     }
 
     public boolean canDigHere() {
