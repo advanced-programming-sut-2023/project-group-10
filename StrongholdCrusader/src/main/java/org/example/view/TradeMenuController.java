@@ -17,13 +17,13 @@ public class TradeMenuController {
 
     @FXML
     private void initialize() {
-        buttonBox.setSpacing(100);
+        buttonBox.setSpacing(25);
         showMakeRequestButton();
         showHistoryButton();
         showBackButton();
-        buttonBox.setTranslateY(400);
-        buttonBox.setTranslateX(300);
-        buttonBox.setPrefWidth(1000);
+        buttonBox.setTranslateY(100);
+        buttonBox.setTranslateX(100);
+        buttonBox.setPrefWidth(600);
 
     }
 
@@ -48,9 +48,9 @@ public class TradeMenuController {
     private void showHistoryButton() {
         history = new Button();
         history.setText("Show All Trades");
-        history.setPrefWidth(500);
-        history.setPrefHeight(100);
-        history.setFont(new Font("PT Mono", 32));
+        history.setPrefWidth(200);
+        history.setPrefHeight(50);
+        history.setFont(new Font("PT Mono", 16));
         history.setBackground(Background.fill(Color.MOCCASIN));
         history.setOnMouseClicked(this::showHistory);
         buttonBox.getChildren().add(history);
@@ -68,9 +68,9 @@ public class TradeMenuController {
     private void showMakeRequestButton() {
         makeRequest = new Button();
         makeRequest.setText("Make New Trade");
-        makeRequest.setPrefWidth(500);
-        makeRequest.setPrefHeight(100);
-        makeRequest.setFont(new Font("PT Mono", 32));
+        makeRequest.setPrefWidth(200);
+        makeRequest.setPrefHeight(50);
+        makeRequest.setFont(new Font("PT Mono", 16));
         makeRequest.setBackground(Background.fill(Color.MOCCASIN));
         makeRequest.setOnMouseClicked(this::makeRequest);
         buttonBox.getChildren().add(makeRequest);

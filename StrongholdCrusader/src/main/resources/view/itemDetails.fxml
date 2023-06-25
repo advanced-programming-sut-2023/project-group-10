@@ -18,7 +18,7 @@
                            fx:id="imageOfItem"/>
 
                 </VBox>
-                <VBox  fx:id="rightBox" spacing="45">
+                <VBox  fx:id="rightBox" spacing="20">
                     <children>
 
                         <HBox   fx:id="storageInfo">
@@ -39,7 +39,7 @@
 
             </children>
         </HBox>
-        <Button layoutX="300" layoutY="8.0" mnemonicParsing="false" text="Back" onMouseClicked="#cancel"/>
+        <Button layoutX="50" layoutY="10.0" mnemonicParsing="false" text="Back" onMouseClicked="#cancel"/>
 
     </children>
 </Pane>
