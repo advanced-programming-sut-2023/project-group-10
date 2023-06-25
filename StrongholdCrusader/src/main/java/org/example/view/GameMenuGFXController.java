@@ -53,7 +53,7 @@ public class GameMenuGFXController {
         controlBox.setStyle("-fx-background-color: #171817");
         mapBox.setPrefHeight(stage.getHeight() - controlBox.getPrefHeight());
         initializeMapView();
-        buildingBox.setPrefWidth(stage.getWidth()*4/6);
+        buildingBox.setPrefWidth(stage.getWidth()* 4/6);
         miniMapBox.setPrefWidth(stage.getWidth() / 6);
         miniMapBox.setStyle("-fx-background-color: #6c6cb4");
         infoBox.setPrefWidth(stage.getWidth() / 6);
@@ -90,8 +90,8 @@ public class GameMenuGFXController {
                 blockView.setOnMouseEntered(mouseEvent -> {
                     if(mouseEvent.isPrimaryButtonDown() || mouseEvent.isSecondaryButtonDown()) return;
                     showingBlockInfoPopup=createBlockInfoPopup(coordinate);
-                    showingBlockInfoPopup.setAnchorX(mouseEvent.getSceneX());
-                    showingBlockInfoPopup.setAnchorY(mouseEvent.getSceneY());
+                    showingBlockInfoPopup.setAnchorX(mouseEvent.getSceneX() + 2);
+                    showingBlockInfoPopup.setAnchorY(mouseEvent.getSceneY() + 2);
                     showingBlockInfoPopup.show(stage);
                 });
                 blockView.setOnMouseExited(mouseEvent -> showingBlockInfoPopup.hide());
@@ -108,8 +108,16 @@ public class GameMenuGFXController {
             vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
             vBox.setPadding(new Insets(0, 10, 0, 10));
             buildingBox.getItems().add(vBox);
-            vBox.getChildren().add(new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingTypeName.toString().toLowerCase() + ".png").toString()))));
+            Circle circle = new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingTypeName.toString().toLowerCase() + ".png").toString())));
+            vBox.getChildren().add(circle);
             vBox.getChildren().add(new Label(BuildingType.getBuildingTypeByName(buildingTypeName).getName().toString().replaceAll("_", " ")));
+            Popup popup = createPopup(BuildingType.getBuildingTypeByName(buildingTypeName));
+            circle.setOnMouseEntered(mouseEvent -> {
+                popup.setAnchorX(mouseEvent.getSceneX() + 2);
+                popup.setAnchorY(mouseEvent.getSceneY() + 2);
+                popup.show(stage);
+            });
+            circle.setOnMouseExited(mouseEvent -> popup.hide());
         }
     }
 
@@ -292,14 +300,17 @@ public class GameMenuGFXController {
             vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
             vBox.setPadding(new Insets(0, 10, 0, 10));
             buildingBox.getItems().add(vBox);
-            vBox.getChildren().add(new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingType.getName() + ".png").toString()))));
+            Circle circle = new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingType.getName() + ".png").toString())));
+            vBox.getChildren().add(circle);
             vBox.getChildren().add(new Label(buildingType.getName().toString().replaceAll("_", " ")));
 
             Popup popup = createPopup(buildingType);
-            vBox.hoverProperty().addListener((Observable, oldValue, newValue) -> {
-                if(newValue) popup.show(stage);
-                else popup.hide();
+            circle.setOnMouseEntered(mouseEvent -> {
+                popup.setAnchorX(mouseEvent.getSceneX() + 2);
+                popup.setAnchorY(mouseEvent.getSceneY() + 2);
+                popup.show(stage);
             });
+            circle.setOnMouseExited(mouseEvent -> popup.hide());
         }
     }
 
@@ -313,12 +324,13 @@ public class GameMenuGFXController {
                 string += ("\n" + entry.getKey().getName() + " needed: " + entry.getValue());
             }
         }
-
         string += ("\nemployee count: " + buildingType.getEmployeeCount());
-        popup.getContent().add(label);
         label.setText(string);
-        popup.setAnchorX(500);
-        popup.setAnchorY(300);
+        VBox vBox = new VBox(label);
+        vBox.setPadding(new Insets(5));
+        label.setStyle("-fx-text-fill: rgba(211,234,216,0.78)");
+        popup.getContent().add(vBox);
+        vBox.setBackground(Background.fill(Color.BLACK));
         return popup;
     }
 
