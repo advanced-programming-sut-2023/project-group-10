@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.example.view.GameMenuGFXController"
       prefHeight="400.0" prefWidth="600.0" stylesheets="@../CSS/spacingStyle.css">
 
-    <ScrollPane fx:id="mapBox">
-    </ScrollPane>
+    <HBox>
+        <ScrollPane fx:id="mapBox">
+        </ScrollPane>
+        <BorderPane fx:id="turnPane">
+            <center>
+                <VBox alignment="CENTER">
+                    <Label text="current player"/>
+                    <Rectangle fx:id="currentPlayerAvatar"/>
+                    <Label fx:id="currentPlayerName"/>
+                    <Button fx:id="nextPlayerButton" text="end turn" onMouseClicked="#goToNextPlayer"
+                            alignment="CENTER"/>
+                </VBox>
+            </center>
+        </BorderPane>
+    </HBox>
     <HBox fx:id="controlBox">
         <VBox fx:id="buildingContainer">
             <ListView orientation="HORIZONTAL" fx:id="buildingBox">
