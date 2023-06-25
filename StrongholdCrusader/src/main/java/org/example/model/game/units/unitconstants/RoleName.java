@@ -1,5 +1,12 @@
 package org.example.model.game.units.unitconstants;
 
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import org.example.model.game.envirnmont.BlockTexture;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public enum RoleName {
     //normal people
     LADY,
@@ -59,6 +66,8 @@ public enum RoleName {
     TREBUCHET,
     FIRE_BALLISTA;
 
+    private static final String unitsListAssetsFolderPath = BlockTexture.class.getResource("/images/units/list").toExternalForm();
+
     public static RoleName getRoleNameByNameString(String name) {
         name = name.replaceAll("[\\s_-]", "");
         for (RoleName roleName : RoleName.values())
@@ -66,6 +75,12 @@ public enum RoleName {
         return null;
     }
 
+    public Image getRoleListImage(Color color) {
+        // TODO: check path validity after adding all assets
+        if (Files.exists(Path.of(unitsListAssetsFolderPath + name() + "/" + color + ".png")))
+            return new Image(unitsListAssetsFolderPath + name() + "/" + color + ".png");
+        else return new Image(unitsListAssetsFolderPath + name() + ".png");
+    }
 
     @Override
     public String toString() {

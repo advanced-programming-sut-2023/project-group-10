@@ -6,10 +6,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
@@ -24,6 +28,7 @@ import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
+import org.example.model.game.units.unitconstants.RoleName;
 import org.example.model.utils.RandomGenerator;
 
 import java.util.ArrayList;
@@ -48,7 +53,7 @@ public class GameMenuGFXController {
     public Pane miniMapBox;
     public Pane infoBox;
     private Stage stage;
-    private Popup showingBlockInfoPopup;
+    private Coordinate selectionStartCoordinate;
     private LinkedList<ExtendedBlock> selectedBlocks;
 
     public void prepareGame(Stage stage) {
@@ -95,26 +100,27 @@ public class GameMenuGFXController {
             for (int j = 0; j < mapView.length; j++) {
                 Polygon blockView = mapView[i][j].getBlockView();
                 Coordinate coordinate = gameMap.getPolygonCoordinateMap().get(blockView);
-                blockView.setOnMouseEntered(mouseEvent -> {
-                    if (mouseEvent.isSecondaryButtonDown()) changeSelectionState(coordinate);
-                    else if (!mouseEvent.isPrimaryButtonDown()) {
-                        showingBlockInfoPopup = createBlockInfoPopup(coordinate);
-                        showingBlockInfoPopup.setAnchorX(mouseEvent.getSceneX());
-                        showingBlockInfoPopup.setAnchorY(mouseEvent.getSceneY());
-                        showingBlockInfoPopup.show(stage);
-                    }
-                });
                 blockView.setOnMousePressed(mouseEvent -> {
-                    if (showingBlockInfoPopup != null) {
-                        showingBlockInfoPopup.hide();
-                        showingBlockInfoPopup = null;
-                    }
-                    if (mouseEvent.isSecondaryButtonDown()) changeSelectionState(coordinate);
+                    if (mouseEvent.isSecondaryButtonDown()) selectionStartCoordinate = coordinate;
                 });
-                blockView.setOnMouseExited(mouseEvent -> {
-                    if (showingBlockInfoPopup != null) {
-                        showingBlockInfoPopup.hide();
-                        showingBlockInfoPopup = null;
+                blockView.setOnMouseEntered(mouseEvent -> {
+                    if (mouseEvent.isPrimaryButtonDown() || mouseEvent.isSecondaryButtonDown()) return;
+                    if (selectionStartCoordinate == null)
+                        Tooltip.install(blockView, new Tooltip(MapMenuController.showDetailsExtended(coordinate)));
+                    else {
+                        Coordinate coordinate1 = new Coordinate(Math.min(selectionStartCoordinate.row, coordinate.row), Math.min(selectionStartCoordinate.column, coordinate.column));
+                        Coordinate coordinate2 = new Coordinate(Math.max(selectionStartCoordinate.row, coordinate.row), Math.max(selectionStartCoordinate.column, coordinate.column));
+                        for (int k = coordinate1.row; k <= coordinate2.row; k++) {
+                            for (int l = coordinate1.column; l <= coordinate2.column; l++)
+                                switchSelectionState(new Coordinate(k, l));
+                        }
+                        selectionStartCoordinate = null;
+                    }
+                });
+                blockView.setOnMouseClicked(mouseEvent -> {
+                    if (selectionStartCoordinate != null) {
+                        switchSelectionState(selectionStartCoordinate);
+                        selectionStartCoordinate = null;
                     }
                 });
             }
@@ -123,7 +129,7 @@ public class GameMenuGFXController {
         mapBox.setHvalue(0.5);
     }
 
-    private void changeSelectionState(Coordinate coordinate) {
+    private void switchSelectionState(Coordinate coordinate) {
         ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
         if (selectedBlocks.contains(extendedBlock)) {
             unselectBlockView(extendedBlock);
@@ -140,13 +146,21 @@ public class GameMenuGFXController {
         selectedBlocks.add(extendedBlock);
         extendedBlock.getBlockView().setStroke(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getColor());
         extendedBlock.getBlockView().setStrokeType(StrokeType.INSIDE);
-        extendedBlock.getBlockView().setStrokeLineCap(StrokeLineCap.ROUND);
-        extendedBlock.getBlockView().setStrokeLineJoin(StrokeLineJoin.ROUND);
-        extendedBlock.getBlockView().setStrokeWidth(3);
+        extendedBlock.getBlockView().setStrokeWidth(2);
         updateSelectedBlocksPane();
     }
 
     private void updateSelectedBlocksPane() {
+        //TODO
+    }
+
+    private VBox generateTroopBox(RoleName type, int troopCount) {
+        VBox result = new VBox();
+        ImageView imageView = new ImageView(type.getRoleListImage(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getColor()));
+        imageView.setPreserveRatio(true);
+        Label nameLabel = new Label(type.toString());
+        // TODO: add count mechanism
+        return result;
     }
 
     private void initializeControls() {
@@ -422,7 +436,7 @@ public class GameMenuGFXController {
         currentPlayerName.setText(currentPlayer.getUsername() + "\n~" + currentPlayer.getNickname() + "~");
     }
 
-    private Popup changePopularityMenu(){
+    private Popup changePopularityMenu() {
         Popup popup = new Popup();
 
         VBox sliders = new VBox(20);
@@ -459,7 +473,7 @@ public class GameMenuGFXController {
 
         sliders.getChildren().addAll(foodRateContainer, taxRateContainer, fearRateContainer, back);
         sliders.setPadding(new Insets(25));
-        Image image = new Image(GameMenu.class.getResource("/images/backgrounds/greenSheet.jpeg").toExternalForm(), 180 , 248, false, false);
+        Image image = new Image(GameMenu.class.getResource("/images/backgrounds/greenSheet.jpeg").toExternalForm(), 180, 248, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
