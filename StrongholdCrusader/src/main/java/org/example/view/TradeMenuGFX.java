@@ -41,7 +41,6 @@ public class TradeMenuGFX extends Application {
         trans2.setDuration(Duration.seconds(35));
         ParallelTransition parTrans = new ParallelTransition(trans1, trans2);
         parTrans.play();
-        stage.setFullScreen(true);
         stage.setScene(scene);
         stage.show();
 

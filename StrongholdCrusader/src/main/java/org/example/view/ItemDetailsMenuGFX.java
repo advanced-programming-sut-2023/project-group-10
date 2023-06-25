@@ -22,9 +22,7 @@ public class ItemDetailsMenuGFX extends Application {
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         itemDetails.setBackground(new Background(backgroundImage));
         Scene scene = new Scene(itemDetails);
-
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

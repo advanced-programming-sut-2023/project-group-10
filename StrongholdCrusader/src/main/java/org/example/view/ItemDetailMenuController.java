@@ -48,9 +48,9 @@ public class ItemDetailMenuController {
     @FXML
     public void initialize() {
         initializeStorageInfo();
-        infos.setTranslateX(400);
-        infos.setTranslateY(200);
-        rightBox.setTranslateY(100);
+        infos.setTranslateX(75);
+        infos.setTranslateY(70);
+        rightBox.setTranslateY(30);
         initializeBuyLabel();
         initializeSellLabel();
         initializeNameLabel();
@@ -60,7 +60,7 @@ public class ItemDetailMenuController {
 
     private void initializeNameLabel() {
         name.setText(enhanceName(selectedItem.getName()));
-        name.setFont(new Font("Didot", 48));
+        name.setFont(new Font("Didot", 30));
         name.setAlignment(Pos.CENTER);
     }
 
@@ -92,32 +92,32 @@ public class ItemDetailMenuController {
     private void showPhoto() {
         imageOfItem.setImage(new Image(new File("src/main/resources/images/items/" + selectedItem.getName() + ".png").toURI().toString()));
 
-        imageOfItem.setFitHeight(350);
-        imageOfItem.setFitWidth(350);
+        imageOfItem.setFitHeight(80);
+        imageOfItem.setFitWidth(80);
 
     }
 
     private void initializeSellLabel() {
-        sellBox.setPrefWidth(250);
+        sellBox.setPrefWidth(150);
         sellButton = new Button("Sell  " + selectedItem.getSellPrice());
-        sellButton.setFont(new Font("PT Mono", 16));
+        sellButton.setFont(new Font("PT Mono", 14));
         sellButton.setBackground(Background.fill(Color.MOCCASIN));
         sellButton.setBorder(Border.stroke(Color.FIREBRICK));
         sellButton.setOnMouseClicked(this::sell);
-        sellButton.setPrefWidth(200);
-        sellButton.setPrefHeight(40);
+        sellButton.setPrefWidth(150);
+        sellButton.setPrefHeight(30);
         sellBox.getChildren().add(sellButton);
     }
 
     private void initializeBuyLabel() {
-        buyBox.setPrefWidth(250);
+        buyBox.setPrefWidth(150);
         buyButton = new Button("Buy  " + selectedItem.getBuyPrice());
-        buyButton.setFont(new Font("PT Mono", 16));
+        buyButton.setFont(new Font("PT Mono", 14));
         buyButton.setBackground(Background.fill(Color.MOCCASIN));
         buyButton.setBorder(Border.stroke(Color.FIREBRICK));
         buyButton.setOnMouseClicked(this::buy);
-        buyButton.setPrefWidth(200);
-        buyButton.setPrefHeight(40);
+        buyButton.setPrefWidth(150);
+        buyButton.setPrefHeight(30);
         buyBox.getChildren().add(buyButton);
 
     }
