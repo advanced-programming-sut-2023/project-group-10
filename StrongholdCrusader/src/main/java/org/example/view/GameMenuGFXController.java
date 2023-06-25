@@ -228,7 +228,6 @@ public class GameMenuGFXController {
         button.setOnMouseClicked(mouseEvent -> {
             Popup popup = changePopularityMenu();
             popup.show(stage);
-            System.out.println(popup.getWidth() + " " + popup.getHeight());
         });
         ImagePattern backImage = new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/icons/back.png").toString()));
         Rectangle back = new Rectangle(30, 30, backImage);
@@ -243,7 +242,7 @@ public class GameMenuGFXController {
         int taxRate = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTaxRate();
         int fearRate = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFearRate();
         int religionRate = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getReligionCount();
-        int total = foodRate + taxRate + fearRate + religionRate;
+        int total = foodRate + taxRate - fearRate + religionRate;
         HBox totalContainer = comingMonth(total);
         totalContainer.setTranslateX(-20);
         totalContainer.setTranslateY(50);
@@ -450,6 +449,7 @@ public class GameMenuGFXController {
             Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFoodRate(newValue.intValue());
         });
         VBox foodRateContainer = new VBox(5, foodRateSlider, foodRateText);
+        foodRateContainer.setAlignment(Pos.CENTER);
 
         Slider taxRateSlider = new Slider(-3, 8, Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTaxRate());
         taxRateSlider.setBlockIncrement(1);
@@ -459,6 +459,7 @@ public class GameMenuGFXController {
             Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setTaxRate(newValue.intValue());
         });
         VBox taxRateContainer = new VBox(5, taxRateSlider, taxRateText);
+        taxRateContainer.setAlignment(Pos.CENTER);
 
         Slider fearRateSlider = new Slider(-5, 5, Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFearRate());
         Text fearRateText = new Text("fear rate: " + (int) fearRateSlider.getValue());
@@ -467,13 +468,37 @@ public class GameMenuGFXController {
             Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFearRate(newValue.intValue());
         });
         VBox fearRateContainer = new VBox(5, fearRateSlider, fearRateText);
+        fearRateContainer.setAlignment(Pos.CENTER);
+
+        Text religionCount = new Text("religion count: " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getReligionCount());
+        ComboBox<String> religion = new ComboBox<>();
+        religion.setPromptText("religion");
+        religion.setMinHeight(25);
+        religion.setMaxHeight(25);
+        religion.getItems().add("have religion");
+        religion.getItems().add("don't have religion");
+        religion.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.equals("have religion")) {
+                Stronghold.getCurrentBattle().getGovernmentAboutToPlay().addReligion();
+                religionCount.setText("religion count: 1");
+            }
+            else {
+                Stronghold.getCurrentBattle().getGovernmentAboutToPlay().removeReligion();
+                religionCount.setText("religion count: 0");
+            }
+        });
+        VBox religionContainer = new VBox(5, religion, religionCount);
+        religionContainer.setAlignment(Pos.CENTER);
 
         Rectangle back = new Rectangle(50, 30, new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/icons/backHand.png")).toString())));
-        back.setOnMouseClicked(mouseEvent -> popup.hide());
+        back.setOnMouseClicked(mouseEvent -> {
+            popup.hide();
+            popularityFactors();
+        });
 
-        sliders.getChildren().addAll(foodRateContainer, taxRateContainer, fearRateContainer, back);
+        sliders.getChildren().addAll(foodRateContainer, taxRateContainer, fearRateContainer, religionContainer, back);
         sliders.setPadding(new Insets(25));
-        Image image = new Image(GameMenu.class.getResource("/images/backgrounds/greenSheet.jpeg").toExternalForm(), 180, 248, false, false);
+        Image image = new Image(GameMenu.class.getResource("/images/backgrounds/greenSheet2.jpeg").toExternalForm(), 197, 316, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
