@@ -7,7 +7,7 @@
     "slogan": "",
     "questionNumber": "2",
     "questionAnswer": "e81935fb86434cdaaeee21ebe051cca827243ab4cccfdafeee8202004630924e",
-    "avatar": "file:/D:/d/t2/AP/project/project-group-10/StrongholdCrusader/target/classes/images/avatar/avatar14.png",
+    "avatar": "/images/avatar/avatar14.png",
     "highScore": 0
   },
   {
@@ -18,7 +18,7 @@
     "slogan": "",
     "questionNumber": "2",
     "questionAnswer": "73ef176d9f12809e64363b2b5f4553abecca7aae157327f190323cfa0e42c815",
-    "avatar": "file:/D:/d/t2/AP/project/project-group-10/StrongholdCrusader/target/classes/images/avatar/avatar24.png",
+    "avatar": "/images/avatar/avatar24.png",
     "highScore": 0
   }
 ]

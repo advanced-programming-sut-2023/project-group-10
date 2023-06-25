@@ -5,6 +5,7 @@ import org.example.model.utils.CheckFormatAndEncrypt;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Random;
 
 public class User {
@@ -30,7 +31,7 @@ public class User {
         this.slogan = slogan;
         this.questionNumber = questionNumber;
         this.questionAnswer = CheckFormatAndEncrypt.encryptString(securityAnswer);
-        this.avatar = User.class.getResource("/images/avatar/avatar" + randomNumber() + ".png").toExternalForm();
+        this.avatar = "/images/avatar/avatar" + randomNumber() + ".png";
     }
 
     public static void addUser(String username, String password, String nickname, String email, String slogan,
@@ -143,7 +144,7 @@ public class User {
     }
 
     public String getAvatar(){
-        return this.avatar;
+        return Objects.requireNonNull(User.class.getResource(this.avatar)).toString();
     }
 
     public void setAvatar(String avatar){
