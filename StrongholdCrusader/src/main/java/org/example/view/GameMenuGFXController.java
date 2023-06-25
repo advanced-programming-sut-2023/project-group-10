@@ -1,5 +1,8 @@
 package org.example.view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -20,7 +24,10 @@ import javafx.stage.Stage;
 import org.example.controller.MapMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.BuildingLists;
+import org.example.model.game.buildings.buildingconstants.BuildingType;
+import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.units.MilitaryUnit;
@@ -48,6 +55,7 @@ public class GameMenuGFXController {
     private Coordinate selectionStartCoordinate;
     private LinkedList<ExtendedBlock> selectedBlocks;
     private HashMap<RoleName, Integer> selectedRoleCountMap;
+    private BuildingTypeName buildingTypeName;
 
     public void prepareGame(Stage stage) {
         GameMenuGFXController.stage = stage;
@@ -83,6 +91,14 @@ public class GameMenuGFXController {
             faceImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/faces/face" + newValue.intValue() / 10 + ".png")).toString())));
         });
         faceImage.setOnMouseClicked(mouseEvent -> popularityFactors());
+        buildingBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
+            if(newValue != null) {
+                Label label = (Label) newValue.getChildren().get(1);
+                String string = label.getText().replaceAll(" ", "_");
+                buildingTypeName = BuildingTypeName.getBuildingTypeNameByNameString(string);
+            }
+            else buildingTypeName = null;
+        });
     }
 
     private void initializeMapView() {
@@ -93,6 +109,7 @@ public class GameMenuGFXController {
             for (int j = 0; j < mapView.length; j++) {
                 Polygon blockView = mapView[i][j].getBlockView();
                 Coordinate coordinate = gameMap.getPolygonCoordinateMap().get(blockView);
+                //ExtendedBlock block = gameMap.getExtendedBlockByRowAndColumn(coordinate); modified by Rozhin
                 blockView.setOnMousePressed(mouseEvent -> {
                     if (mouseEvent.isSecondaryButtonDown()) selectionStartCoordinate = coordinate;
                 });
@@ -111,6 +128,19 @@ public class GameMenuGFXController {
                     }
                 });
                 blockView.setOnMouseClicked(mouseEvent -> {
+                    if(buildingTypeName != null){
+                        ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
+                        extendedBlock.setBuilding(coordinate, buildingTypeName);
+                        Popup popup = buildingDetails(coordinate, buildingTypeName);
+                        extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
+                            popup.setAnchorX(mouseEvent1.getSceneX() + 5);
+                            popup.setAnchorY(mouseEvent.getSceneY() + 5);
+                            popup.show(stage);
+                        });
+                        extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
+                        if(!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
+                            scrollPaneContent.getChildren().add(extendedBlock.getObject());
+                    }
                     if (selectionStartCoordinate != null) {
                         switchSelectionState(selectionStartCoordinate);
                         selectionStartCoordinate = null;
@@ -172,6 +202,21 @@ public class GameMenuGFXController {
     private void initializeControls() {
         // TODO: add other initialization processes (state of troops, resources, ...)
         updateCurrentPlayerInfo();
+    }
+
+    private static Popup buildingDetails(Coordinate coordinate, BuildingTypeName buildingTypeName){
+        Popup popup = new Popup();
+        VBox vBox = new VBox();
+        String string = "coordinate: (" + coordinate.row + "," + coordinate.column + ")";
+        string += "\nbuilding type: " + buildingTypeName.name();
+        string += "\nhitpoint: " + Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(coordinate.row, coordinate.column).getBuilding().getHitPoint();
+        Text text = new Text(string);
+        vBox.getChildren().add(text);
+        popup.getContent().add(vBox);
+        vBox.setBackground(Background.fill(Color.BROWN));
+        text.setFill(Color.BEIGE);
+        vBox.setPadding(new Insets(7));
+        return popup;
     }
 
     public void castle() {
