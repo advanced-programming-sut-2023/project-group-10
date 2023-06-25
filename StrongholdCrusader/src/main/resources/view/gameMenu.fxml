@@ -36,6 +36,7 @@
                 <Button text="Industry" onMouseClicked="#industry"/>
                 <Button text="Town" onMouseClicked="#town"/>
                 <Button text="Weapon" onMouseClicked="#weapon"/>
+                <Button text="Miscellaneous" onMouseClicked="#unknown"/>
             </HBox>
         </VBox>
         <Pane fx:id="miniMapBox">

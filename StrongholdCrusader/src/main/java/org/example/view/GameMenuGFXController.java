@@ -23,6 +23,7 @@ import org.example.controller.MapMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.Item;
+import org.example.model.game.buildings.BuildingLists;
 import org.example.model.game.buildings.buildingconstants.BuildingCategory;
 import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
@@ -52,12 +53,12 @@ public class GameMenuGFXController {
     public ListView<VBox> buildingBox;
     public Pane miniMapBox;
     public Pane infoBox;
-    private Stage stage;
+    public static Stage stage;
     private Coordinate selectionStartCoordinate;
     private LinkedList<ExtendedBlock> selectedBlocks;
 
     public void prepareGame(Stage stage) {
-        this.stage = stage;
+        GameMenuGFXController.stage = stage;
         scrollPaneContent = Stronghold.getMapGroupGFX();
         System.out.println(stage.getHeight());
         controlBox.setPrefHeight(stage.getHeight() / 5);
@@ -75,7 +76,7 @@ public class GameMenuGFXController {
         miniMapBox.setStyle("-fx-background-color: #6c6cb4");
         infoBox.setPrefWidth(stage.getWidth() / 6);
         infoBox.setStyle("-fx-background-color: #ee9a73");
-        allBuildings();
+        buildingBox.getItems().addAll(BuildingLists.allBuildings.getItems());
         selectedBlocks = new LinkedList<>();
     }
 
@@ -168,48 +169,39 @@ public class GameMenuGFXController {
         updateCurrentPlayerInfo();
     }
 
-    private void allBuildings() {
-        for (BuildingTypeName buildingTypeName : BuildingTypeName.values()) {
-            VBox vBox = new VBox(2);
-            vBox.setAlignment(Pos.CENTER);
-            vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
-            vBox.setPadding(new Insets(0, 10, 0, 10));
-            buildingBox.getItems().add(vBox);
-            Circle circle = new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingTypeName.toString().toLowerCase() + ".png").toString())));
-            vBox.getChildren().add(circle);
-            vBox.getChildren().add(new Label(BuildingType.getBuildingTypeByName(buildingTypeName).getName().toString().replaceAll("_", " ")));
-            Popup popup = createPopup(BuildingType.getBuildingTypeByName(buildingTypeName));
-            circle.setOnMouseEntered(mouseEvent -> {
-                popup.setAnchorX(mouseEvent.getSceneX() + 2);
-                popup.setAnchorY(mouseEvent.getSceneY() + 2);
-                popup.show(stage);
-            });
-            circle.setOnMouseExited(mouseEvent -> popup.hide());
-        }
-    }
-
     public void castle() {
-        setBuildingBox(BuildingCategory.CASTLE);
+        buildingBox.getItems().clear();
+        buildingBox.getItems().addAll(BuildingLists.castleBuildings.getItems());
     }
 
     public void farm() {
-        setBuildingBox(BuildingCategory.FARM);
+        buildingBox.getItems().clear();
+        buildingBox.getItems().addAll(BuildingLists.farmBuildings.getItems());
     }
 
     public void foodProcessing() {
-        setBuildingBox(BuildingCategory.FOOD_PROCESSING);
+        buildingBox.getItems().clear();
+        buildingBox.getItems().addAll(BuildingLists.foodProcessingBuildings.getItems());
     }
 
     public void industry() {
-        setBuildingBox(BuildingCategory.INDUSTRY);
+        buildingBox.getItems().clear();
+        buildingBox.getItems().addAll(BuildingLists.industryBuildings.getItems());
     }
 
     public void town() {
-        setBuildingBox(BuildingCategory.TOWN);
+        buildingBox.getItems().clear();
+        buildingBox.getItems().addAll(BuildingLists.townBuildings.getItems());
     }
 
     public void weapon() {
-        setBuildingBox(BuildingCategory.WEAPON);
+        buildingBox.getItems().clear();
+        buildingBox.getItems().addAll(BuildingLists.weaponBuildings.getItems());
+    }
+
+    public void unknown() {
+        buildingBox.getItems().clear();
+        buildingBox.getItems().addAll(BuildingLists.unknown.getItems());
     }
 
     private void popularityFactors() {
@@ -235,7 +227,8 @@ public class GameMenuGFXController {
         back.setOnMouseClicked(mouseEvent -> {
             controlBox.getChildren().remove(0);
             controlBox.getChildren().add(0, buildingContainer);
-            allBuildings();
+            buildingBox.getItems().clear();
+            buildingBox.getItems().addAll(BuildingLists.allBuildings.getItems());
         });
 
         int foodRate = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFoodRate();
@@ -357,54 +350,9 @@ public class GameMenuGFXController {
         return totalContainer;
     }
 
-    private void setBuildingBox(BuildingCategory category) {
-        buildingBox.getItems().clear();
-        ArrayList<BuildingType> buildings = new ArrayList<>();
-        for (BuildingTypeName buildingTypeName : BuildingTypeName.values()) {
-            if (BuildingType.getBuildingTypeByName(buildingTypeName) == null) continue; //TODO delete this line
-            if (BuildingType.getBuildingTypeByName(buildingTypeName).getCategory().equals(category))
-                buildings.add(BuildingType.getBuildingTypeByName(buildingTypeName));
-        }
 
-        for (BuildingType buildingType : buildings) {
-            VBox vBox = new VBox(2); //TODO set spacing
-            vBox.setAlignment(Pos.CENTER);
-            vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
-            vBox.setPadding(new Insets(0, 10, 0, 10));
-            buildingBox.getItems().add(vBox);
-            Circle circle = new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingType.getName() + ".png").toString())));
-            vBox.getChildren().add(circle);
-            vBox.getChildren().add(new Label(buildingType.getName().toString().replaceAll("_", " ")));
 
-            Popup popup = createPopup(buildingType);
-            circle.setOnMouseEntered(mouseEvent -> {
-                popup.setAnchorX(mouseEvent.getSceneX() + 2);
-                popup.setAnchorY(mouseEvent.getSceneY() + 2);
-                popup.show(stage);
-            });
-            circle.setOnMouseExited(mouseEvent -> popup.hide());
-        }
-    }
 
-    private static Popup createPopup(BuildingType buildingType) {
-        Popup popup = new Popup();
-        Label label = new Label();
-        String string = "hitpoint: " + buildingType.getMaxHitPoint();
-        string += "\ncost: " + buildingType.getBuildingCost();
-        if (buildingType.getResourcesNeeded() != null) {
-            for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet()) {
-                string += ("\n" + entry.getKey().getName() + " needed: " + entry.getValue());
-            }
-        }
-        string += ("\nemployee count: " + buildingType.getEmployeeCount());
-        label.setText(string);
-        VBox vBox = new VBox(label);
-        vBox.setPadding(new Insets(5));
-        label.setStyle("-fx-text-fill: rgba(211,234,216,0.78)");
-        popup.getContent().add(vBox);
-        vBox.setBackground(Background.fill(Color.BLACK));
-        return popup;
-    }
 
     private Popup createBlockInfoPopup(Coordinate blockPosition) {
         Popup popup = new Popup();
