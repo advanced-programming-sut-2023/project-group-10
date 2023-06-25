@@ -11,7 +11,7 @@
       prefWidth="700.0" xmlns="http://javafx.com/javafx/19"
       fx:controller="org.example.view.ShopMenuController"
       xmlns:fx="http://javafx.com/fxml/1">
-    <Text layoutX="600" layoutY="65" strokeType="OUTSIDE" strokeWidth="0.0" text="List of items"
+    <Text layoutX="200" layoutY="65" strokeType="OUTSIDE" strokeWidth="0.0" text="List of items"
           textAlignment="CENTER" wrappingWidth="373.21630859375">
         <font>
             <Font name="AppleMyungjo Regular" size="45.0"/>

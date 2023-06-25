@@ -25,7 +25,7 @@ public class GameMenuGFX extends Application {
 
             if (event.getCode() == KeyCode.SPACE) {
                 try {
-                    new ShopMenuGFX().start(SignupMenu.stage);
+                    new ShopMenuGFX().start(new Stage());
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

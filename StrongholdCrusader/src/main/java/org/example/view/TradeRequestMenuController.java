@@ -1,5 +1,7 @@
 package org.example.view;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -10,10 +12,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
+import org.example.controller.TradeMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.Government;
 import org.example.model.game.Item;
+import org.example.view.enums.messages.TradeMenuMessages;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -30,8 +35,10 @@ public class TradeRequestMenuController {
     public Spinner<Integer> itemAmount;
     public TextField price;
     public TextArea messageField;
+    public Button submitButton;
     private User selectedUser;
     private Item selectedItem;
+    private boolean requestSelected;
 
 
     @FXML
@@ -118,13 +125,51 @@ public class TradeRequestMenuController {
     }
 
     public void submit(MouseEvent mouseEvent) {
+        TradeMenuMessages message;
+        if (requestSelected)
+            message = TradeMenuController.sendRequest(selectedItem.getName(), itemAmount.getValue(), Integer.parseInt(price.getText()), messageField.getText(), selectedUser.getUsername());
+        else
+            message = TradeMenuController.sendRequest(selectedItem.getName(), itemAmount.getValue(), 0, messageField.getText(), selectedUser.getUsername());
+        Text text = new Text();
+        switch (message) {
+            //convert these to popups
+            case INVALID_TYPE:
+                text.setText("You should select an item");
+                text.setFill(Color.ORANGERED);
+                break;
 
+            case TRADE_ADDED_TO_TRADELIST:
+                text.setText("you've successfully purchased the item!");
+                text.setFill(Color.LIMEGREEN);
+                break;
+        }
+        text.setFont(new Font("Courier new", 15));
+        Popup popup = new Popup();
+        popup.getContent().add(text);
+        popup.setAutoHide(true);
+        EventHandler<ActionEvent> event =
+                new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e) {
+                        if (!popup.isShowing())
+                            popup.show(SignupMenu.stage);
+                    }
+                };
+        submitButton.setOnAction(event);
+        if(message.equals(TradeMenuMessages.TRADE_ADDED_TO_TRADELIST)) {
+            try {
+                new TradeMenuGFX().start(ShopMenuGFX.stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
 
-    }
+        }
+
 
     public void donateSelected(MouseEvent mouseEvent) {
         donate.setBackground(Background.fill(Color.CORNFLOWERBLUE));
         request.setBackground(Background.fill(Color.LIGHTGRAY));
+         requestSelected = false;
 
     }
 

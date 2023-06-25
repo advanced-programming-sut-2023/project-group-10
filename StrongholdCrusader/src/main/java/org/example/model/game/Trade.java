@@ -14,6 +14,7 @@ public class Trade {
     private final int price;
     private boolean isDisplayedInHistory;
     private boolean acceptedStatus;
+    private boolean viewed;
 
 
     public Trade(String recipientId, String senderId, String message, Item item, int amount, int price) {
@@ -26,10 +27,14 @@ public class Trade {
         this.price = price;
         this.acceptedStatus = false;
         this.isDisplayedInHistory = false;
+        viewed=false;
     }
 
-    public static void tradeItem(Trade trade) {
-
+    public boolean isViewed() {
+        return viewed;
+    }
+    public void setViewed(boolean state){
+        viewed=state;
     }
 
     public String getId() {

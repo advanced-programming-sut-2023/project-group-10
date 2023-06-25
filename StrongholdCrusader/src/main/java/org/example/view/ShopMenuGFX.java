@@ -18,16 +18,15 @@ public class ShopMenuGFX extends Application {
         Pane shopMenuPane = FXMLLoader.load(
                 new URL(ShopMenuGFX.class.getResource("/view/shopMenu.fxml").toExternalForm()));
         this.stage = primaryStage;
-        Image image = new Image(ShopMenuGFX.class.getResource("/images/backgrounds/brownPaper.jpeg").toExternalForm(), 1440 ,900, false, true);
+        Image image = new Image(ShopMenuGFX.class.getResource("/images/backgrounds/brownPaper.jpeg").toExternalForm(), 1440, 900, false, true);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         shopMenuPane.setBackground(new Background(backgroundImage));
         Scene scene = new Scene(shopMenuPane);
-        stage.setFullScreen(true);
+
         stage.setScene(scene);
         stage.show();
     }
-
 
 
 }

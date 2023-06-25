@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<Pane xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.view.TradeMenuHistoryController"
+      prefHeight="900.0" prefWidth="1440.0"
+>
+    <HBox spacing="35">
+        <VBox fx:id="requestsFromUser" spacing="20">
+
+        </VBox>
+        <VBox fx:id="requestsToUser" spacing="20">
+
+        </VBox>
+    </HBox>
+
+
+</Pane>

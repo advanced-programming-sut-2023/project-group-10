@@ -58,6 +58,11 @@ public class TradeMenuController {
     }
 
     private void showHistory(MouseEvent mouseEvent) {
+        try {
+            new TradeMenuHistoryGFX().start(ShopMenuGFX.stage);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void showMakeRequestButton() {

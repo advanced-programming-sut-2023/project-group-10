@@ -67,8 +67,8 @@ public class GameMenuGFXController {
         mapBox.setPrefHeight(stage.getHeight() - controlBox.getPrefHeight());
         turnPane.setPrefWidth(stage.getWidth() / 6);
         turnPane.setPrefHeight(mapBox.getPrefHeight());
-        currentPlayerAvatar.setWidth(turnPane.getPrefWidth() / 2);
-        currentPlayerAvatar.setHeight(turnPane.getPrefWidth() / 2);
+//        currentPlayerAvatar.setWidth(turnPane.getPrefWidth() / 2);
+//        currentPlayerAvatar.setHeight(turnPane.getPrefWidth() / 2);
         initializeMapView();
         initializeControls();
         buildingBox.setPrefWidth(stage.getWidth() * 4 / 6);
@@ -379,7 +379,7 @@ public class GameMenuGFXController {
 
     private void updateCurrentPlayerInfo() {
         User currentPlayer = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner();
-        currentPlayerAvatar.setFill(new ImagePattern(new Image(currentPlayer.getAvatar())));
+//        currentPlayerAvatar.setFill(new ImagePattern(new Image(currentPlayer.getAvatar())));
         currentPlayerName.setText(currentPlayer.getUsername() + "\n~" + currentPlayer.getNickname() + "~");
     }
 

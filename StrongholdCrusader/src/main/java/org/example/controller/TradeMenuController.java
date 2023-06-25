@@ -20,13 +20,9 @@ public class TradeMenuController {
 
     public static TradeMenuMessages sendRequest(String resourceType, int resourceAmount, int price, String message, String recipientId) {
         Item resource = Item.getItemByName(resourceType);
-        if (resource == null || !resource.isSellable())
+        if (resource == null )
             return TradeMenuMessages.INVALID_TYPE;
-        Government recipient = Stronghold.getCurrentBattle().getGovernmentByOwnerId(recipientId);
-        if (recipient == null)
-            return TradeMenuMessages.INVALID_USER;
-        if (price != 0 && Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold() < price)
-            return TradeMenuMessages.NOT_SUFFICIENT_GOLD;
+
         String senderId = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername();
         if (price == 0) {
             String tmp = recipientId;

@@ -10,9 +10,7 @@
     <children>
         <HBox layoutX="326.0" layoutY="68.0" prefHeight="219.0" prefWidth="756.0">
             <children>
-                <ListView fx:id="usersListView">
-
-                </ListView>
+                <ListView fx:id="usersListView" prefHeight="219.0" prefWidth="332.0"/>
                 <VBox prefHeight="224.0" prefWidth="388.0">
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="selected user to trade with:"
@@ -92,7 +90,7 @@
                         </HBox>
                         <HBox prefHeight="95.0" prefWidth="822.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Messge:"
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Message:"
                                       wrappingWidth="221.87677001953125">
                                     <font>
                                         <Font name="Didot" size="30.0"/>
@@ -127,7 +125,7 @@
                 </VBox>
             </children>
         </HBox>
-        <Button layoutX="857.0" layoutY="824.0" mnemonicParsing="false" onMouseClicked="#submit" prefHeight="39.0"
+        <Button layoutX="857.0" layoutY="824.0" mnemonicParsing="false" fx:id="submitButton" onMouseClicked="#submit" prefHeight="39.0"
                 prefWidth="107.0" style="-fx-background-color: palegreen;" text="submit">
             <font>
                 <Font name="PT Mono Bold" size="16.0"/>

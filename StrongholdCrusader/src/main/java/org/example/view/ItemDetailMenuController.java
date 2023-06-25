@@ -140,7 +140,7 @@ public class ItemDetailMenuController {
 
     public void cancel(MouseEvent mouseEvent) throws Exception {
 
-        new ShopMenuGFX().start(SignupMenu.stage);
+        new ShopMenuGFX().start(ShopMenuGFX.stage);
     }
 
     public void sell(MouseEvent mouseEvent) {
