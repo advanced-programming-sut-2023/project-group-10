@@ -8,9 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -22,20 +20,13 @@ import javafx.stage.Stage;
 import org.example.controller.MapMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
-import org.example.model.game.Item;
 import org.example.model.game.buildings.BuildingLists;
-import org.example.model.game.buildings.buildingconstants.BuildingCategory;
-import org.example.model.game.buildings.buildingconstants.BuildingType;
-import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
+import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.unitconstants.RoleName;
-import org.example.model.utils.RandomGenerator;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class GameMenuGFXController {
     public ScrollPane mapBox;
@@ -56,19 +47,19 @@ public class GameMenuGFXController {
     public static Stage stage;
     private Coordinate selectionStartCoordinate;
     private LinkedList<ExtendedBlock> selectedBlocks;
+    private HashMap<RoleName, Integer> selectedRoleCountMap;
 
     public void prepareGame(Stage stage) {
         GameMenuGFXController.stage = stage;
         scrollPaneContent = Stronghold.getMapGroupGFX();
         System.out.println(stage.getHeight());
         controlBox.setPrefHeight(stage.getHeight() / 5);
-        controlBox.setStyle("-fx-background-color: #171817");
         mapBox.setPrefWidth(stage.getWidth() * 5 / 6);
         mapBox.setPrefHeight(stage.getHeight() - controlBox.getPrefHeight());
         turnPane.setPrefWidth(stage.getWidth() / 6);
         turnPane.setPrefHeight(mapBox.getPrefHeight());
-//        currentPlayerAvatar.setWidth(turnPane.getPrefWidth() / 2);
-//        currentPlayerAvatar.setHeight(turnPane.getPrefWidth() / 2);
+        currentPlayerAvatar.setWidth(turnPane.getPrefWidth() / 2);
+        currentPlayerAvatar.setHeight(turnPane.getPrefWidth() / 2);
         initializeMapView();
         initializeControls();
         buildingBox.setPrefWidth(stage.getWidth() * 4 / 6);
@@ -78,6 +69,7 @@ public class GameMenuGFXController {
         infoBox.setStyle("-fx-background-color: #ee9a73");
         buildingBox.getItems().addAll(BuildingLists.allBuildings.getItems());
         selectedBlocks = new LinkedList<>();
+        selectedRoleCountMap = new HashMap<>();
     }
 
     @FXML
@@ -152,15 +144,28 @@ public class GameMenuGFXController {
     }
 
     private void updateSelectedBlocksPane() {
-        //TODO
+        selectedTroopsInfoPane.getChildren().clear();
+        for (ExtendedBlock selectedBlock : selectedBlocks) {
+            ArrayList<MilitaryUnit> selectedUnits = selectedBlock.getBlock().getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+            for (MilitaryUnit selectedUnit : selectedUnits)
+                selectedRoleCountMap.put(selectedUnit.getRole().getName(), selectedRoleCountMap.getOrDefault(selectedUnit.getRole().getName(), 0) + 1);
+        }
+        for (Map.Entry<RoleName, Integer> roleCountEntry : selectedRoleCountMap.entrySet())
+            selectedTroopsInfoPane.getChildren().add(generateTroopBox(roleCountEntry.getKey(), roleCountEntry.getValue()));
     }
 
     private VBox generateTroopBox(RoleName type, int troopCount) {
-        VBox result = new VBox();
-        ImageView imageView = new ImageView(type.getRoleListImage(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getColor()));
+        ImageView imageView = new ImageView(type.getRoleListImage());
         imageView.setPreserveRatio(true);
-        Label nameLabel = new Label(type.toString());
-        // TODO: add count mechanism
+        imageView.setFitHeight(50);
+        Slider slider = new Slider(0, troopCount, troopCount);
+        Label nameLabel = new Label(type + " | count = " + (int) slider.getValue());
+        HBox troopInfo = new HBox(imageView, nameLabel);
+        troopInfo.setAlignment(Pos.CENTER);
+        slider.valueProperty().addListener(observable -> nameLabel.setText(type + " | count = " + (int) slider.getValue()));
+        VBox result = new VBox(troopInfo, slider);
+        result.setAlignment(Pos.CENTER);
+        result.setPadding(new Insets(10, 40, 5, 40));
         return result;
     }
 
@@ -350,24 +355,6 @@ public class GameMenuGFXController {
         return totalContainer;
     }
 
-
-
-
-
-    private Popup createBlockInfoPopup(Coordinate blockPosition) {
-        Popup popup = new Popup();
-        Label label = new Label(MapMenuController.showDetailsExtended(blockPosition));
-        label.setStyle("-fx-text-fill: white");
-        VBox container = new VBox(label);
-        container.setBackground(Background.fill(new Color(0, 0, 0, 1)));
-        container.setMouseTransparent(true);
-        label.setMouseTransparent(true);
-        container.setPadding(new Insets(5));
-        container.setAlignment(Pos.CENTER);
-        popup.getContent().add(container);
-        return popup;
-    }
-
     public void goToNextPlayer() {
         // TODO: handle animations and potential bugs
         Stronghold.getCurrentBattle().goToNextPlayer();
@@ -379,7 +366,7 @@ public class GameMenuGFXController {
 
     private void updateCurrentPlayerInfo() {
         User currentPlayer = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner();
-//        currentPlayerAvatar.setFill(new ImagePattern(new Image(currentPlayer.getAvatar())));
+        currentPlayerAvatar.setFill(new ImagePattern(new Image(currentPlayer.getAvatar())));
         currentPlayerName.setText(currentPlayer.getUsername() + "\n~" + currentPlayer.getNickname() + "~");
     }
 
@@ -426,11 +413,10 @@ public class GameMenuGFXController {
         religion.getItems().add("have religion");
         religion.getItems().add("don't have religion");
         religion.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals("have religion")) {
+            if (newValue.equals("have religion")) {
                 Stronghold.getCurrentBattle().getGovernmentAboutToPlay().addReligion();
                 religionCount.setText("religion count: 1");
-            }
-            else {
+            } else {
                 Stronghold.getCurrentBattle().getGovernmentAboutToPlay().removeReligion();
                 religionCount.setText("religion count: 0");
             }

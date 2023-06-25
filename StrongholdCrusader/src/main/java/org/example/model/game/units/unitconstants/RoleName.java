@@ -4,9 +4,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.example.model.game.envirnmont.BlockTexture;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 public enum RoleName {
     //normal people
     LADY,
@@ -75,11 +72,8 @@ public enum RoleName {
         return null;
     }
 
-    public Image getRoleListImage(Color color) {
-        // TODO: check path validity after adding all assets
-        if (Files.exists(Path.of(unitsListAssetsFolderPath + name() + "/" + color + ".png")))
-            return new Image(unitsListAssetsFolderPath + name() + "/" + color + ".png");
-        else return new Image(unitsListAssetsFolderPath + name() + ".png");
+    public Image getRoleListImage() {
+        return new Image(unitsListAssetsFolderPath + name() + ".png");
     }
 
     @Override
