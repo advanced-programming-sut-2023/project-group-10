@@ -3,9 +3,7 @@ package org.example.view;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -153,13 +151,19 @@ public class GameMenuGFXController {
         mainPane.setBackground(Background.fill(new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/backgrounds/menu.jpeg").toString()))));
 
         VBox first = new VBox(10);
+        Button button = new Button("change rate");
+        button.setOnMouseClicked(mouseEvent -> {
+            Popup popup = changePopularityMenu();
+            popup.show(stage);
+            System.out.println(popup.getWidth() + " " + popup.getHeight());
+        });
         first.setTranslateX(-100);
         first.setAlignment(Pos.CENTER);
         Text popularity = new Text("Popularity");
         popularity.setFont(Font.font("Helvetica", FontPosture.ITALIC, 20));
         ImagePattern backImage = new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/icons/back.png").toString()));
         Rectangle back = new Rectangle(30, 30, backImage);
-        first.getChildren().addAll(popularity, back);
+        first.getChildren().addAll(popularity, button, back);
         back.setOnMouseClicked(mouseEvent -> {
             controlBox.getChildren().remove(0);
             controlBox.getChildren().add(0, buildingContainer);
@@ -344,6 +348,55 @@ public class GameMenuGFXController {
         container.setPadding(new Insets(5));
         container.setAlignment(Pos.CENTER);
         popup.getContent().add(container);
+        return popup;
+    }
+
+    private Popup changePopularityMenu(){
+        Popup popup = new Popup();
+
+        VBox sliders = new VBox(20);
+        sliders.setAlignment(Pos.CENTER);
+
+        Slider foodRateSlider = new Slider(-2, 2, Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFoodRate());
+        foodRateSlider.setBlockIncrement(1);
+        Text foodRateText = new Text("food rate: " + (int) foodRateSlider.getValue());
+        foodRateSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            foodRateText.setText("food rate: " + newValue.intValue());
+            Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFoodRate(newValue.intValue());
+        });
+        VBox foodRateContainer = new VBox(5, foodRateSlider, foodRateText);
+
+        Slider taxRateSlider = new Slider(-3, 8, Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTaxRate());
+        taxRateSlider.setBlockIncrement(1);
+        Text taxRateText = new Text("tax rate: " + (int) taxRateSlider.getValue());
+        taxRateSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            taxRateText.setText("tax rate: " + newValue.intValue());
+            Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setTaxRate(newValue.intValue());
+        });
+        VBox taxRateContainer = new VBox(5, taxRateSlider, taxRateText);
+
+        Slider fearRateSlider = new Slider(-5, 5, Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getFearRate());
+        Text fearRateText = new Text("fear rate: " + (int) fearRateSlider.getValue());
+        fearRateSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            fearRateText.setText("fear rate: " + newValue.intValue());
+            Stronghold.getCurrentBattle().getGovernmentAboutToPlay().setFearRate(newValue.intValue());
+        });
+        VBox fearRateContainer = new VBox(5, fearRateSlider, fearRateText);
+
+        Rectangle back = new Rectangle(50, 30, new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/icons/backHand.png")).toString())));
+        back.setOnMouseClicked(mouseEvent -> popup.hide());
+
+        sliders.getChildren().addAll(foodRateContainer, taxRateContainer, fearRateContainer, back);
+        sliders.setPadding(new Insets(25));
+        Image image = new Image(GameMenu.class.getResource("/images/backgrounds/greenSheet.jpeg").toExternalForm(), 180 , 248, false, false);
+        BackgroundImage backgroundImage = new BackgroundImage(image,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+        sliders.setBackground(new Background(backgroundImage));
+        popup.getContent().add(sliders);
+
         return popup;
     }
 }

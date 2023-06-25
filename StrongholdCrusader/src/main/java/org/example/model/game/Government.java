@@ -79,6 +79,11 @@ public class Government {
         religionCount = 1;
     }
 
+    public void removeReligion(){
+        popularityFactors.put("Religion", 0);
+        religionCount = 0;
+    }
+
     public int getReligionCount() {
         return religionCount;
     }
