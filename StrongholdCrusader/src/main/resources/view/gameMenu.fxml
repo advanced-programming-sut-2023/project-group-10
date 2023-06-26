@@ -40,7 +40,6 @@
             </HBox>
         </VBox>
         <Pane fx:id="miniMapBox">
-            <Label text="map"/>
         </Pane>
         <HBox fx:id="infoBox">
             <Label text="info"/>

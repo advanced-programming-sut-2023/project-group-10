@@ -69,7 +69,7 @@ public class GameMenuGFXController {
         buildingBox.setPrefWidth(stage.getWidth() * 4 / 6);
         miniMapBox.setPrefWidth(400);
         miniMapBox.setPrefHeight(400);
-        miniMapBox.setStyle("-fx-background-color: #6c6cb4");
+        miniMapBox.setStyle("-fx-background-color: DARKKHAKI");
         initializeMiniMap();
         infoBox.setPrefWidth(stage.getWidth() - buildingBox.getPrefWidth() - miniMapBox.getPrefWidth());
         infoBox.setStyle("-fx-background-color: #ee9a73");
@@ -491,8 +491,7 @@ public class GameMenuGFXController {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 Rectangle miniBlock = new Rectangle(miniMapBox.getPrefWidth() / size, miniMapBox.getPrefHeight() / size);
-                System.out.println(Double.toString(miniMapBox.getHeight()) + "..." + Double.toString(miniBlock.getHeight()));
-                miniBlock.setFill(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(j, i).getTexture().getColor());
+                miniBlock.setFill(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getTexture().getColor());
                 miniMap.getChildren().add(miniBlock);
                 GridPane.setConstraints(miniBlock, j, i);
             }
