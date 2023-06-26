@@ -16,6 +16,7 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.example.controller.MapMenuController;
@@ -40,7 +41,7 @@ public class GameMenuGFXController {
     public Button nextPlayerButton;
     public VBox selectedTroopsInfoPane;
     public Rectangle faceImage;
-    public Rectangle bookImage;
+    public Pane bookImage;
     public Rectangle edge;
     public VBox buildingContainer;
     public HBox controlBox;
@@ -80,13 +81,18 @@ public class GameMenuGFXController {
 
     @FXML
     public void initialize() {
-        bookImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/book.jpeg")).toString())));
+        Rectangle book=new Rectangle(90,77);
+        book.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/book.jpeg")).toString())));
+        bookImage.getChildren().add(book);
         edge.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/edge.png")).toString())));
-
+        scribeDetails();
         int popularity = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().get();
-        faceImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/faces/face" + popularity / 10 + ".png")).toString())));
+        faceImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
+                ("/images/faces/face" + popularity / 10 + ".png")).toString())));
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().addListener((observable, oldValue, newValue) -> {
-            faceImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/faces/face" + newValue.intValue() / 10 + ".png")).toString())));
+            faceImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
+                    ("/images/faces/face" + newValue.intValue() / 10 + ".png")).toString())));
+            scribeDetails();
         });
         faceImage.setOnMouseClicked(mouseEvent -> popularityFactors());
         buildingBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -96,6 +102,28 @@ public class GameMenuGFXController {
                 buildingTypeName = BuildingTypeName.getBuildingTypeNameByNameString(string);
             } else buildingTypeName = null;
         });
+    }
+
+    private void scribeDetails() {
+        VBox fields=new VBox();
+        fields.setSpacing(3);
+        Text popularity=new Text("   "+ Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().getValue());
+        popularity.setFont(new Font("PT Mono",14));
+        popularity.setTextAlignment(TextAlignment.CENTER);
+        popularity.setRotate(15);
+        Text golds=new Text(" "+ Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold());
+        golds.setFont(new Font("PT Mono",11));
+        golds.setTextAlignment(TextAlignment.CENTER);
+        golds.setRotate(15);
+        Text population=new Text(" "+Double.toString(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasants().size()));
+        population.setFont(new Font("PT Mono",11));
+        population.setTextAlignment(TextAlignment.CENTER);
+        population.setRotate(15);
+        fields.getChildren().addAll(popularity,golds,population);
+        if (bookImage.getChildren().size()>1)
+            bookImage.getChildren().remove(bookImage.getChildren().size());
+        bookImage.getChildren().add(fields);
+
     }
 
     private void initializeMapView() {

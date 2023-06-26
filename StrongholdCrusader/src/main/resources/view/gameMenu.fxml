@@ -45,7 +45,8 @@
             <Label text="info"/>
             <VBox>
                 <Rectangle fx:id="faceImage" width="110" height="81.1" translateX="16" translateY="6"/>
-                <Rectangle fx:id="bookImage" width="90" height="77" translateX="30" translateY="3"/>
+                <Pane fx:id="bookImage" prefWidth="90" prefHeight="77" translateX="30" translateY="3"/>\
+
             </VBox>
             <Rectangle fx:id="edge" width="120" height="162.2"/>
         </HBox>
