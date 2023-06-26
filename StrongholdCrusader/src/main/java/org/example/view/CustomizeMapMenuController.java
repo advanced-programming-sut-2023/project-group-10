@@ -11,11 +11,15 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import org.example.controller.CustomizeMapController;
 import org.example.model.Stronghold;
+import org.example.model.game.Government;
 import org.example.model.game.RockType;
 import org.example.model.game.TreeType;
 import org.example.model.game.envirnmont.BlockTexture;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
+import org.example.model.game.units.MilitaryPerson;
+import org.example.model.game.units.Unit;
+import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.enums.messages.CustomizeMapMessages;
 
 import java.util.ArrayList;
@@ -99,13 +103,14 @@ public class CustomizeMapMenuController {
         CommonGFXActions.setMapScrollPaneProperties(mapBox);
         org.example.model.game.envirnmont.Map map = CustomizeMapController.getMap();
         int size = map.getSize();
-        double x0 = size * ExtendedBlock.getWidth() / 2;
+        ExtendedBlock.setX0(size * ExtendedBlock.getWidth() / 2);
         mapView = new ExtendedBlock[size][size];
         Stronghold.getCurrentBattle().getBattleMap().setBlocksGraphics(mapView);
-        HashMap<Polygon, Coordinate> polygonCoordinateMap=Stronghold.getCurrentBattle().getBattleMap().getPolygonCoordinateMap();
+        Stronghold.setMapGroupGFX(mapPane);
+        HashMap<Polygon, Coordinate> polygonCoordinateMap = Stronghold.getCurrentBattle().getBattleMap().getPolygonCoordinateMap();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                mapView[i][j] = new ExtendedBlock(map.getBlockByRowAndColumn(i, j), i, j, x0);
+                mapView[i][j] = new ExtendedBlock(map.getBlockByRowAndColumn(i, j), i, j);
                 Polygon blockView = mapView[i][j].getBlockView();
                 polygonCoordinateMap.put(blockView, new Coordinate(i, j));
                 mapPane.getChildren().add(blockView);
@@ -139,11 +144,16 @@ public class CustomizeMapMenuController {
                         updateMessage(result.getMessage());
                     }
                 });
-                if(map.getBlockByRowAndColumn(i, j).isKeep()) {
+                if (map.getBlockByRowAndColumn(i, j).isKeep()) {
                     mapView[i][j].setKeep(i, j);
                     mapPane.getChildren().add(mapView[i][j].getObject());
                 }
             }
+        }
+        for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
+            new MilitaryPerson(government.getKeep(), RoleName.LORD, government).addToGovernmentAndBlockAndView();
+            for (int i = 0; i < 10; i++)
+                new Unit(government.getKeep(), RoleName.PEASANT, government).addToGovernmentAndBlockAndView();
         }
         mapBox.setHvalue(0.5);
     }
@@ -153,7 +163,6 @@ public class CustomizeMapMenuController {
     }
 
     public void goToGame() throws Exception {
-        Stronghold.setMapGroupGFX(mapPane);
         new GameMenuGFX().start(SignupMenu.stage);
     }
 

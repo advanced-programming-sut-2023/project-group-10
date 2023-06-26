@@ -184,21 +184,13 @@ public class GameMenuController {
 
         Battle battle = new Battle(map, governments);
         Stronghold.setCurrentBattle(battle);
-
-        for (Government government : governments) {
-            new MilitaryPerson(government.getKeep(), RoleName.LORD, government).addToGovernmentAndBlock();
-            for (int i = 0; i < 10; i++)
-                new Unit(government.getKeep(), RoleName.PEASANT, government).addToGovernmentAndBlock();
-        }
     }
 
     public static GameMenuMessages dropUnit(Coordinate position, RoleName type, int count) {
         if (count < 0) return GameMenuMessages.INVALID_UNIT_COUNT;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).canUnitsGoHere(false))
             return GameMenuMessages.UNWALKABLE_LAND;
-        for (Unit producedUnit : Unit.produceUnits(type, count, position)) {
-            producedUnit.addToGovernmentAndBlock();
-        }
+        Unit.produceUnits(type, count, position);
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 

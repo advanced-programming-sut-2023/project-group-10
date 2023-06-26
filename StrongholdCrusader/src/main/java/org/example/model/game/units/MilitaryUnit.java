@@ -1,5 +1,7 @@
 package org.example.model.game.units;
 
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import org.example.model.Stronghold;
 import org.example.model.game.Government;
 import org.example.model.game.Moat;
@@ -7,6 +9,7 @@ import org.example.model.game.NumericalEnums;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.buildingconstants.AttackingBuildingType;
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.MilitaryUnitStance;
@@ -21,11 +24,35 @@ public abstract class MilitaryUnit extends Unit {
     private boolean onPatrol;
     private Moat moatAboutToBeDug;
     private Moat moatAboutToBeFilled;
+    private Rectangle bodyGraphics;
 
     public MilitaryUnit(Coordinate position, RoleName role, Government government) {
         super(position, role, government);
         stance = MilitaryUnitStance.STAND_GROUND;
         destination = DestinationIndicator.NONE;
+        bodyGraphics = new Rectangle();
+    }
+
+    public Rectangle refreshBodyGraphics() {
+        // TODO: call this method when unit's state has changed
+        double WIDTH = ExtendedBlock.getWidth();
+        double HEIGHT = ExtendedBlock.getHeight();
+        double x0 = ExtendedBlock.getX0();
+        bodyGraphics.setFill(null);
+        // TODO: change assets based on state
+        // idle animation
+        bodyGraphics.setFill(new ImagePattern(((MilitaryUnitRole) getRole()).getRoleListImage()));
+        // positioning and size
+        ImagePattern paint = (ImagePattern) bodyGraphics.getFill();
+        double heightToWidthRatio = paint.getImage().getHeight() / paint.getImage().getWidth();
+        bodyGraphics.setWidth(WIDTH / 6);
+        bodyGraphics.setHeight(heightToWidthRatio * WIDTH / 6);
+        bodyGraphics.relocate(
+                WIDTH / 2 * (getPosition().column - getPosition().row + 1) + x0 - bodyGraphics.getWidth() / 2,
+                HEIGHT / 2 * (getPosition().row + getPosition().column + 2.5) - bodyGraphics.getHeight());
+        bodyGraphics.setMouseTransparent(true);
+        bodyGraphics.setPickOnBounds(false);
+        return bodyGraphics;
     }
 
     public MilitaryUnitStance getStance() {

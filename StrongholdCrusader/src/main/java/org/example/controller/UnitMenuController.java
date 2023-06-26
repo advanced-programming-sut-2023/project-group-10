@@ -233,7 +233,7 @@ public class UnitMenuController {
             if (selectedUnit instanceof SiegeEquipment || selectedUnit.getRole().getName() == RoleName.LORD)
                 continue;
             Unit peasant = new Unit(selectedUnit.getGovernment().getKeep(), RoleName.PEASANT, selectedUnit.getGovernment());
-            peasant.addToGovernmentAndBlock();
+            peasant.addToGovernmentAndBlockAndView();
             selectedUnit.killMe();
         }
         selectedMilitaryUnits = null;

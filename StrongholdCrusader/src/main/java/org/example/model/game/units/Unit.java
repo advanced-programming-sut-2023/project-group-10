@@ -10,8 +10,6 @@ import org.example.model.game.units.unitconstants.MilitaryPersonRole;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 
-import java.util.ArrayList;
-
 public class Unit extends Entity {
     private final Role role;
     private int hitPoint;
@@ -22,26 +20,24 @@ public class Unit extends Entity {
         hitPoint = role.getMaxHitPoint();
     }
 
-    public static ArrayList<Unit> produceUnits(RoleName roleName, int count, Coordinate position) {
-        ArrayList<Unit> units = new ArrayList<>();
+    public static void produceUnits(RoleName roleName, int count, Coordinate position) {
         Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         for (int i = 0; i < count; i++) {
             if (roleName == RoleName.ENGINEER)
-                new Engineer(position, roleName, currentGovernment).addToGovernmentAndBlock();
+                new Engineer(position, roleName, currentGovernment).addToGovernmentAndBlockAndView();
             else if (roleName == RoleName.TUNNELER)
-                new Tunneler(position, roleName, currentGovernment).addToGovernmentAndBlock();
+                new Tunneler(position, roleName, currentGovernment).addToGovernmentAndBlockAndView();
             else if (roleName == RoleName.LADDERMAN)
-                new Ladderman(position, roleName, currentGovernment).addToGovernmentAndBlock();
+                new Ladderman(position, roleName, currentGovernment).addToGovernmentAndBlockAndView();
             else if (Role.getRoleByName(roleName) instanceof MilitaryPersonRole)
-                new MilitaryPerson(position, roleName, currentGovernment).addToGovernmentAndBlock();
+                new MilitaryPerson(position, roleName, currentGovernment).addToGovernmentAndBlockAndView();
             else if (roleName == RoleName.SIEGE_TOWER)
-                new SiegeTower(position, roleName, currentGovernment).addToGovernmentAndBlock();
+                new SiegeTower(position, roleName, currentGovernment).addToGovernmentAndBlockAndView();
             else if (Role.getRoleByName(roleName) instanceof MilitaryEquipmentRole)
-                new SiegeEquipment(position, roleName, currentGovernment).addToGovernmentAndBlock();
+                new SiegeEquipment(position, roleName, currentGovernment).addToGovernmentAndBlockAndView();
             else
-                new Unit(position, roleName, Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlock();
+                new Unit(position, roleName, Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlockAndView();
         }
-        return units;
     }
 
     public Role getRole() {
@@ -79,9 +75,11 @@ public class Unit extends Entity {
         Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).removeUnit(this);
     }
 
-    public void addToGovernmentAndBlock() {
+    public void addToGovernmentAndBlockAndView() {
         Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).addUnit(this);
         this.getGovernment().addUnit(this);
+        if (this instanceof MilitaryUnit)
+            Stronghold.getMapGroupGFX().getChildren().add(((MilitaryUnit) this).refreshBodyGraphics());
     }
 
     public boolean isAttackable() {

@@ -1,8 +1,5 @@
 package org.example.view;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,13 +21,12 @@ import javafx.stage.Stage;
 import org.example.controller.MapMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
-import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.BuildingLists;
-import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.units.MilitaryUnit;
+import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.RoleName;
 
 import java.util.*;
@@ -109,7 +105,6 @@ public class GameMenuGFXController {
             for (int j = 0; j < mapView.length; j++) {
                 Polygon blockView = mapView[i][j].getBlockView();
                 Coordinate coordinate = gameMap.getPolygonCoordinateMap().get(blockView);
-                //ExtendedBlock block = gameMap.getExtendedBlockByRowAndColumn(coordinate); modified by Rozhin
                 blockView.setOnMousePressed(mouseEvent -> {
                     if (mouseEvent.isSecondaryButtonDown()) selectionStartCoordinate = coordinate;
                 });
@@ -185,7 +180,7 @@ public class GameMenuGFXController {
     }
 
     private VBox generateTroopBox(RoleName type, int troopCount) {
-        ImageView imageView = new ImageView(type.getRoleListImage());
+        ImageView imageView = new ImageView(((MilitaryUnitRole) MilitaryUnitRole.getRoleByName(type)).getRoleListImage());
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(50);
         Slider slider = new Slider(0, troopCount, troopCount);

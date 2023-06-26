@@ -1,8 +1,6 @@
 package org.example.model.game.units.unitconstants;
 
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import org.example.model.game.envirnmont.BlockTexture;
 
 public enum RoleName {
     //normal people
@@ -63,17 +61,11 @@ public enum RoleName {
     TREBUCHET,
     FIRE_BALLISTA;
 
-    private static final String unitsListAssetsFolderPath = BlockTexture.class.getResource("/images/units/list").toExternalForm();
-
     public static RoleName getRoleNameByNameString(String name) {
         name = name.replaceAll("[\\s_-]", "");
         for (RoleName roleName : RoleName.values())
             if (roleName.toString().replaceAll("[\\s_]", "").equalsIgnoreCase(name)) return roleName;
         return null;
-    }
-
-    public Image getRoleListImage() {
-        return new Image(unitsListAssetsFolderPath + name() + ".png");
     }
 
     @Override
