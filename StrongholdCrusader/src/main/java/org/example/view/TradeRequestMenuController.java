@@ -95,8 +95,10 @@ public class TradeRequestMenuController {
             userResources.add(itemInfo);
             itemInfo.setId(item.getKey().getName());
             selectedUserResources.getItems().add(itemInfo);
-
         }
+
+        itemAmount.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, Stronghold.getCurrentBattle().getGovernmentByOwnerId(selectedUser.getUsername()).getItemCount(selectedItem).intValue(), 0));
+
         selectedUserResources.setOnMousePressed(event -> {
             if (event.isPrimaryButtonDown()) {
                 itemNameLabel.setText(selectedUserResources.getSelectionModel().getSelectedItem().getId());
@@ -107,21 +109,16 @@ public class TradeRequestMenuController {
                 itemStorage.setText(Stronghold.getCurrentBattle().getGovernmentByOwnerId
                         (selectedUser.getUsername()).getItemCount(selectedItem).toString());
 
-
-                SpinnerValueFactory<Integer> valueFactory = //
-                        new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Stronghold.getCurrentBattle().getGovernmentByOwnerId(selectedUser.getUsername()).getItemCount(selectedItem).intValue(), 1);
-                itemAmount.setValueFactory(valueFactory);
-
-
-
+                SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory = (SpinnerValueFactory.IntegerSpinnerValueFactory) itemAmount.getValueFactory();
+                valueFactory.setMin(0);
+                valueFactory.setMax(Stronghold.getCurrentBattle().getGovernmentByOwnerId(selectedUser.getUsername()).getItemCount(selectedItem).intValue());
             }
         });
-
     }
 
 
     public void cancel(MouseEvent mouseEvent) throws Exception {
-        new TradeMenuGFX().start(SignupMenu.stage);
+        new TradeMenuGFX().start(ShopMenuGFX.stage);
     }
 
     public void submit(MouseEvent mouseEvent) {
@@ -155,7 +152,7 @@ public class TradeRequestMenuController {
                     }
                 };
         submitButton.setOnAction(event);
-        if(message.equals(TradeMenuMessages.TRADE_ADDED_TO_TRADELIST)) {
+        if (message.equals(TradeMenuMessages.TRADE_ADDED_TO_TRADELIST)) {
             try {
                 new TradeMenuGFX().start(ShopMenuGFX.stage);
             } catch (Exception e) {
@@ -163,13 +160,13 @@ public class TradeRequestMenuController {
             }
         }
 
-        }
+    }
 
 
     public void donateSelected(MouseEvent mouseEvent) {
         donate.setBackground(Background.fill(Color.CORNFLOWERBLUE));
         request.setBackground(Background.fill(Color.LIGHTGRAY));
-         requestSelected = false;
+        requestSelected = false;
 
     }
 

@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import org.example.model.game.Item;
 
 import java.io.File;
@@ -28,8 +27,7 @@ public class ShopMenuController {
         Item[] items = Item.values();
         int j = 0;
         for (int i = 0; i < items.length; i++) {
-            if (!items[i].isSellable())
-                continue;
+            if (!items[i].isSellable()) continue;
             allFiles[j] = new File("src/main/resources/images/items/" + items[i].getName() + ".png");
             j++;
         }
@@ -50,11 +48,11 @@ public class ShopMenuController {
         tableOfItems.setTranslateY(100);
     }
 
-    private void chooseItem(MouseEvent mouseEvent)  {
-        ItemDetailsMenuGFX itemDetailsMenuGFX=new ItemDetailsMenuGFX();
-        String  path=((ImageView)mouseEvent.getSource()).getImage().getUrl().toString();
+    private void chooseItem(MouseEvent mouseEvent) {
+        ItemDetailsMenuGFX itemDetailsMenuGFX = new ItemDetailsMenuGFX();
+        String path = ((ImageView) mouseEvent.getSource()).getImage().getUrl();
         itemDetailsMenuGFX.setSelectedItem(Item.getItemByPath(path));
-        System.out.println(itemDetailsMenuGFX.getSelectedItem()== null);
+        System.out.println(ItemDetailsMenuGFX.getSelectedItem() == null);
         try {
             itemDetailsMenuGFX.start(ShopMenuGFX.stage);
         } catch (Exception e) {
@@ -62,15 +60,11 @@ public class ShopMenuController {
         }
     }
 
-    public void back(MouseEvent mouseEvent) {
-        try {
-            new TradeMenuGFX().start(SignupMenu.stage);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public void back() {
+        ShopMenuGFX.stage.close();
     }
 
-    public void tradeMenu(MouseEvent mouseEvent) {
+    public void tradeMenu() {
         try {
             new TradeMenuGFX().start(ShopMenuGFX.stage);
         } catch (Exception e) {

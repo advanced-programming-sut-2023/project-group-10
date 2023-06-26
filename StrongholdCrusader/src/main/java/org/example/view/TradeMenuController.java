@@ -5,18 +5,18 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class TradeMenuController {
-    public static Button back=new Button();
+    public static Button back = new Button();
     public Button makeRequest;
     public static HBox buttonBox = new HBox();
     public Button history;
 
     @FXML
     private void initialize() {
+        buttonBox.getChildren().clear();
         buttonBox.setSpacing(25);
         showMakeRequestButton();
         showHistoryButton();
@@ -30,16 +30,16 @@ public class TradeMenuController {
     private void showBackButton() {
         back.setText("back");
         back.setBackground(Background.fill(Color.SNOW));
-        back.setFont(new Font("Courier new",14));
+        back.setFont(new Font("Courier new", 14));
         back.setTranslateX(10);
         back.setTranslateY(10);
         back.setOnMouseClicked(this::back);
 
     }
 
-    private void back(MouseEvent mouseEvent)  {
+    private void back(MouseEvent mouseEvent) {
         try {
-            new ShopMenuGFX().start(SignupMenu.stage);
+            new ShopMenuGFX().start(ShopMenuGFX.stage);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -78,11 +78,9 @@ public class TradeMenuController {
 
     private void makeRequest(MouseEvent mouseEvent) {
         try {
-            new TradeRequestMenuGFX().start(SignupMenu.stage);
+            new TradeRequestMenuGFX().start(ShopMenuGFX.stage);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
     }
-
 }
