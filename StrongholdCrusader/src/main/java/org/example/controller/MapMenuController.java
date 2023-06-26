@@ -24,13 +24,15 @@ public class MapMenuController {
     public static String showMap(Coordinate origin) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         map.setOrigin(origin, blocksInARow, blocksInAColumn);
-        return generateMapView(map);
+//        return generateMapView(map);
+        return null;
     }
 
     public static String moveMap(int horizontalChange, int verticalChange) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         map.moveOrigin(horizontalChange, verticalChange);
-        return generateMapView(map);
+//        return generateMapView(map);
+        return null;
     }
 
     private static String generateMapView(Map map) {
@@ -43,7 +45,7 @@ public class MapMenuController {
                     info = 'B';
                 else if (map.getBlockByRowAndColumn(i, j).getDroppable() instanceof Tree) info = 'T';
                 else info = '#';
-                result += map.getBlockByRowAndColumn(i, j).getTexture().getColor().getCode() + info + ASCIIColor.RESET.getCode();
+//                result += map.getBlockByRowAndColumn(i, j).getTexture().getColor().getCode() + info + ASCIIColor.RESET.getCode();
             }
             result += "\n";
         }

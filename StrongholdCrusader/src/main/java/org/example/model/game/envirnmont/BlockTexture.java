@@ -1,28 +1,29 @@
 package org.example.model.game.envirnmont;
 
+import javafx.scene.paint.Color;
 import org.example.model.utils.ASCIIColor;
 
 import java.util.LinkedHashMap;
 
 public enum BlockTexture {
     //on land
-    EARTH("earth", false, true, true, true, ASCIIColor.RED_BACKGROUND, "earth.png"),
-    EARTH_AND_STONES("earth and stones", false, true, true, true, ASCIIColor.RESET, "earth-and-stones.png"),
-    BOULDERS("boulders", false, true, true, true, ASCIIColor.YELLOW_BACKGROUND, "boulders.png"),
-    ROCKS("rocks", false, false, false, false, ASCIIColor.YELLOW_BACKGROUND, "rocks.png"),
-    IRON("iron", false, true, true, false, ASCIIColor.RED_BACKGROUND, "iron.png"),
-    GRASS("grass", true, true, true, true, ASCIIColor.GREEN_BACKGROUND, "grass.png"),
-    SCRUB("scrub", false, true, true, true, ASCIIColor.GREEN_BACKGROUND, "scrub.png"),
-    THICK_SCRUB("thick scrub", false, true, true, true, ASCIIColor.GREEN_BACKGROUND, "thick-scrub.png"),
+    EARTH("earth", false, true, true, true,Color.DARKKHAKI, "earth.png"),
+    EARTH_AND_STONES("earth and stones", false, true, true, true, Color.LIGHTGRAY, "earth-and-stones.png"),
+    BOULDERS("boulders", false, true, true, true, Color.FIREBRICK, "boulders.png"),
+    ROCKS("rocks", false, false, false, false, Color.GRAY, "rocks.png"),
+    IRON("iron", false, true, true, false, Color.SILVER, "iron.png"),
+    GRASS("grass", true, true, true, true, Color.MEDIUMSPRINGGREEN, "grass.png"),
+    SCRUB("scrub", false, true, true, true, Color.LAWNGREEN, "scrub.png"),
+    THICK_SCRUB("thick scrub", false, true, true, true, Color.FORESTGREEN, "thick-scrub.png"),
     //on water
-    OIL("oil", false, false, true, false, ASCIIColor.BLACK_BACKGROUND, "oil.png"),
-    MARSH("marsh", false, false, true, false, ASCIIColor.PURPLE_BACKGROUND, "marsh.png"), /* units can spawn or walk here but drown if they do */
-    FORD("ford", false, false, true, false, ASCIIColor.CYAN_BACKGROUND, "ford.png"),
-    RIVER("river", false, false, false, false, ASCIIColor.BLUE_BACKGROUND, "river.png"),
-    SMALL_POND("small pond", false, false, false, false, ASCIIColor.CYAN_BACKGROUND, "small-pond.png"),
-    LARGE_POND("large pond", false, false, false, false, ASCIIColor.CYAN_BACKGROUND, "large-pond.png"),
-    BEACH("beach", false, true, true, true, ASCIIColor.WHITE_BACKGROUND, "beach.png"),
-    SEA("sea", false, false, false, false, ASCIIColor.BLUE_BACKGROUND, "sea.png");
+    OIL("oil", false, false, true, false, Color.DARKGRAY, "oil.png"),
+    MARSH("marsh", false, false, true, false,Color.DARKSEAGREEN, "marsh.png"), /* units can spawn or walk here but drown if they do */
+    FORD("ford", false, false, true, false,Color.SADDLEBROWN, "ford.png"),
+    RIVER("river", false, false, false, false, Color.CORNFLOWERBLUE, "river.png"),
+    SMALL_POND("small pond", false, false, false, false, Color.CYAN, "small-pond.png"),
+    LARGE_POND("large pond", false, false, false, false, Color.CYAN, "large-pond.png"),
+    BEACH("beach", false, true, true, true, Color.SANDYBROWN, "beach.png"),
+    SEA("sea", false, false, false, false, Color.DEEPSKYBLUE, "sea.png");
 
     private static final String textureListAssetsFolderPath = BlockTexture.class.getResource("/images/textures/list").toExternalForm();
     private final String name;
@@ -30,10 +31,10 @@ public enum BlockTexture {
     private final boolean buildable;
     private final boolean walkable;
     private final boolean isPlantable;
-    private final ASCIIColor color;
+    private final Color color;
     private final String listAssetFileName;
 
-    BlockTexture(String name, boolean fertile, boolean buildable, boolean walkable, boolean plantable, ASCIIColor color, String listAssetFileName) {
+    BlockTexture(String name, boolean fertile, boolean buildable, boolean walkable, boolean plantable, Color color, String listAssetFileName) {
         this.name = name;
         this.isPlantable = plantable;
         this.fertile = fertile;
@@ -82,7 +83,7 @@ public enum BlockTexture {
         return isPlantable;
     }
 
-    public ASCIIColor getColor() {
+    public Color getColor() {
         return color;
     }
 

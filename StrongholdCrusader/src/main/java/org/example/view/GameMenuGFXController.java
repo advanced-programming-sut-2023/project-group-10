@@ -88,13 +88,13 @@ public class GameMenuGFXController {
         });
         faceImage.setOnMouseClicked(mouseEvent -> popularityFactors());
         buildingBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            if(newValue != null) {
+            if (newValue != null) {
                 Label label = (Label) newValue.getChildren().get(1);
                 String string = label.getText().replaceAll(" ", "_");
                 buildingTypeName = BuildingTypeName.getBuildingTypeNameByNameString(string);
-            }
-            else buildingTypeName = null;
+            } else buildingTypeName = null;
         });
+        initializeMiniMap();
     }
 
     private void initializeMapView() {
@@ -123,7 +123,7 @@ public class GameMenuGFXController {
                     }
                 });
                 blockView.setOnMouseClicked(mouseEvent -> {
-                    if(buildingTypeName != null){
+                    if (buildingTypeName != null) {
                         ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
                         extendedBlock.setBuilding(coordinate, buildingTypeName);
                         Popup popup = buildingDetails(coordinate, buildingTypeName);
@@ -133,7 +133,7 @@ public class GameMenuGFXController {
                             popup.show(stage);
                         });
                         extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
-                        if(!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
+                        if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
                             scrollPaneContent.getChildren().add(extendedBlock.getObject());
                     }
                     if (selectionStartCoordinate != null) {
@@ -199,7 +199,7 @@ public class GameMenuGFXController {
         updateCurrentPlayerInfo();
     }
 
-    private static Popup buildingDetails(Coordinate coordinate, BuildingTypeName buildingTypeName){
+    private static Popup buildingDetails(Coordinate coordinate, BuildingTypeName buildingTypeName) {
         Popup popup = new Popup();
         VBox vBox = new VBox();
         String string = "coordinate: (" + coordinate.row + "," + coordinate.column + ")";
@@ -482,5 +482,20 @@ public class GameMenuGFXController {
         popup.getContent().add(sliders);
 
         return popup;
+    }
+
+    public void initializeMiniMap() {
+        GridPane miniMap=new GridPane();
+        int size = Stronghold.getCurrentBattle().getBattleMap().getSize();
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Rectangle miniBlock = new Rectangle(miniMapBox.getWidth()/size,miniMapBox.getHeight()/size);
+                System.out.println(Double.toString(miniMapBox.getHeight())+"..."+Double.toString(miniBlock.getHeight()));
+                miniBlock.setFill(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(j, i).getTexture().getColor());
+                miniMap.getChildren().add(miniBlock);
+                GridPane.setConstraints(miniBlock, j, i);
+            }
+        }
+        miniMapBox.getChildren().add(miniMap);
     }
 }
