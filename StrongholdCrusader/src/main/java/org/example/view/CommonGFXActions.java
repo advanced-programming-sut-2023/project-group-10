@@ -9,7 +9,11 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
+import org.example.model.game.units.unitconstants.MilitaryUnitRole;
+import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
+
+import java.util.List;
 
 public class CommonGFXActions {
     public static void setMapScrollPaneProperties(ScrollPane mapBox) {
@@ -22,18 +26,19 @@ public class CommonGFXActions {
         mapBox.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> mapBox.setPannable(true));
     }
 
-    public static SequentialTransition getMoveAnimation(RoleName unitType, Coordinate[] path, Coordinate currentLocation, Rectangle target) {
+    public static SequentialTransition getMoveAnimation(RoleName unitType, List<Coordinate> path, Coordinate currentLocation, Rectangle target) {
         String assetFolder = "src/main/resources/images/units/" + unitType.name() + "/moving/";
-        if (path.length == 0) return null;
-        String[] directions = new String[path.length];
-        directions[0] = getMoveDirection(currentLocation, path[0]);
+        if (path.size() == 0) return null;
+        String[] directions = new String[path.size()];
+        directions[0] = getMoveDirection(currentLocation, path.get(0));
         for (int i = 1; i < directions.length; i++)
-            directions[i] = getMoveDirection(path[i - 1], path[i]);
+            directions[i] = getMoveDirection(path.get(i - 1), path.get(i));
         SequentialTransition moveTransition = new SequentialTransition();
         Pair<Double, Double> originalPosition = new Pair<>(target.getLayoutX(), target.getLayoutY());
         for (int i = 0; i < directions.length; i++) {
-            Pair<Double, Double> targetPosition = ExtendedBlock.getCenterOfBlockForUnits(path[i].row, path[i].column, target.getWidth(), target.getHeight());
-            SpriteTransition spriteTransition = new SpriteTransition(
+            Pair<Double, Double> targetPosition = ExtendedBlock.getCenterOfBlockForUnits(path.get(i).row, path.get(i).column, target.getWidth(), target.getHeight());
+            UnitMoveTransition unitMoveTransition = new UnitMoveTransition(
+                    (MilitaryUnitRole) Role.getRoleByName(unitType),
                     assetFolder + directions[i],
                     targetPosition.getKey() - originalPosition.getKey(),
                     targetPosition.getValue() - originalPosition.getValue(),
@@ -42,7 +47,7 @@ public class CommonGFXActions {
                     Duration.millis(3000),
                     target);
             originalPosition = targetPosition;
-            moveTransition.getChildren().add(spriteTransition);
+            moveTransition.getChildren().add(unitMoveTransition);
         }
         return moveTransition;
     }

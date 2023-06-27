@@ -6,11 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
+import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 
 import java.io.File;
 import java.util.Objects;
 
-public class SpriteTransition extends Transition {
+public class UnitMoveTransition extends Transition {
     private static final int SPRITE_CHANGE_RATE = 2;
     private final ImagePattern[] sprites;
     private final Shape target;
@@ -19,7 +20,7 @@ public class SpriteTransition extends Transition {
     private final double originalX;
     private final double originalY;
 
-    public SpriteTransition(String assetFolderAddress, double xDiff, double yDiff, double originalX, double originalY, Duration duration, Shape target) {
+    public UnitMoveTransition(MilitaryUnitRole militaryUnitRole, String assetFolderAddress, double xDiff, double yDiff, double originalX, double originalY, Duration duration, Shape target) {
         this.target = target;
         this.xDiff = xDiff;
         this.yDiff = yDiff;
@@ -35,8 +36,7 @@ public class SpriteTransition extends Transition {
         setCycleDuration(duration);
         setInterpolator(Interpolator.LINEAR);
         setCycleCount(1);
-
-        setOnFinished(actionEvent -> target.setFill(sprites[0]));
+        setOnFinished(actionEvent -> target.setFill(new ImagePattern(militaryUnitRole.getRoleDefaultImage())));
     }
 
     @Override

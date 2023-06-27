@@ -42,7 +42,7 @@ public abstract class MilitaryUnit extends Unit {
         bodyGraphics.setFill(null);
         // TODO: change assets based on state
         // idle animation
-        bodyGraphics.setFill(new ImagePattern(((MilitaryUnitRole) getRole()).getRoleListImage()));
+        bodyGraphics.setFill(new ImagePattern(((MilitaryUnitRole) getRole()).getRoleDefaultImage()));
         // positioning and size
         ImagePattern paint = (ImagePattern) bodyGraphics.getFill();
         double heightToWidthRatio = paint.getImage().getHeight() / paint.getImage().getWidth();

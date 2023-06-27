@@ -14,7 +14,6 @@ import org.example.model.game.buildings.buildingconstants.PopularityIncreasingBu
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Node;
-import org.example.model.game.units.MilitaryPerson;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.SiegeEquipment;
 import org.example.model.game.units.Unit;
@@ -22,6 +21,7 @@ import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.MilitaryUnitStance;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.model.game.units.unitconstants.WorkerRole;
+import org.example.view.CommonGFXActions;
 import org.example.view.MountEquipmentMenu;
 import org.example.view.enums.messages.GameMenuMessages;
 
@@ -347,7 +347,9 @@ public class GameMenuController {
         if (path == null) return;
         int movesLeft;
         Building building;
-        unit.setPosition(path.get((movesLeft = Math.min(moveCount, path.size())) - 1));
+        int lastIndex = (movesLeft = Math.min(moveCount, path.size())) - 1;
+        CommonGFXActions.getMoveAnimation(unit.getRole().getName(), path.subList(0, lastIndex+1), unit.getPosition(), unit.getBodyGraphics()).play();
+        unit.setPosition(path.get(lastIndex));
         for (int i = 0; i < movesLeft - 1; i++) {
             building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(path.get(i)).getBuilding();
             if (building != null && building.getBuildingType().getName() == BuildingTypeName.KILLING_PIT) {

@@ -10,7 +10,7 @@ public abstract class MilitaryUnitRole extends Role {
     private final Quality attackRange;
     private final Quality accuracy;
     private final int cost;
-    private final Image listImage;
+    private final Image defaultImage;
 
     protected MilitaryUnitRole(RoleName name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost) {
         super(name, maxHitPoint, speed);
@@ -18,7 +18,7 @@ public abstract class MilitaryUnitRole extends Role {
         this.attackRange = attackRange;
         this.accuracy = accuracy;
         this.cost = cost;
-        listImage = new Image(RoleName.class.getResource("/images/units/list/" + name.name() + ".png").toExternalForm());
+        defaultImage = new Image(RoleName.class.getResource("/images/units/default/" + name.name() + ".png").toExternalForm());
     }
 
     public Quality getAttackRating() {
@@ -48,7 +48,7 @@ public abstract class MilitaryUnitRole extends Role {
         return count;
     }
 
-    public Image getRoleListImage() {
-        return listImage;
+    public Image getRoleDefaultImage() {
+        return defaultImage;
     }
 }
