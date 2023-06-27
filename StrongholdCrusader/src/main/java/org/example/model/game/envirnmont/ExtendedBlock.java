@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Pair;
 import org.example.controller.CustomizeMapController;
 import org.example.controller.GameMenuController;
 import org.example.model.game.RockType;
@@ -14,12 +15,11 @@ import org.example.view.GameMenuGFXController;
 import org.example.view.enums.messages.CustomizeMapMessages;
 import org.example.view.enums.messages.GameMenuMessages;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ExtendedBlock {
-    private static final double WIDTH = 100;
-    private static final double HEIGHT = 50;
+    private static final double WIDTH = 200;
+    private static final double HEIGHT = 100;
     private static double x0;
     private static final HashMap<BlockTexture, ImagePattern> textureImageMap;
     private static final HashMap<TreeType, ImagePattern> treeImageMap;
@@ -65,6 +65,10 @@ public class ExtendedBlock {
 
     public static double getHeight() {
         return HEIGHT;
+    }
+
+    public static Pair<Double, Double> getCenterOfBlockForUnits(int row, int column, double unitWidth, double unitHeight) {
+        return new Pair<>(WIDTH / 2 * (column - row + 1) + x0 - unitWidth / 2, HEIGHT / 2 * (row + column + 2.5) - unitHeight);
     }
 
     public Block getBlock() {

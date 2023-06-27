@@ -2,6 +2,7 @@ package org.example.model.game.units;
 
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Pair;
 import org.example.model.Stronghold;
 import org.example.model.game.Government;
 import org.example.model.game.Moat;
@@ -24,7 +25,7 @@ public abstract class MilitaryUnit extends Unit {
     private boolean onPatrol;
     private Moat moatAboutToBeDug;
     private Moat moatAboutToBeFilled;
-    private Rectangle bodyGraphics;
+    private final Rectangle bodyGraphics;
 
     public MilitaryUnit(Coordinate position, RoleName role, Government government) {
         super(position, role, government);
@@ -45,13 +46,17 @@ public abstract class MilitaryUnit extends Unit {
         // positioning and size
         ImagePattern paint = (ImagePattern) bodyGraphics.getFill();
         double heightToWidthRatio = paint.getImage().getHeight() / paint.getImage().getWidth();
-        bodyGraphics.setWidth(WIDTH / 6);
-        bodyGraphics.setHeight(heightToWidthRatio * WIDTH / 6);
-        bodyGraphics.relocate(
-                WIDTH / 2 * (getPosition().column - getPosition().row + 1) + x0 - bodyGraphics.getWidth() / 2,
-                HEIGHT / 2 * (getPosition().row + getPosition().column + 2.5) - bodyGraphics.getHeight());
+        bodyGraphics.setWidth(WIDTH / 4);
+        bodyGraphics.setHeight(heightToWidthRatio * WIDTH / 4);
+        Pair<Double, Double> centerPosition = ExtendedBlock.getCenterOfBlockForUnits(getPosition().row, getPosition().column, bodyGraphics.getWidth(), bodyGraphics.getHeight());
+        bodyGraphics.relocate(centerPosition.getKey(), centerPosition.getValue());
         bodyGraphics.setMouseTransparent(true);
         bodyGraphics.setPickOnBounds(false);
+        return bodyGraphics;
+    }
+
+    // TODO: remove later
+    public Rectangle getBodyGraphics() {
         return bodyGraphics;
     }
 

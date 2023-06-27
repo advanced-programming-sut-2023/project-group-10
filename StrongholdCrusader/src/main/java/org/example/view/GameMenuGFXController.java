@@ -1,6 +1,6 @@
 package org.example.view;
 
-import javafx.event.EventHandler;
+import javafx.animation.Transition;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,7 +8,6 @@ import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
@@ -59,6 +58,7 @@ public class GameMenuGFXController {
     private LinkedList<ExtendedBlock> selectedBlocks;
     private HashMap<RoleName, Integer> selectedRoleCountMap;
     private BuildingTypeName buildingTypeName;
+    private ExtendedBlock[][] mapView;
 
     public void prepareGame(Stage stage) {
         GameMenuGFXController.stage = stage;
@@ -92,6 +92,14 @@ public class GameMenuGFXController {
 
         selectedBlocks = new LinkedList<>();
         selectedRoleCountMap = new HashMap<>();
+
+        // TODO: delete test for movement animation
+        turnPane.setOnMouseClicked(mouseEvent -> {
+            mapView[2][2].dropUnit(new Coordinate(2, 2), RoleName.ARCHER, 1);
+            Rectangle target = mapView[2][2].getBlock().getAllMilitaryUnits().get(0).getBodyGraphics();
+            Transition tim = CommonGFXActions.getMoveAnimation(RoleName.ARCHER, new Coordinate[]{new Coordinate(2, 3), new Coordinate(3, 3), new Coordinate(4, 3)}, new Coordinate(2, 2), target);
+            tim.play();
+        });
     }
 
     @FXML
@@ -150,7 +158,7 @@ public class GameMenuGFXController {
     private void initializeMapView() {
         CommonGFXActions.setMapScrollPaneProperties(mapBox);
         org.example.model.game.envirnmont.Map gameMap = Stronghold.getCurrentBattle().getBattleMap();
-        ExtendedBlock[][] mapView = gameMap.getBlocksGraphics();
+        mapView = gameMap.getBlocksGraphics();
         for (int i = 0; i < mapView.length; i++) {
             for (int j = 0; j < mapView.length; j++) {
                 Polygon blockView = mapView[i][j].getBlockView();
@@ -179,14 +187,15 @@ public class GameMenuGFXController {
                     }
                 });
                 blockView.setOnDragOver(dragEvent -> {
-                    if(dragEvent.getGestureSource() != blockView && dragEvent.getDragboard().hasString())
+                    if (dragEvent.getGestureSource() != blockView && dragEvent.getDragboard().hasString())
                         dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                     dragEvent.consume();
                 });
                 blockView.setOnDragDropped(dragEvent -> {
-                    Dragboard db = dragEvent.getDragboard();;
-                    if(db.hasString()){
-                        ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
+                    Dragboard db = dragEvent.getDragboard();
+                    ;
+                    if (db.hasString()) {
+                        ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
                         extendedBlock.setBuilding(coordinate, buildingTypeName);
                         Popup popup = buildingDetails(coordinate, buildingTypeName);
                         extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
@@ -197,8 +206,7 @@ public class GameMenuGFXController {
                         extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
                         if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
                             scrollPaneContent.getChildren().add(extendedBlock.getObject());
-                    }
-                    else dragEvent.setDropCompleted(false);
+                    } else dragEvent.setDropCompleted(false);
                     dragEvent.consume();
                 });
             }
@@ -208,7 +216,7 @@ public class GameMenuGFXController {
     }
 
     private void switchSelectionState(Coordinate coordinate) {
-        ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
+        ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
         if (selectedBlocks.contains(extendedBlock)) {
             unselectBlockView(extendedBlock);
             selectedBlocks.remove(extendedBlock);
@@ -230,6 +238,7 @@ public class GameMenuGFXController {
 
     private void updateSelectedBlocksPane() {
         selectedTroopsInfoPane.getChildren().clear();
+        selectedRoleCountMap.clear();
         for (ExtendedBlock selectedBlock : selectedBlocks) {
             ArrayList<MilitaryUnit> selectedUnits = selectedBlock.getBlock().getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
             for (MilitaryUnit selectedUnit : selectedUnits)
