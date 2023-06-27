@@ -1,5 +1,6 @@
 package org.example.view;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,6 +8,9 @@ import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -169,23 +173,33 @@ public class GameMenuGFXController {
                     }
                 });
                 blockView.setOnMouseClicked(mouseEvent -> {
-                    if (buildingTypeName != null) {
+                    if (selectionStartCoordinate != null) {
+                        switchSelectionState(selectionStartCoordinate);
+                        selectionStartCoordinate = null;
+                    }
+                });
+                blockView.setOnDragOver(dragEvent -> {
+                    if(dragEvent.getGestureSource() != blockView && dragEvent.getDragboard().hasString())
+                        dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                    dragEvent.consume();
+                });
+                blockView.setOnDragDropped(dragEvent -> {
+                    Dragboard db = dragEvent.getDragboard();;
+                    if(db.hasString()){
                         ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
                         extendedBlock.setBuilding(coordinate, buildingTypeName);
                         Popup popup = buildingDetails(coordinate, buildingTypeName);
                         extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
-                            popup.setAnchorX(mouseEvent1.getSceneX() + 5);
-                            popup.setAnchorY(mouseEvent.getSceneY() + 5);
+                            popup.setAnchorX(dragEvent.getSceneX() + 5);
+                            popup.setAnchorY(dragEvent.getSceneY() + 5);
                             popup.show(stage);
                         });
                         extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
                         if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
                             scrollPaneContent.getChildren().add(extendedBlock.getObject());
                     }
-                    if (selectionStartCoordinate != null) {
-                        switchSelectionState(selectionStartCoordinate);
-                        selectionStartCoordinate = null;
-                    }
+                    else dragEvent.setDropCompleted(false);
+                    dragEvent.consume();
                 });
             }
         }

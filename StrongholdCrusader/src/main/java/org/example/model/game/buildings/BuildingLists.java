@@ -5,6 +5,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,7 +34,11 @@ public class BuildingLists {
     public static final ListView<VBox> industryBuildings = setBuildingBox(BuildingCategory.INDUSTRY);
     public static final ListView<VBox> foodProcessingBuildings = setBuildingBox(BuildingCategory.FOOD_PROCESSING);
     public static final ListView<VBox> unknown = setBuildingBox(BuildingCategory.UNKNOWN);
+    private static BuildingTypeName selectedBuilding;
 
+    public static BuildingTypeName getSelectedBuilding() {
+        return selectedBuilding;
+    }
 
     private static ListView<VBox> allBuildingsCreator() {
         ListView<VBox> listView = new ListView<>();
@@ -49,6 +57,17 @@ public class BuildingLists {
                 popup.setAnchorY(mouseEvent.getSceneY() + 2);
                 popup.show(GameMenuGFXController.stage);
             });
+            circle.setOnDragDetected(mouseEvent -> {
+                Dragboard db = circle.startDragAndDrop(TransferMode.ANY);
+                ClipboardContent content = new ClipboardContent();
+                content.putString("circle drag detected");
+                db.setContent(content);
+                ImagePattern imagePattern = (ImagePattern) circle.getFill();
+                Image image = imagePattern.getImage();
+                db.setDragView(new Image(image.getUrl(), 40, 40, false, false));
+                selectedBuilding = buildingTypeName;
+            });
+            circle.setOnMouseDragged(mouseEvent -> mouseEvent.setDragDetect(true));
             circle.setOnMouseExited(mouseEvent -> popup.hide());
         }
         return listView;
