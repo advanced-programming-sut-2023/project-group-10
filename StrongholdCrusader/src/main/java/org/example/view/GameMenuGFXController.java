@@ -61,34 +61,43 @@ public class GameMenuGFXController {
         scrollPaneContent = Stronghold.getMapGroupGFX();
         System.out.println(stage.getHeight());
         controlBox.setPrefHeight(400);
+
         mapBox.setPrefWidth(stage.getWidth() * 5 / 6);
         mapBox.setPrefHeight(stage.getHeight() - controlBox.getPrefHeight());
-        turnPane.setPrefWidth(stage.getWidth() / 6);
-        turnPane.setPrefHeight(mapBox.getPrefHeight());
-        currentPlayerAvatar.setWidth(turnPane.getPrefWidth() / 2);
-        currentPlayerAvatar.setHeight(turnPane.getPrefWidth() / 2);
         initializeMapView();
-        initializeControls();
-        buildingBox.setPrefWidth(stage.getWidth() * 4 / 6);
+
         miniMapBox.setPrefWidth(400);
         miniMapBox.setPrefHeight(400);
         miniMapBox.setStyle("-fx-background-color: DARKKHAKI");
         initializeMiniMap();
-        infoBox.setPrefWidth(stage.getWidth() - buildingBox.getPrefWidth() - miniMapBox.getPrefWidth());
-        infoBox.setStyle("-fx-background-color: #ee9a73");
+
+
+        buildingBox.setPrefWidth(stage.getWidth() * 4 / 6);
         buildingBox.getItems().addAll(BuildingLists.allBuildings.getItems());
+
+        controlButtonsBar.setPrefWidth(60);
+        initializeControlButtons();
+
+        turnPane.setPrefWidth(stage.getWidth() - miniMapBox.getPrefWidth() - controlButtonsBar.getPrefWidth() - buildingBox.getPrefWidth());
+        turnPane.setPrefHeight(mapBox.getPrefHeight());
+        currentPlayerAvatar.setWidth(turnPane.getPrefWidth() / 2);
+        currentPlayerAvatar.setHeight(turnPane.getPrefWidth() / 2);
+        initializeInfoPane();
+
+        infoBox.setPrefWidth(turnPane.getPrefWidth());
+        infoBox.setStyle("-fx-background-color: #ee9a73");
+
         selectedBlocks = new LinkedList<>();
         selectedRoleCountMap = new HashMap<>();
     }
 
     @FXML
     public void initialize() {
-        Rectangle book=new Rectangle(90,77);
+        Rectangle book = new Rectangle(90, 77);
         book.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/book.jpeg")).toString())));
         bookImage.getChildren().add(book);
         edge.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/edge.png")).toString())));
         scribeDetails();
-        initializeControlButtons();
         int popularity = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().get();
         faceImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                 ("/images/faces/face" + popularity / 10 + ".png")).toString())));
@@ -113,24 +122,24 @@ public class GameMenuGFXController {
     }
 
     private void scribeDetails() {
-        VBox fields=new VBox();
+        VBox fields = new VBox();
         fields.setSpacing(3);
-        Text popularity=new Text("   "+ Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().getValue());
-        popularity.setFont(new Font("PT Mono",14));
+        Text popularity = new Text("   " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().getValue());
+        popularity.setFont(new Font("PT Mono", 14));
         popularity.setTextAlignment(TextAlignment.CENTER);
         popularity.setRotate(15);
-        Text golds=new Text(" "+ Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold());
-        golds.setFont(new Font("PT Mono",11));
+        Text golds = new Text(" " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold());
+        golds.setFont(new Font("PT Mono", 11));
         golds.setTextAlignment(TextAlignment.CENTER);
         golds.setRotate(15);
-        Text population=new Text(" "+Double.toString(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasants().size()));
-        population.setFont(new Font("PT Mono",11));
+        Text population = new Text(" " + Double.toString(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasants().size()));
+        population.setFont(new Font("PT Mono", 11));
         population.setTextAlignment(TextAlignment.CENTER);
         population.setRotate(15);
-        fields.getChildren().addAll(popularity,golds,population);
-        System.out.println(popularity.getText()+"  "+population.getText()+" "+golds.getText());
-        if (bookImage.getChildren().size()>1)
-            bookImage.getChildren().remove(bookImage.getChildren().size()-1);
+        fields.getChildren().addAll(popularity, golds, population);
+        System.out.println(popularity.getText() + "  " + population.getText() + " " + golds.getText());
+        if (bookImage.getChildren().size() > 1)
+            bookImage.getChildren().remove(bookImage.getChildren().size() - 1);
         bookImage.getChildren().add(fields);
 
     }
@@ -232,7 +241,7 @@ public class GameMenuGFXController {
         return result;
     }
 
-    private void initializeControls() {
+    private void initializeInfoPane() {
         // TODO: add other initialization processes (state of troops, resources, ...)
         updateCurrentPlayerInfo();
     }

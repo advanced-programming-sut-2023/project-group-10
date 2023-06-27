@@ -39,11 +39,11 @@
                 <Button text="Miscellaneous" onMouseClicked="#unknown"/>
             </HBox>
         </VBox>
+        <Pane fx:id="controlButtonsBar">
+        </Pane>
         <Pane fx:id="miniMapBox">
         </Pane>
         <HBox fx:id="infoBox">
-            <Pane fx:id="controlButtonsBar">
-            </Pane>
             <VBox>
                 <Rectangle fx:id="faceImage" width="110" height="81.1" translateX="16" translateY="6"/>
                 <Pane fx:id="bookImage" prefWidth="90" prefHeight="77" translateX="30" translateY="3"/>
