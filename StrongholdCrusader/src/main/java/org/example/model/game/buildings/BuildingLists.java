@@ -77,7 +77,6 @@ public class BuildingLists {
         ListView<VBox> listView = new ListView<>();
         ArrayList<BuildingType> buildings = new ArrayList<>();
         for (BuildingTypeName buildingTypeName : BuildingTypeName.values()) {
-            if (BuildingType.getBuildingTypeByName(buildingTypeName) == null) continue; //TODO delete this line
             if (BuildingType.getBuildingTypeByName(buildingTypeName).getCategory().equals(category))
                 buildings.add(BuildingType.getBuildingTypeByName(buildingTypeName));
         }
@@ -99,6 +98,17 @@ public class BuildingLists {
                 popup.show(GameMenuGFXController.stage);
             });
             circle.setOnMouseExited(mouseEvent -> popup.hide());
+            circle.setOnDragDetected(mouseEvent -> {
+                Dragboard db = circle.startDragAndDrop(TransferMode.ANY);
+                ClipboardContent content = new ClipboardContent();
+                content.putString("circle drag detected");
+                db.setContent(content);
+                ImagePattern imagePattern = (ImagePattern) circle.getFill();
+                Image image = imagePattern.getImage();
+                db.setDragView(new Image(image.getUrl(), 40, 40, false, false));
+                selectedBuilding = buildingType.getName();
+            });
+            circle.setOnMouseDragged(mouseEvent -> mouseEvent.setDragDetect(true));
         }
         return listView;
     }

@@ -5,13 +5,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -26,19 +26,23 @@ import org.example.controller.MapMenuController;
 import org.example.controller.UnitMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.BuildingLists;
+import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.RoleName;
+import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.*;
 
 public class GameMenuGFXController {
     public ScrollPane mapBox;
     public Pane controlButtonsBar;
+    public VBox copiedBuilding;
     private VBox buttons = new VBox();
     private Group scrollPaneContent;
     public BorderPane turnPane;
@@ -59,7 +63,7 @@ public class GameMenuGFXController {
     private LinkedList<ExtendedBlock> selectedBlocks;
     private HashMap<RoleName, Integer> selectedRoleCountMap;
     private LinkedList<Label> selectedUnitsLabels;
-    private BuildingTypeName buildingTypeName;
+    private BuildingTypeName selectedBuilding;
     private ExtendedBlock[][] mapView;
     private boolean deleteMode=false;
 
@@ -120,12 +124,19 @@ public class GameMenuGFXController {
             scribeDetails();
         });
         faceImage.setOnMouseClicked(mouseEvent -> popularityFactors());
-        buildingBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            if (newValue != null) {
-                Label label = (Label) newValue.getChildren().get(1);
-                String string = label.getText().replaceAll(" ", "_");
-                buildingTypeName = BuildingTypeName.getBuildingTypeNameByNameString(string);
-            } else buildingTypeName = null;
+        mapBox.setOnKeyPressed(keyEvent -> {
+            if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.C) && selectedBuilding != null){
+                Circle circle = new Circle(40, new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.
+                        class.getResource("/images/buildings/" + selectedBuilding.name() + ".png")).toString())));
+                Label label = new Label(selectedBuilding.name().replaceAll("_", " "));
+                if(copiedBuilding.getChildren().size() == 3){
+                    copiedBuilding.getChildren().remove(2);
+                    copiedBuilding.getChildren().remove(1);
+                }
+                copiedBuilding.getChildren().add(circle);
+                copiedBuilding.getChildren().add(label);
+                copiedBuilding.setVisible(true);
+            }
         });
     }
 
@@ -303,14 +314,25 @@ public class GameMenuGFXController {
                     ;
                     if (db.hasString()) {
                         ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
-                        extendedBlock.setBuilding(coordinate, buildingTypeName);
-                        Popup popup = buildingDetails(coordinate, buildingTypeName);
-                        extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
-                            popup.setAnchorX(dragEvent.getSceneX() + 5);
-                            popup.setAnchorY(dragEvent.getSceneY() + 5);
-                            popup.show(stage);
-                        });
-                        extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
+                        if(extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding()) != GameMenuMessages.SUCCESSFUL_DROP) return;
+                        Popup popup = buildingDetails(coordinate);
+                        if(extendedBlock.getBlock().getBuilding() != null) {
+                            extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
+                                popup.setAnchorX(dragEvent.getSceneX() + 5);
+                                popup.setAnchorY(dragEvent.getSceneY() + 5);
+                                popup.show(stage);
+                            });
+                            extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
+                            extendedBlock.getObject().setOnMouseClicked(mouseEvent -> {
+                                if (selectedBuilding == null) {
+                                    selectedBuilding = extendedBlock.getBlock().getBuilding().getBuildingType().getName();
+                                    extendedBlock.getObject().setBlendMode(BlendMode.COLOR_DODGE);
+                                } else {
+                                    selectedBuilding = null;
+                                    extendedBlock.getObject().setBlendMode(null);
+                                }
+                            });
+                        }
                         if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
                             scrollPaneContent.getChildren().add(extendedBlock.getObject());
                     } else dragEvent.setDropCompleted(false);
@@ -384,12 +406,13 @@ public class GameMenuGFXController {
         updateCurrentPlayerInfo();
     }
 
-    private static Popup buildingDetails(Coordinate coordinate, BuildingTypeName buildingTypeName) {
+    private static Popup buildingDetails(Coordinate coordinate) {
         Popup popup = new Popup();
         VBox vBox = new VBox();
+        Building building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(coordinate).getBuilding();
         String string = "coordinate: (" + coordinate.row + "," + coordinate.column + ")";
-        string += "\nbuilding type: " + buildingTypeName.name();
-        string += "\nhitpoint: " + Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(coordinate.row, coordinate.column).getBuilding().getHitPoint();
+        string += "\nbuilding type: " + building.getBuildingType().getName().name();
+        string += "\nhitpoint: " + building.getHitPoint();
         Text text = new Text(string);
         vBox.getChildren().add(text);
         popup.getContent().add(vBox);

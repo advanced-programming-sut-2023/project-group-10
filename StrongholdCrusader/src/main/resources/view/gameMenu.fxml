@@ -21,6 +21,9 @@
                             alignment="CENTER"/>
                     <VBox fx:id="selectedTroopsInfoPane">
                     </VBox>
+                    <VBox fx:id="copiedBuilding" visible="false" alignment="CENTER" spacing="5">
+                        <Label text="Copied Building"/>
+                    </VBox>
                 </VBox>
             </center>
         </BorderPane>
