@@ -1,5 +1,6 @@
 package org.example.view;
 
+import javafx.animation.Transition;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -58,6 +59,7 @@ public class GameMenuGFXController {
     private LinkedList<ExtendedBlock> selectedBlocks;
     private HashMap<RoleName, Integer> selectedRoleCountMap;
     private BuildingTypeName buildingTypeName;
+    private ExtendedBlock[][] mapView;
 
     public void prepareGame(Stage stage) {
         GameMenuGFXController.stage = stage;
@@ -92,6 +94,14 @@ public class GameMenuGFXController {
 
         selectedBlocks = new LinkedList<>();
         selectedRoleCountMap = new HashMap<>();
+
+        // TODO: delete test for movement animation
+        turnPane.setOnMouseClicked(mouseEvent -> {
+            mapView[2][2].dropUnit(new Coordinate(2, 2), RoleName.ARCHER, 1);
+            Rectangle target = mapView[2][2].getBlock().getAllMilitaryUnits().get(0).getBodyGraphics();
+            Transition tim = CommonGFXActions.getMoveAnimation(RoleName.ARCHER, new Coordinate[]{new Coordinate(2, 3), new Coordinate(3, 3), new Coordinate(4, 3)}, new Coordinate(2, 2), target);
+            tim.play();
+        });
     }
 
     @FXML
@@ -136,21 +146,21 @@ public class GameMenuGFXController {
         options.setHeight(40);
         options.setOnMouseClicked(this::selectOptionsFromMenuBar);
 
-        Rectangle briefing= new Rectangle();
+        Rectangle briefing = new Rectangle();
         briefing.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                 ("/images/controlbuttons/briefing0.png")).toString())));
         briefing.setWidth(40);
         briefing.setHeight(40);
         briefing.setOnMouseClicked(this::selectBriefingFromMenuBar);
 
-        Rectangle delete= new Rectangle();
+        Rectangle delete = new Rectangle();
         delete.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                 ("/images/controlbuttons/delete1.png")).toString())));
         delete.setWidth(40);
         delete.setHeight(40);
         delete.setOnMouseClicked(this::selectDeleteFromMenuBar);
 
-        Rectangle undo= new Rectangle();
+        Rectangle undo = new Rectangle();
         undo.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                 ("/images/controlbuttons/undo0.png")).toString())));
         undo.setWidth(40);
@@ -159,7 +169,7 @@ public class GameMenuGFXController {
 
         buttons.setSpacing(40);
         buttons.setAlignment(Pos.CENTER);
-        buttons.getChildren().addAll(options,briefing,delete,undo);
+        buttons.getChildren().addAll(options, briefing, delete, undo);
 
         controlButtonsBar.getChildren().add(buttons);
 
@@ -185,8 +195,8 @@ public class GameMenuGFXController {
         //TODO
     }
 
-    private void selectButtonFromBar(int index){
-        ImagePattern []unselected={
+    private void selectButtonFromBar(int index) {
+        ImagePattern[] unselected = {
                 (new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                         ("/images/controlbuttons/options0.png")).toString()))),
                 (new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
@@ -196,7 +206,7 @@ public class GameMenuGFXController {
                 (new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                         ("/images/controlbuttons/undo0.png")).toString()))),
         };
-        ImagePattern []selected={
+        ImagePattern[] selected = {
                 (new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                         ("/images/controlbuttons/options1.png")).toString()))),
                 (new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
@@ -206,16 +216,16 @@ public class GameMenuGFXController {
                 (new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                         ("/images/controlbuttons/undo1.png")).toString()))),
         };
-        for(int i=0; i<buttons.getChildren().size();i++){
+        for (int i = 0; i < buttons.getChildren().size(); i++) {
             ((Rectangle) buttons.getChildren().get(i)).setFill(unselected[i]);
         }
-        if (index==-1)
+        if (index == -1)
             return;
         ((Rectangle) buttons.getChildren().get(index)).setFill(selected[index]);
 
     }
 
-    private void unselectAll(){
+    private void unselectAll() {
         selectButtonFromBar(-1);
     }
 
@@ -245,7 +255,7 @@ public class GameMenuGFXController {
     private void initializeMapView() {
         CommonGFXActions.setMapScrollPaneProperties(mapBox);
         org.example.model.game.envirnmont.Map gameMap = Stronghold.getCurrentBattle().getBattleMap();
-        ExtendedBlock[][] mapView = gameMap.getBlocksGraphics();
+        mapView = gameMap.getBlocksGraphics();
         for (int i = 0; i < mapView.length; i++) {
             for (int j = 0; j < mapView.length; j++) {
                 Polygon blockView = mapView[i][j].getBlockView();
@@ -274,14 +284,15 @@ public class GameMenuGFXController {
                     }
                 });
                 blockView.setOnDragOver(dragEvent -> {
-                    if(dragEvent.getGestureSource() != blockView && dragEvent.getDragboard().hasString())
+                    if (dragEvent.getGestureSource() != blockView && dragEvent.getDragboard().hasString())
                         dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
                     dragEvent.consume();
                 });
                 blockView.setOnDragDropped(dragEvent -> {
-                    Dragboard db = dragEvent.getDragboard();;
-                    if(db.hasString()){
-                        ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
+                    Dragboard db = dragEvent.getDragboard();
+                    ;
+                    if (db.hasString()) {
+                        ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
                         extendedBlock.setBuilding(coordinate, buildingTypeName);
                         Popup popup = buildingDetails(coordinate, buildingTypeName);
                         extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
@@ -292,8 +303,7 @@ public class GameMenuGFXController {
                         extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
                         if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
                             scrollPaneContent.getChildren().add(extendedBlock.getObject());
-                    }
-                    else dragEvent.setDropCompleted(false);
+                    } else dragEvent.setDropCompleted(false);
                     dragEvent.consume();
                 });
             }
@@ -303,7 +313,7 @@ public class GameMenuGFXController {
     }
 
     private void switchSelectionState(Coordinate coordinate) {
-        ExtendedBlock extendedBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(coordinate);
+        ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
         if (selectedBlocks.contains(extendedBlock)) {
             unselectBlockView(extendedBlock);
             selectedBlocks.remove(extendedBlock);
@@ -325,6 +335,7 @@ public class GameMenuGFXController {
 
     private void updateSelectedBlocksPane() {
         selectedTroopsInfoPane.getChildren().clear();
+        selectedRoleCountMap.clear();
         for (ExtendedBlock selectedBlock : selectedBlocks) {
             ArrayList<MilitaryUnit> selectedUnits = selectedBlock.getBlock().getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
             for (MilitaryUnit selectedUnit : selectedUnits)
