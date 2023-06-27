@@ -173,7 +173,7 @@ public class ItemDetailMenuController {
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent e) {
                         if (!popup.isShowing())
-                            popup.show(SignupMenu.stage);
+                            popup.show(ShopMenuGFX.stage);
                     }
                 };
         sellButton.setOnAction(event);

@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import org.example.controller.GameMenuController;
 import org.example.controller.MapMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
@@ -120,8 +121,9 @@ public class GameMenuGFXController {
         population.setTextAlignment(TextAlignment.CENTER);
         population.setRotate(15);
         fields.getChildren().addAll(popularity,golds,population);
+        System.out.println(popularity.getText()+"  "+population.getText()+" "+golds.getText());
         if (bookImage.getChildren().size()>1)
-            bookImage.getChildren().remove(bookImage.getChildren().size());
+            bookImage.getChildren().remove(bookImage.getChildren().size()-1);
         bookImage.getChildren().add(fields);
 
     }
@@ -426,7 +428,8 @@ public class GameMenuGFXController {
 
     public void goToNextPlayer() {
         // TODO: handle animations and potential bugs
-        Stronghold.getCurrentBattle().goToNextPlayer();
+        scribeDetails();
+        GameMenuController.goToNextPlayer();
         updateCurrentPlayerInfo();
         for (ExtendedBlock selectedBlock : selectedBlocks)
             unselectBlockView(selectedBlock);

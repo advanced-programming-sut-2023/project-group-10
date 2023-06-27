@@ -276,7 +276,7 @@ public class GameMenuController {
     private static void updateFoodCount(Government government) {
         for (Map.Entry<Item, Double> itemIntegerEntry : government.getItemList().entrySet()) {
             if (itemIntegerEntry.getValue() != 0 && itemIntegerEntry.getKey().isFood()) {
-                government.changeItemCount(itemIntegerEntry.getKey(), government.getCitizensCounts() * (government.getFoodRate() + 2) * (0.5));
+                government.changeItemCount(itemIntegerEntry.getKey(), -government.getCitizensCounts() * (government.getFoodRate() + 2) * (0.5));
             }
         }
     }
@@ -295,11 +295,10 @@ public class GameMenuController {
             for (Map.Entry<Item, Double> itemIntegerEntry : government.getFoodList().entrySet()) {
                 if (itemIntegerEntry.getValue() < government.getCitizensCounts() * (government.getFoodRate() + 2) * (0.5)) {
                     government.setFoodRate(government.getFoodRate() - 1);
-                    break;
                 } else break outer;
             }
         }
-        government.changePopularity(government.getFearRate(), "Food");
+        government.changePopularity(government.getFoodRate(), "Food");
     }
 
     private static void modifyTaxRate(Government government) {
@@ -308,7 +307,7 @@ public class GameMenuController {
                 government.setTaxRate(government.getTaxRate() + 1);
             else break;
         }
-        government.changePopularity(government.getTaxRate(), "Tax");
+        government.changePopularity(-government.getTaxRate(), "Tax");
 
     }
 

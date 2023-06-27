@@ -147,8 +147,10 @@ public class TradeRequestMenuController {
         EventHandler<ActionEvent> event =
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent e) {
-                        if (!popup.isShowing())
-                            popup.show(SignupMenu.stage);
+                        if (!popup.isShowing()) {
+                            popup.show(ItemDetailsMenuGFX.stage);
+                            popup.setX(0);
+                        }
                     }
                 };
         submitButton.setOnAction(event);
