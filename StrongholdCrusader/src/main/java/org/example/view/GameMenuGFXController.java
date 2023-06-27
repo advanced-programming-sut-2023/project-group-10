@@ -71,21 +71,20 @@ public class GameMenuGFXController {
         miniMapBox.setStyle("-fx-background-color: DARKKHAKI");
         initializeMiniMap();
 
-
-        buildingBox.setPrefWidth(stage.getWidth() * 4 / 6);
-        buildingBox.getItems().addAll(BuildingLists.allBuildings.getItems());
-
         controlButtonsBar.setPrefWidth(60);
         initializeControlButtons();
 
-        turnPane.setPrefWidth(stage.getWidth() - miniMapBox.getPrefWidth() - controlButtonsBar.getPrefWidth() - buildingBox.getPrefWidth());
+        turnPane.setPrefWidth(stage.getWidth() / 6);
         turnPane.setPrefHeight(mapBox.getPrefHeight());
         currentPlayerAvatar.setWidth(turnPane.getPrefWidth() / 2);
         currentPlayerAvatar.setHeight(turnPane.getPrefWidth() / 2);
-        initializeInfoPane();
+        initializeTurnPane();
 
         infoBox.setPrefWidth(turnPane.getPrefWidth());
         infoBox.setStyle("-fx-background-color: #ee9a73");
+
+        buildingBox.setPrefWidth(stage.getWidth() - controlButtonsBar.getPrefWidth() - miniMapBox.getPrefWidth() - infoBox.getPrefWidth());
+        buildingBox.getItems().addAll(BuildingLists.allBuildings.getItems());
 
         selectedBlocks = new LinkedList<>();
         selectedRoleCountMap = new HashMap<>();
@@ -241,7 +240,7 @@ public class GameMenuGFXController {
         return result;
     }
 
-    private void initializeInfoPane() {
+    private void initializeTurnPane() {
         // TODO: add other initialization processes (state of troops, resources, ...)
         updateCurrentPlayerInfo();
     }
