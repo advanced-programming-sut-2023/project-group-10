@@ -314,12 +314,12 @@ public class GameMenuGFXController {
                     ;
                     if (db.hasString()) {
                         ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
-                        if(extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding()) != GameMenuMessages.SUCCESSFUL_DROP) return;
-                        Popup popup = buildingDetails(coordinate);
+                        extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
                         if(extendedBlock.getBlock().getBuilding() != null) {
+                            Popup popup = buildingDetails(coordinate);
                             extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
-                                popup.setAnchorX(dragEvent.getSceneX() + 5);
-                                popup.setAnchorY(dragEvent.getSceneY() + 5);
+                                popup.setAnchorX(mouseEvent1.getSceneX() + 5);
+                                popup.setAnchorY(mouseEvent1.getSceneY() + 5);
                                 popup.show(stage);
                             });
                             extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
@@ -340,6 +340,7 @@ public class GameMenuGFXController {
                 });
             }
         }
+
         mapBox.setContent(scrollPaneContent);
         mapBox.setHvalue(0.5);
     }
