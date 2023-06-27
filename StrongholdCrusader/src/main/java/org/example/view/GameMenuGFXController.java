@@ -35,6 +35,7 @@ import java.util.*;
 
 public class GameMenuGFXController {
     public ScrollPane mapBox;
+    public Pane controlButtonsBar;
     private Group scrollPaneContent;
     public BorderPane turnPane;
     public Rectangle currentPlayerAvatar;
@@ -87,6 +88,7 @@ public class GameMenuGFXController {
         bookImage.getChildren().add(book);
         edge.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/edge.png")).toString())));
         scribeDetails();
+        initializeControlButtons();
         int popularity = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().get();
         faceImage.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                 ("/images/faces/face" + popularity / 10 + ".png")).toString())));
@@ -103,6 +105,11 @@ public class GameMenuGFXController {
                 buildingTypeName = BuildingTypeName.getBuildingTypeNameByNameString(string);
             } else buildingTypeName = null;
         });
+    }
+
+    private void initializeControlButtons() {
+        controlButtonsBar.setStyle("-fx-background-color: red");
+
     }
 
     private void scribeDetails() {

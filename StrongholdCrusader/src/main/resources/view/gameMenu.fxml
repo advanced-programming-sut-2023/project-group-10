@@ -42,10 +42,11 @@
         <Pane fx:id="miniMapBox">
         </Pane>
         <HBox fx:id="infoBox">
-            <Label text="info"/>
+            <Pane fx:id="controlButtonsBar">
+            </Pane>
             <VBox>
                 <Rectangle fx:id="faceImage" width="110" height="81.1" translateX="16" translateY="6"/>
-                <Pane fx:id="bookImage" prefWidth="90" prefHeight="77" translateX="30" translateY="3"/>\
+                <Pane fx:id="bookImage" prefWidth="90" prefHeight="77" translateX="30" translateY="3"/>
 
             </VBox>
             <Rectangle fx:id="edge" width="120" height="162.2"/>
