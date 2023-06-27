@@ -1,6 +1,7 @@
 package org.example.model.game.envirnmont;
 
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -148,5 +149,9 @@ public class ExtendedBlock {
         setTexture(BlockTexture.EARTH, position);
         object = null;
         return CustomizeMapController.clear(position);
+    }
+
+    public void removeBuilding(){
+        object.setFill(Color.TRANSPARENT);
     }
 }

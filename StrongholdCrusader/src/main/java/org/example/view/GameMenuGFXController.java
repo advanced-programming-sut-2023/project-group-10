@@ -61,6 +61,7 @@ public class GameMenuGFXController {
     private LinkedList<Label> selectedUnitsLabels;
     private BuildingTypeName buildingTypeName;
     private ExtendedBlock[][] mapView;
+    private boolean deleteMode=false;
 
     public void prepareGame(Stage stage) {
         GameMenuGFXController.stage = stage;
@@ -154,7 +155,7 @@ public class GameMenuGFXController {
 
         Rectangle delete = new Rectangle();
         delete.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
-                ("/images/controlbuttons/delete1.png")).toString())));
+                ("/images/controlbuttons/delete0.png")).toString())));
         delete.setWidth(40);
         delete.setHeight(40);
         delete.setOnMouseClicked(this::selectDeleteFromMenuBar);
@@ -181,6 +182,7 @@ public class GameMenuGFXController {
 
     private void selectDeleteFromMenuBar(MouseEvent mouseEvent) {
         selectButtonFromBar(2);
+        deleteMode=true;
 
     }
 
@@ -217,6 +219,7 @@ public class GameMenuGFXController {
         };
         for (int i = 0; i < buttons.getChildren().size(); i++) {
             ((Rectangle) buttons.getChildren().get(i)).setFill(unselected[i]);
+
         }
         if (index == -1)
             return;
@@ -228,6 +231,8 @@ public class GameMenuGFXController {
         selectButtonFromBar(-1);
     }
 
+    private void delete(MouseEvent mouseEvent){
+    }
     private void scribeDetails() {
         VBox fields = new VBox();
         fields.setSpacing(3);
@@ -279,8 +284,14 @@ public class GameMenuGFXController {
                 blockView.setOnMouseClicked(mouseEvent -> {
                     if (selectionStartCoordinate != null) {
                         switchSelectionState(selectionStartCoordinate);
+                        if ( deleteMode){
+                            delete(selectionStartCoordinate);
+                            deleteMode=false;
+                            unselectAll();
+                        }
                         selectionStartCoordinate = null;
                     }
+
                 });
                 blockView.setOnDragOver(dragEvent -> {
                     if (dragEvent.getGestureSource() != blockView && dragEvent.getDragboard().hasString())
@@ -317,6 +328,13 @@ public class GameMenuGFXController {
             selectedBlocks.remove(extendedBlock);
             unselectBlockView(extendedBlock);
         } else selectBlock(extendedBlock);
+    }
+    private void delete(Coordinate coordinate){
+        ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
+        if (extendedBlock.getBlock().getBuilding()==null)
+            return;
+        extendedBlock.getBlock().removeBuilding();
+        extendedBlock.removeBuilding();
     }
 
     private void unselectBlockView(ExtendedBlock extendedBlock) {

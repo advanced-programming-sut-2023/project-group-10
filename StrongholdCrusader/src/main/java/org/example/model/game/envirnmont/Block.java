@@ -153,4 +153,10 @@ public class Block {
         }
         return units;
     }
+
+    public void removeBuilding() {
+        if (this.getBuilding()!=null){
+            this.setDroppable(null);
+        }
+    }
 }
