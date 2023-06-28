@@ -1,8 +1,7 @@
 package org.example.model.game.envirnmont;
 
-import javafx.scene.effect.BlendMode;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -160,7 +159,7 @@ public class ExtendedBlock {
     }
 
     public void removeBuilding() {
-        // TODO: ask mehrazin
-        object.setFill(Color.TRANSPARENT);
+        ((Group) object.getParent()).getChildren().remove(object);
+        object = null;
     }
 }
