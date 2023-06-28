@@ -1,5 +1,6 @@
 package org.example.model.game.units;
 
+import org.example.controller.GameMenuController;
 import org.example.model.Stronghold;
 import org.example.model.game.Entity;
 import org.example.model.game.Government;
@@ -75,8 +76,13 @@ public class Unit extends Entity {
             MilitaryUnit deadUnit = (MilitaryUnit) this;
             CommonGFXActions.getDeathAnimation(deadUnit.getRole(), deadUnit.getBodyGraphics()).play();
         }
-        if (this.getRole().getName() == RoleName.LORD) this.changeHitPoint(-this.getHitPoint());
-        else this.getGovernment().deleteUnit(this);
+        if (this.getRole().getName() == RoleName.LORD) {
+            Government dead = this.getGovernment();
+            GameMenuController.countScore(dead);
+            GameMenuController.removeAllBuildings(dead);
+            GameMenuController.removeAllUnits(dead, true);
+            Stronghold.getCurrentBattle().removeGovernment(dead);
+        } else this.getGovernment().deleteUnit(this);
         Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).removeUnit(this);
     }
 

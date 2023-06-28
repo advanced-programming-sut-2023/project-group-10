@@ -41,6 +41,9 @@ public class GameMenuGFX extends Application {
                 case M:
                     ((GameMenuGFXController) loader.getController()).moveSelectedUnits();
                     break;
+                case A:
+                    ((GameMenuGFXController)loader.getController()).attackSelectedUnits();
+                    break;
             }
         });
     }

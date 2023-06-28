@@ -6,7 +6,6 @@ import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -39,8 +38,9 @@ public class CommonGFXActions {
             directions[i] = getMoveDirection(path.get(i - 1), path.get(i));
         SequentialTransition moveTransition = new SequentialTransition();
         Pair<Double, Double> originalPosition = new Pair<>(target.getLayoutX(), target.getLayoutY());
+        Pair<Double, Double> targetPosition;
         for (int i = 0; i < directions.length; i++) {
-            Pair<Double, Double> targetPosition = ExtendedBlock.getRandomPositioningForUnits(path.get(i).row, path.get(i).column, target.getWidth(), target.getHeight());
+            targetPosition = ExtendedBlock.getRandomPositioningForUnits(path.get(i).row, path.get(i).column, target.getWidth(), target.getHeight());
             UnitMoveTransition unitMoveTransition = new UnitMoveTransition((MilitaryUnitRole) unitType, assetFolder + directions[i], targetPosition.getKey() - originalPosition.getKey(), targetPosition.getValue() - originalPosition.getValue(), originalPosition.getKey(), originalPosition.getValue(), Duration.millis(3000), target);
             originalPosition = targetPosition;
             moveTransition.getChildren().add(unitMoveTransition);
@@ -54,6 +54,7 @@ public class CommonGFXActions {
     }
 
     public static Transition getDeathAnimation(Role unitType, Rectangle targetView) {
+        if (targetView == null) return null;
         String assetFolder = "src/main/resources/images/units/" + unitType.getName().name() + "/dying";
         Transition deathTransition = new UnitSpriteTransition((MilitaryUnitRole) unitType, assetFolder, Duration.millis(2000), targetView);
         deathTransition.setOnFinished(event -> ((Group) targetView.getParent()).getChildren().remove(targetView));

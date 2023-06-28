@@ -13,6 +13,7 @@ import org.example.model.game.buildings.buildingconstants.ItemProducingBuildingT
 import org.example.model.game.buildings.buildingconstants.PopularityIncreasingBuildingType;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.envirnmont.Node;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.SiegeEquipment;
@@ -210,29 +211,21 @@ public class GameMenuController {
         return GameMenuMessages.SUCCESSFUL_DELETE_STRUCTURE;
     }
 
-    private static void removeAllUnits(Government government) {
-        for (int i = 0; i < Stronghold.getCurrentBattle().getBattleMap().getSize(); i++) {
-            for (int j = 0; j < Stronghold.getCurrentBattle().getBattleMap().getSize(); j++) {
-                if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getAllUnits() != null) {
-                    ArrayList<Unit> units = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getAllUnits();
-                    for (Unit unit : units) {
-                        if (unit.getGovernment().equals(government))
-                            Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).removeUnit(unit);
-
-                    }
-                }
-            }
+    public static void removeAllUnits(Government government, boolean exceptLord) {
+        ArrayList<Unit> tempCopy = new ArrayList<>(government.getUnits());
+        for (Unit unit : tempCopy) {
+            if (exceptLord && unit.getRole().getName() == RoleName.LORD) continue;
+            unit.killMe();
         }
     }
 
-    private static void removeAllBuildings(Government government) {
-        for (int i = 0; i < Stronghold.getCurrentBattle().getBattleMap().getSize(); i++) {
-            for (int j = 0; j < Stronghold.getCurrentBattle().getBattleMap().getSize(); j++) {
-                Building building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getBuilding();
-                if (building != null && building.getGovernment().equals(government))
-                    Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).setDroppable(null);
-            }
-        }
+    public static void removeAllBuildings(Government government) {
+        ArrayList<Building> tempCopy = new ArrayList<>(government.getBuildings());
+        for (Building building : tempCopy)
+            building.deleteBuildingFromMapAndGovernment();
+        ExtendedBlock keepBlock=Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(government.getKeep());
+        keepBlock.getBlock().setKeep(null);
+        keepBlock.removeBuilding();
     }
 
     public static GameMenuMessages goToNextPlayer() {
@@ -255,7 +248,7 @@ public class GameMenuController {
         while ((dead = deadLord()) != null) {
             countScore(dead);
             removeAllBuildings(dead);
-            removeAllUnits(dead);
+            removeAllUnits(dead, false);
             Stronghold.getCurrentBattle().removeGovernment(dead);
         }
         if (aliveLords().size() == 1) {
@@ -453,7 +446,7 @@ public class GameMenuController {
         }
     }
 
-    private static void countScore(Government government) {
+    public static void countScore(Government government) {
         government.getOwner().setHighScore(Stronghold.getCurrentBattle().getTurnsPassed() * NumericalEnums.SCORE_CONSTANT.getValue());
     }
 

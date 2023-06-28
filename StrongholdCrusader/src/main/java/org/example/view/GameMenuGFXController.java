@@ -8,7 +8,10 @@ import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.*;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
@@ -28,14 +31,12 @@ import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.BuildingLists;
-import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.RoleName;
-import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.*;
 
@@ -51,7 +52,7 @@ public class GameMenuGFXController {
     public Button nextPlayerButton;
     public VBox selectedTroopsInfoPane;
     public Rectangle faceImage;
-    public  Pane bookImage=new Pane() ;
+    public Pane bookImage = new Pane();
     public Rectangle edge;
     public VBox buildingContainer;
     public HBox controlBox;
@@ -63,9 +64,10 @@ public class GameMenuGFXController {
     private LinkedList<ExtendedBlock> selectedBlocks;
     private HashMap<RoleName, Integer> selectedRoleCountMap;
     private LinkedList<Label> selectedUnitsLabels;
+    private Button unselectButton;
     private BuildingTypeName selectedBuilding;
     private ExtendedBlock[][] mapView;
-    private boolean deleteMode=false;
+    private boolean deleteMode = false;
 
     public void prepareGame(Stage stage) {
         GameMenuGFXController.stage = stage;
@@ -98,6 +100,16 @@ public class GameMenuGFXController {
         buildingBox.setPrefWidth(stage.getWidth() - controlButtonsBar.getPrefWidth() - miniMapBox.getPrefWidth() - infoBox.getPrefWidth());
         buildingBox.getItems().addAll(BuildingLists.allBuildings.getItems());
 
+        unselectButton = new Button("unselect");
+        unselectButton.setOnMouseClicked(mouseEvent -> {
+            selectedTroopsInfoPane.getChildren().clear();
+            selectedUnitsLabels.clear();
+            for (ExtendedBlock selectedBlock : selectedBlocks)
+                selectedBlock.getBlockView().setStroke(null);
+            selectedRoleCountMap.clear();
+            selectedBlocks.clear();
+        });
+
         selectedBlocks = new LinkedList<>();
         selectedRoleCountMap = new HashMap<>();
         selectedUnitsLabels = new LinkedList<>();
@@ -125,23 +137,22 @@ public class GameMenuGFXController {
         });
         faceImage.setOnMouseClicked(mouseEvent -> popularityFactors());
         mapBox.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.C) && selectedBuilding != null){
+            if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.C) && selectedBuilding != null) {
                 Circle circle = new Circle(40, new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.
                         class.getResource("/images/buildings/" + selectedBuilding.name() + ".png")).toString())));
                 Label label = new Label(selectedBuilding.name().replaceAll("_", " "));
-                if(copiedBuilding.getChildren().size() == 3){
+                if (copiedBuilding.getChildren().size() == 3) {
                     copiedBuilding.getChildren().remove(2);
                     copiedBuilding.getChildren().remove(1);
                 }
                 copiedBuilding.getChildren().add(circle);
                 copiedBuilding.getChildren().add(label);
                 copiedBuilding.setVisible(true);
-            }
-            else if(keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.V) && copiedBuilding.getChildren().size() == 3 && selectedBlocks.size() == 1){
+            } else if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.V) && copiedBuilding.getChildren().size() == 3 && selectedBlocks.size() == 1) {
                 Coordinate coordinate = Stronghold.getCurrentBattle().getBattleMap().getPolygonCoordinateMap().get(selectedBlocks.get(0).getBlockView());
                 ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
                 extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
-                if(extendedBlock.getBlock().getBuilding() != null) {
+                if (extendedBlock.getBlock().getBuilding() != null) {
                     Popup popup = buildingDetails(coordinate);
                     extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
                         popup.setAnchorX(mouseEvent1.getSceneX() + 5);
@@ -218,7 +229,7 @@ public class GameMenuGFXController {
 
     private void selectDeleteFromMenuBar(MouseEvent mouseEvent) {
         selectButtonFromBar(2);
-        deleteMode=true;
+        deleteMode = true;
 
     }
 
@@ -319,9 +330,9 @@ public class GameMenuGFXController {
                 blockView.setOnMouseClicked(mouseEvent -> {
                     if (selectionStartCoordinate != null) {
                         switchSelectionState(selectionStartCoordinate);
-                        if (deleteMode){
+                        if (deleteMode) {
                             delete(selectionStartCoordinate);
-                            deleteMode=false;
+                            deleteMode = false;
                             unselectAll();
                         }
                         selectionStartCoordinate = null;
@@ -339,7 +350,7 @@ public class GameMenuGFXController {
                     if (db.hasString()) {
                         ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
                         extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
-                        if(extendedBlock.getBlock().getBuilding() != null) {
+                        if (extendedBlock.getBlock().getBuilding() != null) {
                             Popup popup = buildingDetails(coordinate);
                             extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
                                 popup.setAnchorX(mouseEvent1.getSceneX() + 5);
@@ -376,9 +387,10 @@ public class GameMenuGFXController {
             unselectBlockView(extendedBlock);
         } else selectBlock(extendedBlock);
     }
-    private void delete(Coordinate coordinate){
+
+    private void delete(Coordinate coordinate) {
         ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
-        if (extendedBlock.getBlock().getBuilding()==null)
+        if (extendedBlock.getBlock().getBuilding() == null)
             return;
         extendedBlock.getBlock().removeBuilding();
         extendedBlock.removeBuilding();
@@ -406,8 +418,16 @@ public class GameMenuGFXController {
             for (MilitaryUnit selectedUnit : selectedUnits)
                 selectedRoleCountMap.put(selectedUnit.getRole().getName(), selectedRoleCountMap.getOrDefault(selectedUnit.getRole().getName(), 0) + 1);
         }
+        if (selectedRoleCountMap.isEmpty()) return;
         for (Map.Entry<RoleName, Integer> roleCountEntry : selectedRoleCountMap.entrySet())
             selectedTroopsInfoPane.getChildren().add(generateTroopBox(roleCountEntry.getKey(), roleCountEntry.getValue()));
+        Button moveButton = new Button("move");
+        moveButton.setOnMouseClicked(mouseEvent -> moveSelectedUnits());
+        Button attackButton = new Button("attack");
+        attackButton.setOnMouseClicked(mouseEvent -> attackSelectedUnits());
+        HBox actionsContainer = new HBox(moveButton, attackButton, unselectButton);
+        actionsContainer.setAlignment(Pos.CENTER);
+        selectedTroopsInfoPane.getChildren().add(actionsContainer);
     }
 
     private VBox generateTroopBox(RoleName type, int troopCount) {
@@ -734,6 +754,16 @@ public class GameMenuGFXController {
     }
 
     public void moveSelectedUnits() {
+        ArrayList<MilitaryUnit> movingUnits = getSelectedUnits();
+        prepareMoveAttackMenu(false, movingUnits);
+    }
+
+    public void attackSelectedUnits() {
+        ArrayList<MilitaryUnit> attackingUnits = getSelectedUnits();
+        prepareMoveAttackMenu(true, attackingUnits);
+    }
+
+    private ArrayList<MilitaryUnit> getSelectedUnits() {
         HashMap<RoleName, Integer> typeCountMap = new HashMap<>();
         for (Label selectedUnitsLabel : selectedUnitsLabels) {
             String[] words = selectedUnitsLabel.getText().split(" ");
@@ -742,21 +772,24 @@ public class GameMenuGFXController {
             typeCountMap.put(type, count);
         }
 
-        if (typeCountMap.size() == 0) return;
+        if (typeCountMap.size() == 0) return null;
 
-        ArrayList<MilitaryUnit> movingUnits = new ArrayList<>();
+        ArrayList<MilitaryUnit> selectedUnits = new ArrayList<>();
         for (ExtendedBlock selectedBlock : selectedBlocks)
-            for (MilitaryUnit militaryUnit : selectedBlock.getBlock().getAllMilitaryUnits()) {
+            for (MilitaryUnit militaryUnit : selectedBlock.getBlock().getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay())) {
                 int temp;
                 RoleName roleName = militaryUnit.getRole().getName();
                 if ((temp = typeCountMap.getOrDefault(roleName, -1)) != -1) {
                     temp--;
-                    movingUnits.add(militaryUnit);
+                    selectedUnits.add(militaryUnit);
                     typeCountMap.put(roleName, temp);
                     if (temp == 0) typeCountMap.remove(roleName);
                 }
             }
+        return selectedUnits;
+    }
 
+    private void prepareMoveAttackMenu(boolean isAttack, ArrayList<MilitaryUnit> selectedUnits) {
         selectedTroopsInfoPane.getChildren().clear();
         Label xLabel = new Label("x = ");
         Spinner<Integer> xSpinner = new Spinner<>(0, mapView.length - 1, 0);
@@ -766,13 +799,15 @@ public class GameMenuGFXController {
         Spinner<Integer> ySpinner = new Spinner<>(0, mapView.length - 1, 0);
         HBox yContainer = new HBox(yLabel, ySpinner);
         yContainer.setAlignment(Pos.CENTER);
-        Button moveButton = new Button("move");
+        Button moveButton = new Button(isAttack ? "attack" : "move");
         moveButton.setOnMouseClicked(mouseEvent -> {
-            UnitMenuController.selectedMilitaryUnits = movingUnits;
-            UnitMenuController.moveUnit(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
+            UnitMenuController.selectedMilitaryUnits = selectedUnits;
+            if (isAttack) UnitMenuController.attackEnemy(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
+            else UnitMenuController.moveUnit(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
+            unselectButton.getOnMouseClicked();
         });
         Button cancelButton = new Button("cancel");
-         cancelButton.setOnMouseClicked(mouseEvent -> updateSelectedBlocksPane());
+        cancelButton.setOnMouseClicked(mouseEvent -> updateSelectedBlocksPane());
         HBox buttonContainer = new HBox(moveButton, cancelButton);
         buttonContainer.setAlignment(Pos.CENTER);
         selectedTroopsInfoPane.getChildren().addAll(xContainer, yContainer, buttonContainer);
