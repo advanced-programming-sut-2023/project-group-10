@@ -37,8 +37,6 @@ public abstract class MilitaryUnit extends Unit {
     public Rectangle refreshBodyGraphics() {
         // TODO: call this method when unit's state has changed
         double WIDTH = ExtendedBlock.getWidth();
-        double HEIGHT = ExtendedBlock.getHeight();
-        double x0 = ExtendedBlock.getX0();
         bodyGraphics.setFill(null);
         // TODO: change assets based on state
         // idle animation
@@ -48,14 +46,13 @@ public abstract class MilitaryUnit extends Unit {
         double heightToWidthRatio = paint.getImage().getHeight() / paint.getImage().getWidth();
         bodyGraphics.setWidth(WIDTH / 4);
         bodyGraphics.setHeight(heightToWidthRatio * WIDTH / 4);
-        Pair<Double, Double> centerPosition = ExtendedBlock.getCenterOfBlockForUnits(getPosition().row, getPosition().column, bodyGraphics.getWidth(), bodyGraphics.getHeight());
-        bodyGraphics.relocate(centerPosition.getKey(), centerPosition.getValue());
+        Pair<Double, Double> positionInView = ExtendedBlock.getRandomPositioningForUnits(getPosition().row, getPosition().column, bodyGraphics.getWidth(), bodyGraphics.getHeight());
+        bodyGraphics.relocate(positionInView.getKey(), positionInView.getValue());
         bodyGraphics.setMouseTransparent(true);
         bodyGraphics.setPickOnBounds(false);
         return bodyGraphics;
     }
 
-    // TODO: remove later
     public Rectangle getBodyGraphics() {
         return bodyGraphics;
     }

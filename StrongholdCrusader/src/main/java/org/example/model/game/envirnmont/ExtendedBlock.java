@@ -72,6 +72,13 @@ public class ExtendedBlock {
         return new Pair<>(WIDTH / 2 * (column - row + 1) + x0 - unitWidth / 2, HEIGHT / 2 * (row + column + 2.5) - unitHeight);
     }
 
+    public static Pair<Double, Double> getRandomPositioningForUnits(int row, int column, double unitWidth, double unitHeight) {
+        Pair<Double, Double> result = getCenterOfBlockForUnits(row, column, unitWidth, unitHeight);
+        double randomX = WIDTH / 2 * Math.random() - WIDTH / 4;
+        double randomY = HEIGHT / 2 * Math.random() - HEIGHT / 4;
+        return new Pair<>(result.getKey() + randomX, result.getValue() + randomY);
+    }
+
     public Block getBlock() {
         return block;
     }
@@ -151,7 +158,7 @@ public class ExtendedBlock {
         return CustomizeMapController.clear(position);
     }
 
-    public void removeBuilding(){
+    public void removeBuilding() {
         object.setFill(Color.TRANSPARENT);
     }
 }

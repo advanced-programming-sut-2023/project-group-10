@@ -36,7 +36,7 @@ public class CommonGFXActions {
         SequentialTransition moveTransition = new SequentialTransition();
         Pair<Double, Double> originalPosition = new Pair<>(target.getLayoutX(), target.getLayoutY());
         for (int i = 0; i < directions.length; i++) {
-            Pair<Double, Double> targetPosition = ExtendedBlock.getCenterOfBlockForUnits(path.get(i).row, path.get(i).column, target.getWidth(), target.getHeight());
+            Pair<Double, Double> targetPosition = ExtendedBlock.getRandomPositioningForUnits(path.get(i).row, path.get(i).column, target.getWidth(), target.getHeight());
             UnitMoveTransition unitMoveTransition = new UnitMoveTransition(
                     (MilitaryUnitRole) Role.getRoleByName(unitType),
                     assetFolder + directions[i],
