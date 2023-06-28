@@ -288,7 +288,6 @@ public class GameMenuGFXController {
 
     private void selectUndoFromMenuBar(MouseEvent mouseEvent) {
         selectButtonFromBar(3);
-        //TODO
     }
 
     private void selectDeleteFromMenuBar(MouseEvent mouseEvent) {
@@ -304,7 +303,14 @@ public class GameMenuGFXController {
 
     private void selectOptionsFromMenuBar(MouseEvent mouseEvent) {
         selectButtonFromBar(0);
-        //TODO
+        OptionsMenuGFX optionsMenuGFX=new OptionsMenuGFX();
+        optionsMenuGFX.setGameMenuGFXController(this);
+        try {
+            optionsMenuGFX.start(new Stage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        unselectAll();
     }
 
     private void selectButtonFromBar(int index) {

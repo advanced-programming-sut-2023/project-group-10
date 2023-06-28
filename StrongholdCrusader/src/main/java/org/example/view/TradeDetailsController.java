@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import org.example.model.User;
 import org.example.model.game.Trade;
 
+import java.io.File;
 import java.util.Objects;
 
 public class TradeDetailsController {
@@ -42,8 +43,9 @@ public class TradeDetailsController {
     }
 
     private void initializeItemInfo() {
+        System.out.println(selectedTrade.getItem().getName());
+        Image item = new Image(new File("src/main/resources/images/items/" + selectedTrade.getItem().getName() + ".png").toURI().toString());
 
-        Image item = new Image("src/main/resources/images/items/" + selectedTrade.getItem().getName() + ".png");
         itemImage.setFill(new ImagePattern(item));
 
         itemName.setText("Name: " + selectedTrade.getItem().getName());
