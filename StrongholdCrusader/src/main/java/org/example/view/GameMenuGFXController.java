@@ -9,10 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
@@ -175,6 +172,10 @@ public class GameMenuGFXController {
                     alert.show();
                 }
             }
+        });
+        mapBox.addEventFilter(ScrollEvent.ANY, scrollEvent -> {
+            zoom(!(scrollEvent.getDeltaY() < 0));
+            scrollEvent.consume();
         });
     }
 
@@ -422,7 +423,8 @@ public class GameMenuGFXController {
             }
         }
 
-        mapBox.setContent(scrollPaneContent);
+        Group zoomHandlerGroup = new Group(scrollPaneContent);
+        mapBox.setContent(zoomHandlerGroup);
         mapBox.setHvalue(0.5);
     }
 
@@ -916,9 +918,13 @@ public class GameMenuGFXController {
     }
 
     public void zoom(boolean zoomIn) {
-        double scaleFactor = zoomIn ? 1.005 : 1 / 1.005;
+        double vValue = mapBox.getVvalue();
+        double hValue = mapBox.getHvalue();
+        if (scrollPaneContent.getScaleX() > 1.5 && zoomIn || scrollPaneContent.getScaleX() < 0.8 && !zoomIn) return;
+        double scaleFactor = zoomIn ? 1.1 : 1 / 1.1;
         scrollPaneContent.setScaleX(scrollPaneContent.getScaleX() * scaleFactor);
         scrollPaneContent.setScaleY(scrollPaneContent.getScaleY() * scaleFactor);
-        System.out.println(scrollPaneContent.getScaleX());
+        mapBox.setVvalue(vValue);
+        mapBox.setHvalue(hValue);
     }
 }

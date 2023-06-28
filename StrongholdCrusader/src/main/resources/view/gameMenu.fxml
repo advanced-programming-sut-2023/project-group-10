@@ -9,22 +9,23 @@
       prefHeight="400.0" prefWidth="600.0" stylesheets="@../CSS/spacingStyle.css">
 
     <HBox>
-        <ScrollPane fx:id="mapBox">
+        <ScrollPane fx:id="mapBox" fitToHeight="true" fitToWidth="true">
         </ScrollPane>
         <BorderPane fx:id="turnPane">
             <center>
                 <VBox alignment="CENTER">
-                    <Label fx:id="unitMessageLabel" wrapText="true" textAlignment="CENTER" styleClass="moderate-spacing" />
-                    <Separator minHeight="10" visible="false" />
+                    <Label fx:id="unitMessageLabel" wrapText="true" textAlignment="CENTER"
+                           styleClass="moderate-spacing"/>
+                    <Separator minHeight="10" visible="false"/>
                     <Label text="current player"/>
                     <Rectangle fx:id="currentPlayerAvatar"/>
                     <Label fx:id="currentPlayerName"/>
                     <Button fx:id="nextPlayerButton" text="end turn" onMouseClicked="#goToNextPlayer"
                             alignment="CENTER"/>
-                    <Separator minHeight="10" visible="false" />
+                    <Separator minHeight="10" visible="false"/>
                     <VBox fx:id="selectedTroopsInfoPane">
                     </VBox>
-                    <Separator minHeight="10" visible="false" />
+                    <Separator minHeight="10" visible="false"/>
                     <VBox fx:id="copiedBuilding" visible="false" alignment="CENTER" spacing="5">
                         <Label text="Copied Building"/>
                     </VBox>
