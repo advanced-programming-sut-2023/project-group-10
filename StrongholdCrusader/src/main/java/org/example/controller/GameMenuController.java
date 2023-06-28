@@ -258,6 +258,7 @@ public class GameMenuController {
         for(ExtendedBlock extendedBlock : blocksAroundKeep){
             extendedBlock.getBlockView().setBlendMode(BlendMode.BLUE);
             extendedBlock.getBlock().setIll(true);
+            extendedBlock.getBlock().setIllnessOwner(government);
         }
         government.setIll(true);
         government.setIllnessCenter(randomBlock + 3);
@@ -286,6 +287,7 @@ public class GameMenuController {
             for(ExtendedBlock extendedBlock : illBlocks){
                 extendedBlock.getBlock().setIll(false);
                 extendedBlock.getBlockView().setBlendMode(null);
+                extendedBlock.getBlock().setIllnessOwner(null);
             }
             government.setIll(false);
         }

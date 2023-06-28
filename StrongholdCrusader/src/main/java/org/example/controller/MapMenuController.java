@@ -45,12 +45,13 @@ public class MapMenuController {
         }
         Building building;
         if ((building = block.getBuilding()) != null) {
-            details = details.concat("Building :" + building.getBuildingType().toString() + " with hitpoints : " +
+            details = details.concat("Building :" + building.getBuildingType().getName().name() + " with hitpoints : " +
                     building.getHitPoint() + "\n" + "owner: " + building.getGovernment().getOwner().getUsername() + " (" + building.getGovernment().getOwner().getNickname() + ")\n");
         } else if (block.isKeep()) {
             User owner = block.getKeepGovernment().getOwner();
             details = details.concat("keep | owner: " + owner.getUsername() + " (" + owner.getNickname() + ")\n");
         }
+        if (block.isIll()) details = details.concat("has illness for government: " + block.getIllnessOwner().getOwner().getUsername() + "\n");
         int count = 0;
         ArrayList<MilitaryUnit> militaryUnits = block.getMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         HashMap<String, ArrayList<MilitaryPerson>> militaryPeople = new HashMap<>();

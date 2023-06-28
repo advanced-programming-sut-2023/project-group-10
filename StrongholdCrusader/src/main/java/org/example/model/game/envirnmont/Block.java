@@ -19,6 +19,7 @@ public class Block {
     private boolean onFire;
     private Government keepGovernment;
     private boolean isIll;
+    private Government illnessOwner;
 
     Block(BlockTexture texture) {
         this.texture = texture;
@@ -26,6 +27,7 @@ public class Block {
         units = new ArrayList<>();
         onFire = false;
         isIll = false;
+        illnessOwner = null;
     }
 
     public BlockTexture getTexture() {
@@ -115,6 +117,14 @@ public class Block {
 
     public void setIll(boolean ill) {
         isIll = ill;
+    }
+
+    public Government getIllnessOwner() {
+        return illnessOwner;
+    }
+
+    public void setIllnessOwner(Government illnessOwner) {
+        this.illnessOwner = illnessOwner;
     }
 
     public void setOnFire(boolean onFire) {
