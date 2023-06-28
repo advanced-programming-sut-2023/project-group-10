@@ -29,6 +29,7 @@ public class TradeDetailsGFX extends Application {
         stage.setWidth(tradeDetailsPane.getPrefWidth());
         stage.setHeight(tradeDetailsPane.getPrefHeight());
         stage.setResizable(false);
+        ((TradeDetailsController) loader.getController()).prepare();
         if (!stage.isShowing()) {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();

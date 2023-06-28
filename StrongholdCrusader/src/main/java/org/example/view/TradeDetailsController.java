@@ -31,8 +31,7 @@ public class TradeDetailsController {
         new TradeMenuHistoryGFX().start(ShopMenuGFX.stage);
     }
 
-    @FXML
-    public void initialize() {
+    public void prepare() {
         initializeBackButton();
         initializeDetails();
     }
