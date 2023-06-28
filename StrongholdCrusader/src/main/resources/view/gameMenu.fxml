@@ -23,7 +23,7 @@
                     <Button fx:id="nextPlayerButton" text="end turn" onMouseClicked="#goToNextPlayer"
                             alignment="CENTER"/>
                     <Separator minHeight="10" visible="false"/>
-                    <VBox fx:id="selectedTroopsInfoPane">
+                    <VBox fx:id="selectedTroopsInfoPane" alignment="CENTER">
                     </VBox>
                     <Separator minHeight="10" visible="false"/>
                     <VBox fx:id="copiedBuilding" visible="false" alignment="CENTER" spacing="5">

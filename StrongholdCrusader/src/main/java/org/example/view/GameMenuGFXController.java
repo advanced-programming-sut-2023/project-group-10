@@ -32,7 +32,9 @@ import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.BuildingLists;
+import org.example.model.game.buildings.ItemProducingBuilding;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
+import org.example.model.game.buildings.buildingconstants.ItemProducingBuildingType;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.units.MilitaryUnit;
@@ -113,11 +115,6 @@ public class GameMenuGFXController {
         selectedBlocks = new LinkedList<>();
         selectedRoleCountMap = new HashMap<>();
         selectedUnitsLabels = new LinkedList<>();
-
-        // TODO: delete test for movement animation
-        turnPane.setOnMouseClicked(mouseEvent -> {
-            mapView[2][2].dropUnit(new Coordinate(2, 2), RoleName.ARCHER, 1);
-        });
     }
 
     @FXML
@@ -515,11 +512,31 @@ public class GameMenuGFXController {
         selectedTroopsInfoPane.getChildren().clear();
         selectedRoleCountMap.clear();
         selectedUnitsLabels.clear();
+        int maxRate = 0;
+        int minRate = 100;
+        int rateSum = 0;
+        int buildingCount = 0;
         for (ExtendedBlock selectedBlock : selectedBlocks) {
             ArrayList<MilitaryUnit> selectedUnits = selectedBlock.getBlock().getSelectableMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
             for (MilitaryUnit selectedUnit : selectedUnits)
                 selectedRoleCountMap.put(selectedUnit.getRole().getName(), selectedRoleCountMap.getOrDefault(selectedUnit.getRole().getName(), 0) + 1);
+            // TODO: complete
+            Building building;
+            if ((building = selectedBlock.getBlock().getBuilding()) instanceof ItemProducingBuilding) {
+                ItemProducingBuildingType buildingType = (ItemProducingBuildingType) building.getBuildingType();
+                if (buildingType.getRate() > maxRate) maxRate = buildingType.getRate();
+                if (buildingType.getRate() < minRate) minRate = buildingType.getRate();
+                rateSum += buildingType.getRate();
+                buildingCount++;
+            }
         }
+        Label productionRate = new Label();
+        productionRate.setWrapText(true);
+        productionRate.setTextAlignment(TextAlignment.CENTER);
+        if (buildingCount == 0) productionRate.setText("no production in this area");
+        else
+            productionRate.setText("max rate: " + maxRate + "\n" + "min rate: " + minRate + "\naverage rate: " + ((double) rateSum) / buildingCount);
+        selectedTroopsInfoPane.getChildren().add(productionRate);
         if (selectedRoleCountMap.isEmpty()) return;
         for (Map.Entry<RoleName, Integer> roleCountEntry : selectedRoleCountMap.entrySet())
             selectedTroopsInfoPane.getChildren().add(generateTroopBox(roleCountEntry.getKey(), roleCountEntry.getValue()));

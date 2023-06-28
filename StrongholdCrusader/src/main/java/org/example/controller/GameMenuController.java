@@ -300,15 +300,17 @@ public class GameMenuController {
             produceItems(government);
         }
 
-        moveAllUnits(currentGovernment);
-        attackAllUnits(currentGovernment);
+        if(currentGovernment!=null) {
+            moveAllUnits(currentGovernment);
+            attackAllUnits(currentGovernment);
 
-        collectTaxes(currentGovernment);
-        feedCitizens(currentGovernment);
-        addPeasants(currentGovernment);
-        currentGovernment.setExcessFood(0);
-        updateFoodCount(currentGovernment);
-        updatePopularity(currentGovernment);
+            collectTaxes(currentGovernment);
+            feedCitizens(currentGovernment);
+            addPeasants(currentGovernment);
+            currentGovernment.setExcessFood(0);
+            updateFoodCount(currentGovernment);
+            updatePopularity(currentGovernment);
+        }
         removeIllness(currentGovernment);
         Government dead;
         while ((dead = deadLord()) != null) {

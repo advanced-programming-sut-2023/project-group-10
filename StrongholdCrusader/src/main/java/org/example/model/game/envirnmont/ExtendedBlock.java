@@ -135,9 +135,9 @@ public class ExtendedBlock {
         setObjectProperties(row, column, false);
     }
 
-    public GameMenuMessages dropUnit(Coordinate position, RoleName typeName, int count) {
-        return GameMenuController.dropUnit(position, typeName, count);
-    }
+//    public GameMenuMessages dropUnit(Coordinate position, RoleName typeName, int count) {
+//        return GameMenuController.dropUnit(position, typeName, count);
+//    }
 
     private void setObjectProperties(int row, int column, boolean isNatural) {
         ImagePattern paint = (ImagePattern) object.getFill();

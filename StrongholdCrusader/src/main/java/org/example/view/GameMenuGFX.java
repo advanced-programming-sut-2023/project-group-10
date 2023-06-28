@@ -26,13 +26,13 @@ public class GameMenuGFX extends Application {
                     ((GameMenuGFXController) loader.getController()).moveSelectedUnits();
                     break;
                 case A:
-                    ((GameMenuGFXController)loader.getController()).attackSelectedUnits();
+                    ((GameMenuGFXController) loader.getController()).attackSelectedUnits();
                     break;
                 case I:
-                    ((GameMenuGFXController)loader.getController()).zoom(true);
+                    ((GameMenuGFXController) loader.getController()).zoom(true);
                     break;
                 case O:
-                    ((GameMenuGFXController)loader.getController()).zoom(false);
+                    if (!event.isControlDown()) ((GameMenuGFXController) loader.getController()).zoom(false);
                     break;
             }
         });

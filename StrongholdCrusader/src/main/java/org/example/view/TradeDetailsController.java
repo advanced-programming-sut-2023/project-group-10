@@ -24,7 +24,7 @@ public class TradeDetailsController {
     public Label price;
     public Label itemName;
     public Rectangle back;
-    public Text message;
+    public Label message;
     private Trade selectedTrade;
 
     public void setSelectedTrade(Trade selectedTrade) {
