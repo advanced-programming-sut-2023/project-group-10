@@ -1,78 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.*?>
-<Pane xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-        maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-      prefWidth="600.0"
-      fx:controller="org.example.view.TradeDetailsController"
->
-    <children>
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fx:id="back" height="40" layoutX="28.0" layoutY="14.0"
-                   stroke="BLACK" strokeType="INSIDE" width="40" onMouseClicked="#goBack"/>
-        <HBox layoutX="104.0" layoutY="66.0" prefHeight="80.0" prefWidth="377.0">
-            <children>
-                <Rectangle fx:id="avatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="81.0" stroke="BLACK"
-                           strokeType="INSIDE" width="110.0"/>
-                <VBox prefHeight="82.0" prefWidth="263.0">
-                    <children>
-                        <Label prefHeight="17.0" prefWidth="264.0" text="sender's username:">
-                            <font>
-                                <Font name="Annai MN Regular" size="13.0"/>
-                            </font>
-                        </Label>
-                        <Label fx:id="username" prefHeight="17.0" prefWidth="268.0"/>
-                    </children>
-                </VBox>
-            </children>
-        </HBox>
-        <HBox layoutX="63.0" layoutY="206.0" prefHeight="134.0" prefWidth="490.0">
-            <children>
-                <Rectangle fx:id="itemImage" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="122.0"
-                           stroke="BLACK" strokeType="INSIDE" width="135.0"/>
-                <VBox prefHeight="160.0" prefWidth="120.0">
-                    <children>
-                        <Label alignment="CENTER" prefHeight="39.0" prefWidth="120.0" text="Trade ID:">
-                            <font>
-                                <Font name="Annai MN Regular" size="13.0"/>
-                            </font>
-                        </Label>
-                        <Label fx:id="tradeId" prefHeight="33.0" prefWidth="120.0"/>
-                    </children>
-                </VBox>
-                <VBox prefHeight="132.0" prefWidth="233.0">
-                    <children>
-                        <Label fx:id="price" prefHeight="41.0" prefWidth="234.0"/>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                            <children>
-                                <Label prefHeight="97.0" prefWidth="62.0" text="message:">
-                                    <font>
-                                        <Font name="Annai MN Regular" size="13.0"/>
-                                    </font>
-                                </Label>
-                                <Text fx:id="message"/>
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
-            </children>
-        </HBox>
-        <Label fx:id="itemName" layoutX="70.0" layoutY="173.0" prefHeight="21.0" prefWidth="120.0"/>
-        <Button layoutX="202.0" layoutY="361.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="84.0"
-                style="-fx-background-color: khaki; -fx-border-color: brown;" text="accept" onMouseClicked="#accept">
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.view.TradeDetailsController">
+
+    <Rectangle fx:id="back" arcHeight="5.0" arcWidth="5.0" height="40" layoutX="28.0" layoutY="14.0" onMouseClicked="#goBack" stroke="BLACK" strokeType="INSIDE" width="40" />
+    <HBox layoutX="104.0" layoutY="66.0" prefHeight="33.0" prefWidth="302.0">
+        <Rectangle fx:id="avatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="75.0" stroke="BLACK" strokeType="INSIDE" width="95.0" />
+        <VBox prefHeight="55.0" prefWidth="237.0">
+            <Label alignment="CENTER" prefHeight="17.0" prefWidth="264.0" text="sender's username:" textAlignment="RIGHT">
+                <font>
+                    <Font name="Annai MN Regular" size="13.0" />
+                </font>
+            </Label>
+            <Label fx:id="username" alignment="CENTER" prefHeight="17.0" prefWidth="268.0" />
+        </VBox>
+    </HBox>
+    <HBox layoutX="55.0" layoutY="167.0" prefHeight="134.0" prefWidth="490.0" spacing="10.0">
+        <Rectangle fx:id="itemImage" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="137.0" stroke="BLACK" strokeType="INSIDE" width="135.0" />
+        <VBox prefHeight="160.0" prefWidth="120.0">
+            <Label alignment="CENTER" prefHeight="39.0" prefWidth="120.0" text="Trade ID:">
+                <font>
+                    <Font name="Annai MN Regular" size="10.0" />
+                </font>
+            </Label>
+            <Label fx:id="tradeId" alignment="CENTER" prefHeight="33.0" prefWidth="120.0" style="-fx-border-color: brown;" textAlignment="CENTER">
             <font>
-                <Font name="Apple Chancery" size="13.0"/>
-            </font>
-        </Button>
-        <Button layoutX="300.0" layoutY="361.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="84.0"
-                style="-fx-background-color: khaki; -fx-border-color: brown;" text="reject" onMouseClicked="#reject">
+               <Font size="11.0" />
+            </font></Label>
+         <Label alignment="CENTER" prefHeight="30.0" prefWidth="120.0" text="Price:">
             <font>
-                <Font name="Apple Chancery" size="13.0"/>
+               <Font name="Annai MN Regular" size="10.0" />
             </font>
-        </Button>
-    </children>
+         </Label>
+         <Label fx:id="price" alignment="CENTER" prefHeight="31.0" prefWidth="127.0" style="-fx-border-color: brown;" textAlignment="CENTER">
+            <font>
+               <Font size="11.0" />
+            </font>
+         </Label>
+        </VBox>
+      <VBox prefHeight="134.0" prefWidth="233.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="39.0" prefWidth="252.0" text="Message:">
+               <font>
+                  <Font name="Annai MN Regular" size="10.0" />
+               </font>
+            </Label>
+            <Label fx:id="message" alignment="CENTER" prefHeight="94.0" prefWidth="233.0" style="-fx-border-color: brown;" />
+         </children>
+      </VBox>
+    </HBox>
+    <Label fx:id="itemName" layoutX="61.0" layoutY="146.0" prefHeight="21.0" prefWidth="120.0" />
+    <Button layoutX="198.0" layoutY="313.0" mnemonicParsing="false" onMouseClicked="#accept" prefHeight="26.0" prefWidth="84.0" style="-fx-background-color: khaki; -fx-border-color: brown;" text="accept">
+        <font>
+            <Font name="Apple Chancery" size="13.0" />
+        </font>
+    </Button>
+    <Button layoutX="300.0" layoutY="313.0" mnemonicParsing="false" onMouseClicked="#reject" prefHeight="26.0" prefWidth="84.0" style="-fx-background-color: khaki; -fx-border-color: brown;" text="reject">
+        <font>
+            <Font name="Apple Chancery" size="13.0" />
+        </font>
+    </Button>
 </Pane>

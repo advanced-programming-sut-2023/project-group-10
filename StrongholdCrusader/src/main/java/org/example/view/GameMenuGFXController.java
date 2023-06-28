@@ -10,10 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
@@ -189,6 +186,10 @@ public class GameMenuGFXController {
                 }
             }
         });
+        mapBox.addEventFilter(ScrollEvent.ANY, scrollEvent -> {
+            zoom(!(scrollEvent.getDeltaY() < 0));
+            scrollEvent.consume();
+        });
     }
 
     private void setDropBuildingMessage(GameMenuMessages message) {
@@ -300,7 +301,6 @@ public class GameMenuGFXController {
 
     private void selectUndoFromMenuBar(MouseEvent mouseEvent) {
         selectButtonFromBar(3);
-        //TODO
     }
 
     private void selectDeleteFromMenuBar(MouseEvent mouseEvent) {
@@ -316,7 +316,14 @@ public class GameMenuGFXController {
 
     private void selectOptionsFromMenuBar(MouseEvent mouseEvent) {
         selectButtonFromBar(0);
-        //TODO
+        OptionsMenuGFX optionsMenuGFX=new OptionsMenuGFX();
+        optionsMenuGFX.setGameMenuGFXController(this);
+        try {
+            optionsMenuGFX.start(new Stage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        unselectAll();
     }
 
     private void selectButtonFromBar(int index) {
@@ -435,7 +442,8 @@ public class GameMenuGFXController {
             }
         }
 
-        mapBox.setContent(scrollPaneContent);
+        Group zoomHandlerGroup = new Group(scrollPaneContent);
+        mapBox.setContent(zoomHandlerGroup);
         mapBox.setHvalue(0.5);
     }
 
@@ -738,7 +746,14 @@ public class GameMenuGFXController {
         scribeDetails();
         unselectAllMethod();
         unitMessageLabel.setText("");
-        GameMenuController.goToNextPlayer();
+        GameMenuMessages result = GameMenuController.goToNextPlayer();
+        if (result == GameMenuMessages.GAME_OVER) {
+            try {
+                new EndScreenGFX(Stronghold.getCurrentBattle().getAliveGovernment()).start(SignupMenu.stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
         updateCurrentPlayerInfo();
     }
 
@@ -929,9 +944,13 @@ public class GameMenuGFXController {
     }
 
     public void zoom(boolean zoomIn) {
-        double scaleFactor = zoomIn ? 1.005 : 1 / 1.005;
+        double vValue = mapBox.getVvalue();
+        double hValue = mapBox.getHvalue();
+        if (scrollPaneContent.getScaleX() > 1.5 && zoomIn || scrollPaneContent.getScaleX() < 0.8 && !zoomIn) return;
+        double scaleFactor = zoomIn ? 1.1 : 1 / 1.1;
         scrollPaneContent.setScaleX(scrollPaneContent.getScaleX() * scaleFactor);
         scrollPaneContent.setScaleY(scrollPaneContent.getScaleY() * scaleFactor);
-        System.out.println(scrollPaneContent.getScaleX());
+        mapBox.setVvalue(vValue);
+        mapBox.setHvalue(hValue);
     }
 }
