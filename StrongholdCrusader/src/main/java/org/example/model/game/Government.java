@@ -337,4 +337,12 @@ public class Government {
             return getStorageSpace(BuildingTypeName.STOCKPILE) - getTotalItemCount("primary");
         return getStorageSpace(BuildingTypeName.ARMOURY) - getTotalItemCount("weapon");
     }
+
+    public int maxPossiblePeasants(){
+        int p=this.getPeasants().size();
+        for (Building building : buildings) {
+            p+=building.getBuildingType().getEmployeeCount();
+        }
+        return p;
+    }
 }

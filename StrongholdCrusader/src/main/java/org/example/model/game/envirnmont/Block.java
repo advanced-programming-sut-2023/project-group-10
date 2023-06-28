@@ -1,6 +1,7 @@
 package org.example.model.game.envirnmont;
 
 import org.example.model.Stronghold;
+import org.example.model.game.Battle;
 import org.example.model.game.Droppable;
 import org.example.model.game.Government;
 import org.example.model.game.buildings.Building;
@@ -16,7 +17,7 @@ public class Block {
     private final ArrayList<Unit> units;
     private BlockTexture texture;
     private Droppable droppable;
-    private boolean onFire;
+    private ArrayList<Fire> fires;
     private Government keepGovernment;
     private boolean isIll;
     private Government illnessOwner;
@@ -25,7 +26,7 @@ public class Block {
         this.texture = texture;
         droppable = null;
         units = new ArrayList<>();
-        onFire = false;
+        fires = new ArrayList<>();
         isIll = false;
         illnessOwner = null;
     }
@@ -88,7 +89,7 @@ public class Block {
         droppable = null;
         for (Unit unit : units)
             unit.killMe();
-        setOnFire(false);
+       fires=new ArrayList<>();
     }
 
     public boolean setDroppable(Droppable droppable) {
@@ -98,7 +99,7 @@ public class Block {
         }
         if (this.droppable != null) return false;
         if (!texture.isBuildable()) return false;
-        if (onFire) return false;
+        if (fires.size()>0) return false;
         if (droppable instanceof ItemProducingBuilding) {
             ItemProducingBuildingType buildingType = (ItemProducingBuildingType) ((ItemProducingBuilding) droppable).getBuildingType();
             if (buildingType.isFarm() && !texture.isFertile()) return false;
@@ -127,9 +128,7 @@ public class Block {
         this.illnessOwner = illnessOwner;
     }
 
-    public void setOnFire(boolean onFire) {
-        this.onFire = onFire;
-    }
+
 
     public void addUnit(Unit unit) {
         units.add(unit);
@@ -157,11 +156,11 @@ public class Block {
     }
 
     public boolean isBuildable() {
-        return droppable == null && !onFire && texture.isBuildable() && !isKeep();
+        return droppable == null && !(fires.size() >0) && texture.isBuildable() && !isKeep();
     }
 
     public boolean canDigHere() {
-        return droppable == null && !onFire && isBuildable();
+        return droppable == null &&  !(fires.size() >0) && isBuildable();
     }
 
     public ArrayList<Unit> getAllAttackableEnemyUnits(Government government) {
@@ -184,5 +183,18 @@ public class Block {
         if (this.getBuilding() != null) {
             this.setDroppable(null);
         }
+    }
+    public void setOnFire(Fire fire){
+        fires.add(fire);
+    }
+
+    public void removeFires(Battle battle){
+        for (int i = fires.size() - 1; i >= 0; i--) {
+            if (!fires.get(i).isStillOn(battle.getTurnsPassed()))
+                fires.remove(i);
+        }
+    }
+    public boolean isOnFire(){
+        return fires.size()>0;
     }
 }

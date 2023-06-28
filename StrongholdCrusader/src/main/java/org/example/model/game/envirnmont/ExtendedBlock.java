@@ -18,7 +18,8 @@ import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.HashMap;
 
-public class ExtendedBlock {
+public class
+ExtendedBlock {
     private static final double WIDTH = 200;
     private static final double HEIGHT = 100;
     private static double x0;

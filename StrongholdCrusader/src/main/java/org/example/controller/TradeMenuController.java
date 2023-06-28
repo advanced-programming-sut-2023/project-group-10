@@ -64,19 +64,18 @@ public class TradeMenuController {
         return history;
     }
 
-    public static TradeMenuMessages acceptRequest(String id) {
-        Trade trade = Stronghold.getCurrentBattle().getGovernmentByOwnerId(Stronghold.getCurrentUser().getUsername()).getTradeFromTradeList(id);
+    public static TradeMenuMessages acceptRequest(Trade trade) {
+
 
         Government recipient = Stronghold.getCurrentBattle().getGovernmentByOwnerId
                 (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername());
+        System.out.println(trade.getSenderId());
         Government sender = Stronghold.getCurrentBattle().getGovernmentByOwnerId(trade.getSenderId());
         if (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getStorageSpaceForItem(trade.getItem()) <= 0)
             return TradeMenuMessages.NOT_ENOUGH_SPACE;
         if (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold() < trade.getPrice() * trade.getAmount())
             return TradeMenuMessages.NOT_SUFFICIENT_GOLD;
-
-        Stronghold.getCurrentBattle().getGovernmentByOwnerId(Stronghold.getCurrentUser().getUsername())
-                .getTradeFromTradeList(id).setAcceptedStatus(true);
+        trade.setAcceptedStatus(true);
         recipient.reduceItem(trade);
         sender.addItem(trade);
         return TradeMenuMessages.TRADE_SUCCESSFULLY_ACCEPTED;

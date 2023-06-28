@@ -7,6 +7,7 @@ import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
+import org.example.model.game.envirnmont.Fire;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.*;
 import org.example.model.game.units.unitconstants.*;
@@ -131,7 +132,7 @@ public class UnitMenuController {
         targetPosition.column += horizontalChange;
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         if (!map.isIndexInBounds(targetPosition)) return UnitMenuMessages.TARGET_OUT_OF_MAP;
-        map.getBlockByRowAndColumn(targetPosition).setOnFire(true);
+        map.getBlockByRowAndColumn(targetPosition).setOnFire(new Fire(Stronghold.getCurrentBattle().getTurnsPassed()));
         selectedEngineer.setHasOil(false);
         selectedEngineer.moveUnit(getNearestOilSmelterCoordinate(selectedEngineer.getPosition()));
         return UnitMenuMessages.SUCCESSFUL_POUR_OIL;

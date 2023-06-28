@@ -70,7 +70,8 @@ public class TradeDetailsController {
     }
 
     public void accept(MouseEvent mouseEvent) {
-        TradeMenuMessages tradeMenuMessage= TradeMenuController.acceptRequest(selectedTrade.getId());
+        System.out.println(selectedTrade.getId());
+        TradeMenuMessages tradeMenuMessage= TradeMenuController.acceptRequest(selectedTrade);
         Alert alert =new Alert(Alert.AlertType.CONFIRMATION);
         switch (tradeMenuMessage){
             case NOT_ENOUGH_SPACE:
@@ -89,6 +90,7 @@ public class TradeDetailsController {
                 alert.setContentText("you accepted the trade successfully");
                 break;
         }
+
         alert.showAndWait();
     }
 

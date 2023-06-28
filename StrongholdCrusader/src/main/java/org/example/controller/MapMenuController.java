@@ -23,14 +23,12 @@ public class MapMenuController {
     public static String showMap(Coordinate origin) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         map.setOrigin(origin, blocksInARow, blocksInAColumn);
-//        return generateMapView(map);
         return null;
     }
 
     public static String moveMap(int horizontalChange, int verticalChange) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         map.moveOrigin(horizontalChange, verticalChange);
-//        return generateMapView(map);
         return null;
     }
 

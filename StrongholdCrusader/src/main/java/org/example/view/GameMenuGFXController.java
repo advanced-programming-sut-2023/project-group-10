@@ -374,12 +374,13 @@ public class GameMenuGFXController {
         popularity.setFont(new Font("PT Mono", 14));
         popularity.setTextAlignment(TextAlignment.CENTER);
         popularity.setRotate(15);
-        Text golds = new Text(" " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold());
+        Text golds = new Text("  " + ((int)Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold()));
         golds.setFont(new Font("PT Mono", 11));
         golds.setTextAlignment(TextAlignment.CENTER);
         golds.setRotate(15);
-        Text population = new Text(" " + Double.toString(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasants().size()));
-        population.setFont(new Font("PT Mono", 11));
+        Text population = new Text((Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasants().size())+
+                "/"+Stronghold.getCurrentBattle().getGovernmentAboutToPlay().maxPossiblePeasants());
+        population.setFont(new Font("PT Mono", 10));
         population.setTextAlignment(TextAlignment.CENTER);
         population.setRotate(15);
         fields.getChildren().addAll(popularity, golds, population);
