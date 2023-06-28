@@ -11,7 +11,6 @@ import org.example.controller.GameMenuController;
 import org.example.model.game.RockType;
 import org.example.model.game.TreeType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
-import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.GameMenuGFXController;
 import org.example.view.enums.messages.CustomizeMapMessages;
 import org.example.view.enums.messages.GameMenuMessages;
@@ -26,6 +25,7 @@ ExtendedBlock {
     private static final HashMap<BlockTexture, ImagePattern> textureImageMap;
     private static final HashMap<TreeType, ImagePattern> treeImageMap;
     private static final HashMap<RockType, ImagePattern> rockImageMap;
+    private static final ImagePattern[] randomRocks;
     private static final HashMap<BuildingTypeName, ImagePattern> buildingImageMap;
     private final Block block;
     private final Polygon blockView;
@@ -41,6 +41,9 @@ ExtendedBlock {
         rockImageMap = new HashMap<>();
         for (RockType value : RockType.values())
             rockImageMap.put(value, new ImagePattern(new Image(RockType.getRockListAssetsFolderPath() + value.getListAssetFileName())));
+        randomRocks = new ImagePattern[10];
+        for (int i = 0; i < randomRocks.length; i++)
+            randomRocks[i] = new ImagePattern(new Image(RockType.getRockListAssetsFolderPath() + "random/" + (i + 1) + ".png"));
         buildingImageMap = new HashMap<>();
         for (BuildingTypeName value : BuildingTypeName.values())
             buildingImageMap.put(value, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + value.toString().toLowerCase() + ".png").toExternalForm())));

@@ -25,8 +25,6 @@ public enum RockType {
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
         for (RockType value : values())
             result.put(value.getName(), value.getListAssetFileName());
-        //TODO: add different assets for random
-        result.put("random", values()[(int) (Math.random() * values().length)].getListAssetFileName());
         return result;
     }
 
