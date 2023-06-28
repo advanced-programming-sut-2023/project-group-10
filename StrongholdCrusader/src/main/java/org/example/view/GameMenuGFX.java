@@ -44,6 +44,12 @@ public class GameMenuGFX extends Application {
                 case A:
                     ((GameMenuGFXController)loader.getController()).attackSelectedUnits();
                     break;
+                case I:
+                    ((GameMenuGFXController)loader.getController()).zoom(true);
+                    break;
+                case O:
+                    ((GameMenuGFXController)loader.getController()).zoom(false);
+                    break;
             }
         });
     }

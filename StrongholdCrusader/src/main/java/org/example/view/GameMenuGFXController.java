@@ -1,5 +1,6 @@
 package org.example.view;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,6 +25,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.controller.BuildingMenuController;
 import org.example.controller.GameMenuController;
 import org.example.controller.MapMenuController;
@@ -42,6 +44,7 @@ import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.enums.messages.BuildingMenuMessages;
 import org.example.view.enums.messages.GameMenuMessages;
+import org.example.view.enums.messages.UnitMenuMessages;
 
 import java.util.*;
 
@@ -49,6 +52,7 @@ public class GameMenuGFXController {
     public ScrollPane mapBox;
     public Pane controlButtonsBar;
     public VBox copiedBuilding;
+    public Label unitMessageLabel;
     private VBox buttons = new VBox();
     private Group scrollPaneContent;
     public BorderPane turnPane;
@@ -106,14 +110,7 @@ public class GameMenuGFXController {
         buildingBox.getItems().addAll(BuildingLists.allBuildings.getItems());
 
         unselectButton = new Button("unselect");
-        unselectButton.setOnMouseClicked(mouseEvent -> {
-            selectedTroopsInfoPane.getChildren().clear();
-            selectedUnitsLabels.clear();
-            for (ExtendedBlock selectedBlock : selectedBlocks)
-                selectedBlock.getBlockView().setStroke(null);
-            selectedRoleCountMap.clear();
-            selectedBlocks.clear();
-        });
+        unselectButton.setOnMouseClicked(this::unselectAllHandleMethod);
 
         selectedBlocks = new LinkedList<>();
         selectedRoleCountMap = new HashMap<>();
@@ -726,11 +723,10 @@ public class GameMenuGFXController {
     public void goToNextPlayer() {
         // TODO: handle animations and potential bugs
         scribeDetails();
+        unselectAllMethod();
+        unitMessageLabel.setText("");
         GameMenuController.goToNextPlayer();
         updateCurrentPlayerInfo();
-        for (ExtendedBlock selectedBlock : selectedBlocks)
-            unselectBlockView(selectedBlock);
-        selectedBlocks.clear();
     }
 
     private void updateCurrentPlayerInfo() {
@@ -877,14 +873,52 @@ public class GameMenuGFXController {
         Button moveButton = new Button(isAttack ? "attack" : "move");
         moveButton.setOnMouseClicked(mouseEvent -> {
             UnitMenuController.selectedMilitaryUnits = selectedUnits;
-            if (isAttack) UnitMenuController.attackEnemy(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
-            else UnitMenuController.moveUnit(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
-            unselectButton.getOnMouseClicked();
+            if (isAttack) {
+                UnitMenuMessages result = UnitMenuController.attackEnemy(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
+                if (result == UnitMenuMessages.TARGET_OUT_OF_RANGE)
+                    unitMessageLabel.setText("target is out of range, move closer and try again!");
+                else if (result == UnitMenuMessages.NO_ENEMY_HERE) unitMessageLabel.setText("there's no enemy here!");
+                else unitMessageLabel.setText("units are attacking target");
+            } else {
+                UnitMenuMessages result = UnitMenuController.moveUnit(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
+                if (result == UnitMenuMessages.INVALID_DESTINATION) unitMessageLabel.setText("units can't go here!");
+                else if (result == UnitMenuMessages.NO_WAY_THERE)
+                    unitMessageLabel.setText("there is no way to get there!");
+                else
+                    unitMessageLabel.setText("destination set successfully, units will go there when your turn is over");
+            }
+            PauseTransition visiblePause = new PauseTransition(
+                    Duration.seconds(3)
+            );
+            unselectAllMethod();
+            updateSelectedBlocksPane();
+            visiblePause.setOnFinished(event -> unitMessageLabel.setText(""));
+            visiblePause.play();
         });
-        Button cancelButton = new Button("cancel");
+        Button cancelButton = new Button("back");
         cancelButton.setOnMouseClicked(mouseEvent -> updateSelectedBlocksPane());
         HBox buttonContainer = new HBox(moveButton, cancelButton);
         buttonContainer.setAlignment(Pos.CENTER);
         selectedTroopsInfoPane.getChildren().addAll(xContainer, yContainer, buttonContainer);
+    }
+
+    private void unselectAllHandleMethod(MouseEvent mouseEvent) {
+        unselectAllMethod();
+    }
+
+    private void unselectAllMethod() {
+        selectedTroopsInfoPane.getChildren().clear();
+        selectedUnitsLabels.clear();
+        for (ExtendedBlock selectedBlock : selectedBlocks)
+            selectedBlock.getBlockView().setStroke(null);
+        selectedRoleCountMap.clear();
+        selectedBlocks.clear();
+    }
+
+    public void zoom(boolean zoomIn) {
+        double scaleFactor = zoomIn ? 1.005 : 1 / 1.005;
+        scrollPaneContent.setScaleX(scrollPaneContent.getScaleX() * scaleFactor);
+        scrollPaneContent.setScaleY(scrollPaneContent.getScaleY() * scaleFactor);
+        System.out.println(scrollPaneContent.getScaleX());
     }
 }
