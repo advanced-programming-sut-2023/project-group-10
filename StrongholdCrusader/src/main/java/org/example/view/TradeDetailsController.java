@@ -1,14 +1,17 @@
 package org.example.view;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import org.example.controller.TradeMenuController;
 import org.example.model.User;
 import org.example.model.game.Trade;
+import org.example.view.enums.messages.TradeMenuMessages;
 
 import java.io.File;
 import java.util.Objects;
@@ -58,8 +61,6 @@ public class TradeDetailsController {
 
     private void initializeSenderInfo() {
         username.setText(selectedTrade.getSenderId());
-        //Maybe it has some minor problems
-
         avatar.setFill(new ImagePattern(new Image(User.getUserByUsername(selectedTrade.getSenderId()).getAvatar())));
 
     }
@@ -69,8 +70,26 @@ public class TradeDetailsController {
     }
 
     public void accept(MouseEvent mouseEvent) {
-        //No idea actually
-
+        TradeMenuMessages tradeMenuMessage= TradeMenuController.acceptRequest(selectedTrade.getId());
+        Alert alert =new Alert(Alert.AlertType.CONFIRMATION);
+        switch (tradeMenuMessage){
+            case NOT_ENOUGH_SPACE:
+                alert=new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("error in accepting the trade");
+                alert.setContentText("you don't have enough space");
+                break;
+            case NOT_SUFFICIENT_GOLD:
+                alert=new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("error in accepting the trade");
+                alert.setContentText("you don't have enough gold");
+                break;
+            case TRADE_SUCCESSFULLY_ACCEPTED:
+                alert=new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("successful accept trade");
+                alert.setContentText("you accepted the trade successfully");
+                break;
+        }
+        alert.showAndWait();
     }
 
     public void reject(MouseEvent mouseEvent) throws Exception {

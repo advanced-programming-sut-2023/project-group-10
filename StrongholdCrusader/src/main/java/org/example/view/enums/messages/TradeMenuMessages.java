@@ -9,5 +9,5 @@ public enum TradeMenuMessages {
     NOT_SUFFICIENT_GOLD,
     INVALID_TYPE,
     INVALID_USER,
-    NOT_ENOUGH_ITEMS;
+    NOT_ENOUGH_ITEMS, NOT_ENOUGH_SPACE;
 }

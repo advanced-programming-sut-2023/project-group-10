@@ -20,7 +20,7 @@ public class TradeMenuController {
 
     public static TradeMenuMessages sendRequest(String resourceType, int resourceAmount, int price, String message, String recipientId) {
         Item resource = Item.getItemByName(resourceType);
-        if (resource == null )
+        if (resource == null)
             return TradeMenuMessages.INVALID_TYPE;
 
         String senderId = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername();
@@ -64,23 +64,21 @@ public class TradeMenuController {
         return history;
     }
 
-    public static TradeMenuMessages acceptRequest(String id, String message) {
+    public static TradeMenuMessages acceptRequest(String id) {
         Trade trade = Stronghold.getCurrentBattle().getGovernmentByOwnerId(Stronghold.getCurrentUser().getUsername()).getTradeFromTradeList(id);
-        if (trade == null)
-            return TradeMenuMessages.INVALID_TRADE_ID;
+
         Government recipient = Stronghold.getCurrentBattle().getGovernmentByOwnerId
                 (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername());
         Government sender = Stronghold.getCurrentBattle().getGovernmentByOwnerId(trade.getSenderId());
-        if (!recipient.getOwner().getUsername().equals(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername()))
-            return TradeMenuMessages.MISMATCH_OF_TRADERS;
-        if (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(trade.getItem()) < trade.getAmount())
-            return TradeMenuMessages.NOT_ENOUGH_ITEMS;
+        if (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getStorageSpaceForItem(trade.getItem()) <= 0)
+            return TradeMenuMessages.NOT_ENOUGH_SPACE;
+        if (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold() < trade.getPrice() * trade.getAmount())
+            return TradeMenuMessages.NOT_SUFFICIENT_GOLD;
+
         Stronghold.getCurrentBattle().getGovernmentByOwnerId(Stronghold.getCurrentUser().getUsername())
                 .getTradeFromTradeList(id).setAcceptedStatus(true);
-        Stronghold.getCurrentBattle().getGovernmentByOwnerId(Stronghold.getCurrentUser().getUsername()).getTradeFromTradeList(id)
-                .addMessage(Stronghold.getCurrentUser().getUsername(), message);
-        recipient.addItem(trade);
-        sender.reduceItem(trade);
+        recipient.reduceItem(trade);
+        sender.addItem(trade);
         return TradeMenuMessages.TRADE_SUCCESSFULLY_ACCEPTED;
     }
 
