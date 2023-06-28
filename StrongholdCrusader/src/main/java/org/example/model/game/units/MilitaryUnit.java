@@ -1,5 +1,6 @@
 package org.example.model.game.units;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
@@ -32,6 +33,13 @@ public abstract class MilitaryUnit extends Unit {
         stance = MilitaryUnitStance.STAND_GROUND;
         destination = DestinationIndicator.NONE;
         bodyGraphics = new Rectangle();
+        bodyGraphics.setOnMouseEntered(mouseEvent -> {
+            Tooltip.install(bodyGraphics, new Tooltip(
+                    "owner: " + getGovernment().getOwner().getUsername() + " (" + getGovernment().getOwner().getNickname() + ")"
+                            + "\nstance: " + this.getStance().getName()
+                            + "\nHP: " + this.getHitPoint()
+                            + "\n AP: " + getAttackPoint()));
+        });
     }
 
     public Rectangle refreshBodyGraphics() {
@@ -48,7 +56,6 @@ public abstract class MilitaryUnit extends Unit {
         bodyGraphics.setHeight(heightToWidthRatio * WIDTH / 4);
         Pair<Double, Double> positionInView = ExtendedBlock.getRandomPositioningForUnits(getPosition().row, getPosition().column, bodyGraphics.getWidth(), bodyGraphics.getHeight());
         bodyGraphics.relocate(positionInView.getKey(), positionInView.getValue());
-        bodyGraphics.setMouseTransparent(true);
         bodyGraphics.setPickOnBounds(false);
         return bodyGraphics;
     }
@@ -138,6 +145,10 @@ public abstract class MilitaryUnit extends Unit {
         onPatrol = false;
         moatAboutToBeDug = null;
         moatAboutToBeFilled = null;
+    }
+
+    public int getAttackPoint() {
+        return ((MilitaryUnitRole) getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue();
     }
 
     public int getRange() {

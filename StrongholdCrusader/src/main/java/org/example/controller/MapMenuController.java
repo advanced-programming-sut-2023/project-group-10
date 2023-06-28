@@ -12,7 +12,6 @@ import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.Unit;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
-import org.example.model.utils.ASCIIColor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,22 +34,6 @@ public class MapMenuController {
         return null;
     }
 
-    private static String generateMapView(Map map) {
-        String result = "";
-        char info;
-        for (int i = map.getTopLeftBlockCoordinate().row; i < map.getTopLeftBlockCoordinate().row + blocksInAColumn; i++) {
-            for (int j = map.getTopLeftBlockCoordinate().column; j < map.getTopLeftBlockCoordinate().column + blocksInARow; j++) {
-                if (map.getBlockByRowAndColumn(i, j).getAllMilitaryUnits().size() != 0) info = 'S';
-                else if (map.getBlockByRowAndColumn(i, j).getBuilding() != null)
-                    info = 'B';
-                else if (map.getBlockByRowAndColumn(i, j).getDroppable() instanceof Tree) info = 'T';
-                else info = '#';
-//                result += map.getBlockByRowAndColumn(i, j).getTexture().getColor().getCode() + info + ASCIIColor.RESET.getCode();
-            }
-            result += "\n";
-        }
-        return result;
-    }
 
     public static String showDetails(Coordinate position) {
         Block block = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position);
@@ -91,7 +74,9 @@ public class MapMenuController {
         details = details.concat("your military people count : " + count + "\n");
         for (java.util.Map.Entry<String, ArrayList<MilitaryPerson>> militaryPersonIntegerEntry : militaryPeople.entrySet()) {
             details = details.concat(militaryPersonIntegerEntry.getValue().size() + " of "
-                    + militaryPersonIntegerEntry.getKey() + " with hitpoints:\n");
+                    + militaryPersonIntegerEntry.getKey() + " (attack point: " +
+                    militaryPersonIntegerEntry.getValue().get(0).getAttackPoint() +
+                    ") with hitpoints:\n");
             for (int i = 0; i < militaryPersonIntegerEntry.getValue().size(); i++) {
                 details = details.concat(militaryPersonIntegerEntry.getValue().get(i).getHitPoint() + " - ");
             }
@@ -115,9 +100,8 @@ public class MapMenuController {
         if (peasants.size() == 0)
             return details;
         details = details.concat("Their hitpoints are: \n");
-        for (Unit peasant : peasants) {
+        for (Unit peasant : peasants)
             details = details.concat(peasant.getHitPoint() + " - ");
-        }
         details = details.substring(0, details.length() - 2);
         details = details.concat("\n");
         return details;

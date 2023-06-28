@@ -1,5 +1,6 @@
 package org.example.view;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,6 +25,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.controller.BuildingMenuController;
 import org.example.controller.GameMenuController;
 import org.example.controller.MapMenuController;
@@ -40,6 +42,7 @@ import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.enums.messages.BuildingMenuMessages;
 import org.example.view.enums.messages.GameMenuMessages;
+import org.example.view.enums.messages.UnitMenuMessages;
 
 import java.util.*;
 
@@ -50,6 +53,7 @@ public class GameMenuGFXController {
     private VBox buttons = new VBox();
     private Group scrollPaneContent;
     public BorderPane turnPane;
+    public Label unitMessageLabel;
     public Rectangle currentPlayerAvatar;
     public Label currentPlayerName;
     public Button nextPlayerButton;
@@ -104,14 +108,7 @@ public class GameMenuGFXController {
         buildingBox.getItems().addAll(BuildingLists.allBuildings.getItems());
 
         unselectButton = new Button("unselect");
-        unselectButton.setOnMouseClicked(mouseEvent -> {
-            selectedTroopsInfoPane.getChildren().clear();
-            selectedUnitsLabels.clear();
-            for (ExtendedBlock selectedBlock : selectedBlocks)
-                selectedBlock.getBlockView().setStroke(null);
-            selectedRoleCountMap.clear();
-            selectedBlocks.clear();
-        });
+        unselectButton.setOnMouseClicked(this::unselectAllHandleMethod);
 
         selectedBlocks = new LinkedList<>();
         selectedRoleCountMap = new HashMap<>();
@@ -159,7 +156,7 @@ public class GameMenuGFXController {
                 setDropBuildingMessage(message);
                 if (extendedBlock.getBlock().getBuilding() != null)
                     setBuilding(extendedBlock, coordinate);
-            } else if(keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.R) && selectedBuildingCoordinate != null){
+            } else if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.R) && selectedBuildingCoordinate != null) {
                 BuildingMenuController.setSelectedBuilding(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuildingCoordinate).getBuilding());
                 BuildingMenuMessages message = BuildingMenuController.repair();
                 setRepairMessage(message);
@@ -167,8 +164,8 @@ public class GameMenuGFXController {
         });
     }
 
-    private void setDropBuildingMessage(GameMenuMessages message){
-        if(!message.equals(GameMenuMessages.SUCCESSFUL_DROP)){
+    private void setDropBuildingMessage(GameMenuMessages message) {
+        if (!message.equals(GameMenuMessages.SUCCESSFUL_DROP)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Drop Building Unsuccessful");
             alert.setContentText(message.name().replaceAll("_", " "));
@@ -176,14 +173,13 @@ public class GameMenuGFXController {
         }
     }
 
-    private void setRepairMessage(BuildingMenuMessages message){
-        if(message.equals(BuildingMenuMessages.REPAIR_SUCCESSFUL)){
+    private void setRepairMessage(BuildingMenuMessages message) {
+        if (message.equals(BuildingMenuMessages.REPAIR_SUCCESSFUL)) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Repair Successful");
             alert.setContentText("Selected Building was repaired successfully");
             alert.show();
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Repair Unsuccessful");
             alert.setContentText(message.name().replaceAll("_", " "));
@@ -378,7 +374,7 @@ public class GameMenuGFXController {
         mapBox.setHvalue(0.5);
     }
 
-    private void setBuilding(ExtendedBlock extendedBlock, Coordinate coordinate){
+    private void setBuilding(ExtendedBlock extendedBlock, Coordinate coordinate) {
         Popup popup = buildingDetails(coordinate);
         extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
             popup.setAnchorX(mouseEvent1.getSceneX() + 5);
@@ -470,6 +466,7 @@ public class GameMenuGFXController {
     private void initializeTurnPane() {
         // TODO: add other initialization processes (state of troops, resources, ...)
         updateCurrentPlayerInfo();
+
     }
 
     private static Popup buildingDetails(Coordinate coordinate) {
@@ -672,11 +669,10 @@ public class GameMenuGFXController {
     public void goToNextPlayer() {
         // TODO: handle animations and potential bugs
         scribeDetails();
+        unselectAllMethod();
+        unitMessageLabel.setText("");
         GameMenuController.goToNextPlayer();
         updateCurrentPlayerInfo();
-        for (ExtendedBlock selectedBlock : selectedBlocks)
-            unselectBlockView(selectedBlock);
-        selectedBlocks.clear();
     }
 
     private void updateCurrentPlayerInfo() {
@@ -823,14 +819,45 @@ public class GameMenuGFXController {
         Button moveButton = new Button(isAttack ? "attack" : "move");
         moveButton.setOnMouseClicked(mouseEvent -> {
             UnitMenuController.selectedMilitaryUnits = selectedUnits;
-            if (isAttack) UnitMenuController.attackEnemy(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
-            else UnitMenuController.moveUnit(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
-            unselectButton.getOnMouseClicked();
+            if (isAttack) {
+                UnitMenuMessages result = UnitMenuController.attackEnemy(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
+                if (result == UnitMenuMessages.TARGET_OUT_OF_RANGE)
+                    unitMessageLabel.setText("target is out of range, move closer and try again!");
+                else if (result == UnitMenuMessages.NO_ENEMY_HERE) unitMessageLabel.setText("there's no enemy here!");
+                else unitMessageLabel.setText("units are attacking target");
+            } else {
+                UnitMenuMessages result = UnitMenuController.moveUnit(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
+                if (result == UnitMenuMessages.INVALID_DESTINATION) unitMessageLabel.setText("units can't go here!");
+                else if (result == UnitMenuMessages.NO_WAY_THERE)
+                    unitMessageLabel.setText("there is no way to get there!");
+                else
+                    unitMessageLabel.setText("destination set successfully, units will go there when your turn is over");
+            }
+            PauseTransition visiblePause = new PauseTransition(
+                    Duration.seconds(3)
+            );
+            unselectAllMethod();
+            updateSelectedBlocksPane();
+            visiblePause.setOnFinished(event -> unitMessageLabel.setText(""));
+            visiblePause.play();
         });
-        Button cancelButton = new Button("cancel");
+        Button cancelButton = new Button("back");
         cancelButton.setOnMouseClicked(mouseEvent -> updateSelectedBlocksPane());
         HBox buttonContainer = new HBox(moveButton, cancelButton);
         buttonContainer.setAlignment(Pos.CENTER);
         selectedTroopsInfoPane.getChildren().addAll(xContainer, yContainer, buttonContainer);
+    }
+
+    private void unselectAllHandleMethod(MouseEvent mouseEvent) {
+        unselectAllMethod();
+    }
+
+    private void unselectAllMethod() {
+        selectedTroopsInfoPane.getChildren().clear();
+        selectedUnitsLabels.clear();
+        for (ExtendedBlock selectedBlock : selectedBlocks)
+            selectedBlock.getBlockView().setStroke(null);
+        selectedRoleCountMap.clear();
+        selectedBlocks.clear();
     }
 }

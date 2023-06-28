@@ -21,8 +21,10 @@ public class UnitMenuController {
 
     public static UnitMenuMessages moveUnit(Coordinate destination) {
         Map map = Stronghold.getCurrentBattle().getBattleMap();
-        if (!map.getBlockByRowAndColumn(destination).canUnitsGoHere(true) || map.findPath(selectedMilitaryUnits.get(0).getPosition(), destination) == null)
+        if (!map.getBlockByRowAndColumn(destination).canUnitsGoHere(true))
             return UnitMenuMessages.INVALID_DESTINATION;
+        if (map.findPath(selectedMilitaryUnits.get(0).getPosition(), destination) == null)
+            return UnitMenuMessages.NO_WAY_THERE;
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits)
             selectedMilitaryUnit.moveUnit(destination);
         return UnitMenuMessages.SUCCESSFUL_MOVE_UNIT;
@@ -48,6 +50,11 @@ public class UnitMenuController {
     }
 
     public static UnitMenuMessages attackEnemy(Coordinate target) {
+        Block targetBlock = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(target);
+        ArrayList<Unit> enemyUnits = targetBlock.getAllAttackableEnemyUnits(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
+        Building enemyBuilding = targetBlock.getBuilding();
+        if (enemyUnits.size() == 0 && (enemyBuilding == null || enemyBuilding.getGovernment() == Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
+            return UnitMenuMessages.NO_ENEMY_HERE;
         int totalDamageToUnits = 0;
         int totalDamageToBuildings = 0;
         ArrayList<MilitaryUnit> attackingUnits = new ArrayList<>();
@@ -63,11 +70,6 @@ public class UnitMenuController {
             }
         }
         if (attackingUnits.isEmpty()) return UnitMenuMessages.TARGET_OUT_OF_RANGE;
-        Block targetBlock = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(target);
-        ArrayList<Unit> enemyUnits = targetBlock.getAllAttackableEnemyUnits(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
-        Building enemyBuilding = targetBlock.getBuilding();
-        if (enemyUnits.size() == 0 && enemyBuilding != null && enemyBuilding.getGovernment() == Stronghold.getCurrentBattle().getGovernmentAboutToPlay())
-            return UnitMenuMessages.NO_ENEMY_HERE;
         ArrayList<Unit> deadUnits = new ArrayList<>();
         for (Unit unit : enemyUnits) {
             unit.changeHitPoint(-totalDamageToUnits);
