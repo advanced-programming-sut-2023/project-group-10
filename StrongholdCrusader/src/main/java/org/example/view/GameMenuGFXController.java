@@ -24,6 +24,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import org.example.controller.BuildingMenuController;
 import org.example.controller.GameMenuController;
 import org.example.controller.MapMenuController;
 import org.example.controller.UnitMenuController;
@@ -37,6 +38,7 @@ import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.RoleName;
+import org.example.view.enums.messages.BuildingMenuMessages;
 
 import java.util.*;
 
@@ -155,8 +157,27 @@ public class GameMenuGFXController {
                 extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
                 if (extendedBlock.getBlock().getBuilding() != null)
                     setBuilding(extendedBlock, coordinate);
+            } else if(keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.R) && selectedBuildingCoordinate != null){
+                BuildingMenuController.setSelectedBuilding(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuildingCoordinate).getBuilding());
+                BuildingMenuMessages message = BuildingMenuController.repair();
+                setRepairMessage(message);
             }
         });
+    }
+
+    private void setRepairMessage(BuildingMenuMessages message){
+        if(message.equals(BuildingMenuMessages.REPAIR_SUCCESSFUL)){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Repair Successful");
+            alert.setContentText("Selected Building was repaired successfully");
+            alert.show();
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Repair Unsuccessful");
+            alert.setContentText(message.name().replaceAll("_", " "));
+            alert.show();
+        }
     }
 
     private void initializeControlButtons() {
