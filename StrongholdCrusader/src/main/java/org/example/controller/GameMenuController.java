@@ -117,8 +117,10 @@ public class GameMenuController {
                     if (neededPeasants == 0) break;
                 }
         }
-        if (BuildingType.getBuildingTypeByName(buildingTypeName) instanceof ItemProducingBuildingType)
-            new ItemProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingTypeName).addToGovernmentAndBlock();
+        if (BuildingType.getBuildingTypeByName(buildingTypeName) instanceof ItemProducingBuildingType) {
+            if (!new ItemProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingTypeName).addToGovernmentAndBlock())
+                return GameMenuMessages.INCOMPATIBLE_LAND;
+        }
         else if (buildingTypeName == BuildingTypeName.STAIRS)
             new Stairs(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlock();
         else

@@ -137,6 +137,31 @@ public class GameMenuGFXController {
                 copiedBuilding.getChildren().add(label);
                 copiedBuilding.setVisible(true);
             }
+            else if(keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.V) && copiedBuilding.getChildren().size() == 3 && selectedBlocks.size() == 1){
+                Coordinate coordinate = Stronghold.getCurrentBattle().getBattleMap().getPolygonCoordinateMap().get(selectedBlocks.get(0).getBlockView());
+                ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
+                extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
+                if(extendedBlock.getBlock().getBuilding() != null) {
+                    Popup popup = buildingDetails(coordinate);
+                    extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
+                        popup.setAnchorX(mouseEvent1.getSceneX() + 5);
+                        popup.setAnchorY(mouseEvent1.getSceneY() + 5);
+                        popup.show(stage);
+                    });
+                    extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
+                    extendedBlock.getObject().setOnMouseClicked(mouseEvent -> {
+                        if (selectedBuilding == null) {
+                            selectedBuilding = extendedBlock.getBlock().getBuilding().getBuildingType().getName();
+                            extendedBlock.getObject().setBlendMode(BlendMode.COLOR_DODGE);
+                        } else {
+                            selectedBuilding = null;
+                            extendedBlock.getObject().setBlendMode(null);
+                        }
+                    });
+                    if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
+                        scrollPaneContent.getChildren().add(extendedBlock.getObject());
+                }
+            }
         });
     }
 
@@ -331,9 +356,9 @@ public class GameMenuGFXController {
                                     extendedBlock.getObject().setBlendMode(null);
                                 }
                             });
+                            if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
+                                scrollPaneContent.getChildren().add(extendedBlock.getObject());
                         }
-                        if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
-                            scrollPaneContent.getChildren().add(extendedBlock.getObject());
                     } else dragEvent.setDropCompleted(false);
                     dragEvent.consume();
                 });
