@@ -95,8 +95,14 @@ public class Block {
         if (this.droppable != null) return false;
         if (!texture.isBuildable()) return false;
         if (onFire) return false;
-        if (!texture.isFertile() && droppable instanceof ItemProducingBuilding && ((ItemProducingBuildingType) ((Building) droppable).getBuildingType()).isFarm())
-            return false;
+        if (droppable instanceof ItemProducingBuilding) {
+            ItemProducingBuildingType buildingType = (ItemProducingBuildingType) ((ItemProducingBuilding) droppable).getBuildingType();
+            if (buildingType.isFarm() && !texture.isFertile()) return false;
+            else if (buildingType.getName() == BuildingTypeName.IRON_MINE && texture != BlockTexture.IRON) return false;
+            else if (buildingType.getName() == BuildingTypeName.QUARRY && texture != BlockTexture.BOULDERS)
+                return false;
+            else if(buildingType.getName()==BuildingTypeName.PITCH_RIG && texture!=BlockTexture.OIL) return false;
+        }
         this.droppable = droppable;
         return true;
     }
@@ -155,7 +161,7 @@ public class Block {
     }
 
     public void removeBuilding() {
-        if (this.getBuilding()!=null){
+        if (this.getBuilding() != null) {
             this.setDroppable(null);
         }
     }

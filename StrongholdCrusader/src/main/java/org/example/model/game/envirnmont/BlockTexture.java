@@ -15,7 +15,7 @@ public enum BlockTexture {
     SCRUB("scrub", false, true, true, true, Color.LAWNGREEN, "scrub.png"),
     THICK_SCRUB("thick scrub", false, true, true, true, Color.FORESTGREEN, "thick-scrub.png"),
     //on water
-    OIL("oil", false, false, true, false, Color.BLACK, "oil.png"),
+    OIL("oil", false, true, true, false, Color.BLACK, "oil.png"),
     MARSH("marsh", false, false, true, false, Color.DARKSEAGREEN, "marsh.png"), /* units can spawn or walk here but drown if they do */
     FORD("ford", false, false, true, false, Color.SADDLEBROWN, "ford.png"),
     RIVER("river", false, false, false, false, Color.DEEPSKYBLUE, "river.png"),

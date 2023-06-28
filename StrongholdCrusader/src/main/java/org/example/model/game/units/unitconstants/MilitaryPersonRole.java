@@ -47,7 +47,7 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
         new MilitaryPersonRole(RoleName.FIRE_THROWER, defaultHitPoint * Quality.LOW.getValue(), Quality.VERY_HIGH, Quality.HIGH, Quality.AVERAGE, Quality.AVERAGE, 100, BuildingTypeName.MERCENARY_POST, null, false, false);
     }
 
-    public static ArrayList<Role> getAllMilitaryRoles(){
+    public static ArrayList<Role> getAllMilitaryRoles() {
         return allMilitaryRoles;
     }
 
@@ -84,7 +84,8 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
         int result = super.numberOfUnitsThatCanBeSpawned(government);
         for (Item armor : armors)
             result = (int) Math.min(result, government.getItemCount(armor));
-        result = (int) Math.min(result, government.getItemCount(weapon));
+        if (weapon != null)
+            result = (int) Math.min(result, government.getItemCount(weapon));
         return result;
     }
 }

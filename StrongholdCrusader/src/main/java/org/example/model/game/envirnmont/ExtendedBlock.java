@@ -103,7 +103,7 @@ public class ExtendedBlock {
         if (result == CustomizeMapMessages.SUCCESSFUL_TREE_DROP) {
             object = new Rectangle();
             object.setFill(treeImageMap.get(treeType));
-            setObjectProperties(position.row, position.column);
+            setObjectProperties(position.row, position.column, true);
         }
         return result;
     }
@@ -113,7 +113,7 @@ public class ExtendedBlock {
         if (result == CustomizeMapMessages.DROP_ROCK_SUCCESSFUL) {
             object = new Rectangle();
             object.setFill(rockImageMap.get(rockType));
-            setObjectProperties(position.row, position.column);
+            setObjectProperties(position.row, position.column, true);
         }
         return result;
     }
@@ -123,7 +123,7 @@ public class ExtendedBlock {
         if (result == GameMenuMessages.SUCCESSFUL_DROP) {
             object = new Rectangle();
             object.setFill(buildingImageMap.get(typeName));
-            setObjectProperties(position.row, position.column);
+            setObjectProperties(position.row, position.column, false);
         }
         return result;
     }
@@ -132,19 +132,23 @@ public class ExtendedBlock {
         // TODO: set keep boolean in block object to true if necessary
         object = new Rectangle();
         object.setFill(new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/keep").toExternalForm() + "keep" + (int) (Math.random() * 4 + 1) + ".png")));
-        setObjectProperties(row, column);
+        setObjectProperties(row, column, false);
     }
 
     public GameMenuMessages dropUnit(Coordinate position, RoleName typeName, int count) {
         return GameMenuController.dropUnit(position, typeName, count);
     }
 
-    private void setObjectProperties(int row, int column) {
+    private void setObjectProperties(int row, int column, boolean isNatural) {
         ImagePattern paint = (ImagePattern) object.getFill();
         double heightToWidthRatio = paint.getImage().getHeight() / paint.getImage().getWidth();
-        object.setWidth(WIDTH / 2);
-        object.setHeight(heightToWidthRatio * WIDTH / 2);
-        object.relocate(WIDTH / 2 * (column - row) + x0 + object.getWidth() / 2, HEIGHT / 2 * (row + column + 2) - object.getHeight() + 5);
+        object.setWidth(isNatural ? WIDTH / 6 : WIDTH / 2);
+        object.setHeight(heightToWidthRatio * object.getWidth());
+        if (isNatural) {
+            Pair<Double, Double> center = getCenterOfBlockForUnits(row, column, object.getWidth(), object.getHeight());
+            object.relocate(center.getKey(), center.getValue());
+        } else
+            object.relocate(WIDTH / 2 * (column - row) + x0 + object.getWidth() / 2, HEIGHT / 2 * (row + column + 2) - object.getHeight() + 5);
         object.setPickOnBounds(false);
     }
 

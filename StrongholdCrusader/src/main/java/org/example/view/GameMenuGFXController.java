@@ -80,22 +80,22 @@ public class GameMenuGFXController {
         GameMenuGFXController.stage = stage;
         scrollPaneContent = Stronghold.getMapGroupGFX();
         System.out.println(stage.getHeight());
-        controlBox.setPrefHeight(400);
+        controlBox.setPrefHeight(200);
 
-        mapBox.setPrefWidth(stage.getWidth() * 5 / 6);
+        mapBox.setPrefWidth(stage.getWidth() * 7 / 8);
         mapBox.setPrefHeight(stage.getHeight() - controlBox.getPrefHeight());
         initializeMapView();
 
-        miniMapBox.setPrefWidth(400);
-        miniMapBox.setPrefHeight(400);
+        miniMapBox.setPrefWidth(200);
+        miniMapBox.setPrefHeight(controlBox.getPrefHeight());
         miniMapBox.setStyle("-fx-background-color: DARKKHAKI");
         initializeMiniMap();
 
-        controlButtonsBar.setPrefWidth(60);
-        controlButtonsBar.setPrefHeight(400);
+        controlButtonsBar.setPrefWidth(50);
+        controlButtonsBar.setPrefHeight(controlBox.getPrefHeight());
         initializeControlButtons();
 
-        turnPane.setPrefWidth(stage.getWidth() / 6);
+        turnPane.setPrefWidth(stage.getWidth() / 8);
         turnPane.setPrefHeight(mapBox.getPrefHeight());
         currentPlayerAvatar.setWidth(turnPane.getPrefWidth() / 2);
         currentPlayerAvatar.setHeight(turnPane.getPrefWidth() / 2);
@@ -172,11 +172,11 @@ public class GameMenuGFXController {
                     alert.setContentText("You can not create unit in this building");
                     alert.show();
                 }
-            } else if(keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.O) && selectedBuildingCoordinate!= null){
+            } else if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.O) && selectedBuildingCoordinate != null) {
                 Building building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuildingCoordinate).getBuilding();
-                if(building.getBuildingType().getName().equals(BuildingTypeName.MARKET)){
+                if (building.getBuildingType().getName().equals(BuildingTypeName.MARKET)) {
                     try {
-                        ShopMenuGFX shopMenuGFX= new ShopMenuGFX();
+                        ShopMenuGFX shopMenuGFX = new ShopMenuGFX();
                         FXMLLoader loader = new FXMLLoader(GameMenuGFX.class.getResource("/view/gameMenu.fxml"));
                         shopMenuGFX.setGameController(loader.getController());
                         shopMenuGFX.start(new Stage());
@@ -258,40 +258,41 @@ public class GameMenuGFXController {
         LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops);
         Rectangle back = new Rectangle(controlButtonsBar.getPrefWidth(), controlButtonsBar.getPrefHeight());
         back.setFill(lg1);
-        controlButtonsBar.getChildren().removeAll();
+        controlButtonsBar.getChildren().clear();
         controlButtonsBar.getChildren().add(back);
-        buttons.setPrefHeight(400);
-        buttons.setPrefWidth(60);
+        buttons.setPrefHeight(controlButtonsBar.getPrefHeight());
+        buttons.setPrefWidth(controlButtonsBar.getPrefWidth());
 
+        double size = controlButtonsBar.getPrefHeight() / 8;
         Rectangle options = new Rectangle();
         options.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                 ("/images/controlbuttons/options0.png")).toString())));
-        options.setWidth(40);
-        options.setHeight(40);
+        options.setWidth(size);
+        options.setHeight(size);
         options.setOnMouseClicked(this::selectOptionsFromMenuBar);
 
         Rectangle briefing = new Rectangle();
         briefing.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                 ("/images/controlbuttons/briefing0.png")).toString())));
-        briefing.setWidth(40);
-        briefing.setHeight(40);
+        briefing.setWidth(size);
+        briefing.setHeight(size);
         briefing.setOnMouseClicked(this::selectBriefingFromMenuBar);
 
         Rectangle delete = new Rectangle();
         delete.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                 ("/images/controlbuttons/delete0.png")).toString())));
-        delete.setWidth(40);
-        delete.setHeight(40);
+        delete.setWidth(size);
+        delete.setHeight(size);
         delete.setOnMouseClicked(this::selectDeleteFromMenuBar);
 
         Rectangle undo = new Rectangle();
         undo.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource
                 ("/images/controlbuttons/undo0.png")).toString())));
-        undo.setWidth(40);
-        undo.setHeight(40);
+        undo.setWidth(size);
+        undo.setHeight(size);
         undo.setOnMouseClicked(this::selectUndoFromMenuBar);
 
-        buttons.setSpacing(40);
+        buttons.setSpacing((controlButtonsBar.getPrefHeight() - size * 4) / 6);
         buttons.setAlignment(Pos.CENTER);
         buttons.getChildren().addAll(options, briefing, delete, undo);
 
@@ -311,7 +312,7 @@ public class GameMenuGFXController {
 
     private void selectBriefingFromMenuBar(MouseEvent mouseEvent) {
         selectButtonFromBar(1);
-        BriefingGFX briefingGFX=new BriefingGFX();
+        BriefingGFX briefingGFX = new BriefingGFX();
         briefingGFX.setGameMenuGFXController(this);
         try {
             briefingGFX.start(new Stage());
@@ -323,11 +324,11 @@ public class GameMenuGFXController {
 
     private void selectOptionsFromMenuBar(MouseEvent mouseEvent) {
         selectButtonFromBar(0);
-        OptionsMenuGFX optionsMenuGFX=new OptionsMenuGFX();
+        OptionsMenuGFX optionsMenuGFX = new OptionsMenuGFX();
         optionsMenuGFX.setGameMenuGFXController(this);
         try {
             optionsMenuGFX.start(new Stage());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         unselectAll();
@@ -478,6 +479,7 @@ public class GameMenuGFXController {
         });
         if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
             scrollPaneContent.getChildren().add(extendedBlock.getObject());
+        scribeDetails();
     }
 
     private void switchSelectionState(Coordinate coordinate) {
@@ -536,6 +538,8 @@ public class GameMenuGFXController {
         imageView.setFitHeight(50);
         Slider slider = new Slider(0, troopCount, troopCount);
         Label nameLabel = new Label(type + " | count = " + (int) slider.getValue());
+        nameLabel.setWrapText(true);
+        nameLabel.setTextAlignment(TextAlignment.CENTER);
         selectedUnitsLabels.add(nameLabel);
         HBox troopInfo = new HBox(imageView, nameLabel);
         troopInfo.setAlignment(Pos.CENTER);
@@ -750,7 +754,6 @@ public class GameMenuGFXController {
 
     public void goToNextPlayer() {
         // TODO: handle animations and potential bugs
-        scribeDetails();
         unselectAllMethod();
         unitMessageLabel.setText("");
         GameMenuMessages result = GameMenuController.goToNextPlayer();
@@ -761,6 +764,7 @@ public class GameMenuGFXController {
                 throw new RuntimeException(e);
             }
         }
+        scribeDetails();
         updateCurrentPlayerInfo();
     }
 

@@ -83,7 +83,7 @@ public class Government {
         religionCount = 1;
     }
 
-    public void removeReligion(){
+    public void removeReligion() {
         popularityFactors.put("Religion", 0);
         religionCount = 0;
     }
@@ -146,11 +146,12 @@ public class Government {
         gold += change;
     }
 
-    public void addItem(Item item, int amount) {
-        if (itemList.containsKey(item))
-            itemList.put(item, itemList.get(item) + amount);
-        else itemList.put(item, (double) amount);
+    public void changeItemCount(Item item, int amount) {
+        itemList.put(item, itemList.getOrDefault(item, 0d) + amount);
+    }
 
+    public void addItem(Item item, int amount) {
+        changeItemCount(item, amount);
         gold -= item.getBuyPrice() * amount;
 
     }

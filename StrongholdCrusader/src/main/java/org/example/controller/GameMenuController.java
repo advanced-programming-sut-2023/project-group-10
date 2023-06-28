@@ -110,22 +110,30 @@ public class GameMenuController {
             return GameMenuMessages.NOT_ENOUGH_PEASANTS;
         RoleName workerRole = WorkerRole.getRoleNameByWorkplace(buildingTypeName);
         if (workerRole != null) Unit.produceUnits(workerRole, neededPeasants, position);
+        ArrayList<Unit> tempCopy = new ArrayList<>(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getUnits());
         if (neededPeasants != 0) {
-            for (Unit unit : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getUnits())
+            for (Unit unit : tempCopy)
                 if (unit.getRole().getName() == RoleName.PEASANT) {
                     unit.killMe();
                     neededPeasants--;
                     if (neededPeasants == 0) break;
                 }
         }
-        if (BuildingType.getBuildingTypeByName(buildingTypeName) instanceof ItemProducingBuildingType) {
-            if (!new ItemProducingBuilding(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingTypeName).addToGovernmentAndBlock())
+        BuildingType buildingType = BuildingType.getBuildingTypeByName(buildingTypeName);
+        Government player = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
+        if (buildingType.getBuildingCost() > player.getGold()) return GameMenuMessages.NOT_ENOUGH_GOLD;
+        for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet())
+            if (player.getItemCount(entry.getKey()) < entry.getValue()) return GameMenuMessages.NOT_ENOUGH_RESOURCES;
+        if (buildingType instanceof ItemProducingBuildingType) {
+            if (!new ItemProducingBuilding(position, player, buildingTypeName).addToGovernmentAndBlock())
                 return GameMenuMessages.INCOMPATIBLE_LAND;
-        }
-        else if (buildingTypeName == BuildingTypeName.STAIRS)
+        } else if (buildingTypeName == BuildingTypeName.STAIRS)
             new Stairs(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay()).addToGovernmentAndBlock();
         else
             new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingTypeName).addToGovernmentAndBlock();
+        player.changeGold(-buildingType.getBuildingCost());
+        for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet())
+            player.changeItemCount(entry.getKey(), -entry.getValue());
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 
@@ -176,9 +184,9 @@ public class GameMenuController {
             User owner = User.getUserByUsername(player.getKey());
             Coordinate keep = keeps.get(player.getKey());
             Government gov = new Government(owner, player.getValue(), keep);
-            gov.addItem(Item.WOOD, 20);
-            gov.addItem(Item.STONE, 20);
-            gov.setGold(20);
+            gov.changeItemCount(Item.WOOD, 20);
+            gov.changeItemCount(Item.STONE, 20);
+            gov.setGold(2000);
             map.getBlockByRowAndColumn(keep).setKeep(gov);
             governments[x] = gov;
             x++;
@@ -223,7 +231,7 @@ public class GameMenuController {
         ArrayList<Building> tempCopy = new ArrayList<>(government.getBuildings());
         for (Building building : tempCopy)
             building.deleteBuildingFromMapAndGovernment();
-        ExtendedBlock keepBlock=Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(government.getKeep());
+        ExtendedBlock keepBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(government.getKeep());
         keepBlock.getBlock().setKeep(null);
         keepBlock.removeBuilding();
     }
