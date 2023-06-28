@@ -1,21 +1,21 @@
 package org.example.view;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.example.controller.ProfileMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
 
@@ -25,15 +25,39 @@ import java.util.List;
 
 public class Scoreboard extends Application {
     private static Stage stage;
-    public Circle currentPlayerAvatar;
-    public Text currentPlayerUsername;
-    public Text currentPlayerScore;
     private String path;
 
 
     @Override
     public void start(Stage stage) throws Exception {
         Scoreboard.stage = stage;
+
+        Circle currentPlayerAvatar = new Circle(50, new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
+        currentPlayerAvatar.setOnDragOver(dragEvent -> {
+            if (dragEvent.getGestureSource() != currentPlayerAvatar && dragEvent.getDragboard().hasString())
+                dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            dragEvent.consume();
+        });
+        currentPlayerAvatar.setOnDragDropped(dragEvent -> {
+            Dragboard db = dragEvent.getDragboard();
+            if (db.hasString())
+                currentPlayerAvatar.setFill(new ImagePattern(new Image(path)));
+            else dragEvent.setDropCompleted(false);
+            dragEvent.consume();
+        });
+        Text currentPlayerUsername = new Text(Stronghold.getCurrentUser().getUsername());
+        Text currentPlayerScore = new Text(Integer.toString(Stronghold.getCurrentUser().getHighScore()));
+        Button back = new Button("back");
+        back.setOnMouseClicked(mouseEvent -> {
+            try {
+                profileMenu();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        VBox vBox = new VBox(10);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(currentPlayerAvatar, currentPlayerUsername, currentPlayerScore, back);
 
         ListView<Integer> rank = new ListView<>();
         rank.setMaxWidth(70);
@@ -55,10 +79,16 @@ public class Scoreboard extends Application {
             username.getItems().add(sortedUsers.get(i).getUsername());
             Circle circle = new Circle(30, new ImagePattern(new Image(sortedUsers.get(i).getAvatar())));
             circle.setOnDragDetected(mouseEvent -> {
+                Dragboard db = circle.startDragAndDrop(TransferMode.ANY);
+                ClipboardContent content = new ClipboardContent();
+                content.putString("circle drag detected");
+                db.setContent(content);
                 ImagePattern imagePattern = (ImagePattern) circle.getFill();
-                path = imagePattern.getImage().getUrl();
-                System.out.println(path);
+                Image image = imagePattern.getImage();
+                db.setDragView(new Image(image.getUrl(), 40, 40, false, false));
+                path = image.getUrl();
             });
+            circle.setOnMouseDragged(mouseEvent -> mouseEvent.setDragDetect(true));
             avatar.getItems().add(circle);
             highScore.getItems().add(sortedUsers.get(i).getHighScore());
         }
@@ -68,20 +98,14 @@ public class Scoreboard extends Application {
         hBox.setMaxHeight(300);
 
         HBox main = new FXMLLoader(Scoreboard.class.getResource("/view/scoreboard.fxml")).load();
-        main.getChildren().add(hBox);
+        main.getChildren().addAll(vBox, hBox);
         Scene scene = new Scene(main);
         stage.setScene(scene);
         stage.setTitle("Scoreboard");
+        stage.setMaximized(true);
         stage.show();
 
         bind(rank, avatar, username, highScore);
-    }
-
-    @FXML
-    public void initialize(){
-        currentPlayerAvatar.setFill(new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
-        currentPlayerUsername.setText(Stronghold.getCurrentUser().getUsername());
-        currentPlayerScore.setText(Integer.toString(Stronghold.getCurrentUser().getHighScore()));
     }
 
     public void profileMenu() throws Exception{
@@ -108,11 +132,5 @@ public class Scoreboard extends Application {
                 bar1.valueProperty().bindBidirectional(bar4.valueProperty());
             }
         }
-    }
-
-    public void changeAvatar() {
-        System.out.println("yes");
-        ProfileMenuController.changeAvatar(path);
-        currentPlayerAvatar.setFill(new ImagePattern(new Image(path)));
     }
 }

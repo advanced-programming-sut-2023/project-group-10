@@ -14,11 +14,4 @@
       prefHeight="400.0" prefWidth="600.0" fx:id="pane"
       alignment="CENTER" spacing="25">
 
-    <VBox alignment="CENTER" spacing="10">
-        <Circle fx:id="currentPlayerAvatar" radius="50" onMouseClicked="#changeAvatar"/>
-        <Text fx:id="currentPlayerUsername"/>
-        <Text fx:id="currentPlayerScore"/>
-        <Button text="back" onMouseClicked="#profileMenu"/>
-    </VBox>
-
 </HBox>
