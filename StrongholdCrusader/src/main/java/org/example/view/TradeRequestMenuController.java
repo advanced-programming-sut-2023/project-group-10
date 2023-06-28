@@ -46,6 +46,8 @@ public class TradeRequestMenuController {
         showUsers();
         prepareUserLabel();
 
+        addPositionValidityListener(price);
+
     }
 
     private void prepareUserLabel() {
@@ -88,9 +90,11 @@ public class TradeRequestMenuController {
         }
 
         for (Map.Entry<Item, Double> item : Stronghold.getCurrentBattle().getGovernmentByOwnerId(selectedUser.getUsername()).getItemList().entrySet()) {
+            if (!item.getKey().isSellable())
+                continue;
             HBox itemInfo = new HBox();
             Text itemName = new Text(item.getKey().getName());
-            itemName.setFont(new Font("PT Mono", 14));
+            itemName.setFont(new Font("PT Mono", 9));
             itemInfo.getChildren().add(itemName);
             userResources.add(itemInfo);
             itemInfo.setId(item.getKey().getName());
@@ -123,11 +127,13 @@ public class TradeRequestMenuController {
 
     public void submit(MouseEvent mouseEvent) {
         TradeMenuMessages message;
+        System.out.println(Integer.parseInt(price.getText()));
         if (requestSelected)
             message = TradeMenuController.sendRequest(selectedItem.getName(), itemAmount.getValue(), Integer.parseInt(price.getText()), messageField.getText(), selectedUser.getUsername());
         else
             message = TradeMenuController.sendRequest(selectedItem.getName(), itemAmount.getValue(), 0, messageField.getText(), selectedUser.getUsername());
         Text text = new Text();
+        System.out.println(message.name());
         switch (message) {
             //convert these to popups
             case INVALID_TYPE:
@@ -140,7 +146,7 @@ public class TradeRequestMenuController {
                 text.setFill(Color.LIMEGREEN);
                 break;
         }
-        text.setFont(new Font("Courier new", 15));
+        text.setFont(new Font("Courier new", 10));
         Popup popup = new Popup();
         popup.getContent().add(text);
         popup.setAutoHide(true);
@@ -148,7 +154,7 @@ public class TradeRequestMenuController {
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent e) {
                         if (!popup.isShowing()) {
-                            popup.show(ItemDetailsMenuGFX.stage);
+                            popup.show(ShopMenuGFX.stage);
                             popup.setX(0);
                         }
                     }
@@ -175,6 +181,16 @@ public class TradeRequestMenuController {
     public void selectRequest(MouseEvent mouseEvent) {
         request.setBackground(Background.fill(Color.CORNFLOWERBLUE));
         donate.setBackground(Background.fill(Color.LIGHTGRAY));
+    }
+
+    public void addPositionValidityListener(TextField number) {
+        number.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!number.getText().matches("\\d*"))
+                number.setText(oldValue);
+            else
+                number.setText(newValue);
+
+        });
     }
 
 }

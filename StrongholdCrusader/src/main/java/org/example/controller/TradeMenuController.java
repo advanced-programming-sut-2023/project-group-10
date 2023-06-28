@@ -24,11 +24,6 @@ public class TradeMenuController {
             return TradeMenuMessages.INVALID_TYPE;
 
         String senderId = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername();
-        if (price == 0) {
-            String tmp = recipientId;
-            recipientId = senderId;
-            senderId = tmp;
-        }
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().addToTradeList(
                 new Trade(recipientId, senderId, message, resource, resourceAmount, price));
         Stronghold.getCurrentBattle().getGovernmentByOwnerId(recipientId).addToTradeList(
