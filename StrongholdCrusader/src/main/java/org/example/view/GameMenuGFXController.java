@@ -51,7 +51,7 @@ public class GameMenuGFXController {
     public Button nextPlayerButton;
     public VBox selectedTroopsInfoPane;
     public Rectangle faceImage;
-    public Pane bookImage;
+    public  Pane bookImage=new Pane() ;
     public Rectangle edge;
     public VBox buildingContainer;
     public HBox controlBox;
@@ -242,9 +242,8 @@ public class GameMenuGFXController {
         selectButtonFromBar(-1);
     }
 
-    private void delete(MouseEvent mouseEvent){
-    }
-    private void scribeDetails() {
+
+    public void scribeDetails() {
         VBox fields = new VBox();
         fields.setSpacing(3);
         Text popularity = new Text("   " + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPopularity().getValue());
@@ -295,7 +294,7 @@ public class GameMenuGFXController {
                 blockView.setOnMouseClicked(mouseEvent -> {
                     if (selectionStartCoordinate != null) {
                         switchSelectionState(selectionStartCoordinate);
-                        if ( deleteMode){
+                        if (deleteMode){
                             delete(selectionStartCoordinate);
                             deleteMode=false;
                             unselectAll();
@@ -748,7 +747,7 @@ public class GameMenuGFXController {
             UnitMenuController.moveUnit(new Coordinate(xSpinner.getValue(), ySpinner.getValue()));
         });
         Button cancelButton = new Button("cancel");
-        cancelButton.setOnMouseClicked(mouseEvent -> updateSelectedBlocksPane());
+         cancelButton.setOnMouseClicked(mouseEvent -> updateSelectedBlocksPane());
         HBox buttonContainer = new HBox(moveButton, cancelButton);
         buttonContainer.setAlignment(Pos.CENTER);
         selectedTroopsInfoPane.getChildren().addAll(xContainer, yContainer, buttonContainer);

@@ -13,11 +13,15 @@ import java.net.URL;
 public class ShopMenuGFX extends Application {
 
     public static Stage stage;
+    public GameMenuGFXController gameMenuGFXController;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Pane shopMenuPane = FXMLLoader.load(
-                new URL(ShopMenuGFX.class.getResource("/view/shopMenu.fxml").toExternalForm()));
+
+        URL shopMenuFXML = ItemDetailsMenuGFX.class.getResource("/view/shopMenu.fxml");
+        FXMLLoader loader = new FXMLLoader(shopMenuFXML);
+        Pane shopMenuPane= loader.load();
+        ((ShopMenuController) loader.getController()).setGameMenuGFXController(this.gameMenuGFXController);
         ShopMenuGFX.stage = primaryStage;
         Image image = new Image(ShopMenuGFX.class.getResource("/images/backgrounds/brownPaper.jpeg").toExternalForm());
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,
@@ -34,5 +38,9 @@ public class ShopMenuGFX extends Application {
             stage.showAndWait();
         }
         stage.centerOnScreen();
+    }
+
+    public void setGameController(GameMenuGFXController gameMenuGFXController) {
+        this.gameMenuGFXController=gameMenuGFXController;
     }
 }

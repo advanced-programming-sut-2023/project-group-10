@@ -23,18 +23,24 @@ public class GameMenuGFX extends Application {
             switch (event.getCode()) {
                 case SPACE:
                     try {
-                        new ShopMenuGFX().start(new Stage());
+                       ShopMenuGFX shopMenuGFX= new ShopMenuGFX();
+                       shopMenuGFX.setGameController(loader.getController());
+                       shopMenuGFX.start(new Stage());
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+                    break;
+
                 case TAB:
                     try {
                         new ShopMenuGFX().start(SignupMenu.stage);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
+                    break;
                 case M:
                     ((GameMenuGFXController) loader.getController()).moveSelectedUnits();
+                    break;
             }
         });
     }

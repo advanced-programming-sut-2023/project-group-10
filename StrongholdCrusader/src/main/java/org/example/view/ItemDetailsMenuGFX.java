@@ -13,11 +13,14 @@ import java.net.URL;
 public class ItemDetailsMenuGFX extends Application {
     public static Item selectedItem;
     public static Stage stage;
+    public GameMenuGFXController gameMenuGFXController;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Pane itemDetails = FXMLLoader.load(
-                new URL(ShopMenuGFX.class.getResource("/view/itemDetails.fxml").toExternalForm()));
+        URL itemDetailsFXML = ItemDetailsMenuGFX.class.getResource("/view/itemDetails.fxml");
+        FXMLLoader loader = new FXMLLoader(itemDetailsFXML);
+        Pane itemDetails= loader.load();
+        ((ItemDetailMenuController) loader.getController()).setGameMenuGFXController(this.gameMenuGFXController);
         Image image = new Image(ItemDetailsMenuGFX.class.getResource("/images/backgrounds/brownPaper.jpeg").toExternalForm());
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100, 100, true, true, true, true));
@@ -33,5 +36,9 @@ public class ItemDetailsMenuGFX extends Application {
 
     public static Item getSelectedItem() {
         return selectedItem;
+    }
+
+    public void setGameMenuGFXController(GameMenuGFXController gameMenuGFXController) {
+        this.gameMenuGFXController = gameMenuGFXController;
     }
 }

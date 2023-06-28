@@ -13,6 +13,7 @@ import java.io.File;
 public class ShopMenuController {
     public GridPane tableOfItems;
     public HBox buttons;
+    public GameMenuGFXController gameMenuGFXController;
 
     @FXML
     private void initialize() {
@@ -52,6 +53,7 @@ public class ShopMenuController {
         ItemDetailsMenuGFX itemDetailsMenuGFX = new ItemDetailsMenuGFX();
         String path = ((ImageView) mouseEvent.getSource()).getImage().getUrl();
         itemDetailsMenuGFX.setSelectedItem(Item.getItemByPath(path));
+        itemDetailsMenuGFX.setGameMenuGFXController(this.gameMenuGFXController);
         System.out.println(ItemDetailsMenuGFX.getSelectedItem() == null);
         try {
             itemDetailsMenuGFX.start(ShopMenuGFX.stage);
@@ -70,5 +72,9 @@ public class ShopMenuController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setGameMenuGFXController(GameMenuGFXController gameMenuGFXController) {
+        this.gameMenuGFXController = gameMenuGFXController;
     }
 }

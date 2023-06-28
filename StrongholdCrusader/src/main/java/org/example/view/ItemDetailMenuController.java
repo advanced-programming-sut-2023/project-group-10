@@ -43,7 +43,11 @@ public class ItemDetailMenuController {
     public Button sellButton;
     private int amount;
     private Label storage;
+    private GameMenuGFXController gameMenuGFXController;
 
+    public void setGameMenuGFXController(GameMenuGFXController gameMenuGFXController) {
+        this.gameMenuGFXController = gameMenuGFXController;
+    }
 
     @FXML
     public void initialize() {
@@ -213,10 +217,11 @@ public class ItemDetailMenuController {
                 new EventHandler<ActionEvent>() {
                     public void handle(ActionEvent e) {
                         if (!popup.isShowing())
-                            popup.show(SignupMenu.stage);
+                            popup.show(ShopMenuGFX.stage);
                     }
                 };
         buyButton.setOnAction(event);
+        this.gameMenuGFXController.scribeDetails();
 
     }
 
