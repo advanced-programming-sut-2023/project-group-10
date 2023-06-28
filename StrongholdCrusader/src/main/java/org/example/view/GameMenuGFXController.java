@@ -39,6 +39,7 @@ import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.enums.messages.BuildingMenuMessages;
+import org.example.view.enums.messages.GameMenuMessages;
 
 import java.util.*;
 
@@ -154,7 +155,8 @@ public class GameMenuGFXController {
             } else if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.V) && copiedBuilding.getChildren().size() == 3 && selectedBlocks.size() == 1) {
                 Coordinate coordinate = Stronghold.getCurrentBattle().getBattleMap().getPolygonCoordinateMap().get(selectedBlocks.get(0).getBlockView());
                 ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
-                extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
+                GameMenuMessages message = extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
+                setDropBuildingMessage(message);
                 if (extendedBlock.getBlock().getBuilding() != null)
                     setBuilding(extendedBlock, coordinate);
             } else if(keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.R) && selectedBuildingCoordinate != null){
@@ -163,6 +165,15 @@ public class GameMenuGFXController {
                 setRepairMessage(message);
             }
         });
+    }
+
+    private void setDropBuildingMessage(GameMenuMessages message){
+        if(!message.equals(GameMenuMessages.SUCCESSFUL_DROP)){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Drop Building Unsuccessful");
+            alert.setContentText(message.name().replaceAll("_", " "));
+            alert.show();
+        }
     }
 
     private void setRepairMessage(BuildingMenuMessages message){
@@ -353,7 +364,8 @@ public class GameMenuGFXController {
                     ;
                     if (db.hasString()) {
                         ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
-                        extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
+                        GameMenuMessages message = extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
+                        setDropBuildingMessage(message);
                         if (extendedBlock.getBlock().getBuilding() != null)
                             setBuilding(extendedBlock, coordinate);
                     } else dragEvent.setDropCompleted(false);
@@ -379,8 +391,10 @@ public class GameMenuGFXController {
                 selectedBuildingCoordinate = coordinate;
                 extendedBlock.getObject().setBlendMode(BlendMode.COLOR_DODGE);
             } else {
+                Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(selectedBuildingCoordinate).getObject().setBlendMode(null);
                 selectedBuildingCoordinate = null;
-                extendedBlock.getObject().setBlendMode(null);
+                extendedBlock.getObject().setBlendMode(BlendMode.COLOR_DODGE);
+                selectedBuildingCoordinate = coordinate;
             }
         });
         if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
