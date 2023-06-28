@@ -13,6 +13,7 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
     private final Item[] armors;
     private final boolean canClimbLadders;
     private final boolean canDigMoats;
+    private static final ArrayList<Role> allMilitaryRoles = new ArrayList<>();
 
     private MilitaryPersonRole(RoleName name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost, BuildingTypeName producingBuilding, Item weapon, boolean canClimbLadders, boolean canDigMoats, Item... armors) {
         super(name, maxHitPoint, speed, attackRating, attackRange, accuracy, cost);
@@ -21,6 +22,7 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
         this.armors = armors;
         this.canClimbLadders = canClimbLadders;
         this.canDigMoats = canDigMoats;
+        allMilitaryRoles.add(this);
     }
 
     public static void initializeRoles() {
@@ -43,6 +45,10 @@ public class MilitaryPersonRole extends MilitaryUnitRole {
         new MilitaryPersonRole(RoleName.HORSE_ARCHER, defaultHitPoint * Quality.AVERAGE.getValue(), Quality.VERY_HIGH, Quality.HIGH, Quality.AVERAGE, Quality.AVERAGE, 60, BuildingTypeName.MERCENARY_POST, null, false, false);
         new MilitaryPersonRole(RoleName.ARABIAN_SWORDSMAN, defaultHitPoint * Quality.HIGH.getValue(), Quality.VERY_HIGH, Quality.HIGH, Quality.ZERO, Quality.EXTREMELY_HIGH, 80, BuildingTypeName.MERCENARY_POST, null, false, false);
         new MilitaryPersonRole(RoleName.FIRE_THROWER, defaultHitPoint * Quality.LOW.getValue(), Quality.VERY_HIGH, Quality.HIGH, Quality.AVERAGE, Quality.AVERAGE, 100, BuildingTypeName.MERCENARY_POST, null, false, false);
+    }
+
+    public static ArrayList<Role> getAllMilitaryRoles(){
+        return allMilitaryRoles;
     }
 
     public static MilitaryPersonRole[] getRolesProducedInBuilding(BuildingTypeName buildingTypeName) {

@@ -26,6 +26,9 @@ public class BuildingMenuController {
         if (!canBuildingCreateUnit())
             return BuildingMenuMessages.INVALID_BUILDING;
 
+        if (!isTypeCompatible(type))
+            return BuildingMenuMessages.INCOMPATIBLE_TYPES;
+
         if (RoleName.getRoleNameByNameString(type) == null)
             return BuildingMenuMessages.INVALID_UNIT_TYPE;
 
@@ -35,9 +38,6 @@ public class BuildingMenuController {
 
         if (selectedBuilding.getGovernment().getPeasantsCount() < count)
             return BuildingMenuMessages.INSUFFICIENT_POPULATION;
-
-        if (isTypeCompatible(type))
-            return BuildingMenuMessages.INCOMPATIBLE_TYPES;
 
         int deletedPeasants = 0;
         for (Unit unit : selectedBuilding.getGovernment().getUnits())
@@ -92,7 +92,9 @@ public class BuildingMenuController {
     private static boolean canBuildingCreateUnit() {
         return selectedBuilding.getBuildingType().getName().equals(BuildingTypeName.ENGINEER_GUILD) ||
                 selectedBuilding.getBuildingType().getName().equals(BuildingTypeName.MERCENARY_POST) ||
-                selectedBuilding.getBuildingType().getName().equals(BuildingTypeName.BARRACKS);
+                selectedBuilding.getBuildingType().getName().equals(BuildingTypeName.TUNNELER_GUILD) ||
+                selectedBuilding.getBuildingType().getName().equals(BuildingTypeName.BARRACKS) ||
+                selectedBuilding.getBuildingType().getName().equals(BuildingTypeName.CATHEDRAL);
     }
 
     private static boolean isTypeCompatible(String type) {

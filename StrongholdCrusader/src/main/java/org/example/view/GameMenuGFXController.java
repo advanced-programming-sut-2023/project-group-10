@@ -1,5 +1,7 @@
 package org.example.view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,7 +38,9 @@ import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.units.MilitaryUnit;
+import org.example.model.game.units.unitconstants.MilitaryPersonRole;
 import org.example.model.game.units.unitconstants.MilitaryUnitRole;
+import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.view.enums.messages.BuildingMenuMessages;
 import org.example.view.enums.messages.GameMenuMessages;
@@ -163,6 +167,17 @@ public class GameMenuGFXController {
                 BuildingMenuController.setSelectedBuilding(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuildingCoordinate).getBuilding());
                 BuildingMenuMessages message = BuildingMenuController.repair();
                 setRepairMessage(message);
+            } else if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.U) && selectedBuildingCoordinate != null){
+                BuildingMenuController.setSelectedBuilding(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuildingCoordinate).getBuilding());
+                BuildingTypeName name = BuildingMenuController.selectedBuilding.getBuildingType().getName();
+                if(name.equals(BuildingTypeName.MERCENARY_POST) || name.equals(BuildingTypeName.TUNNELER_GUILD) || name.equals(BuildingTypeName.ENGINEER_GUILD) ||
+                   name.equals(BuildingTypeName.BARRACKS) || name.equals(BuildingTypeName.CATHEDRAL)) createUnitPopup();
+                else{
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Can Not Create Unit");
+                    alert.setContentText("You can not create unit in this building");
+                    alert.show();
+                }
             }
         });
     }
@@ -189,6 +204,44 @@ public class GameMenuGFXController {
             alert.setContentText(message.name().replaceAll("_", " "));
             alert.show();
         }
+    }
+
+    private void createUnitPopup(){
+        Popup popup = new Popup();
+        VBox vBox = new VBox(5);
+        vBox.setAlignment(Pos.CENTER);
+
+        ComboBox<String> comboBox = new ComboBox<>();
+        comboBox.setPromptText("role name");
+        for(RoleName roleName : RoleName.values()){
+            if(MilitaryPersonRole.getAllMilitaryRoles().contains(Role.getRoleByName(roleName)))
+                comboBox.getItems().add(roleName.name().replaceAll("_", " ").toLowerCase());
+        }
+
+        Slider slider = new Slider(1, 10, 1);
+        slider.setBlockIncrement(1);
+        Text text = new Text("unit count: 1");
+        text.setFill(Color.WHITE);
+        slider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            text.setText("unit count: " + newValue.intValue());
+        });
+        Button button = new Button("create");
+        button.setOnMouseClicked(mouseEvent -> {
+            popup.hide();
+            BuildingMenuMessages message = BuildingMenuController.createUnit(comboBox.getValue(), (int) slider.getValue());
+            if(!message.equals(BuildingMenuMessages.CREATE_UNIT_SUCCESSFUL)){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Create Unit Failed");
+                alert.setContentText(message.name().replaceAll("_", " "));
+                alert.show();
+            }
+        });
+
+        vBox.getChildren().addAll(comboBox, slider, text, button);
+        vBox.setBackground(Background.fill(Color.BLACK));
+        vBox.setPadding(new Insets(15));
+        popup.getContent().add(vBox);
+        popup.show(stage);
     }
 
     private void initializeControlButtons() {
@@ -390,6 +443,9 @@ public class GameMenuGFXController {
             if (selectedBuildingCoordinate == null) {
                 selectedBuildingCoordinate = coordinate;
                 extendedBlock.getObject().setBlendMode(BlendMode.COLOR_DODGE);
+            } else if(selectedBuildingCoordinate == coordinate){
+                selectedBuildingCoordinate = null;
+                extendedBlock.getObject().setBlendMode(null);
             } else {
                 Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(selectedBuildingCoordinate).getObject().setBlendMode(null);
                 selectedBuildingCoordinate = null;
