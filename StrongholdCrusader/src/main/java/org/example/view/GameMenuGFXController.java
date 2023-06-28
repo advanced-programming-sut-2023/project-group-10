@@ -163,10 +163,6 @@ public class GameMenuGFXController {
                 }
             }
         });
-        //TODO does not work
-        /*mapBox.setOnKeyPressed(keyEvent -> {
-
-        });*/
     }
 
     private void initializeControlButtons() {
