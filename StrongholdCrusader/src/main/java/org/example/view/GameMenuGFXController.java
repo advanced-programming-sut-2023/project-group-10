@@ -65,7 +65,7 @@ public class GameMenuGFXController {
     private HashMap<RoleName, Integer> selectedRoleCountMap;
     private LinkedList<Label> selectedUnitsLabels;
     private Button unselectButton;
-    private BuildingTypeName selectedBuilding;
+    private Coordinate selectedBuildingCoordinate;
     private ExtendedBlock[][] mapView;
     private boolean deleteMode = false;
 
@@ -137,7 +137,8 @@ public class GameMenuGFXController {
         });
         faceImage.setOnMouseClicked(mouseEvent -> popularityFactors());
         mapBox.setOnKeyPressed(keyEvent -> {
-            if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.C) && selectedBuilding != null) {
+            if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.C) && selectedBuildingCoordinate != null) {
+                BuildingTypeName selectedBuilding = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuildingCoordinate).getBuilding().getBuildingType().getName();
                 Circle circle = new Circle(40, new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.
                         class.getResource("/images/buildings/" + selectedBuilding.name() + ".png")).toString())));
                 Label label = new Label(selectedBuilding.name().replaceAll("_", " "));
@@ -152,26 +153,8 @@ public class GameMenuGFXController {
                 Coordinate coordinate = Stronghold.getCurrentBattle().getBattleMap().getPolygonCoordinateMap().get(selectedBlocks.get(0).getBlockView());
                 ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
                 extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
-                if (extendedBlock.getBlock().getBuilding() != null) {
-                    Popup popup = buildingDetails(coordinate);
-                    extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
-                        popup.setAnchorX(mouseEvent1.getSceneX() + 5);
-                        popup.setAnchorY(mouseEvent1.getSceneY() + 5);
-                        popup.show(stage);
-                    });
-                    extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
-                    extendedBlock.getObject().setOnMouseClicked(mouseEvent -> {
-                        if (selectedBuilding == null) {
-                            selectedBuilding = extendedBlock.getBlock().getBuilding().getBuildingType().getName();
-                            extendedBlock.getObject().setBlendMode(BlendMode.COLOR_DODGE);
-                        } else {
-                            selectedBuilding = null;
-                            extendedBlock.getObject().setBlendMode(null);
-                        }
-                    });
-                    if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
-                        scrollPaneContent.getChildren().add(extendedBlock.getObject());
-                }
+                if (extendedBlock.getBlock().getBuilding() != null)
+                    setBuilding(extendedBlock, coordinate);
             }
         });
     }
@@ -350,26 +333,8 @@ public class GameMenuGFXController {
                     if (db.hasString()) {
                         ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
                         extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
-                        if (extendedBlock.getBlock().getBuilding() != null) {
-                            Popup popup = buildingDetails(coordinate);
-                            extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
-                                popup.setAnchorX(mouseEvent1.getSceneX() + 5);
-                                popup.setAnchorY(mouseEvent1.getSceneY() + 5);
-                                popup.show(stage);
-                            });
-                            extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
-                            extendedBlock.getObject().setOnMouseClicked(mouseEvent -> {
-                                if (selectedBuilding == null) {
-                                    selectedBuilding = extendedBlock.getBlock().getBuilding().getBuildingType().getName();
-                                    extendedBlock.getObject().setBlendMode(BlendMode.COLOR_DODGE);
-                                } else {
-                                    selectedBuilding = null;
-                                    extendedBlock.getObject().setBlendMode(null);
-                                }
-                            });
-                            if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
-                                scrollPaneContent.getChildren().add(extendedBlock.getObject());
-                        }
+                        if (extendedBlock.getBlock().getBuilding() != null)
+                            setBuilding(extendedBlock, coordinate);
                     } else dragEvent.setDropCompleted(false);
                     dragEvent.consume();
                 });
@@ -378,6 +343,27 @@ public class GameMenuGFXController {
 
         mapBox.setContent(scrollPaneContent);
         mapBox.setHvalue(0.5);
+    }
+
+    private void setBuilding(ExtendedBlock extendedBlock, Coordinate coordinate){
+        Popup popup = buildingDetails(coordinate);
+        extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
+            popup.setAnchorX(mouseEvent1.getSceneX() + 5);
+            popup.setAnchorY(mouseEvent1.getSceneY() + 5);
+            popup.show(stage);
+        });
+        extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
+        extendedBlock.getObject().setOnMouseClicked(mouseEvent -> {
+            if (selectedBuildingCoordinate == null) {
+                selectedBuildingCoordinate = coordinate;
+                extendedBlock.getObject().setBlendMode(BlendMode.COLOR_DODGE);
+            } else {
+                selectedBuildingCoordinate = null;
+                extendedBlock.getObject().setBlendMode(null);
+            }
+        });
+        if (!scrollPaneContent.getChildren().contains(extendedBlock.getObject()))
+            scrollPaneContent.getChildren().add(extendedBlock.getObject());
     }
 
     private void switchSelectionState(Coordinate coordinate) {
