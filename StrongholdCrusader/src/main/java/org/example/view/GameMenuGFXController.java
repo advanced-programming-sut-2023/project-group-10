@@ -733,7 +733,14 @@ public class GameMenuGFXController {
         scribeDetails();
         unselectAllMethod();
         unitMessageLabel.setText("");
-        GameMenuController.goToNextPlayer();
+        GameMenuMessages result = GameMenuController.goToNextPlayer();
+        if (result == GameMenuMessages.GAME_OVER) {
+            try {
+                new EndScreenGFX(Stronghold.getCurrentBattle().getAliveGovernment()).start(SignupMenu.stage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
         updateCurrentPlayerInfo();
     }
 
