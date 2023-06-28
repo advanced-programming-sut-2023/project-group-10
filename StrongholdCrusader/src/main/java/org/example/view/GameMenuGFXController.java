@@ -311,7 +311,14 @@ public class GameMenuGFXController {
 
     private void selectBriefingFromMenuBar(MouseEvent mouseEvent) {
         selectButtonFromBar(1);
-        //TODO
+        BriefingGFX briefingGFX=new BriefingGFX();
+        briefingGFX.setGameMenuGFXController(this);
+        try {
+            briefingGFX.start(new Stage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        unselectAll();
     }
 
     private void selectOptionsFromMenuBar(MouseEvent mouseEvent) {
