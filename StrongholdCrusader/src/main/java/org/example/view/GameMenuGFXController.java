@@ -7,12 +7,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -46,6 +50,9 @@ import org.example.view.enums.messages.BuildingMenuMessages;
 import org.example.view.enums.messages.GameMenuMessages;
 import org.example.view.enums.messages.UnitMenuMessages;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.*;
 
 public class GameMenuGFXController {
@@ -143,6 +150,9 @@ public class GameMenuGFXController {
                     copiedBuilding.getChildren().remove(2);
                     copiedBuilding.getChildren().remove(1);
                 }
+                StringSelection stringSelection = new StringSelection(selectedBuilding.name());
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(stringSelection, null);
                 copiedBuilding.getChildren().add(circle);
                 copiedBuilding.getChildren().add(label);
                 copiedBuilding.setVisible(true);

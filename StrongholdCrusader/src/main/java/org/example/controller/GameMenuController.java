@@ -124,8 +124,11 @@ public class GameMenuController {
         BuildingType buildingType = BuildingType.getBuildingTypeByName(buildingTypeName);
         Government player = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         if (buildingType.getBuildingCost() > player.getGold()) return GameMenuMessages.NOT_ENOUGH_GOLD;
-        for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet())
-            if (player.getItemCount(entry.getKey()) < entry.getValue()) return GameMenuMessages.NOT_ENOUGH_RESOURCES;
+        if(buildingType.getResourcesNeeded() != null) {
+            for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet())
+                if (player.getItemCount(entry.getKey()) < entry.getValue())
+                    return GameMenuMessages.NOT_ENOUGH_RESOURCES;
+        }
         if (buildingType instanceof ItemProducingBuildingType) {
             if (!new ItemProducingBuilding(position, player, buildingTypeName).addToGovernmentAndBlock())
                 return GameMenuMessages.INCOMPATIBLE_LAND;
@@ -134,8 +137,10 @@ public class GameMenuController {
         else
             new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingTypeName).addToGovernmentAndBlock();
         player.changeGold(-buildingType.getBuildingCost());
-        for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet())
-            player.changeItemCount(entry.getKey(), -entry.getValue());
+        if(buildingType.getResourcesNeeded() != null) {
+            for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet())
+                player.changeItemCount(entry.getKey(), -entry.getValue());
+        }
         return GameMenuMessages.SUCCESSFUL_DROP;
     }
 
