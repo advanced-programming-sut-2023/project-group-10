@@ -2,6 +2,7 @@ package org.example.view;
 
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -173,6 +174,18 @@ public class GameMenuGFXController {
                     alert.setTitle("Can Not Create Unit");
                     alert.setContentText("You can not create unit in this building");
                     alert.show();
+                }
+            } else if(keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.O) && selectedBuildingCoordinate!= null){
+                Building building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(selectedBuildingCoordinate).getBuilding();
+                if(building.getBuildingType().getName().equals(BuildingTypeName.MARKET)){
+                    try {
+                        ShopMenuGFX shopMenuGFX= new ShopMenuGFX();
+                        FXMLLoader loader = new FXMLLoader(GameMenuGFX.class.getResource("/view/gameMenu.fxml"));
+                        shopMenuGFX.setGameController(loader.getController());
+                        shopMenuGFX.start(new Stage());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         });

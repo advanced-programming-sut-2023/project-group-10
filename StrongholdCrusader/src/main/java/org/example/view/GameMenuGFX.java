@@ -21,16 +21,6 @@ public class GameMenuGFX extends Application {
         ((GameMenuGFXController) loader.getController()).prepareGame(primaryStage);
         gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
-                case SPACE:
-                    try {
-                       ShopMenuGFX shopMenuGFX= new ShopMenuGFX();
-                       shopMenuGFX.setGameController(loader.getController());
-                       shopMenuGFX.start(new Stage());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    break;
-
                 case TAB:
                     try {
                         new ShopMenuGFX().start(SignupMenu.stage);
