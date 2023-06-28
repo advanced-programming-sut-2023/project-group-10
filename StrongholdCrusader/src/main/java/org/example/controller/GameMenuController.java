@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import org.example.model.Stronghold;
 import org.example.model.User;
@@ -29,6 +30,7 @@ import org.example.view.enums.messages.GameMenuMessages;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class GameMenuController {
     public static User currentPlayer() {
@@ -236,6 +238,59 @@ public class GameMenuController {
         keepBlock.removeBuilding();
     }
 
+    public static void illness(Government government){
+        org.example.model.game.envirnmont.Map map = Stronghold.getCurrentBattle().getBattleMap();
+        Random random = new Random();
+        int randomNumber = random.nextInt(10);
+        if(randomNumber != 0) return;
+
+        int randomBlock = random.nextInt(Stronghold.getCurrentBattle().getBattleMap().getSize() - 10);
+        ArrayList<ExtendedBlock> blocksAroundKeep = new ArrayList<>();
+        for(int i = randomBlock; i < randomBlock + 6; i++){
+            for(int j = randomBlock; j < randomBlock + 6; j++) {
+                if(map.getBlockByRowAndColumn(i, j).getBuilding() != null && map.getBlockByRowAndColumn(i, j).getBuilding().getGovernment().equals(government) &&
+                   map.getBlockByRowAndColumn(i, j).getBuilding().getBuildingType().getName().equals(BuildingTypeName.CATHEDRAL))
+                    return;
+                blocksAroundKeep.add(map.getExtendedBlockByRowAndColumn(new Coordinate(i, j)));
+            }
+        }
+
+        for(ExtendedBlock extendedBlock : blocksAroundKeep){
+            extendedBlock.getBlockView().setBlendMode(BlendMode.BLUE);
+            extendedBlock.getBlock().setIll(true);
+        }
+        government.setIll(true);
+        government.setIllnessCenter(randomBlock + 3);
+    }
+
+    public static void removeIllness(Government government){
+        if(!government.isIll()) return;
+
+        org.example.model.game.envirnmont.Map map = Stronghold.getCurrentBattle().getBattleMap();
+        ArrayList<ExtendedBlock> illBlocks = new ArrayList<>();
+        int center = government.getIllnessCenter();
+        boolean cathedralExists = false;
+
+        for (int i = center - 3; i < center + 3; i++){
+            for(int j = center - 3; j < center + 3; j++)
+                illBlocks.add(map.getExtendedBlockByRowAndColumn(new Coordinate(i, j)));
+        }
+
+        for(ExtendedBlock extendedBlock : illBlocks){
+            if (extendedBlock.getBlock().getBuilding() != null && extendedBlock.getBlock().getBuilding().getGovernment().equals(government) &&
+                extendedBlock.getBlock().getBuilding().getBuildingType().getName().equals(BuildingTypeName.CATHEDRAL))
+                cathedralExists = true;
+        }
+
+        if(cathedralExists){
+            for(ExtendedBlock extendedBlock : illBlocks){
+                extendedBlock.getBlock().setIll(false);
+                extendedBlock.getBlockView().setBlendMode(null);
+            }
+            government.setIll(false);
+        }
+    }
+
     public static GameMenuMessages goToNextPlayer() {
         Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
@@ -252,6 +307,7 @@ public class GameMenuController {
         currentGovernment.setExcessFood(0);
         updateFoodCount(currentGovernment);
         updatePopularity(currentGovernment);
+        removeIllness(currentGovernment);
         Government dead;
         while ((dead = deadLord()) != null) {
             countScore(dead);
@@ -264,6 +320,7 @@ public class GameMenuController {
             return GameMenuMessages.GAME_OVER;
         }
         Stronghold.getCurrentBattle().goToNextPlayer();
+        illness(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         return GameMenuMessages.NEXT_PLAYER;
     }
 
@@ -288,7 +345,7 @@ public class GameMenuController {
         modifyTaxRate(government);
         religion(government);
         fear(government);
-
+        if(government.isIll()) government.getPopularity().set(government.getPopularity().intValue() - 5);
     }
 
     private static void modifyFoodRate(Government government) {

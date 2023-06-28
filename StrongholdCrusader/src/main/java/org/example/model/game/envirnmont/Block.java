@@ -18,12 +18,14 @@ public class Block {
     private Droppable droppable;
     private boolean onFire;
     private Government keepGovernment;
+    private boolean isIll;
 
     Block(BlockTexture texture) {
         this.texture = texture;
         droppable = null;
         units = new ArrayList<>();
         onFire = false;
+        isIll = false;
     }
 
     public BlockTexture getTexture() {
@@ -105,6 +107,14 @@ public class Block {
         }
         this.droppable = droppable;
         return true;
+    }
+
+    public boolean isIll() {
+        return isIll;
+    }
+
+    public void setIll(boolean ill) {
+        isIll = ill;
     }
 
     public void setOnFire(boolean onFire) {

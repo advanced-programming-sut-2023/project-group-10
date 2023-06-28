@@ -35,6 +35,8 @@ public class Government {
     private int taxRate;
     private int fearRate;
     private int religionCount;
+    private boolean isIll;
+    private int illnessCenter;
 
     public Government(User owner, Color color, Coordinate keep) {
         this.owner = owner;
@@ -51,6 +53,7 @@ public class Government {
         popularityFactors.put("Fear", 0);
         religionCount = 0;
         popularityFactors.put("Religion", 0);
+        isIll = false;
     }
 
     public Coordinate getKeep() {
@@ -136,6 +139,22 @@ public class Government {
 
     public boolean deleteUnit(Unit unit) {
         return units.remove(unit);
+    }
+
+    public boolean isIll() {
+        return isIll;
+    }
+
+    public void setIll(boolean ill) {
+        isIll = ill;
+    }
+
+    public int getIllnessCenter() {
+        return illnessCenter;
+    }
+
+    public void setIllnessCenter(int illnessCenter) {
+        this.illnessCenter = illnessCenter;
     }
 
     public Double getItemCount(Item item) {
