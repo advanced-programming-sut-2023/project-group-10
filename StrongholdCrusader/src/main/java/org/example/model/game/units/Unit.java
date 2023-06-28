@@ -9,6 +9,7 @@ import org.example.model.game.units.unitconstants.MilitaryEquipmentRole;
 import org.example.model.game.units.unitconstants.MilitaryPersonRole;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.RoleName;
+import org.example.view.CommonGFXActions;
 
 public class Unit extends Entity {
     private final Role role;
@@ -70,6 +71,10 @@ public class Unit extends Entity {
     }
 
     public void killMe() {
+        if (this instanceof MilitaryUnit) {
+            MilitaryUnit deadUnit = (MilitaryUnit) this;
+            CommonGFXActions.getDeathAnimation(deadUnit.getRole(), deadUnit.getBodyGraphics()).play();
+        }
         if (this.getRole().getName() == RoleName.LORD) this.changeHitPoint(-this.getHitPoint());
         else this.getGovernment().deleteUnit(this);
         Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(this.getPosition()).removeUnit(this);

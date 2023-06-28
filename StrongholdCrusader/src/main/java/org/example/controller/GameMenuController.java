@@ -108,8 +108,7 @@ public class GameMenuController {
         if (neededPeasants > Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasantsCount())
             return GameMenuMessages.NOT_ENOUGH_PEASANTS;
         RoleName workerRole = WorkerRole.getRoleNameByWorkplace(buildingTypeName);
-        if (workerRole != null)
-            Unit.produceUnits(workerRole, neededPeasants, position);
+        if (workerRole != null) Unit.produceUnits(workerRole, neededPeasants, position);
         if (neededPeasants != 0) {
             for (Unit unit : Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getUnits())
                 if (unit.getRole().getName() == RoleName.PEASANT) {
@@ -348,7 +347,7 @@ public class GameMenuController {
         int movesLeft;
         Building building;
         int lastIndex = (movesLeft = Math.min(moveCount, path.size())) - 1;
-        CommonGFXActions.getMoveAnimation(unit.getRole().getName(), path.subList(0, lastIndex+1), unit.getPosition(), unit.getBodyGraphics()).play();
+        CommonGFXActions.getMoveAnimation(unit.getRole(), path.subList(0, lastIndex + 1), unit.getPosition(), unit.getBodyGraphics()).play();
         unit.setPosition(path.get(lastIndex));
         for (int i = 0; i < movesLeft - 1; i++) {
             building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(path.get(i)).getBuilding();
@@ -378,6 +377,7 @@ public class GameMenuController {
             closestEnemyUnit = findClosestEnemyUnit(unit.getPosition());
             if (closestEnemyUnit == null) continue;
             if (closestEnemyUnit.getPosition().getDistanceFrom(unit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
+                CommonGFXActions.getAttackAnimation(unit.getRole(), ((MilitaryUnit) unit).getBodyGraphics(), unit.getPosition(), closestEnemyUnit.getPosition()).play();
                 closestEnemyUnit.changeHitPoint(-damage);
                 if (closestEnemyUnit.isDead()) closestEnemyUnit.killMe();
             } else if (((MilitaryUnit) unit).getStance() != MilitaryUnitStance.STAND_GROUND && ((MilitaryUnit) unit).getBoostInFireRange() == 0) {
@@ -389,6 +389,7 @@ public class GameMenuController {
                 for (int i = 0; i < pathLimit; i++)
                     if (path.get(i).getDistanceFrom(closestEnemyUnit.getPosition()) <= ((MilitaryUnit) unit).getRange()) {
                         unit.setPosition(path.get(i));
+                        CommonGFXActions.getMoveAnimation(unit.getRole(), path.subList(0, i + 1), unit.getPosition(), ((MilitaryUnit) unit).getBodyGraphics()).play();
                         closestEnemyUnit.changeHitPoint(damage);
                         if (closestEnemyUnit.isDead()) closestEnemyUnit.killMe();
                     }
@@ -443,8 +444,7 @@ public class GameMenuController {
             }
         }
         capacity -= government.getPeasantsCount();
-        if (capacity < newPeasants)
-            newPeasants = capacity;
+        if (capacity < newPeasants) newPeasants = capacity;
         for (int i = 0; i < newPeasants; i++) {
             government.addUnit(new Unit(government.getKeep(), RoleName.PEASANT, government));
 

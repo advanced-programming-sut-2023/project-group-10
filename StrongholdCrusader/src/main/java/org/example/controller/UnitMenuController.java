@@ -10,6 +10,7 @@ import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.*;
 import org.example.model.game.units.unitconstants.*;
+import org.example.view.CommonGFXActions;
 import org.example.view.enums.messages.UnitMenuMessages;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class UnitMenuController {
     public static UnitMenuMessages attackEnemy(Coordinate target) {
         int totalDamageToUnits = 0;
         int totalDamageToBuildings = 0;
+        ArrayList<MilitaryUnit> attackingUnits = new ArrayList<>();
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits) {
             selectedMilitaryUnit.setOnPatrol(false);
             if (selectedMilitaryUnit.getPosition().getDistanceFrom(target) <= selectedMilitaryUnit.getRange()) {
@@ -56,9 +58,11 @@ public class UnitMenuController {
                     totalDamageToBuildings += ((MilitaryUnitRole) selectedMilitaryUnit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue();
                 else
                     totalDamageToUnits += ((MilitaryUnitRole) selectedMilitaryUnit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue();
+                attackingUnits.add(selectedMilitaryUnit);
+                CommonGFXActions.getAttackAnimation(selectedMilitaryUnit.getRole(), selectedMilitaryUnit.getBodyGraphics(), selectedMilitaryUnit.getPosition(), target).play();
             }
         }
-        if (totalDamageToUnits == 0 && totalDamageToBuildings == 0) return UnitMenuMessages.TARGET_OUT_OF_RANGE;
+        if (attackingUnits.isEmpty()) return UnitMenuMessages.TARGET_OUT_OF_RANGE;
         Block targetBlock = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(target);
         ArrayList<Unit> enemyUnits = targetBlock.getAllAttackableEnemyUnits(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         Building enemyBuilding = targetBlock.getBuilding();
