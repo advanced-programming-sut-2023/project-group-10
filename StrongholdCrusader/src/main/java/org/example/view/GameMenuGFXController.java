@@ -172,7 +172,8 @@ public class GameMenuGFXController {
             } else if (keyEvent.isControlDown() && keyEvent.getCode().equals(KeyCode.V) && copiedBuilding.getChildren().size() == 3 && selectedBlocks.size() == 1) {
                 Coordinate coordinate = Stronghold.getCurrentBattle().getBattleMap().getPolygonCoordinateMap().get(selectedBlocks.get(0).getBlockView());
                 ExtendedBlock extendedBlock = mapView[coordinate.row][coordinate.column];
-                GameMenuMessages message = extendedBlock.setBuilding(coordinate, BuildingLists.getSelectedBuilding());
+                BuildingTypeName name = BuildingTypeName.getBuildingTypeNameByNameString(((Label) copiedBuilding.getChildren().get(2)).getText().replaceAll(" ", "_"));
+                GameMenuMessages message = extendedBlock.setBuilding(coordinate, name);
                 setDropBuildingMessage(message);
                 if (extendedBlock.getBlock().getBuilding() != null)
                     setBuilding(extendedBlock, coordinate);
