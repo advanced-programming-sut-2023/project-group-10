@@ -5,6 +5,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.stage.Stage;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.example.view.GameMenu;
 
@@ -63,11 +64,8 @@ public class RandomGenerator {
 
     public static BackgroundImage setBackground(String url) {
         Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440, 900, false, false);
-        BackgroundImage backgroundImage = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
+        BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100, 100, true, true, true, true));
         return backgroundImage;
     }
 }

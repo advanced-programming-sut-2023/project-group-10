@@ -10,7 +10,7 @@ import java.nio.file.Files;
 import java.util.Objects;
 
 public class FireTransition extends Transition {
-    private static Image[] fireAssets = new Image[18];
+    private static Image[] fireAssets;
     private final ImageView fireNode;
 
     public FireTransition(ImageView fireNode) {
@@ -20,9 +20,8 @@ public class FireTransition extends Transition {
     }
 
     public static void initializeImages() {
-        String assetFolderAddress = "./src/main/resources/images/fire";
+        String assetFolderAddress = "./StrongholdCrusader/src/main/resources/images/fire";
         File directory = new File(assetFolderAddress);
-        System.out.println(directory.exists());
         fireAssets = new Image[Objects.requireNonNull(directory.listFiles()).length];
         int i = 0;
         for (File file : Objects.requireNonNull(directory.listFiles())) {
