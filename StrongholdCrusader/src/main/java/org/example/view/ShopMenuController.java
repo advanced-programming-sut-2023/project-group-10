@@ -54,7 +54,7 @@ public class ShopMenuController {
         String path = ((ImageView) mouseEvent.getSource()).getImage().getUrl();
         itemDetailsMenuGFX.setSelectedItem(Item.getItemByPath(path));
         itemDetailsMenuGFX.setGameMenuGFXController(this.gameMenuGFXController);
-        System.out.println(ItemDetailsMenuGFX.getSelectedItem() == null);
+        System.out.println(this.gameMenuGFXController == null);
         try {
             itemDetailsMenuGFX.start(ShopMenuGFX.stage);
         } catch (Exception e) {

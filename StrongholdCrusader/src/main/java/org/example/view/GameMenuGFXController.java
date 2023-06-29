@@ -185,7 +185,7 @@ public class GameMenuGFXController {
                     try {
                         ShopMenuGFX shopMenuGFX = new ShopMenuGFX();
                         FXMLLoader loader = new FXMLLoader(GameMenuGFX.class.getResource("/view/gameMenu.fxml"));
-                        shopMenuGFX.setGameController(loader.getController());
+                        shopMenuGFX.setGameController(this);
                         shopMenuGFX.start(new Stage());
                     } catch (Exception e) {
                         throw new RuntimeException(e);
