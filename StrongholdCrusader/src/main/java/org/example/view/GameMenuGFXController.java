@@ -15,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
@@ -86,8 +88,17 @@ public class GameMenuGFXController {
     private Coordinate selectedBuildingCoordinate;
     private ExtendedBlock[][] mapView;
     private boolean deleteMode = false;
+    private boolean isMute = false;
+    private Media themeSong;
+    private MediaPlayer mediaPlayer;
 
     public void prepareGame(Stage stage) {
+        if (!isMute && themeSong != null) {
+            mediaPlayer = new MediaPlayer(themeSong);
+            mediaPlayer.setVolume(0.6);
+            mediaPlayer.setAutoPlay(true);
+        }
+
         GameMenuGFXController.stage = stage;
         scrollPaneContent = Stronghold.getMapGroupGFX();
         System.out.println(stage.getHeight());
@@ -999,5 +1010,13 @@ public class GameMenuGFXController {
         scrollPaneContent.setScaleY(scrollPaneContent.getScaleY() * scaleFactor);
         mapBox.setVvalue(vValue);
         mapBox.setHvalue(hValue);
+    }
+
+    public void setMute(boolean mute) {
+        isMute = mute;
+    }
+
+    public void setThemeSong(Media themeSong) {
+        this.themeSong = themeSong;
     }
 }
