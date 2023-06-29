@@ -19,17 +19,9 @@ public class FireTransition extends Transition {
     }
 
     public static void initializeImages() {
-        //String assetFolderAddress = "/images/fire/";
-        //File directory = new File(FireTransition.class.getResource(assetFolderAddress).toExternalForm());
         for(int j = 1; j <= 18; j++){
             fireAssets[j-1] = new Image(FireTransition.class.getResource("/images/fire/" + j + ".png").toExternalForm());
         }
-        /*fireAssets = new Image[Objects.requireNonNull(directory.listFiles()).length];
-        int i = 0;
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
-            fireAssets[i] = new Image(file.toURI().toString());
-            i++;
-        }*/
     }
 
     @Override
