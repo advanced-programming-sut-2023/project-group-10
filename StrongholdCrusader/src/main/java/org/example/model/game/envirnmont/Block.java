@@ -1,11 +1,10 @@
 package org.example.model.game.envirnmont;
 
 import org.example.model.Stronghold;
-import org.example.model.game.Battle;
-import org.example.model.game.Droppable;
-import org.example.model.game.Government;
+import org.example.model.game.*;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.ItemProducingBuilding;
+import org.example.model.game.buildings.buildingconstants.AttackingBuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.buildings.buildingconstants.ItemProducingBuildingType;
 import org.example.model.game.units.MilitaryUnit;
@@ -89,7 +88,7 @@ public class Block {
         droppable = null;
         for (Unit unit : units)
             unit.killMe();
-       fires=new ArrayList<>();
+        fires = new ArrayList<>();
     }
 
     public boolean setDroppable(Droppable droppable) {
@@ -99,14 +98,14 @@ public class Block {
         }
         if (this.droppable != null) return false;
         if (!texture.isBuildable()) return false;
-        if (fires.size()>0) return false;
+        if (fires.size() > 0) return false;
         if (droppable instanceof ItemProducingBuilding) {
             ItemProducingBuildingType buildingType = (ItemProducingBuildingType) ((ItemProducingBuilding) droppable).getBuildingType();
             if (buildingType.isFarm() && !texture.isFertile()) return false;
             else if (buildingType.getName() == BuildingTypeName.IRON_MINE && texture != BlockTexture.IRON) return false;
             else if (buildingType.getName() == BuildingTypeName.QUARRY && texture != BlockTexture.BOULDERS)
                 return false;
-            else if(buildingType.getName()==BuildingTypeName.PITCH_RIG && texture!=BlockTexture.OIL) return false;
+            else if (buildingType.getName() == BuildingTypeName.PITCH_RIG && texture != BlockTexture.OIL) return false;
         }
         this.droppable = droppable;
         return true;
@@ -129,7 +128,6 @@ public class Block {
     }
 
 
-
     public void addUnit(Unit unit) {
         units.add(unit);
     }
@@ -149,18 +147,21 @@ public class Block {
     public boolean canUnitsGoHere(boolean canGoInEnemyPit) {
         if (!texture.isWalkable()) return false;
         if (droppable == null) return true;
-        //moat, rock, tree aren't passable
-        if (!(droppable instanceof Building)) return false;
+        if (droppable instanceof Tree) return true;
+        if (droppable instanceof Rock) return false;
+        if (droppable instanceof Moat) return false;
         if (getBuilding().isClimbable()) return true;
+        if (!(getBuilding().getBuildingType() instanceof AttackingBuildingType) && getBuilding().getBuildingType().getName() != BuildingTypeName.KILLING_PIT)
+            return true;
         return canGoInEnemyPit && getBuilding().getBuildingType().getName() == BuildingTypeName.KILLING_PIT && getBuilding().getGovernment() != Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
     }
 
     public boolean isBuildable() {
-        return droppable == null && !(fires.size() >0) && texture.isBuildable() && !isKeep();
+        return droppable == null && !(fires.size() > 0) && texture.isBuildable() && !isKeep();
     }
 
     public boolean canDigHere() {
-        return droppable == null &&  !(fires.size() >0) && isBuildable();
+        return droppable == null && !(fires.size() > 0) && isBuildable();
     }
 
     public ArrayList<Unit> getAllAttackableEnemyUnits(Government government) {
@@ -184,17 +185,19 @@ public class Block {
             this.setDroppable(null);
         }
     }
-    public void setOnFire(Fire fire){
+
+    public void setOnFire(Fire fire) {
         fires.add(fire);
     }
 
-    public void removeFires(Battle battle){
+    public void removeFires(Battle battle) {
         for (int i = fires.size() - 1; i >= 0; i--) {
             if (!fires.get(i).isStillOn(battle.getTurnsPassed()))
                 fires.remove(i);
         }
     }
-    public boolean isOnFire(){
-        return fires.size()>0;
+
+    public boolean isOnFire() {
+        return fires.size() > 0;
     }
 }

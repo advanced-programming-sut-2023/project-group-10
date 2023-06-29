@@ -2,19 +2,21 @@ package org.example.model.game.envirnmont;
 
 import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 import org.example.controller.CustomizeMapController;
 import org.example.controller.GameMenuController;
-import org.example.model.game.Battle;
+import org.example.model.Stronghold;
 import org.example.model.game.RockType;
 import org.example.model.game.TreeType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.view.GameMenuGFXController;
 import org.example.view.enums.messages.CustomizeMapMessages;
 import org.example.view.enums.messages.GameMenuMessages;
+import org.example.view.transitions.FireTransition;
 
 import java.util.HashMap;
 
@@ -26,7 +28,6 @@ ExtendedBlock {
     private static final HashMap<BlockTexture, ImagePattern> textureImageMap;
     private static final HashMap<TreeType, ImagePattern> treeImageMap;
     private static final HashMap<RockType, ImagePattern> rockImageMap;
-    private static final ImagePattern[] randomRocks;
     private static final HashMap<BuildingTypeName, ImagePattern> buildingImageMap;
     private final Block block;
     private final Polygon blockView;
@@ -42,9 +43,6 @@ ExtendedBlock {
         rockImageMap = new HashMap<>();
         for (RockType value : RockType.values())
             rockImageMap.put(value, new ImagePattern(new Image(RockType.getRockListAssetsFolderPath() + value.getListAssetFileName())));
-        randomRocks = new ImagePattern[10];
-        for (int i = 0; i < randomRocks.length; i++)
-            randomRocks[i] = new ImagePattern(new Image(RockType.getRockListAssetsFolderPath() + "random/" + (i + 1) + ".png"));
         buildingImageMap = new HashMap<>();
         for (BuildingTypeName value : BuildingTypeName.values())
             buildingImageMap.put(value, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + value.toString().toLowerCase() + ".png").toExternalForm())));
@@ -172,14 +170,27 @@ ExtendedBlock {
         object = null;
     }
 
-    public void setOnFire(Battle battle) {
-        Map map = battle.getBattleMap();
-        for (int i = 0; i < map.size; i++) {
-            for (int j = 0; j < map.size; j++) {
-                if (map.getBlockByRowAndColumn(i, j).isOnFire()) {
-                    //TODO
-                }
-            }
+    public void setOnFire(Coordinate position) {
+        Fire fire = new Fire(Stronghold.getCurrentBattle().getTurnsPassed(), position);
+        switch (block.getTexture()) {
+            case SEA:
+            case FORD:
+            case MARSH:
+            case RIVER:
+            case LARGE_POND:
+            case SMALL_POND:
+                return;
         }
+        block.setOnFire(fire);
+        ImageView fireGraphics = new ImageView();
+        fireGraphics.setPreserveRatio(true);
+        fireGraphics.setFitWidth(WIDTH / 2);
+        fireGraphics.setMouseTransparent(true);
+        Stronghold.getMapGroupGFX().getChildren().add(fireGraphics);
+        Pair<Double, Double> center = getCenterOfBlockForUnits(position.row, position.column, fireGraphics.getFitWidth(), fireGraphics.getFitWidth());
+        fireGraphics.relocate(center.getKey(), center.getValue());
+        fire.setFireGraphics(fireGraphics);
+        fire.setFireTransition(new FireTransition(fireGraphics));
+        fire.getFireTransition().play();
     }
 }

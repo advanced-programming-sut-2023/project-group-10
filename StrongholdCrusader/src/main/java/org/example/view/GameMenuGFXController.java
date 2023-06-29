@@ -251,7 +251,7 @@ public class GameMenuGFXController {
                 alert.setTitle("Create Unit Failed");
                 alert.setContentText(message.name().replaceAll("_", " "));
                 alert.show();
-            }
+            } else scribeDetails();
         });
 
         vBox.getChildren().addAll(comboBox, slider, text, button);
@@ -909,7 +909,7 @@ public class GameMenuGFXController {
             String[] words = selectedUnitsLabel.getText().split(" ");
             RoleName type = RoleName.getRoleNameByNameString(words[0]);
             int count = Integer.parseInt(words[words.length - 1]);
-            typeCountMap.put(type, count);
+            if (count != 0) typeCountMap.put(type, count);
         }
 
         if (typeCountMap.size() == 0) return null;

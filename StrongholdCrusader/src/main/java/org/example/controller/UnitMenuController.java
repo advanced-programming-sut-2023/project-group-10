@@ -7,7 +7,6 @@ import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.envirnmont.Block;
 import org.example.model.game.envirnmont.Coordinate;
-import org.example.model.game.envirnmont.Fire;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.*;
 import org.example.model.game.units.unitconstants.*;
@@ -54,10 +53,9 @@ public class UnitMenuController {
         Block targetBlock = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(target);
         ArrayList<Unit> enemyUnits = targetBlock.getAllAttackableEnemyUnits(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         Building enemyBuilding = targetBlock.getBuilding();
-        if (enemyUnits.size() == 0 && (enemyBuilding == null || enemyBuilding.getGovernment() == Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
-            return UnitMenuMessages.NO_ENEMY_HERE;
         int totalDamageToUnits = 0;
         int totalDamageToBuildings = 0;
+        boolean canSetOnFire = false;
         ArrayList<MilitaryUnit> attackingUnits = new ArrayList<>();
         for (MilitaryUnit selectedMilitaryUnit : selectedMilitaryUnits) {
             selectedMilitaryUnit.setOnPatrol(false);
@@ -67,10 +65,16 @@ public class UnitMenuController {
                 else
                     totalDamageToUnits += ((MilitaryUnitRole) selectedMilitaryUnit.getRole()).getAttackRating().getValue() * NumericalEnums.DAMAGE_COEFFICIENT.getValue();
                 attackingUnits.add(selectedMilitaryUnit);
-                CommonGFXActions.getAttackAnimation(selectedMilitaryUnit.getRole(), selectedMilitaryUnit.getBodyGraphics(), selectedMilitaryUnit.getPosition(), target).play();
+                if (selectedMilitaryUnit.canSetFire()) canSetOnFire = true;
             }
         }
         if (attackingUnits.isEmpty()) return UnitMenuMessages.TARGET_OUT_OF_RANGE;
+        if (canSetOnFire)
+            Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(target).setOnFire(target);
+        else if (enemyUnits.size() == 0 && (enemyBuilding == null || enemyBuilding.getGovernment() == Stronghold.getCurrentBattle().getGovernmentAboutToPlay()))
+            return UnitMenuMessages.NO_ENEMY_HERE;
+        for (MilitaryUnit attackingUnit : attackingUnits)
+            CommonGFXActions.getAttackAnimation(attackingUnit.getRole(), attackingUnit.getBodyGraphics(), attackingUnit.getPosition(), target).play();
         ArrayList<Unit> deadUnits = new ArrayList<>();
         for (Unit unit : enemyUnits) {
             unit.changeHitPoint(-totalDamageToUnits);
@@ -80,8 +84,9 @@ public class UnitMenuController {
             deadUnit.killMe();
         if (enemyBuilding != null && enemyBuilding.getGovernment() != Stronghold.getCurrentBattle().getGovernmentAboutToPlay()) {
             enemyBuilding.changeHitPoint(-totalDamageToBuildings);
-            if (enemyBuilding.getHitPoint() <= 0) enemyBuilding.deleteBuildingFromMapAndGovernment();
+            if (enemyBuilding.getHitPoint() <= 0) enemyBuilding.deleteBuildingFromMapAndGovernmentAndView();
         }
+
         return UnitMenuMessages.SUCCESSFUL_ENEMY_ATTACK;
     }
 
@@ -132,7 +137,7 @@ public class UnitMenuController {
         targetPosition.column += horizontalChange;
         Map map = Stronghold.getCurrentBattle().getBattleMap();
         if (!map.isIndexInBounds(targetPosition)) return UnitMenuMessages.TARGET_OUT_OF_MAP;
-        map.getBlockByRowAndColumn(targetPosition).setOnFire(new Fire(Stronghold.getCurrentBattle().getTurnsPassed()));
+        map.getExtendedBlockByRowAndColumn(targetPosition).setOnFire(targetPosition);
         selectedEngineer.setHasOil(false);
         selectedEngineer.moveUnit(getNearestOilSmelterCoordinate(selectedEngineer.getPosition()));
         return UnitMenuMessages.SUCCESSFUL_POUR_OIL;
