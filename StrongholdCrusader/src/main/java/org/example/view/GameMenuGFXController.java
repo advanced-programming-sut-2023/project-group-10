@@ -6,17 +6,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -231,6 +231,7 @@ public class GameMenuGFXController {
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPromptText("role name");
         for (RoleName roleName : RoleName.values()) {
+            if (roleName == RoleName.LORD) continue;
             if (MilitaryPersonRole.getAllMilitaryRoles().contains(Role.getRoleByName(roleName)))
                 comboBox.getItems().add(roleName.name().replaceAll("_", " ").toLowerCase());
         }
@@ -385,12 +386,12 @@ public class GameMenuGFXController {
         popularity.setFont(new Font("PT Mono", 14));
         popularity.setTextAlignment(TextAlignment.CENTER);
         popularity.setRotate(15);
-        Text golds = new Text("  " + ((int)Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold()));
+        Text golds = new Text("  " + ((int) Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold()));
         golds.setFont(new Font("PT Mono", 11));
         golds.setTextAlignment(TextAlignment.CENTER);
         golds.setRotate(15);
-        Text population = new Text((Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasants().size())+
-                "/"+Stronghold.getCurrentBattle().getGovernmentAboutToPlay().maxPossiblePeasants());
+        Text population = new Text((Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasants().size()) +
+                "/" + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().maxPossiblePeasants());
         population.setFont(new Font("PT Mono", 10));
         population.setTextAlignment(TextAlignment.CENTER);
         population.setRotate(15);
