@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.*?>
 <Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: lemonchiffon;"
-      xmlns="http://javafx.com/javafx/19"
+      prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19"
       fx:controller="org.example.view.MainMenuController">
     <children>
         <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Main Menu"
