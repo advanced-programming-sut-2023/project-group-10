@@ -1,4 +1,4 @@
-package org.example.connection;
+package org.example;
 
 import com.google.gson.Gson;
 
