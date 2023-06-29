@@ -34,4 +34,13 @@ public enum ClientToServerCommands {
         this.attributes = attributes;
     }
 
+    public String getCommand() {
+        return command;
+    }
+
+    public static ClientToServerCommands getCommandByString(String command) {
+        for (ClientToServerCommands value : values())
+            if (value.command.equals(command)) return value;
+        return null;
+    }
 }

@@ -19,11 +19,9 @@ public enum ClientToServerCommands {
     GO_TO_MAIN_MENU("main menu"),
 
     //start game menu
-    START_NEW_GAME("start game","players","keeps x","keeps y","colors"),
+    START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),
     CANCEL_START_GAME("cancel start game");
     //customize map
-
-
 
 
     private final String command;
@@ -34,4 +32,13 @@ public enum ClientToServerCommands {
         this.attributes = attributes;
     }
 
+    public String getCommand() {
+        return command;
     }
+
+    public static ClientToServerCommands getCommandByString(String command) {
+        for (ClientToServerCommands value : values())
+            if (value.command.equals(command)) return value;
+        return null;
+    }
+}

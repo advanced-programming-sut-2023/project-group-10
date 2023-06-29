@@ -17,7 +17,7 @@ public class Connection extends Thread {
         dataInputStream = new DataInputStream(socket.getInputStream());
         dataOutputStream = new DataOutputStream(socket.getOutputStream());
         packetParser = new PacketParser();
-        packetHandler = new PacketHandler();
+        packetHandler = new PacketHandler(this);
         // TODO: generate id
         String connectionID = "";
         ConnectionDatabase.getInstance().addConnection(connectionID, this);
@@ -33,5 +33,10 @@ public class Connection extends Thread {
             }
         } catch (IOException e) {
         }
+    }
+
+    public void sendPacket(Packet toBeSentPacket) throws IOException {
+        String json = packetParser.parseGson(toBeSentPacket);
+        dataOutputStream.writeUTF(json);
     }
 }
