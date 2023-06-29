@@ -5,7 +5,10 @@ public enum ServerToClientCommands {
     SUCCESSFUL_SIGNUP("successful sign up"),
     //main menu responses
     LOGGED_OUT("log out"),
-    PROFILE_MENU("profile menu");
+    PROFILE_MENU("profile menu"),
+    //profile menu
+    FAILED_CHANGE("failed change", "message"),
+    SUCCESSFUL_CHANGE("successful change", "message");
 
     private final String command;
     private final String[] attributes;

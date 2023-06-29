@@ -75,16 +75,14 @@ public class ProfileMenuController {
         return ProfileMenuMessages.CHANGE_PASSWORD_SUCCESSFUL;
     }
 
-    public static void changeEmail(String email) {
-        if (Stronghold.getLoggedInUserFromFile() != null &&
-                Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
-            Stronghold.getCurrentUser().setEmail(email);
-            Stronghold.dataBase.saveUsersToFile();
-            Stronghold.addUserToFile(Stronghold.getCurrentUser());
-        } else {
-            Stronghold.getCurrentUser().setEmail(email);
-            Stronghold.dataBase.saveUsersToFile();
-        }
+    public static ProfileMenuMessages changeEmail(String email) {
+        if (User.getUserByEmail(email) != null)
+            return ProfileMenuMessages.EMAIL_EXISTS;
+        Stronghold.getCurrentUser().setEmail(email);
+        Stronghold.dataBase.saveUsersToFile();
+        Stronghold.addUserToFile(Stronghold.getCurrentUser());
+        return ProfileMenuMessages.CHANGE_EMAIL_SUCCESSFUL;
+
     }
 
     public static void changeSlogan(String slogan) {
