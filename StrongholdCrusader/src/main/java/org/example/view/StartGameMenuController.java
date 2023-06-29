@@ -46,7 +46,7 @@ public class StartGameMenuController {
 
     private void prepareSize() {
         sizeToggleGroup = new ToggleGroup();
-        int[] sizes = {200, 400};
+        int[] sizes = {50, 100, 200, 400};
         RadioButton option;
         for (int size : sizes) {
             option = new RadioButton(String.valueOf(size));

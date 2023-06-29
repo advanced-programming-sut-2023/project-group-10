@@ -34,6 +34,7 @@ import org.example.controller.MapMenuController;
 import org.example.controller.UnitMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.game.Government;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.BuildingLists;
 import org.example.model.game.buildings.ItemProducingBuilding;
@@ -883,10 +884,14 @@ public class GameMenuGFXController {
         GridPane miniMap = new GridPane();
         int size = Stronghold.getCurrentBattle().getBattleMap().getSize();
         int q = 400 / size;
-        for (int i = 0; i < 400; i++) {
-            for (int j = 0; j < 400; j++) {
-                Rectangle miniBlock = new Rectangle(miniMapBox.getPrefWidth() / 400, miniMapBox.getPrefHeight() / 400);
-                miniBlock.setFill(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i / q, j / q).getTexture().getColor());
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Rectangle miniBlock = new Rectangle(miniMapBox.getPrefWidth() / size, miniMapBox.getPrefHeight() / size);
+                Government keepGov = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getKeepGovernment();
+                if (keepGov != null)
+                    miniBlock.setFill(keepGov.getColor());
+                else
+                    miniBlock.setFill(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getTexture().getColor());
                 miniMap.getChildren().add(miniBlock);
                 GridPane.setConstraints(miniBlock, j, i);
             }
