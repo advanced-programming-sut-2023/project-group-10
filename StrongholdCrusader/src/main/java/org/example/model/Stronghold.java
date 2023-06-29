@@ -51,7 +51,7 @@ public class Stronghold {
     public static User getLoggedInUserFromFile() {
 
         try {
-            String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/LoggedInUser.json")));
+            String json = new String(Files.readAllBytes(Paths.get("./StrongholdCrusader/src/main/resources/LoggedInUser.json")));
             User loggedInUser = gson.fromJson(json, new TypeToken<User>() {
             }.getType());
             if (loggedInUser != null)
@@ -64,7 +64,7 @@ public class Stronghold {
 
     public static void addUserToFile(User user) {
         try {
-            FileWriter fileWriter = new FileWriter("./src/main/resources/LoggedInUser.json");
+            FileWriter fileWriter = new FileWriter("./StrongholdCrusader/src/main/resources/LoggedInUser.json");
             fileWriter.write(gson.toJson(user));
             fileWriter.close();
         } catch (IOException exception) {
