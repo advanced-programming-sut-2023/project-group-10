@@ -18,6 +18,15 @@ public class UnitSpriteTransition extends Transition {
     private final Shape target;
     private final ImagePattern[] sprites;
 
+    public UnitSpriteTransition(MilitaryUnitRole militaryUnitRole, String assetFolderAddress, Duration duration, Shape target) {
+        this.target = target;
+        sprites = pathSpritesMap.get(assetFolderAddress);
+        setCycleDuration(duration);
+        setInterpolator(Interpolator.LINEAR);
+        setCycleCount(1);
+        setOnFinished(actionEvent -> target.setFill(new ImagePattern(militaryUnitRole.getRoleDefaultImage())));
+    }
+
     public static void initializeImages() {
         pathSpritesMap = new HashMap<>();
         String[] actions = {"moving", "attacking"};
@@ -31,7 +40,7 @@ public class UnitSpriteTransition extends Transition {
                     ImagePattern[] sprites = new ImagePattern[directory.listFiles().length];
                     int i = 0;
                     for (File file : Objects.requireNonNull(directory.listFiles())) {
-                        sprites[i] = new ImagePattern(new Image(file.getAbsolutePath()));
+                        sprites[i] = new ImagePattern(new Image(file.toURI().toString()));
                         i++;
                     }
                     pathSpritesMap.put(assetFolderAddress, sprites);
@@ -42,20 +51,11 @@ public class UnitSpriteTransition extends Transition {
             ImagePattern[] sprites = new ImagePattern[directory.listFiles().length];
             int i = 0;
             for (File file : Objects.requireNonNull(directory.listFiles())) {
-                sprites[i] = new ImagePattern(new Image(file.getAbsolutePath()));
+                sprites[i] = new ImagePattern(new Image(file.toURI().toString()));
                 i++;
             }
             pathSpritesMap.put(assetFolderAddress, sprites);
         }
-    }
-
-    public UnitSpriteTransition(MilitaryUnitRole militaryUnitRole, String assetFolderAddress, Duration duration, Shape target) {
-        this.target = target;
-        sprites = pathSpritesMap.get(assetFolderAddress);
-        setCycleDuration(duration);
-        setInterpolator(Interpolator.LINEAR);
-        setCycleCount(1);
-        setOnFinished(actionEvent -> target.setFill(new ImagePattern(militaryUnitRole.getRoleDefaultImage())));
     }
 
     @Override

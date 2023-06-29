@@ -99,7 +99,7 @@ public class ProfileMenuController {
         }
     }
 
-    public static void changeAvatar(String path){
+    public static void changeAvatar(String path) {
         if (Stronghold.getLoggedInUserFromFile() != null &&
                 Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
             Stronghold.getCurrentUser().setAvatar(path);

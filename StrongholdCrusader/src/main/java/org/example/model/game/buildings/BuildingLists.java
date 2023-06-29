@@ -5,7 +5,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -26,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class BuildingLists {
+    private static BuildingTypeName selectedBuilding;
     public static final ListView<VBox> allBuildings = allBuildingsCreator();
     public static final ListView<VBox> castleBuildings = setBuildingBox(BuildingCategory.CASTLE);
     public static final ListView<VBox> farmBuildings = setBuildingBox(BuildingCategory.FARM);
@@ -34,7 +34,6 @@ public class BuildingLists {
     public static final ListView<VBox> industryBuildings = setBuildingBox(BuildingCategory.INDUSTRY);
     public static final ListView<VBox> foodProcessingBuildings = setBuildingBox(BuildingCategory.FOOD_PROCESSING);
     public static final ListView<VBox> unknown = setBuildingBox(BuildingCategory.UNKNOWN);
-    private static BuildingTypeName selectedBuilding;
 
     public static BuildingTypeName getSelectedBuilding() {
         return selectedBuilding;

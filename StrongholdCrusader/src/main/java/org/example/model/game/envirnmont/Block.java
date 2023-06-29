@@ -186,10 +186,6 @@ public class Block {
         }
     }
 
-    public void setOnFire(Fire fire) {
-        fires.add(fire);
-    }
-
     public void removeFires(Battle battle) {
         for (int i = fires.size() - 1; i >= 0; i--) {
             if (!fires.get(i).isStillOn(battle.getTurnsPassed()))
@@ -199,5 +195,9 @@ public class Block {
 
     public boolean isOnFire() {
         return fires.size() > 0;
+    }
+
+    public void setOnFire(Fire fire) {
+        fires.add(fire);
     }
 }

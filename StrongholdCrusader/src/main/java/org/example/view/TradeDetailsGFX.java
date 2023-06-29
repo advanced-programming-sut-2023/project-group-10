@@ -21,7 +21,7 @@ public class TradeDetailsGFX extends Application {
     public void start(Stage stage) throws Exception {
         URL tradeDetailsFXML = TradeDetailsGFX.class.getResource("/view/tradeDetailsMenu.fxml");
         FXMLLoader loader = new FXMLLoader(tradeDetailsFXML);
-        Pane tradeDetailsPane= loader.load();
+        Pane tradeDetailsPane = loader.load();
         ((TradeDetailsController) loader.getController()).setSelectedTrade(this.selectedTrade);
         Scene scene = new Scene(tradeDetailsPane);
         stage.setScene(scene);
@@ -35,8 +35,6 @@ public class TradeDetailsGFX extends Application {
             stage.showAndWait();
         }
         stage.centerOnScreen();
-
-
 
 
     }

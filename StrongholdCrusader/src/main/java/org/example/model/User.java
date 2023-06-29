@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class User {
     static final Gson gson = new Gson();
-    private static ArrayList<User> users = new ArrayList<>();
+    private static final ArrayList<User> users = new ArrayList<>();
     private String username;
     private String password;
     private String nickname;
@@ -122,7 +122,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        User.getUserByUsername(this.username).email=email;
+        User.getUserByUsername(this.username).email = email;
         Stronghold.dataBase.saveUsersToFile();
     }
 
@@ -143,11 +143,11 @@ public class User {
         this.slogan = slogan;
     }
 
-    public String getAvatar(){
+    public String getAvatar() {
         return Objects.requireNonNull(User.class.getResource(this.avatar)).toString();
     }
 
-    public void setAvatar(String avatar){
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
         Stronghold.dataBase.saveUsersToFile();
     }
@@ -177,7 +177,7 @@ public class User {
 
     public void setHighScore(int highScore) {
         if (this.highScore <= highScore)
-            User.getUserByUsername(this.username).highScore=highScore;
+            User.getUserByUsername(this.username).highScore = highScore;
         Stronghold.dataBase.saveUsersToFile();
     }
 
@@ -190,8 +190,8 @@ public class User {
         return 0;
     }
 
-    private int randomNumber(){
+    private int randomNumber() {
         Random random = new Random();
-        return random.nextInt(28)+1; //TODO set bound
+        return random.nextInt(28) + 1; //TODO set bound
     }
 }

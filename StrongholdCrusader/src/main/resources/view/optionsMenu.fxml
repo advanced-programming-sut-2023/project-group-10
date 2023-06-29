@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.*?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-fx:controller="org.example.view.OptionsMenuController">
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19"
+      fx:controller="org.example.view.OptionsMenuController">
     <children>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a10808" height="63.0" stroke="BLACK" strokeType="INSIDE"
                    width="600.0" opacity="Infinity"/>
@@ -22,35 +22,35 @@ fx:controller="org.example.view.OptionsMenuController">
             <children>
                 <Button mnemonicParsing="false" opacity="0.7" prefHeight="23.0" prefWidth="536.0"
                         style="-fx-background-color: black;" text="Options" textFill="WHITE"
-                onMouseClicked="#options">
+                        onMouseClicked="#options">
                     <font>
                         <Font name="Khmer MN" size="15.0"/>
                     </font>
                 </Button>
                 <Button mnemonicParsing="false" opacity="0.7" prefHeight="23.0" prefWidth="536.0"
                         style="-fx-background-color: black;" text="Help" textFill="WHITE"
-                onMouseClicked="#help">
+                        onMouseClicked="#help">
                     <font>
                         <Font name="Khmer MN" size="15.0"/>
                     </font>
                 </Button>
                 <Button mnemonicParsing="false" opacity="0.7" prefHeight="23.0" prefWidth="536.0"
                         style="-fx-background-color: black;" text="Restart Battle" textFill="WHITE"
-                onMouseClicked="#restartGame">
+                        onMouseClicked="#restartGame">
                     <font>
                         <Font name="Khmer MN" size="15.0"/>
                     </font>
                 </Button>
                 <Button mnemonicParsing="false" opacity="0.7" prefHeight="23.0" prefWidth="536.0"
                         style="-fx-background-color: black;" text="Quit Battle" textFill="WHITE"
-                onMouseClicked="#quitGame">
+                        onMouseClicked="#quitGame">
                     <font>
                         <Font name="Khmer MN" size="15.0"/>
                     </font>
                 </Button>
                 <Button mnemonicParsing="false" opacity="0.7" prefHeight="23.0" prefWidth="536.0"
                         style="-fx-background-color: black;" text="Resume Game" textFill="WHITE"
-                onMouseClicked="#resumeGame">
+                        onMouseClicked="#resumeGame">
                     <font>
                         <Font name="Khmer MN" size="15.0"/>
                     </font>

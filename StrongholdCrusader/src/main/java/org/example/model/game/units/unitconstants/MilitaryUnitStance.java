@@ -11,13 +11,13 @@ public enum MilitaryUnitStance {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public static MilitaryUnitStance getStanceByName(String name) {
         for (MilitaryUnitStance stance : MilitaryUnitStance.values())
             if (stance.name.equals(name)) return stance;
         return null;
+    }
+
+    public String getName() {
+        return name;
     }
 }

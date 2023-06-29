@@ -38,20 +38,19 @@ public class ChangeAvatarMenu extends Application {
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         avatarList.getItems().add("none");
-        for(int i = 1; i < 29; i++){
+        for (int i = 1; i < 29; i++) {
             String path = Stronghold.class.getResource("/images/avatar/avatar" + i + ".png").toExternalForm();
             avatarList.getItems().add(new Circle(30, new ImagePattern(new Image(path))));
         }
         avatarList.getSelectionModel().select("none");
         avatarList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(avatarList.getSelectionModel().getSelectedItem().equals("none")){
+            if (avatarList.getSelectionModel().getSelectedItem().equals("none")) {
                 browseButton.setDisable(false);
                 dropHere.setDisable(false);
                 dropHere.setOpacity(1);
-            }
-            else {
+            } else {
                 browseButton.setDisable(true);
                 dropHere.setDisable(true);
                 dropHere.setOpacity(0.5);
@@ -64,14 +63,14 @@ public class ChangeAvatarMenu extends Application {
                 ChangeAvatarMenu.class.getResource("/images/backgrounds/drop.jpeg").toExternalForm())));
     }
 
-    public void browse() throws Exception{
+    public void browse() throws Exception {
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Image File (*.jpeg), (*.jpg), (*.png)",
                 "*.jpeg", "*.jpg", "*.png");
         fileChooser.setTitle("select profile photo");
         fileChooser.getExtensionFilters().add(extensionFilter);
         File file = fileChooser.showOpenDialog(stage);
-        if(file != null){
+        if (file != null) {
             Stronghold.getCurrentUser().setAvatar(file.toURI().toString());
             Popup popup = new Popup();
             Text text = new Text("Avatar Changed Successfully");
@@ -87,13 +86,13 @@ public class ChangeAvatarMenu extends Application {
         dropHere.setFill(new ImagePattern(new Image(file.toURI().toString())));
     }
 
-    public void profileMenu() throws Exception{
+    public void profileMenu() throws Exception {
         new ProfileMenu().start(stage);
     }
 
-    public void submit() throws Exception{
-        if(avatarList.getSelectionModel().getSelectedItem().equals("none")) new ProfileMenu().start(stage);
-        else{
+    public void submit() throws Exception {
+        if (avatarList.getSelectionModel().getSelectedItem().equals("none")) new ProfileMenu().start(stage);
+        else {
             Circle circle = (Circle) avatarList.getSelectionModel().getSelectedItem();
             ImagePattern imagePattern = (ImagePattern) circle.getFill();
             String path = imagePattern.getImage().getUrl();

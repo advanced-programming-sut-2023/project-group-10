@@ -27,14 +27,15 @@ public class Trade {
         this.price = price;
         this.acceptedStatus = false;
         this.isDisplayedInHistory = false;
-        viewed=false;
+        viewed = false;
     }
 
     public boolean isViewed() {
         return viewed;
     }
-    public void setViewed(boolean state){
-        viewed=state;
+
+    public void setViewed(boolean state) {
+        viewed = state;
     }
 
     public String getId() {

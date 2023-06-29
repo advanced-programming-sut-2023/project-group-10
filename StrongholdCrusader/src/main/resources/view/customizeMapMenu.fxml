@@ -3,8 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.layout.*?>
-<HBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
+<HBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
       fx:controller="org.example.view.CustomizeMapMenuController"
       stylesheets="@../CSS/spacingStyle.css">
 
@@ -17,7 +17,7 @@
         </HBox>
         <ListView fx:id="itemList">
         </ListView>
-        <VBox  fx:id="controlsBox"  alignment="CENTER">
+        <VBox fx:id="controlsBox" alignment="CENTER">
             <Label fx:id="errorMessage" wrapText="true"/>
             <HBox alignment="CENTER">
                 <Button text="eraser" onMouseClicked="#goToEraserMode"/>

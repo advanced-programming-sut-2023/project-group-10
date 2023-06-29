@@ -126,8 +126,7 @@ public class CustomizeMapMenuController {
                         } else {
                             if (customizationMode == CustomizationMode.TREE)
                                 result = mapView[coordinate.row][coordinate.column].setTree(coordinate, TreeType.getTreeTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
-                            else if (customizationMode == CustomizationMode.ROCK)
-                            {
+                            else if (customizationMode == CustomizationMode.ROCK) {
                                 result = mapView[coordinate.row][coordinate.column].setRock(coordinate, RockType.getRockTypeByName(itemList.getSelectionModel().getSelectedItem().getId()));
                             }
                             Shape object = mapView[coordinate.row][coordinate.column].getObject();

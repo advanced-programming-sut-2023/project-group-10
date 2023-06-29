@@ -10,8 +10,8 @@ import javafx.stage.Stage;
 import java.net.URL;
 
 public class OptionsMenuGFX extends Application {
-    public GameMenuGFXController gameMenuGFXController;
     public static Stage stage;
+    public GameMenuGFXController gameMenuGFXController;
 
     public void setGameMenuGFXController(GameMenuGFXController gameMenuGFXController) {
         this.gameMenuGFXController = gameMenuGFXController;
@@ -20,7 +20,7 @@ public class OptionsMenuGFX extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        this.stage = stage;
+        OptionsMenuGFX.stage = stage;
         URL optionsGFX = OptionsMenuGFX.class.getResource("/view/optionsMenu.fxml");
         FXMLLoader loader = new FXMLLoader(optionsGFX);
         Pane optionsPane = loader.load();

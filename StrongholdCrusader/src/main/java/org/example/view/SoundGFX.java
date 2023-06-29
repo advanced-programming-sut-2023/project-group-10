@@ -10,8 +10,8 @@ import javafx.stage.Stage;
 import java.net.URL;
 
 public class SoundGFX extends Application {
-    private GameMenuGFXController gameMenuGFXController;
     public static Stage stage;
+    private GameMenuGFXController gameMenuGFXController;
 
     public void setGameMenuGFXController(GameMenuGFXController gameMenuGFXController) {
         this.gameMenuGFXController = gameMenuGFXController;
@@ -19,10 +19,10 @@ public class SoundGFX extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        this.stage = stage;
+        SoundGFX.stage = stage;
         URL soundFXML = SoundGFX.class.getResource("/view/soundMenu.fxml");
         FXMLLoader loader = new FXMLLoader(soundFXML);
-        System.out.println(loader.getController()==null);
+        System.out.println(loader.getController() == null);
         Pane soundPane = loader.load();
         ((SoundController) loader.getController()).setGameMenuGFXController(this.gameMenuGFXController);
         soundPane.setStyle("-fx-background-color: rgba(80, 80, 80, 0.5); -fx-background-radius: 10;");

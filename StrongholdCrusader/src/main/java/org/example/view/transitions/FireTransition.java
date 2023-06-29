@@ -12,21 +12,21 @@ public class FireTransition extends Transition {
     private static Image[] fireAssets;
     private final ImageView fireNode;
 
+    public FireTransition(ImageView fireNode) {
+        this.fireNode = fireNode;
+        setCycleCount(INDEFINITE);
+        setCycleDuration(Duration.millis(2000));
+    }
+
     public static void initializeImages() {
         String assetFolderAddress = "src/main/resources/images/fire";
         File directory = new File(assetFolderAddress);
         fireAssets = new Image[Objects.requireNonNull(directory.listFiles()).length];
         int i = 0;
         for (File file : Objects.requireNonNull(directory.listFiles())) {
-            fireAssets[i] = new Image(file.getAbsolutePath());
+            fireAssets[i] = new Image(file.toURI().toString());
             i++;
         }
-    }
-
-    public FireTransition(ImageView fireNode) {
-        this.fireNode = fireNode;
-        setCycleCount(INDEFINITE);
-        setCycleDuration(Duration.millis(2000));
     }
 
     @Override

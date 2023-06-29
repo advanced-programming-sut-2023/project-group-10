@@ -11,10 +11,12 @@
       xmlns="http://javafx.com/javafx/19"
       fx:controller="org.example.view.TradeMenuHistoryController">
     <children>
-        <Button layoutX="6.0" layoutY="1.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="77.0" text="back" onMouseClicked="#back"/>
+        <Button layoutX="6.0" layoutY="1.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="77.0" text="back"
+                onMouseClicked="#back"/>
         <HBox layoutX="30.0" layoutY="62.0" prefHeight="305.0" prefWidth="539.0" spacing="20.0">
             <children>
-                <VBox  fx:id="requestsFromUser" prefHeight="305.0" prefWidth="260.0" style="-fx-background-color: lemonchiffon;">
+                <VBox fx:id="requestsFromUser" prefHeight="305.0" prefWidth="260.0"
+                      style="-fx-background-color: lemonchiffon;">
                     <children>
                         <Label prefHeight="22.0" prefWidth="264.0" text="Requests from you">
                             <font>
@@ -23,7 +25,8 @@
                         </Label>
                     </children>
                 </VBox>
-                <VBox fx:id="requestsToUser" prefHeight="305.0" prefWidth="264.0" style="-fx-background-color: lemonchiffon;">
+                <VBox fx:id="requestsToUser" prefHeight="305.0" prefWidth="264.0"
+                      style="-fx-background-color: lemonchiffon;">
                     <children>
                         <Label prefHeight="22.0" prefWidth="217.0" text="Requests to you">
                             <font>

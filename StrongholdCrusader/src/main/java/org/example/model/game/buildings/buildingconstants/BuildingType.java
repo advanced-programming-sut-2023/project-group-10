@@ -87,7 +87,7 @@ public class BuildingType {
     }
 
     public BuildingCategory getCategory() {
-        if(this.category == null)
+        if (this.category == null)
             return BuildingCategory.UNKNOWN;
         else return category;
     }

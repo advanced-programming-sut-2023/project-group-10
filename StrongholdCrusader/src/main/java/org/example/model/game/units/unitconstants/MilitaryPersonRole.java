@@ -8,12 +8,12 @@ import java.util.ArrayList;
 
 public class MilitaryPersonRole extends MilitaryUnitRole {
     private static final int defaultHitPoint = 50;
+    private static final ArrayList<Role> allMilitaryRoles = new ArrayList<>();
     private final BuildingTypeName producingBuilding;
     private final Item weapon;
     private final Item[] armors;
     private final boolean canClimbLadders;
     private final boolean canDigMoats;
-    private static final ArrayList<Role> allMilitaryRoles = new ArrayList<>();
 
     private MilitaryPersonRole(RoleName name, int maxHitPoint, Quality speed, Quality attackRating, Quality attackRange, Quality accuracy, int cost, BuildingTypeName producingBuilding, Item weapon, boolean canClimbLadders, boolean canDigMoats, Item... armors) {
         super(name, maxHitPoint, speed, attackRating, attackRange, accuracy, cost);

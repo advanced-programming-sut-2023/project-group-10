@@ -30,7 +30,7 @@ public class UnitMoveTransition extends Transition {
         sprites = new ImagePattern[Objects.requireNonNull(directory.listFiles()).length];
         int i = 0;
         for (File file : Objects.requireNonNull(directory.listFiles())) {
-            sprites[i] = new ImagePattern(new Image(file.getAbsolutePath()));
+            sprites[i] = new ImagePattern(new Image(file.toURI().toString()));
             i++;
         }
         setCycleDuration(duration);

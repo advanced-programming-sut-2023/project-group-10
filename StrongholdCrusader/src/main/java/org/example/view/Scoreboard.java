@@ -9,7 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
-import javafx.scene.input.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
@@ -27,6 +29,27 @@ public class Scoreboard extends Application {
     private static Stage stage;
     private String path;
 
+    public static void bind(ListView<Integer> rank, ListView<Circle> avatar, ListView<String> username, ListView<Integer> highScore) {
+        Node n1 = rank.lookup(".scroll-bar");
+        if (n1 instanceof ScrollBar) {
+            final ScrollBar bar1 = (ScrollBar) n1;
+            Node n2 = highScore.lookup(".scroll-bar");
+            if (n2 instanceof ScrollBar) {
+                final ScrollBar bar2 = (ScrollBar) n2;
+                bar1.valueProperty().bindBidirectional(bar2.valueProperty());
+            }
+            Node n3 = username.lookup(".scroll-bar");
+            if (n3 instanceof ScrollBar) {
+                final ScrollBar bar3 = (ScrollBar) n3;
+                bar1.valueProperty().bindBidirectional(bar3.valueProperty());
+            }
+            Node n4 = avatar.lookup(".scroll-bar");
+            if (n4 instanceof ScrollBar) {
+                final ScrollBar bar4 = (ScrollBar) n4;
+                bar1.valueProperty().bindBidirectional(bar4.valueProperty());
+            }
+        }
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -74,8 +97,8 @@ public class Scoreboard extends Application {
 
         List<User> sortedUsers = new ArrayList<>(User.sortUsers());
 
-        for(int i = 0; i < sortedUsers.size(); i++){
-            rank.getItems().add(i+1);
+        for (int i = 0; i < sortedUsers.size(); i++) {
+            rank.getItems().add(i + 1);
             username.getItems().add(sortedUsers.get(i).getUsername());
             Circle circle = new Circle(30, new ImagePattern(new Image(sortedUsers.get(i).getAvatar())));
             circle.setOnDragDetected(mouseEvent -> {
@@ -108,29 +131,7 @@ public class Scoreboard extends Application {
         bind(rank, avatar, username, highScore);
     }
 
-    public void profileMenu() throws Exception{
+    public void profileMenu() throws Exception {
         new ProfileMenu().start(stage);
-    }
-
-    public static void bind(ListView<Integer> rank, ListView<Circle> avatar, ListView<String> username, ListView<Integer> highScore){
-        Node n1 = rank.lookup(".scroll-bar");
-        if (n1 instanceof ScrollBar) {
-            final ScrollBar bar1 = (ScrollBar) n1;
-            Node n2 = highScore.lookup(".scroll-bar");
-            if (n2 instanceof ScrollBar) {
-                final ScrollBar bar2 = (ScrollBar) n2;
-                bar1.valueProperty().bindBidirectional(bar2.valueProperty());
-            }
-            Node n3 = username.lookup(".scroll-bar");
-            if(n3 instanceof ScrollBar){
-                final ScrollBar bar3 = (ScrollBar) n3;
-                bar1.valueProperty().bindBidirectional(bar3.valueProperty());
-            }
-            Node n4 = avatar.lookup(".scroll-bar");
-            if(n4 instanceof ScrollBar){
-                final ScrollBar bar4 = (ScrollBar) n4;
-                bar1.valueProperty().bindBidirectional(bar4.valueProperty());
-            }
-        }
     }
 }

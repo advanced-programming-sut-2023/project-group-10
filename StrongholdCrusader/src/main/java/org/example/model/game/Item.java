@@ -2,7 +2,6 @@ package org.example.model.game;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum Item {
@@ -38,7 +37,7 @@ public enum Item {
     private final double buyPrice;
     private final double sellPrice;
     private final boolean isFood;
-     private HashMap<Item, String> itemPath=new HashMap<>();
+    private final HashMap<Item, String> itemPath = new HashMap<>();
 
 
     Item(String name, Map<Item, Integer> resourcesNeeded, double buyPrice, double sellPrice, boolean isFood) {
@@ -66,6 +65,14 @@ public enum Item {
 
     public static Item[] getPrimaryItems() {
         return new Item[]{WOOD, STONE, IRON, PITCH, WHEAT, FLOUR, HOPS};
+    }
+
+    public static Item getItemByPath(String path) {
+        for (Item value : Item.values()) {
+            if (Pattern.compile(value.getName()).matcher(path).find())
+                return value;
+        }
+        return null;
     }
 
     public String getName() {
@@ -114,12 +121,5 @@ public enum Item {
     public HashMap<Item, String> itemToPath() {
 
         return itemPath;
-    }
-    public static Item getItemByPath(String path){
-        for (Item value : Item.values()) {
-            if(Pattern.compile(value.getName()).matcher(path).find())
-                return value;
-        }
-        return null;
     }
 }

@@ -11,7 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import org.example.model.Stronghold;
 import org.example.model.game.Trade;
 
@@ -29,7 +28,7 @@ public class TradeMenuHistoryController {
     private void listOfReceived() {
         ListView<HBox> requests = new ListView<HBox>();
         requests.setPrefWidth(requestsToUser.getPrefWidth());
-        for (int i = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList().size()-1; i >= 0; i--) {
+        for (int i = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList().size() - 1; i >= 0; i--) {
             if (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList().get(i).getRecipientId().equals(
                     Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername())) {
                 Trade trade = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList().get(i);
@@ -93,7 +92,7 @@ public class TradeMenuHistoryController {
         ListView<HBox> requests = new ListView<HBox>();
         requests.setPrefWidth(requestsFromUser.getPrefWidth());
         System.out.println(Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList().size());
-        for (int i = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList().size()-1; i >= 0; i--) {
+        for (int i = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList().size() - 1; i >= 0; i--) {
             if (Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList().get(i).getSenderId().equals(
                     Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getOwner().getUsername())) {
                 Trade trade = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getTradeList().get(i);

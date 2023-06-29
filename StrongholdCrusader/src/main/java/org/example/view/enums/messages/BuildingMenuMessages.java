@@ -10,6 +10,6 @@ public enum BuildingMenuMessages {
     ENEMIES_FORCES_ARE_CLOSE,
     REPAIR_SUCCESSFUL,
     INVALID_UNIT_TYPE,
-    AT_MAX_HITPOINT;
+    AT_MAX_HITPOINT
 
 }

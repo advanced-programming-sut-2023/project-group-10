@@ -24,14 +24,11 @@ public class
 ExtendedBlock {
     private static final double WIDTH = 200;
     private static final double HEIGHT = 100;
-    private static double x0;
     private static final HashMap<BlockTexture, ImagePattern> textureImageMap;
     private static final HashMap<TreeType, ImagePattern> treeImageMap;
     private static final HashMap<RockType, ImagePattern> rockImageMap;
     private static final HashMap<BuildingTypeName, ImagePattern> buildingImageMap;
-    private final Block block;
-    private final Polygon blockView;
-    private Rectangle object;
+    private static double x0;
 
     static {
         textureImageMap = new HashMap<>();
@@ -47,6 +44,10 @@ ExtendedBlock {
         for (BuildingTypeName value : BuildingTypeName.values())
             buildingImageMap.put(value, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + value.toString().toLowerCase() + ".png").toExternalForm())));
     }
+
+    private final Block block;
+    private final Polygon blockView;
+    private Rectangle object;
 
     public ExtendedBlock(Block block, int row, int column) {
         this.block = block;

@@ -6,7 +6,7 @@ import org.example.view.enums.messages.SignupMenuMessages;
 
 public class SignupMenuController {
     public static void createUser(String securityQuestionNumber, String securityAnswer,
-                                   String username, String password, String nickname, String slogan, String email) {
+                                  String username, String password, String nickname, String slogan, String email) {
         User.addUser(username, password, nickname, email, slogan, securityQuestionNumber, securityAnswer);
     }
 
@@ -59,7 +59,7 @@ public class SignupMenuController {
         else return SignupMenuMessages.STRONG_PASSWORD;
     }
 
-    public static SignupMenuMessages checkUsername(String username){
+    public static SignupMenuMessages checkUsername(String username) {
         if (CheckFormatAndEncrypt.isUsernameFormatInvalid(username))
             return SignupMenuMessages.INVALID_USERNAME_FORMAT;
         if (User.getUserByUsername(username) != null)

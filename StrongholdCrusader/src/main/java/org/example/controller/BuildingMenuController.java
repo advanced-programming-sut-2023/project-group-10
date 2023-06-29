@@ -40,7 +40,7 @@ public class BuildingMenuController {
             return BuildingMenuMessages.INSUFFICIENT_POPULATION;
 
         int deletedPeasants = 0;
-        ArrayList<Unit> tempCopy=new ArrayList<>(selectedBuilding.getGovernment().getUnits());
+        ArrayList<Unit> tempCopy = new ArrayList<>(selectedBuilding.getGovernment().getUnits());
         for (Unit unit : tempCopy)
             if (unit.getRole().getName() == RoleName.PEASANT) {
                 unit.killMe();

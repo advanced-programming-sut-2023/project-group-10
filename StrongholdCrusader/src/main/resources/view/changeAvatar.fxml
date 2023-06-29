@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
-<HBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
+<HBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
       fx:controller="org.example.view.ChangeAvatarMenu"
       prefHeight="400.0" prefWidth="600.0"
       spacing="40" alignment="CENTER">

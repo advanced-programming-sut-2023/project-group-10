@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -23,6 +22,7 @@ import org.example.model.utils.CaptchaGenerator;
 
 public class SecurityQuestionMenu extends Application {
 
+    private static Stage stage;
     public RadioButton question1;
     public RadioButton question2;
     public RadioButton question3;
@@ -34,7 +34,6 @@ public class SecurityQuestionMenu extends Application {
     public Text captchaText;
     public VBox captchaContainer;
     private String question;
-    private static Stage stage;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -51,7 +50,7 @@ public class SecurityQuestionMenu extends Application {
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         question1.setText(SecurityQuestion.getQuestionByNumber("1"));
         question2.setText(SecurityQuestion.getQuestionByNumber("2"));
         question3.setText(SecurityQuestion.getQuestionByNumber("3"));
@@ -81,8 +80,8 @@ public class SecurityQuestionMenu extends Application {
         question = "3";
     }
 
-    public void submit() throws Exception{
-        if(!input.getText().equals(captchaNumber.getText())){
+    public void submit() throws Exception {
+        if (!input.getText().equals(captchaNumber.getText())) {
             captchaText.setText("incorrect captcha!");
             generateCaptcha();
             return;
@@ -93,8 +92,8 @@ public class SecurityQuestionMenu extends Application {
         new LoginMenu().start(stage);
     }
 
-    private BackgroundImage setBackground(String url){
-        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440 ,900, false, false);
+    private BackgroundImage setBackground(String url) {
+        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440, 900, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,

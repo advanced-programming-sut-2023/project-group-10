@@ -3,8 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
       fx:controller="org.example.view.GameMenuGFXController"
       prefHeight="400.0" prefWidth="600.0" stylesheets="@../CSS/spacingStyle.css">
 

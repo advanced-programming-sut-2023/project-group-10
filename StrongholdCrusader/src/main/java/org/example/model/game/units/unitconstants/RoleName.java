@@ -1,7 +1,5 @@
 package org.example.model.game.units.unitconstants;
 
-import javafx.scene.image.Image;
-
 public enum RoleName {
     //normal people
     LADY,

@@ -27,8 +27,8 @@ public class Government {
     private final Color color;
     private final ArrayList<Trade> tradeList = new ArrayList<>();
     private final Coordinate keep;
-    private ArrayList<Building> buildings = new ArrayList<>();
     private final SimpleIntegerProperty popularity = new SimpleIntegerProperty();
+    private ArrayList<Building> buildings = new ArrayList<>();
     private double gold;
     private int foodRate;
     private int excessFood;

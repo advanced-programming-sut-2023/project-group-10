@@ -3,15 +3,15 @@ package org.example.view;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.NodeOrientation;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -30,6 +30,7 @@ import org.example.view.enums.messages.SignupMenuMessages;
 
 public class LoginMenu extends Application {
 
+    private static Stage stage;
     public TextField username;
     public PasswordField password;
     public CheckBox stayLoggedIn;
@@ -42,7 +43,6 @@ public class LoginMenu extends Application {
     public Rectangle box;
     @FXML
     private Pane pane;
-    private static Stage stage;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -57,7 +57,7 @@ public class LoginMenu extends Application {
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         box.setFill(new ImagePattern(new Image(LoginMenu.class.getResource("/images/backgrounds/dotted.jpeg").toExternalForm())));
         generateCaptcha();
     }
@@ -101,23 +101,22 @@ public class LoginMenu extends Application {
         Button submit = new Button("submit");
 
         show.setOnMouseClicked(mouseEvent -> {
-            if(username.getText().equals("")) usernameLabel.setText("please provide a username!");
+            if (username.getText().equals("")) usernameLabel.setText("please provide a username!");
 
-            else if(User.getUserByUsername(username.getText()) != null){
+            else if (User.getUserByUsername(username.getText()) != null) {
                 pane.getChildren().removeAll(text);
                 String questionNumber = User.getUserByUsername(username.getText()).getQuestionNumber();
                 question.setText(SecurityQuestion.getQuestionByNumber(questionNumber));
                 pane.getChildren().add(question);
                 vbox.getChildren().removeAll(hBox, usernameLabel);
                 vbox.getChildren().addAll(answer, answerLabel, passwordContainer, submit);
-            }
-            else usernameLabel.setText("This username does not exist!");
+            } else usernameLabel.setText("This username does not exist!");
         });
 
         newPassword.textProperty().addListener((observable, oldValue, newValue) -> checkPassword(newValue, passwordLabel));
 
         submit.setOnMouseClicked(mouseEvent -> {
-            if(!User.checkSecurityAnswer(username.getText(), answer.getText()))
+            if (!User.checkSecurityAnswer(username.getText(), answer.getText()))
                 answerLabel.setText("wrong answer!");
             else {
                 User.getUserByUsername(username.getText()).setPassword(newPassword.getText());
@@ -129,7 +128,7 @@ public class LoginMenu extends Application {
     }
 
     @FXML
-    private void generateCaptcha(){
+    private void generateCaptcha() {
         captchaNumber.setText(CaptchaGenerator.randomNumberGenerator());
         captchaNumber.setFill(Color.DARKGRAY);
         captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
@@ -137,8 +136,8 @@ public class LoginMenu extends Application {
         box.setWidth(captchaNumber.getText().length() * 15);
     }
 
-    public void submit() throws Exception{
-        if(!input.getText().equals(captchaNumber.getText())){
+    public void submit() throws Exception {
+        if (!input.getText().equals(captchaNumber.getText())) {
             captchaText.setText("incorrect captcha!");
             usernameText.setText("");
             passwordText.setText("");
@@ -147,37 +146,34 @@ public class LoginMenu extends Application {
         }
 
         LoginMenuMessages message = LoginMenuController.login(username.getText(), password.getText(), stayLoggedIn.isSelected());
-        if(message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST)){
+        if (message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST)) {
             usernameText.setText("username does not exist");
             passwordText.setText("");
             captchaText.setText("");
-        }
-        else if(message.equals(LoginMenuMessages.WRONG_PASSWORD)){
+        } else if (message.equals(LoginMenuMessages.WRONG_PASSWORD)) {
             usernameText.setText("");
             passwordText.setText("wrong password");
             captchaText.setText("");
-        }
-
-        else new MainMenuGFX().start(stage);
+        } else new MainMenuGFX().start(stage);
     }
 
-    private void checkPassword(String password, Label label){
+    private void checkPassword(String password, Label label) {
         SignupMenuMessages messages = SignupMenuController.checkPassword(password);
 
-        if(messages.equals(SignupMenuMessages.SHORT_PASSWORD))
+        if (messages.equals(SignupMenuMessages.SHORT_PASSWORD))
             label.setText("short password!");
-        else if(messages.equals(SignupMenuMessages.NO_LOWERCASE_LETTER))
+        else if (messages.equals(SignupMenuMessages.NO_LOWERCASE_LETTER))
             label.setText("password must have a lowercase letter");
-        else if(messages.equals(SignupMenuMessages.NO_UPPERCASE_LETTER))
+        else if (messages.equals(SignupMenuMessages.NO_UPPERCASE_LETTER))
             label.setText("password must have an uppercase letter");
-        else if(messages.equals(SignupMenuMessages.NO_NUMBER))
+        else if (messages.equals(SignupMenuMessages.NO_NUMBER))
             label.setText("password must have a digit");
-        else if(messages.equals(SignupMenuMessages.NO_SPECIAL_CHARACTER))
+        else if (messages.equals(SignupMenuMessages.NO_SPECIAL_CHARACTER))
             label.setText("password must have a special character");
         else label.setText("valid password!");
     }
 
-    public void signupMenu(MouseEvent mouseEvent) throws Exception{
+    public void signupMenu(MouseEvent mouseEvent) throws Exception {
         new SignupMenu().start(stage);
     }
 }

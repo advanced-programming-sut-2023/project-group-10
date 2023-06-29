@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StartGameMenuController {
-    private Stage stage;
     public VBox settingsContainer;
     public Label playerCountLabel;
     public Slider playerCountSlider;
     public HBox sizeBox;
     public GridPane playersInfoBox;
+    private Stage stage;
     private ToggleGroup sizeToggleGroup;
 
     public void prepareMenu(Stage stage) {
@@ -130,6 +130,15 @@ public class StartGameMenuController {
             allPlayerInfos.add(this);
         }
 
+        public static boolean isInfoValid() {
+            for (PlayerInfoStartGame playerInfo : allPlayerInfos) {
+                if (!playerInfo.isUsernameValid || !playerInfo.isKeepPositionValid) return false;
+                if (playerInfo.username.getText().isEmpty() || playerInfo.row.getText().isEmpty() || playerInfo.column.getText().isEmpty())
+                    return false;
+            }
+            return true;
+        }
+
         public void addPositionValidityListener(StartGameMenuController controller, TextField number) {
             number.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (!number.getText().matches("\\d*") || !number.getText().isEmpty() && Integer.parseInt(number.getText()) > controller.getSize())
@@ -139,15 +148,6 @@ public class StartGameMenuController {
                     updateErrorMessage();
                 }
             });
-        }
-
-        public static boolean isInfoValid() {
-            for (PlayerInfoStartGame playerInfo : allPlayerInfos) {
-                if (!playerInfo.isUsernameValid || !playerInfo.isKeepPositionValid) return false;
-                if (playerInfo.username.getText().isEmpty() || playerInfo.row.getText().isEmpty() || playerInfo.column.getText().isEmpty())
-                    return false;
-            }
-            return true;
         }
 
         private boolean duplicateCoordinate() {

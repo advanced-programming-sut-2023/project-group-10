@@ -10,8 +10,8 @@ import javafx.scene.text.Font;
 
 public class TradeMenuController {
     public static Button back = new Button();
-    public Button makeRequest;
     public static HBox buttonBox = new HBox();
+    public Button makeRequest;
     public Button history;
 
     @FXML

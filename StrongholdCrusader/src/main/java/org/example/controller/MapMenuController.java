@@ -49,7 +49,8 @@ public class MapMenuController {
             User owner = block.getKeepGovernment().getOwner();
             details = details.concat("keep | owner: " + owner.getUsername() + " (" + owner.getNickname() + ")\n");
         }
-        if (block.isIll()) details = details.concat("has illness for government: " + block.getIllnessOwner().getOwner().getUsername() + "\n");
+        if (block.isIll())
+            details = details.concat("has illness for government: " + block.getIllnessOwner().getOwner().getUsername() + "\n");
         int count = 0;
         ArrayList<MilitaryUnit> militaryUnits = block.getMilitaryUnitsByGovernment(Stronghold.getCurrentBattle().getGovernmentAboutToPlay());
         HashMap<String, ArrayList<MilitaryPerson>> militaryPeople = new HashMap<>();

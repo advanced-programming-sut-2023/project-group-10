@@ -11,5 +11,5 @@ public enum LoginMenuMessages {
     NO_UPPERCASE_LETTER,
     NO_NUMBER,
     NO_SPECIAL_CHARACTER,
-    STRONG_PASSWORD;
+    STRONG_PASSWORD
 }

@@ -20,7 +20,7 @@ public class ShopMenuGFX extends Application {
 
         URL shopMenuFXML = ItemDetailsMenuGFX.class.getResource("/view/shopMenu.fxml");
         FXMLLoader loader = new FXMLLoader(shopMenuFXML);
-        Pane shopMenuPane= loader.load();
+        Pane shopMenuPane = loader.load();
         ((ShopMenuController) loader.getController()).setGameMenuGFXController(this.gameMenuGFXController);
         ShopMenuGFX.stage = primaryStage;
         Image image = new Image(ShopMenuGFX.class.getResource("/images/backgrounds/brownPaper.jpeg").toExternalForm());
@@ -41,6 +41,6 @@ public class ShopMenuGFX extends Application {
     }
 
     public void setGameController(GameMenuGFXController gameMenuGFXController) {
-        this.gameMenuGFXController=gameMenuGFXController;
+        this.gameMenuGFXController = gameMenuGFXController;
     }
 }

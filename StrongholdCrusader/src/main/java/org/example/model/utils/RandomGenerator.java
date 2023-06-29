@@ -27,7 +27,7 @@ public class RandomGenerator {
     };
     private static int tradeNumber = 0;
 
-    public static String[] getSlogans(){
+    public static String[] getSlogans() {
         return slogans;
     }
 
@@ -61,8 +61,8 @@ public class RandomGenerator {
         return Integer.toString(tradeNumber);
     }
 
-    public static BackgroundImage setBackground(String url){
-        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440 ,900, false, false);
+    public static BackgroundImage setBackground(String url) {
+        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440, 900, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,

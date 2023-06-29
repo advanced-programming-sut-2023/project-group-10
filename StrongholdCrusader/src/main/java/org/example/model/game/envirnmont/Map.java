@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Map {
-    int size;
     private final Block[][] blocks;
-    private ExtendedBlock[][] blocksGraphics;
     private final HashMap<Polygon, Coordinate> polygonCoordinateMap = new HashMap<>();
+    int size;
     Coordinate topLeftBlockCoordinate;
+    private ExtendedBlock[][] blocksGraphics;
 
     public Map(int size) {
         this.size = size;
@@ -40,7 +40,7 @@ public class Map {
     }
 
     public ExtendedBlock getExtendedBlockByRowAndColumn(Coordinate position) {
-        if(!isIndexInBounds(position)) return null;
+        if (!isIndexInBounds(position)) return null;
         return blocksGraphics[position.row][position.column];
     }
 

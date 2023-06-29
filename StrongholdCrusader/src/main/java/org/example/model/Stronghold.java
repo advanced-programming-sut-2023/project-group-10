@@ -2,11 +2,8 @@ package org.example.model;
 
 import com.google.gson.reflect.TypeToken;
 import javafx.scene.Group;
-import javafx.scene.shape.Polygon;
 import org.example.model.game.Battle;
 import org.example.model.game.buildings.buildingconstants.*;
-import org.example.model.game.envirnmont.Coordinate;
-import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.units.unitconstants.MilitaryEquipmentRole;
 import org.example.model.game.units.unitconstants.MilitaryPersonRole;
 import org.example.model.game.units.unitconstants.Role;
@@ -18,7 +15,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 
 import static org.example.model.User.gson;
 
@@ -27,6 +23,7 @@ public class Stronghold {
     private static User currentUser;
     private static Battle currentBattle;
     private static Group mapGroupGFX;
+
     public static User getCurrentUser() {
         return currentUser;
     }

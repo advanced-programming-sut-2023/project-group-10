@@ -23,6 +23,7 @@ public class OptionsMenuController {
 
     public void quitGame(MouseEvent mouseEvent) {
         Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getLord().killMe();
+        gameMenuGFXController.goToNextPlayer();
         OptionsMenuGFX.stage.close();
     }
 
@@ -31,8 +32,8 @@ public class OptionsMenuController {
         HashMap<String, Color> colors = new HashMap<>();
         HashMap<String, Coordinate> keeps = new HashMap<>();
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
-            colors.put(government.getOwner().getUsername(),government.getColor());
-            keeps.put(government.getOwner().getUsername(),government.getKeep());
+            colors.put(government.getOwner().getUsername(), government.getColor());
+            keeps.put(government.getOwner().getUsername(), government.getKeep());
         }
         GameMenuController.initializeGame(colors, keeps, new Map(Stronghold.getCurrentBattle().getBattleMap().getSize()));
         new CustomizeMapMenuGFX().start(SignupMenu.stage);
@@ -40,7 +41,7 @@ public class OptionsMenuController {
     }
 
     public void help(MouseEvent mouseEvent) {
-      Help help=new Help();
+        Help help = new Help();
         try {
             help.start(OptionsMenuGFX.stage);
         } catch (Exception e) {
@@ -49,7 +50,7 @@ public class OptionsMenuController {
     }
 
     public void options(MouseEvent mouseEvent) throws Exception {
-        SoundGFX soundGFX=new SoundGFX();
+        SoundGFX soundGFX = new SoundGFX();
         soundGFX.setGameMenuGFXController(this.gameMenuGFXController);
         soundGFX.start(OptionsMenuGFX.stage);
     }

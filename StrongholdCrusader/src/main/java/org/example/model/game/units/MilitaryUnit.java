@@ -19,6 +19,7 @@ import org.example.model.game.units.unitconstants.Quality;
 import org.example.model.game.units.unitconstants.RoleName;
 
 public abstract class MilitaryUnit extends Unit {
+    private final Rectangle bodyGraphics;
     private MilitaryUnitStance stance;
     private Coordinate startingPoint;
     private Coordinate endPoint;
@@ -26,7 +27,6 @@ public abstract class MilitaryUnit extends Unit {
     private boolean onPatrol;
     private Moat moatAboutToBeDug;
     private Moat moatAboutToBeFilled;
-    private final Rectangle bodyGraphics;
 
     public MilitaryUnit(Coordinate position, RoleName role, Government government) {
         super(position, role, government);

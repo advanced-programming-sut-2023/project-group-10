@@ -5,5 +5,5 @@ public enum ShopMenuMessages {
     INVALID_AMOUNT,
     INVALID_ITEM,
     INSUFFICIENT_AMOUNT,
-    INSUFFICIENT_GOLD;
+    INSUFFICIENT_GOLD
 }

@@ -1,13 +1,11 @@
 package org.example.view;
 
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import org.example.controller.TradeMenuController;
 import org.example.model.User;
 import org.example.model.game.Trade;
@@ -71,21 +69,21 @@ public class TradeDetailsController {
 
     public void accept(MouseEvent mouseEvent) {
         System.out.println(selectedTrade.getId());
-        TradeMenuMessages tradeMenuMessage= TradeMenuController.acceptRequest(selectedTrade);
-        Alert alert =new Alert(Alert.AlertType.CONFIRMATION);
-        switch (tradeMenuMessage){
+        TradeMenuMessages tradeMenuMessage = TradeMenuController.acceptRequest(selectedTrade);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        switch (tradeMenuMessage) {
             case NOT_ENOUGH_SPACE:
-                alert=new Alert(Alert.AlertType.ERROR);
+                alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("error in accepting the trade");
                 alert.setContentText("you don't have enough space");
                 break;
             case NOT_SUFFICIENT_GOLD:
-                alert=new Alert(Alert.AlertType.ERROR);
+                alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("error in accepting the trade");
                 alert.setContentText("you don't have enough gold");
                 break;
             case TRADE_SUCCESSFULLY_ACCEPTED:
-                alert=new Alert(Alert.AlertType.CONFIRMATION);
+                alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("successful accept trade");
                 alert.setContentText("you accepted the trade successfully");
                 break;

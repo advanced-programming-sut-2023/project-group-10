@@ -3,8 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
             fx:controller="org.example.view.ChangeRateMenuGFX"
             prefHeight="400.0" prefWidth="600.0">
 
@@ -19,8 +19,8 @@
             <Label fx:id="fearRateLabel" text="fear rate"/>
             <Slider fx:id="fearRateSlider" min="-5" max="5"/>
 
-            <Button text="done" onMouseClicked="#updateRates" />
-            <Button text="cancel" onMouseClicked="#cancelChanges" />
+            <Button text="done" onMouseClicked="#updateRates"/>
+            <Button text="cancel" onMouseClicked="#cancelChanges"/>
         </VBox>
     </center>
 </BorderPane>

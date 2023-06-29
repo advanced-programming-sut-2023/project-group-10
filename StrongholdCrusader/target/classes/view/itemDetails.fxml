@@ -5,26 +5,26 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0"
-      prefWidth="500.0" xmlns="http://javafx.com/javafx/19"
-      fx:controller="org.example.view.ItemDetailMenuController" xmlns:fx="http://javafx.com/fxml/1">
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="300.0" prefWidth="500.0"
+      xmlns="http://javafx.com/javafx/19" fx:controller="org.example.view.ItemDetailMenuController">
     <children>
         <HBox fx:id="infos" spacing="130">
             <children>
                 <VBox spacing="25">
                     <Label fx:id="name">
                     </Label>
-                <ImageView fitHeight="159.0" fitWidth="141.0" pickOnBounds="true" preserveRatio="true"
-                           fx:id="imageOfItem"/>
+                    <ImageView fitHeight="159.0" fitWidth="141.0" pickOnBounds="true" preserveRatio="true"
+                               fx:id="imageOfItem"/>
 
                 </VBox>
-                <VBox  fx:id="rightBox" spacing="20">
+                <VBox fx:id="rightBox" spacing="20">
                     <children>
 
-                        <HBox   fx:id="storageInfo">
+                        <HBox fx:id="storageInfo">
 
                         </HBox>
-                        <HBox  fx:id="buyBox">
+                        <HBox fx:id="buyBox">
 
                         </HBox>
                         <HBox fx:id="sellBox">

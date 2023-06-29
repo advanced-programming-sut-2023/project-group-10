@@ -4,10 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-      prefWidth="360.0"  xmlns="http://javafx.com/javafx/19"
-      fx:controller="org.example.view.HelpController"
-      xmlns:fx="http://javafx.com/fxml/1">
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="600.0" prefWidth="360.0"
+      xmlns="http://javafx.com/javafx/19"
+      fx:controller="org.example.view.HelpController">
     <children>
         <Label alignment="CENTER" prefHeight="39.0" prefWidth="388.0" text="Shortcuts and gestures"
                textAlignment="CENTER" textFill="#01d5ff">

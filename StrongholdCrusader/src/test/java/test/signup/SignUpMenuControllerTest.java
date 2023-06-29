@@ -23,7 +23,7 @@ public class SignUpMenuControllerTest {
     public void testUsernameFormat() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("user%name", "password",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("user%name", "password",
                 "password", "email", "nickname");
         Assertions.assertEquals(SignupMenuMessages.INVALID_USERNAME_FORMAT, signupMenuMessage);
     }
@@ -32,7 +32,7 @@ public class SignUpMenuControllerTest {
     public void testNicknameFormat() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "password",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("username", "password",
                 "confirmation", "email", "NICK@name");
         Assertions.assertEquals(SignupMenuMessages.INVALID_NICKNAME_FORMAT, signupMenuMessage);
 
@@ -42,7 +42,7 @@ public class SignUpMenuControllerTest {
     public void testPasswordLength() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "aaaa",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("username", "aaaa",
                 "aaaa", "email.email@email.email", "nickname");
         Assertions.assertEquals(SignupMenuMessages.SHORT_PASSWORD, signupMenuMessage);
     }
@@ -51,7 +51,7 @@ public class SignUpMenuControllerTest {
     public void testPasswordUpperCaseUse() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "uppercase",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("username", "uppercase",
                 "confirmation", "email", "nickname");
         Assertions.assertEquals(SignupMenuMessages.NO_UPPERCASE_LETTER, signupMenuMessage);
     }
@@ -61,7 +61,7 @@ public class SignUpMenuControllerTest {
 
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "LOWERCASE",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("username", "LOWERCASE",
                 "confirmation", "email", "nickname");
         Assertions.assertEquals(SignupMenuMessages.NO_LOWERCASE_LETTER, signupMenuMessage);
     }
@@ -70,7 +70,7 @@ public class SignUpMenuControllerTest {
     public void testPasswordContainsNumber() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "lower&Upper",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("username", "lower&Upper",
                 "confirmation", "email", "nickname");
         Assertions.assertEquals(SignupMenuMessages.NO_NUMBER, signupMenuMessage);
     }
@@ -79,7 +79,7 @@ public class SignUpMenuControllerTest {
     public void testPasswordForSpecialCharacters() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username1", "lowerUpper123",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("username1", "lowerUpper123",
                 "confirmation", "email", "nickname");
         Assertions.assertEquals(SignupMenuMessages.NO_SPECIAL_CHARACTER, signupMenuMessage);
     }
@@ -88,7 +88,7 @@ public class SignUpMenuControllerTest {
     public void testPasswordConfirmation() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("username", "lower&Upper123",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("username", "lower&Upper123",
                 "confirmation",
                 "email", "nickname");
         Assertions.assertEquals(SignupMenuMessages.WRONG_PASSWORD_CONFIRMATION, signupMenuMessage);
@@ -98,7 +98,7 @@ public class SignUpMenuControllerTest {
     public void testForSuccessfulCreation() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("mehrazin", "mehrAZIN@123",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("mehrazin", "mehrAZIN@123",
                 "mehrAZIN@123", "mehrazin.m@gmail.com", "mehrazin");
         Assertions.assertEquals(SignupMenuMessages.SHOW_QUESTIONS, signupMenuMessage);
 
@@ -108,7 +108,7 @@ public class SignUpMenuControllerTest {
     public void testEmailFormat1() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("mehrazin", "mehrAZIN@123",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("mehrazin", "mehrAZIN@123",
                 "mehrAZIN@123", "mehrazin.m@gmail", "mehrazin");
         Assertions.assertEquals(SignupMenuMessages.INVALID_EMAIL_FORMAT, signupMenuMessage);
     }
@@ -117,7 +117,7 @@ public class SignUpMenuControllerTest {
     public void testEmailFormat2() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser("mehrazin", "mehrAZIN@123",
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser("mehrazin", "mehrAZIN@123",
                 "mehrAZIN@123", "@gmail.com", "mehrazin");
         Assertions.assertEquals(SignupMenuMessages.INVALID_EMAIL_FORMAT, signupMenuMessage);
     }
@@ -126,7 +126,7 @@ public class SignUpMenuControllerTest {
     public void testBoundsForQuestion() {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.pickSecurityQuestionAndCreateUser
+        SignupMenuMessages signupMenuMessage = SignupMenuController.pickSecurityQuestionAndCreateUser
                 ("10", "answer", "confirm",
                         "username", "password", "nickname", "slogan", "email");
         Assertions.assertEquals(SignupMenuMessages.NUMBER_OUT_OF_BOUNDS, signupMenuMessage);
@@ -137,7 +137,7 @@ public class SignUpMenuControllerTest {
         signupMenuController = Mockito.mock(SignupMenuController.class);
 
 
-        SignupMenuMessages signupMenuMessage = signupMenuController.pickSecurityQuestionAndCreateUser
+        SignupMenuMessages signupMenuMessage = SignupMenuController.pickSecurityQuestionAndCreateUser
                 ("1", "answer", "confirm",
                         "username", "password", "nickname", "slogan", "email");
         Assertions.assertEquals(SignupMenuMessages.REENTER_ANSWER, signupMenuMessage);
@@ -146,10 +146,10 @@ public class SignUpMenuControllerTest {
     @Test
     public void testTakenEmail() throws Exception {
         signupMenuController = Mockito.mock(SignupMenuController.class);
-        signupMenuController.pickSecurityQuestionAndCreateUser
+        SignupMenuController.pickSecurityQuestionAndCreateUser
                 ("1", "Father's name", "Father's name",
                         "rozhin001", "R0zhin001", "RozhTagh", "noSlogan", "rozhin@mail.com");
-        SignupMenuMessages signupMenuMessage = signupMenuController.createUser
+        SignupMenuMessages signupMenuMessage = SignupMenuController.createUser
                 ("rozhin002", "valid@Passw0rd", "valid@Passw0rd", "rozhin@mail.com", "nickname");
         Assertions.assertEquals(SignupMenuMessages.EMAIL_EXISTS, signupMenuMessage);
     }

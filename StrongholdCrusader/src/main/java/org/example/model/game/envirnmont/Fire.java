@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Fire {
     private final static ArrayList<Fire> allFires = new ArrayList<>();
-    private final static int FIRE_DAMAGE =40;
+    private final static int FIRE_DAMAGE = 40;
     int turnStarted;
     ImageView fireGraphics;
     Transition fireTransition;
@@ -37,10 +37,9 @@ public class Fire {
     public static void applyDamageToBuildings() {
         for (Fire fire : allFires) {
             Building building = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(fire.position).getBuilding();
-            if (building != null)
-            {
+            if (building != null) {
                 building.changeHitPoint(-FIRE_DAMAGE);
-                if(building.getHitPoint()<=0) building.deleteBuildingFromMapAndGovernmentAndView();
+                if (building.getHitPoint() <= 0) building.deleteBuildingFromMapAndGovernmentAndView();
             }
         }
     }
