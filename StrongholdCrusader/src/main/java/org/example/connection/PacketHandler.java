@@ -18,9 +18,9 @@ public class PacketHandler {
     public void handle(Packet receivedPacket) throws IOException {
         ClientToServerCommands receivedPacketCommand = ClientToServerCommands.getCommandByString(receivedPacket.getCommand());
         switch (receivedPacketCommand) {
-            case SIGN_UP:
-                handleSignUp(receivedPacket);
-                break;
+//            case SIGN_UP:
+//                handleSignUp(receivedPacket);
+//                break;
             case LOGOUT:
                 handleLogout(receivedPacket);
                 break;
