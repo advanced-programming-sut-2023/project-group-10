@@ -13,8 +13,8 @@ import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.ExtendedBlock;
 import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.Role;
-import org.example.view.unittransitions.UnitMoveTransition;
-import org.example.view.unittransitions.UnitSpriteTransition;
+import org.example.view.transitions.UnitMoveTransition;
+import org.example.view.transitions.UnitSpriteTransition;
 
 import java.util.List;
 

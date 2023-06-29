@@ -17,7 +17,7 @@ module StrongholdCrusader {
     exports org.example.model.game.buildings.buildingconstants;
     exports org.example.model.game.units.unitconstants;
     opens org.example.model to com.google.gson;
-    exports org.example.view.unittransitions;
-    opens org.example.view.unittransitions to javafx.fxml;
+    exports org.example.view.transitions;
+    opens org.example.view.transitions to javafx.fxml;
     //exports org.example.controller;
 }

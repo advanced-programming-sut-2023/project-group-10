@@ -12,10 +12,7 @@ import org.example.model.game.buildings.buildingconstants.BuildingType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
 import org.example.model.game.buildings.buildingconstants.ItemProducingBuildingType;
 import org.example.model.game.buildings.buildingconstants.PopularityIncreasingBuildingType;
-import org.example.model.game.envirnmont.Block;
-import org.example.model.game.envirnmont.Coordinate;
-import org.example.model.game.envirnmont.ExtendedBlock;
-import org.example.model.game.envirnmont.Node;
+import org.example.model.game.envirnmont.*;
 import org.example.model.game.units.MilitaryUnit;
 import org.example.model.game.units.SiegeEquipment;
 import org.example.model.game.units.Unit;
@@ -124,7 +121,7 @@ public class GameMenuController {
         BuildingType buildingType = BuildingType.getBuildingTypeByName(buildingTypeName);
         Government player = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
         if (buildingType.getBuildingCost() > player.getGold()) return GameMenuMessages.NOT_ENOUGH_GOLD;
-        if(buildingType.getResourcesNeeded() != null) {
+        if (buildingType.getResourcesNeeded() != null) {
             for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet())
                 if (player.getItemCount(entry.getKey()) < entry.getValue())
                     return GameMenuMessages.NOT_ENOUGH_RESOURCES;
@@ -137,7 +134,7 @@ public class GameMenuController {
         else
             new Building(position, Stronghold.getCurrentBattle().getGovernmentAboutToPlay(), buildingTypeName).addToGovernmentAndBlock();
         player.changeGold(-buildingType.getBuildingCost());
-        if(buildingType.getResourcesNeeded() != null) {
+        if (buildingType.getResourcesNeeded() != null) {
             for (Map.Entry<Item, Integer> entry : buildingType.getResourcesNeeded().entrySet())
                 player.changeItemCount(entry.getKey(), -entry.getValue());
         }
@@ -221,7 +218,7 @@ public class GameMenuController {
         Droppable droppable = target.getDroppable();
         if (droppable == null) return GameMenuMessages.NO_STRUCTURE;
         if (!(droppable instanceof Entity)) return GameMenuMessages.NOT_YOUR_STRUCTURE;
-        if (droppable instanceof Building) ((Building) droppable).deleteBuildingFromMapAndGovernment();
+        if (droppable instanceof Building) ((Building) droppable).deleteBuildingFromMapAndGovernmentAndView();
         else target.setDroppable(null);
         return GameMenuMessages.SUCCESSFUL_DELETE_STRUCTURE;
     }
@@ -237,30 +234,30 @@ public class GameMenuController {
     public static void removeAllBuildings(Government government) {
         ArrayList<Building> tempCopy = new ArrayList<>(government.getBuildings());
         for (Building building : tempCopy)
-            building.deleteBuildingFromMapAndGovernment();
+            building.deleteBuildingFromMapAndGovernmentAndView();
         ExtendedBlock keepBlock = Stronghold.getCurrentBattle().getBattleMap().getExtendedBlockByRowAndColumn(government.getKeep());
         keepBlock.getBlock().setKeep(null);
         keepBlock.removeBuilding();
     }
 
-    public static void illness(Government government){
+    public static void illness(Government government) {
         org.example.model.game.envirnmont.Map map = Stronghold.getCurrentBattle().getBattleMap();
         Random random = new Random();
         int randomNumber = random.nextInt(10);
-        if(randomNumber != 0) return;
+        if (randomNumber != 0) return;
 
         int randomBlock = random.nextInt(Stronghold.getCurrentBattle().getBattleMap().getSize() - 10);
         ArrayList<ExtendedBlock> blocksAroundKeep = new ArrayList<>();
-        for(int i = randomBlock; i < randomBlock + 6; i++){
-            for(int j = randomBlock; j < randomBlock + 6; j++) {
-                if(map.getBlockByRowAndColumn(i, j).getBuilding() != null && map.getBlockByRowAndColumn(i, j).getBuilding().getGovernment().equals(government) &&
-                   map.getBlockByRowAndColumn(i, j).getBuilding().getBuildingType().getName().equals(BuildingTypeName.CATHEDRAL))
+        for (int i = randomBlock; i < randomBlock + 6; i++) {
+            for (int j = randomBlock; j < randomBlock + 6; j++) {
+                if (map.getBlockByRowAndColumn(i, j).getBuilding() != null && map.getBlockByRowAndColumn(i, j).getBuilding().getGovernment().equals(government) &&
+                        map.getBlockByRowAndColumn(i, j).getBuilding().getBuildingType().getName().equals(BuildingTypeName.CATHEDRAL))
                     return;
                 blocksAroundKeep.add(map.getExtendedBlockByRowAndColumn(new Coordinate(i, j)));
             }
         }
 
-        for(ExtendedBlock extendedBlock : blocksAroundKeep){
+        for (ExtendedBlock extendedBlock : blocksAroundKeep) {
             extendedBlock.getBlockView().setBlendMode(BlendMode.BLUE);
             extendedBlock.getBlock().setIll(true);
             extendedBlock.getBlock().setIllnessOwner(government);
@@ -269,27 +266,27 @@ public class GameMenuController {
         government.setIllnessCenter(randomBlock + 3);
     }
 
-    public static void removeIllness(Government government){
-        if(!government.isIll()) return;
+    public static void removeIllness(Government government) {
+        if (!government.isIll()) return;
 
         org.example.model.game.envirnmont.Map map = Stronghold.getCurrentBattle().getBattleMap();
         ArrayList<ExtendedBlock> illBlocks = new ArrayList<>();
         int center = government.getIllnessCenter();
         boolean cathedralExists = false;
 
-        for (int i = center - 3; i < center + 3; i++){
-            for(int j = center - 3; j < center + 3; j++)
+        for (int i = center - 3; i < center + 3; i++) {
+            for (int j = center - 3; j < center + 3; j++)
                 illBlocks.add(map.getExtendedBlockByRowAndColumn(new Coordinate(i, j)));
         }
 
-        for(ExtendedBlock extendedBlock : illBlocks){
+        for (ExtendedBlock extendedBlock : illBlocks) {
             if (extendedBlock.getBlock().getBuilding() != null && extendedBlock.getBlock().getBuilding().getGovernment().equals(government) &&
-                extendedBlock.getBlock().getBuilding().getBuildingType().getName().equals(BuildingTypeName.CATHEDRAL))
+                    extendedBlock.getBlock().getBuilding().getBuildingType().getName().equals(BuildingTypeName.CATHEDRAL))
                 cathedralExists = true;
         }
 
-        if(cathedralExists){
-            for(ExtendedBlock extendedBlock : illBlocks){
+        if (cathedralExists) {
+            for (ExtendedBlock extendedBlock : illBlocks) {
                 extendedBlock.getBlock().setIll(false);
                 extendedBlock.getBlockView().setBlendMode(null);
                 extendedBlock.getBlock().setIllnessOwner(null);
@@ -300,17 +297,14 @@ public class GameMenuController {
 
     public static GameMenuMessages goToNextPlayer() {
         Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
-        for (int i=0;i<Stronghold.getCurrentBattle().getBattleMap().getSize();i++){
-            for (int j=0;j<Stronghold.getCurrentBattle().getBattleMap().getSize();j++){
-                Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i,j).removeFires(Stronghold.getCurrentBattle());
-            }
-        }
+        Fire.applyDamageToBuildings();
+        Fire.putOutFinishedFires();
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
             if (government == null) continue;
             produceItems(government);
         }
 
-        if(currentGovernment!=null) {
+        if (currentGovernment != null) {
             moveAllUnits(currentGovernment);
             attackAllUnits(currentGovernment);
 
@@ -359,7 +353,7 @@ public class GameMenuController {
         modifyTaxRate(government);
         religion(government);
         fear(government);
-        if(government.isIll()) government.getPopularity().set(government.getPopularity().intValue() - 5);
+        if (government.isIll()) government.getPopularity().set(government.getPopularity().intValue() - 5);
     }
 
     private static void modifyFoodRate(Government government) {

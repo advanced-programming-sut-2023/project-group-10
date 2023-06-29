@@ -162,4 +162,15 @@ public abstract class MilitaryUnit extends Unit {
             return 0;
         return ((AttackingBuildingType) building.getBuildingType()).getBoostInFireRange();
     }
+
+    public boolean canSetFire() {
+        switch (getRole().getName()) {
+            case FIRE_BALLISTA:
+            case FIRE_THROWER:
+            case SLAVE:
+                return true;
+            default:
+                return false;
+        }
+    }
 }

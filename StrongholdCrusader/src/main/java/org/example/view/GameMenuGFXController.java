@@ -6,19 +6,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -36,6 +34,7 @@ import org.example.controller.MapMenuController;
 import org.example.controller.UnitMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
+import org.example.model.game.Government;
 import org.example.model.game.buildings.Building;
 import org.example.model.game.buildings.BuildingLists;
 import org.example.model.game.buildings.ItemProducingBuilding;
@@ -56,6 +55,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GameMenuGFXController {
     public ScrollPane mapBox;
@@ -86,13 +86,8 @@ public class GameMenuGFXController {
     private Coordinate selectedBuildingCoordinate;
     private ExtendedBlock[][] mapView;
     private boolean deleteMode = false;
-    private javafx.scene.media.Media themeSong;
-    private boolean isMute;
-    private MediaPlayer mediaPlayer;
 
     public void prepareGame(Stage stage) {
-        themeSong =null;
-        isMute=true;
         GameMenuGFXController.stage = stage;
         scrollPaneContent = Stronghold.getMapGroupGFX();
         System.out.println(stage.getHeight());
@@ -131,22 +126,8 @@ public class GameMenuGFXController {
         selectedUnitsLabels = new LinkedList<>();
     }
 
-    public void setMute(boolean mute) {
-        isMute = mute;
-    }
-
-    public void setThemeSong(Media themeSong) {
-        this.themeSong = themeSong;
-    }
-
     @FXML
     public void initialize() {
-        if(!isMute && themeSong !=null){
-            mediaPlayer = new MediaPlayer(themeSong);
-            mediaPlayer.setVolume(0.6);
-            mediaPlayer.setAutoPlay(true);
-
-        }
         Rectangle book = new Rectangle(90, 77);
         book.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/book.jpeg")).toString())));
         bookImage.getChildren().add(book);
@@ -251,6 +232,7 @@ public class GameMenuGFXController {
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPromptText("role name");
         for (RoleName roleName : RoleName.values()) {
+            if (roleName == RoleName.LORD) continue;
             if (MilitaryPersonRole.getAllMilitaryRoles().contains(Role.getRoleByName(roleName)))
                 comboBox.getItems().add(roleName.name().replaceAll("_", " ").toLowerCase());
         }
@@ -271,7 +253,7 @@ public class GameMenuGFXController {
                 alert.setTitle("Create Unit Failed");
                 alert.setContentText(message.name().replaceAll("_", " "));
                 alert.show();
-            }
+            } else scribeDetails();
         });
 
         vBox.getChildren().addAll(comboBox, slider, text, button);
@@ -405,12 +387,12 @@ public class GameMenuGFXController {
         popularity.setFont(new Font("PT Mono", 14));
         popularity.setTextAlignment(TextAlignment.CENTER);
         popularity.setRotate(15);
-        Text golds = new Text("  " + ((int)Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold()));
+        Text golds = new Text("  " + ((int) Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getGold()));
         golds.setFont(new Font("PT Mono", 11));
         golds.setTextAlignment(TextAlignment.CENTER);
         golds.setRotate(15);
-        Text population = new Text((Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasants().size())+
-                "/"+Stronghold.getCurrentBattle().getGovernmentAboutToPlay().maxPossiblePeasants());
+        Text population = new Text((Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasants().size()) +
+                "/" + Stronghold.getCurrentBattle().getGovernmentAboutToPlay().maxPossiblePeasants());
         population.setFont(new Font("PT Mono", 10));
         population.setTextAlignment(TextAlignment.CENTER);
         population.setRotate(15);
@@ -485,13 +467,14 @@ public class GameMenuGFXController {
     }
 
     private void setBuilding(ExtendedBlock extendedBlock, Coordinate coordinate) {
-        Popup popup = buildingDetails(coordinate);
+        AtomicReference<Popup> popup = new AtomicReference<>();
         extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
-            popup.setAnchorX(mouseEvent1.getSceneX() + 5);
-            popup.setAnchorY(mouseEvent1.getSceneY() + 5);
-            popup.show(stage);
+            popup.set(buildingDetails(coordinate));
+            popup.get().setAnchorX(mouseEvent1.getSceneX() + 5);
+            popup.get().setAnchorY(mouseEvent1.getSceneY() + 5);
+            popup.get().show(stage);
         });
-        extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
+        extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.get().hide());
         extendedBlock.getObject().setOnMouseClicked(mouseEvent -> {
             if (selectedBuildingCoordinate == null) {
                 selectedBuildingCoordinate = coordinate;
@@ -901,10 +884,14 @@ public class GameMenuGFXController {
         GridPane miniMap = new GridPane();
         int size = Stronghold.getCurrentBattle().getBattleMap().getSize();
         int q = 400 / size;
-        for (int i = 0; i < 400; i++) {
-            for (int j = 0; j < 400; j++) {
-                Rectangle miniBlock = new Rectangle(miniMapBox.getPrefWidth() / 400, miniMapBox.getPrefHeight() / 400);
-                miniBlock.setFill(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i / q, j / q).getTexture().getColor());
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Rectangle miniBlock = new Rectangle(miniMapBox.getPrefWidth() / size, miniMapBox.getPrefHeight() / size);
+                Government keepGov = Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getKeepGovernment();
+                if (keepGov != null)
+                    miniBlock.setFill(keepGov.getColor());
+                else
+                    miniBlock.setFill(Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i, j).getTexture().getColor());
                 miniMap.getChildren().add(miniBlock);
                 GridPane.setConstraints(miniBlock, j, i);
             }
@@ -928,7 +915,7 @@ public class GameMenuGFXController {
             String[] words = selectedUnitsLabel.getText().split(" ");
             RoleName type = RoleName.getRoleNameByNameString(words[0]);
             int count = Integer.parseInt(words[words.length - 1]);
-            typeCountMap.put(type, count);
+            if (count != 0) typeCountMap.put(type, count);
         }
 
         if (typeCountMap.size() == 0) return null;
