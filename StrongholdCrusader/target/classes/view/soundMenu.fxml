@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="748.0" prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx/19"
+      fx:controller="org.example.view.SoundController">
+    <Label alignment="CENTER" prefHeight="28.0" prefWidth="400.0" text="Sound Choice" textFill="#9a965cab"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Helvetica" size="22.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="A Pane in the Glass" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="A Strong Spice" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Caravan" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Caravan_Ambient" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Crusader solo" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Crusader" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Dar Meshq" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Gorn with the Wind" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Oudunnit" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Sandal Maker" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="The Last Drop" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Trancefusion" textFill="WHITE"
+           onMouseClicked="#chooseSong">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Label alignment="CENTER" prefHeight="17.0" prefWidth="421.0" text="Mute" textFill="RED" onMouseClicked="#mute">
+        <font>
+            <Font name="Apple Chancery" size="14.0"/>
+        </font>
+    </Label>
+    <Pane prefHeight="74.0" prefWidth="400.0">
+        <Button layoutX="156.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="88.0"
+                style="-fx-background-color: black;" text="OK" textFill="WHITE" onMouseClicked="#submit">
+            <font>
+                <Font name="Cambay Devanagari Regular" size="13.0"/>
+            </font>
+        </Button>
+    </Pane>
+</VBox>

@@ -1,8 +1,9 @@
 package org.example;
 
-public class Main {
-    public static void main(String[] args) {
+import java.io.IOException;
 
-        System.out.println("Hello world!");
+public class Main {
+    public static void main(String[] args) throws IOException {
+        new Client("localhost", 8080);
     }
 }

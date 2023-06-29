@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="org.example.view.GameMenuGFXController"
+      prefHeight="400.0" prefWidth="600.0" stylesheets="@../CSS/spacingStyle.css">
+
+    <HBox>
+        <ScrollPane fx:id="mapBox" fitToHeight="true" fitToWidth="true">
+        </ScrollPane>
+        <BorderPane fx:id="turnPane">
+            <center>
+                <VBox alignment="CENTER">
+                    <Label fx:id="unitMessageLabel" wrapText="true" textAlignment="CENTER"
+                           styleClass="moderate-spacing"/>
+                    <Separator minHeight="10" visible="false"/>
+                    <Label text="current player"/>
+                    <Rectangle fx:id="currentPlayerAvatar"/>
+                    <Label fx:id="currentPlayerName"/>
+                    <Button fx:id="nextPlayerButton" text="end turn" onMouseClicked="#goToNextPlayer"
+                            alignment="CENTER"/>
+                    <Separator minHeight="10" visible="false"/>
+                    <VBox fx:id="selectedTroopsInfoPane" alignment="CENTER">
+                    </VBox>
+                    <Separator minHeight="10" visible="false"/>
+                    <VBox fx:id="copiedBuilding" visible="false" alignment="CENTER" spacing="5">
+                        <Label text="Copied Building"/>
+                    </VBox>
+                </VBox>
+            </center>
+        </BorderPane>
+    </HBox>
+    <HBox fx:id="controlBox">
+        <VBox fx:id="buildingContainer">
+            <ListView orientation="HORIZONTAL" fx:id="buildingBox">
+            </ListView>
+            <HBox>
+                <Button text="Castle" onMouseClicked="#castle"/>
+                <Button text="Farm" onMouseClicked="#farm"/>
+                <Button text="Food Processing" onMouseClicked="#foodProcessing"/>
+                <Button text="Industry" onMouseClicked="#industry"/>
+                <Button text="Town" onMouseClicked="#town"/>
+                <Button text="Weapon" onMouseClicked="#weapon"/>
+                <Button text="Miscellaneous" onMouseClicked="#unknown"/>
+            </HBox>
+        </VBox>
+        <Pane fx:id="controlButtonsBar">
+        </Pane>
+        <Pane fx:id="miniMapBox">
+        </Pane>
+        <HBox fx:id="infoBox">
+            <VBox>
+                <Rectangle fx:id="faceImage" width="110" height="81.1" translateX="16" translateY="6"/>
+                <Pane fx:id="bookImage" prefWidth="90" prefHeight="77" translateX="30" translateY="3"/>
+
+            </VBox>
+            <Rectangle fx:id="edge" width="120" height="162.2"/>
+        </HBox>
+    </HBox>
+</VBox>

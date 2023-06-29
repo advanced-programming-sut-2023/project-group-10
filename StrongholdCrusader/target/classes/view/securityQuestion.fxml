@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="org.example.view.SecurityQuestionMenu"
+            prefHeight="400.0" prefWidth="600.0">
+    <center>
+        <VBox alignment="CENTER_LEFT" spacing="40" translateX="150">
+
+            <VBox alignment="CENTER_LEFT" spacing="20">
+                <fx:define>
+                    <ToggleGroup fx:id="tg"/>
+                </fx:define>
+                <Text text="choose your question" fill="peachpuff"/>
+                <VBox alignment="CENTER_LEFT" spacing="10">
+                    <RadioButton fx:id="question1" toggleGroup="$tg" onAction="#question1" textFill="beige"/>
+                    <RadioButton fx:id="question2" toggleGroup="$tg" onAction="#question2" textFill="beige"/>
+                    <RadioButton fx:id="question3" toggleGroup="$tg" onAction="#question3" textFill="beige"/>
+                </VBox>
+                <TextField promptText="answer" fx:id="answer" visible="false" maxWidth="240"/>
+            </VBox>
+
+            <VBox alignment="CENTER_LEFT" fx:id="captchaContainer" spacing="-10" visible="false">
+                <Pane translateX="38">
+                    <Rectangle fx:id="box" height="35"/>
+                    <Text fx:id="captchaNumber" translateY="23" translateX="5"/>
+                </Pane>
+                <VBox alignment="CENTER" spacing="7">
+                    <HBox alignment="CENTER_LEFT" spacing="5">
+                        <TextField fx:id="input" promptText="enter captcha"/>
+                        <Button text="new" onMouseClicked="#generateCaptcha"/>
+                    </HBox>
+                    <Text fx:id="captchaText" translateX="-640" fill="peachpuff"/>
+                </VBox>
+            </VBox>
+
+            <Button text="submit" fx:id="submit" onMouseClicked="#submit" visible="false" translateY="-20"
+                    translateX="60"/>
+
+        </VBox>
+    </center>
+</BorderPane>

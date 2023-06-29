@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.layout.*?>
+<HBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="org.example.view.CustomizeMapMenuController"
+      stylesheets="@../CSS/spacingStyle.css">
+
+    <ScrollPane fx:id="mapBox">
+        <Group fx:id="mapPane">
+        </Group>
+    </ScrollPane>
+    <VBox fx:id="actionsPane">
+        <HBox fx:id="selectListBox">
+        </HBox>
+        <ListView fx:id="itemList">
+        </ListView>
+        <VBox fx:id="controlsBox" alignment="CENTER">
+            <Label fx:id="errorMessage" wrapText="true"/>
+            <HBox alignment="CENTER">
+                <Button text="eraser" onMouseClicked="#goToEraserMode"/>
+                <Button text="done" onMouseClicked="#goToGame"/>
+            </HBox>
+        </VBox>
+    </VBox>
+</HBox>

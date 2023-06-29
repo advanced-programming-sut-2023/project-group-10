@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.*?>
+<Pane xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="org.example.view.LoginMenu"
+      prefHeight="400.0" prefWidth="600.0" fx:id="pane">
+    <VBox fx:id="login" alignment="CENTER" spacing="17" translateX="100" translateY="60">
+        <VBox alignment="CENTER" spacing="10">
+            <Text text="welcome to login menu"/>
+            <Text text="enter username and password to login"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="10">
+            <TextField promptText="username" fx:id="username"/>
+            <Text fx:id="usernameText"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="10">
+            <PasswordField promptText="password" fx:id="password"/>
+            <Text fx:id="passwordText"/>
+        </VBox>
+        <VBox spacing="-10" alignment="CENTER">
+            <Pane translateX="38">
+                <Rectangle fx:id="box" height="35"/>
+                <Text fx:id="captchaNumber" translateY="23" translateX="5"/>
+            </Pane>
+            <VBox alignment="CENTER" spacing="7">
+                <HBox alignment="CENTER" spacing="5">
+                    <TextField fx:id="input" promptText="enter captcha"/>
+                    <Button text="new" onMouseClicked="#generateCaptcha"/>
+                </HBox>
+                <Text fx:id="captchaText"/>
+            </VBox>
+        </VBox>
+        <VBox spacing="7" alignment="CENTER">
+            <HBox alignment="CENTER" spacing="5">
+                <Text text="forget your password? click"/>
+                <Text text="HERE" onMouseClicked="#forgetPassword"/>
+            </HBox>
+            <HBox alignment="CENTER" spacing="5">
+                <Text text="don't have an account? click"/>
+                <Text text="HERE" onMouseClicked="#signupMenu"/>
+            </HBox>
+        </VBox>
+        <CheckBox text="stay logged in" fx:id="stayLoggedIn"/>
+        <Button text="submit" onMouseClicked="#submit"/>
+    </VBox>
+
+</Pane>

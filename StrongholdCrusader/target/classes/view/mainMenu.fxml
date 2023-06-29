@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.*?>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19"
+      fx:controller="org.example.view.MainMenuController">
+    <children>
+        <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Main Menu"
+              textAlignment="CENTER" wrappingWidth="400.0">
+            <font>
+                <Font name="Bodoni 72 Smallcaps Book" size="46.0"/>
+            </font>
+        </Text>
+        <Button fx:id="profileButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0"
+                style="-fx-background-color: PAPAYAWHIP; -fx-border-color: brown;" text="Profile Menu"
+                onMouseClicked="#goToProfileMenu">
+            <font>
+                <Font name="Malayalam MN" size="13.0"/>
+            </font>
+        </Button>
+        <Button fx:id="gameButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0"
+                style="-fx-background-color: PAPAYAWHIP; -fx-border-color: brown;" text="Start Playing"
+                onMouseClicked="#startGame">
+            <font>
+                <Font name="Malayalam MN" size="13.0"/>
+            </font>
+        </Button>
+        <Button fx:id="logoutButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0"
+                style="-fx-background-color: PAPAYAWHIP; -fx-border-color: brown;" text="Logout"
+                onMouseClicked="#logout">
+            <font>
+                <Font name="Malayalam MN" size="13.0"/>
+            </font>
+        </Button>
+    </children>
+</Pane>
