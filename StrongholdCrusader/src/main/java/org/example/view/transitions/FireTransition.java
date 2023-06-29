@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.Objects;
 
 public class FireTransition extends Transition {
-    private static Image[] fireAssets;
+    private static Image[] fireAssets = new Image[18];
     private final ImageView fireNode;
 
     public FireTransition(ImageView fireNode) {
@@ -19,14 +19,17 @@ public class FireTransition extends Transition {
     }
 
     public static void initializeImages() {
-        String assetFolderAddress = "src/main/resources/images/fire";
-        File directory = new File(assetFolderAddress);
-        fireAssets = new Image[Objects.requireNonNull(directory.listFiles()).length];
+        //String assetFolderAddress = "/images/fire/";
+        //File directory = new File(FireTransition.class.getResource(assetFolderAddress).toExternalForm());
+        for(int j = 1; j <= 18; j++){
+            fireAssets[j-1] = new Image(FireTransition.class.getResource("/images/fire/" + j + ".png").toExternalForm());
+        }
+        /*fireAssets = new Image[Objects.requireNonNull(directory.listFiles()).length];
         int i = 0;
         for (File file : Objects.requireNonNull(directory.listFiles())) {
             fireAssets[i] = new Image(file.toURI().toString());
             i++;
-        }
+        }*/
     }
 
     @Override
