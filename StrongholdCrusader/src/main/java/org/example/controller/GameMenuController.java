@@ -103,7 +103,7 @@ public class GameMenuController {
         if (Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isKeep())
             return GameMenuMessages.IS_KEEP;
         if (!Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(position).isBuildable())
-            return GameMenuMessages.INCOMPATIBLE_LAND;
+            return GameMenuMessages.UNBUILDABLE_LAND;
         int neededPeasants = BuildingType.getBuildingTypeByName(buildingTypeName).getEmployeeCount();
         if (neededPeasants > Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getPeasantsCount())
             return GameMenuMessages.NOT_ENOUGH_PEASANTS;
