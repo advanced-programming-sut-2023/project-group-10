@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Objects;
 
 public class FireTransition extends Transition {
@@ -19,8 +20,14 @@ public class FireTransition extends Transition {
     }
 
     public static void initializeImages() {
-        for(int j = 1; j <= 18; j++){
-            fireAssets[j-1] = new Image(FireTransition.class.getResource("/images/fire/" + j + ".png").toExternalForm());
+        String assetFolderAddress = "./src/main/resources/images/fire";
+        File directory = new File(assetFolderAddress);
+        System.out.println(directory.exists());
+        fireAssets = new Image[Objects.requireNonNull(directory.listFiles()).length];
+        int i = 0;
+        for (File file : Objects.requireNonNull(directory.listFiles())) {
+            fireAssets[i] = new Image(file.toURI().toString());
+            i++;
         }
     }
 
