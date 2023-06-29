@@ -1,5 +1,6 @@
 package org.example.connection;
 
+import org.example.controller.MainMenuController;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 import java.io.IOException;
@@ -32,6 +33,19 @@ public class PacketHandler {
             attributes.put("message", result.name());
             toBeSent = new Packet(ServerToClientCommands.FAILED_SIGNUP.getCommand(), attributes);
         }
+        connection.sendPacket(toBeSent);
+    }
+
+    private  void handleLogout(Packet receivedPacket) throws IOException {
+        String result= MainMenuController.logout().name();
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("message", result);
+        Packet toBeSent=new Packet(ServerToClientCommands.LOGGED_OUT.getCommand(),attributes);
+        connection.sendPacket(toBeSent);
+    }
+
+    private void goToAnotherMenu(String menu,Connection connection) throws IOException {
+        Packet toBeSent=new Packet(menu,null);
         connection.sendPacket(toBeSent);
     }
 }

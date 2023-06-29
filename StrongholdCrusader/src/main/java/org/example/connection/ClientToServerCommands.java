@@ -17,6 +17,14 @@ public enum ClientToServerCommands {
     GO_TO_CHAT_MENU("chat menu"),
     //profile menu
     GO_TO_MAIN_MENU("main menu"),
+    CHANGE_USERNAME("change username", "new username"),
+    CHANGE_PASSWORD("change password", "current password", "new password"),
+    CHANGE_NICKNAME("change nickname", "new nickname"),
+    CHANGE_EMAIL("change email", "new email"),
+    //this should be Handled in another manner/did not figure it out //TODO
+    CHANGE_SLOGAN("change slogan", "slogan"),
+    CHANGE_AVATAR("change avatar", "new avatar path"),
+    SCOREBOARD("scoreboard"),
 
     //start game menu
     START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),

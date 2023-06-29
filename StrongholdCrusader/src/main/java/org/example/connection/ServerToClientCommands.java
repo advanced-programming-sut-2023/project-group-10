@@ -2,7 +2,10 @@ package org.example.connection;
 
 public enum ServerToClientCommands {
     FAILED_SIGNUP("failed sign up", "message"),
-    SUCCESSFUL_SIGNUP("successful sign up");
+    SUCCESSFUL_SIGNUP("successful sign up"),
+    //main menu responses
+    LOGGED_OUT("log out"),
+    PROFILE_MENU("profile menu");
 
     private final String command;
     private final String[] attributes;
