@@ -94,9 +94,7 @@ public class GameMenuGFXController {
 
     public void prepareGame(Stage stage) {
         if (!isMute && themeSong != null) {
-            mediaPlayer = new MediaPlayer(themeSong);
-            mediaPlayer.setVolume(0.6);
-            mediaPlayer.setAutoPlay(true);
+            setThemeSong(themeSong);
         }
 
         GameMenuGFXController.stage = stage;
@@ -1013,11 +1011,16 @@ public class GameMenuGFXController {
         mapBox.setHvalue(hValue);
     }
 
-    public void setMute(boolean mute) {
-        isMute = mute;
+    public void mute() {
+        if (mediaPlayer != null) mediaPlayer.setMute(true);
     }
 
     public void setThemeSong(Media themeSong) {
         this.themeSong = themeSong;
+        if (mediaPlayer != null) mediaPlayer.stop();
+        mediaPlayer = new MediaPlayer(themeSong);
+        mediaPlayer.setVolume(0.6);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
     }
 }
