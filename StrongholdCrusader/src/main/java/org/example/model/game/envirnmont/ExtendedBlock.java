@@ -8,6 +8,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Pair;
 import org.example.controller.CustomizeMapController;
 import org.example.controller.GameMenuController;
+import org.example.model.game.Battle;
 import org.example.model.game.RockType;
 import org.example.model.game.TreeType;
 import org.example.model.game.buildings.buildingconstants.BuildingTypeName;
@@ -169,5 +170,16 @@ ExtendedBlock {
     public void removeBuilding() {
         ((Group) object.getParent()).getChildren().remove(object);
         object = null;
+    }
+
+    public void setOnFire(Battle battle) {
+        Map map = battle.getBattleMap();
+        for (int i = 0; i < map.size; i++) {
+            for (int j = 0; j < map.size; j++) {
+                if (map.getBlockByRowAndColumn(i, j).isOnFire()) {
+                    //TODO
+                }
+            }
+        }
     }
 }

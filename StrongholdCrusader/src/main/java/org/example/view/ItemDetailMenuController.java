@@ -88,7 +88,7 @@ public class ItemDetailMenuController {
 
     private void updateStorageLabel() {
         double count = Stronghold.getCurrentBattle().getGovernmentAboutToPlay().getItemCount(selectedItem);
-        storage.setText("current storage : " + count);
+        storage.setText("current storage : " + ((int) count));
         storage.setFont(new Font("PT Mono", 16));
 
     }

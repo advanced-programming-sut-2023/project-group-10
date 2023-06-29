@@ -300,6 +300,11 @@ public class GameMenuController {
 
     public static GameMenuMessages goToNextPlayer() {
         Government currentGovernment = Stronghold.getCurrentBattle().getGovernmentAboutToPlay();
+        for (int i=0;i<Stronghold.getCurrentBattle().getBattleMap().getSize();i++){
+            for (int j=0;j<Stronghold.getCurrentBattle().getBattleMap().getSize();j++){
+                Stronghold.getCurrentBattle().getBattleMap().getBlockByRowAndColumn(i,j).removeFires(Stronghold.getCurrentBattle());
+            }
+        }
         for (Government government : Stronghold.getCurrentBattle().getGovernments()) {
             if (government == null) continue;
             produceItems(government);
