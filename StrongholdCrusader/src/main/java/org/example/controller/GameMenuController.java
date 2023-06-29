@@ -314,8 +314,8 @@ public class GameMenuController {
             currentGovernment.setExcessFood(0);
             updateFoodCount(currentGovernment);
             updatePopularity(currentGovernment);
+            removeIllness(currentGovernment);
         }
-        removeIllness(currentGovernment);
         Government dead;
         while ((dead = deadLord()) != null) {
             countScore(dead);

@@ -805,9 +805,10 @@ public class GameMenuGFXController {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        } else {
+            scribeDetails();
+            updateCurrentPlayerInfo();
         }
-        scribeDetails();
-        updateCurrentPlayerInfo();
     }
 
     private void updateCurrentPlayerInfo() {

@@ -13,8 +13,11 @@ public class MainMenuGFX extends Application {
     public void start(Stage primaryStage) throws Exception {
         Pane mainMenu = FXMLLoader.load(
                 new URL(MainMenuGFX.class.getResource("/view/mainMenu.fxml").toExternalForm()));
-        Scene scene = new Scene(mainMenu);
-        primaryStage.setScene(scene);
+        if (primaryStage.getScene() == null) {
+            Scene scene = new Scene(mainMenu);
+            primaryStage.setScene(scene);
+        } else
+            primaryStage.getScene().setRoot(mainMenu);
         primaryStage.setMaximized(true);
         primaryStage.show();
     }
