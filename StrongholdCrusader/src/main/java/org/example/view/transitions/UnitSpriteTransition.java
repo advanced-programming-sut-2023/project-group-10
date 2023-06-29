@@ -14,11 +14,11 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class UnitSpriteTransition extends Transition {
-    private static final HashMap<String, ImagePattern[]> pathSpritesMap;
+    private static HashMap<String, ImagePattern[]> pathSpritesMap;
     private final Shape target;
     private final ImagePattern[] sprites;
 
-    static {
+    public static void initializeImages() {
         pathSpritesMap = new HashMap<>();
         String[] actions = {"moving", "attacking"};
         String[] directions = {"up", "down", "left", "right"};

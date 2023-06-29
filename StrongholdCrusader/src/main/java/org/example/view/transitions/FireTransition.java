@@ -9,10 +9,10 @@ import java.io.File;
 import java.util.Objects;
 
 public class FireTransition extends Transition {
-    private static final Image[] fireAssets;
+    private static Image[] fireAssets;
     private final ImageView fireNode;
 
-    static {
+    public static void initializeImages() {
         String assetFolderAddress = "src/main/resources/images/fire";
         File directory = new File(assetFolderAddress);
         fireAssets = new Image[Objects.requireNonNull(directory.listFiles()).length];

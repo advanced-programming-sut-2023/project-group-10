@@ -11,6 +11,8 @@ import org.example.model.game.units.unitconstants.MilitaryEquipmentRole;
 import org.example.model.game.units.unitconstants.MilitaryPersonRole;
 import org.example.model.game.units.unitconstants.Role;
 import org.example.model.game.units.unitconstants.WorkerRole;
+import org.example.view.transitions.FireTransition;
+import org.example.view.transitions.UnitSpriteTransition;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -81,6 +83,8 @@ public class Stronghold {
         MilitaryEquipmentRole.initializeRoles();
         MilitaryPersonRole.initializeRoles();
         WorkerRole.initializeRoles();
+        UnitSpriteTransition.initializeImages();
+        FireTransition.initializeImages();
         //initialize building type classes
         BuildingType.initializeTypes();
         AttackingBuildingType.initializeTypes();
