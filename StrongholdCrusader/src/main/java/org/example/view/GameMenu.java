@@ -43,8 +43,6 @@ public class GameMenu {
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.CLEAR_FORCES) != null) clearForces(input);
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.DELETE_STRUCTURE) != null)
                 deleteStructure(input);
-//            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.TRADE_MENU) != null) TradeMenu.run();
-            else if (GameMenuCommands.getMatcher(input, GameMenuCommands.SHOP_MENU) != null) ShopMenu.run();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.MAP_MENU) != null) MapMenu.run();
             else if (GameMenuCommands.getMatcher(input, GameMenuCommands.NEXT_TURN) != null)
                 if (endTurn() == GameMenuMessages.GAME_OVER) return;
