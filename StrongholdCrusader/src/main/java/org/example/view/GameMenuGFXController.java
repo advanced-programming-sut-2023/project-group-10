@@ -54,6 +54,7 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GameMenuGFXController {
     public ScrollPane mapBox;
@@ -464,13 +465,14 @@ public class GameMenuGFXController {
     }
 
     private void setBuilding(ExtendedBlock extendedBlock, Coordinate coordinate) {
-        Popup popup = buildingDetails(coordinate);
+        AtomicReference<Popup> popup = new AtomicReference<>();
         extendedBlock.getObject().setOnMouseEntered(mouseEvent1 -> {
-            popup.setAnchorX(mouseEvent1.getSceneX() + 5);
-            popup.setAnchorY(mouseEvent1.getSceneY() + 5);
-            popup.show(stage);
+            popup.set(buildingDetails(coordinate));
+            popup.get().setAnchorX(mouseEvent1.getSceneX() + 5);
+            popup.get().setAnchorY(mouseEvent1.getSceneY() + 5);
+            popup.get().show(stage);
         });
-        extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.hide());
+        extendedBlock.getObject().setOnMouseExited(mouseEvent1 -> popup.get().hide());
         extendedBlock.getObject().setOnMouseClicked(mouseEvent -> {
             if (selectedBuildingCoordinate == null) {
                 selectedBuildingCoordinate = coordinate;
