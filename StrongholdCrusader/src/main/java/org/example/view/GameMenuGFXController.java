@@ -15,6 +15,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -84,8 +86,13 @@ public class GameMenuGFXController {
     private Coordinate selectedBuildingCoordinate;
     private ExtendedBlock[][] mapView;
     private boolean deleteMode = false;
+    private javafx.scene.media.Media themeSong;
+    private boolean isMute;
+    private MediaPlayer mediaPlayer;
 
     public void prepareGame(Stage stage) {
+        themeSong =null;
+        isMute=true;
         GameMenuGFXController.stage = stage;
         scrollPaneContent = Stronghold.getMapGroupGFX();
         System.out.println(stage.getHeight());
@@ -124,8 +131,22 @@ public class GameMenuGFXController {
         selectedUnitsLabels = new LinkedList<>();
     }
 
+    public void setMute(boolean mute) {
+        isMute = mute;
+    }
+
+    public void setThemeSong(Media themeSong) {
+        this.themeSong = themeSong;
+    }
+
     @FXML
     public void initialize() {
+        if(!isMute && themeSong !=null){
+            mediaPlayer = new MediaPlayer(themeSong);
+            mediaPlayer.setVolume(0.6);
+            mediaPlayer.setAutoPlay(true);
+
+        }
         Rectangle book = new Rectangle(90, 77);
         book.setFill(new ImagePattern(new Image(Objects.requireNonNull(GameMenuGFXController.class.getResource("/images/backgrounds/book.jpeg")).toString())));
         bookImage.getChildren().add(book);

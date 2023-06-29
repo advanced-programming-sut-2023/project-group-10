@@ -11,6 +11,12 @@ import org.example.model.game.envirnmont.Map;
 import java.util.HashMap;
 
 public class OptionsMenuController {
+    private GameMenuGFXController gameMenuGFXController;
+
+    public void setGameMenuGFXController(GameMenuGFXController gameMenuGFXController) {
+        this.gameMenuGFXController = gameMenuGFXController;
+    }
+
     public void resumeGame(MouseEvent mouseEvent) {
         OptionsMenuGFX.stage.close();
     }
@@ -42,7 +48,9 @@ public class OptionsMenuController {
         }
     }
 
-    public void options(MouseEvent mouseEvent) {
-        //Do we have any sound effects yet? or we could change some controls
+    public void options(MouseEvent mouseEvent) throws Exception {
+        SoundGFX soundGFX=new SoundGFX();
+        soundGFX.setGameMenuGFXController(this.gameMenuGFXController);
+        soundGFX.start(OptionsMenuGFX.stage);
     }
 }
