@@ -27,4 +27,6 @@ public class Packet {
     public void setAttribute(HashMap<String, String> attribute) {
         this.attribute = attribute;
     }
+
+
 }

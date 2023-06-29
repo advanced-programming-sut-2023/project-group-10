@@ -4,12 +4,13 @@ import com.google.gson.Gson;
 
 public class PacketParser {
 
-    public PacketParser(String gson) {
 
+    public Packet parsePacket(String gson){
+        Packet packet =new Gson().fromJson(gson,Packet.class);
+        return packet;
     }
 
-    public PacketParser(Packet packet) {
-
-
+    public String parseGson(Packet packet){
+        return null;
     }
 }
