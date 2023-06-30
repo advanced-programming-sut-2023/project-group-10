@@ -104,11 +104,13 @@ public class LoginMenu extends Application {
             //TODO username exists?
             else if (User.getUserByUsername(username.getText()) != null) {
                 pane.getChildren().removeAll(text);
+
+                HashMap<String, String> attribute = new HashMap<>();
+                attribute.put("username", username.getText());
+                Packet packet = new Packet("get security question", attribute);
                 String questionNumber = User.getUserByUsername(username.getText()).getQuestionNumber();
                 //TODO get security question
-                HashMap <String, String> getQuestionAttribute = new HashMap<>();
-                getQuestionAttribute.put("username", username.getText());
-                Packet getQuestion = new Packet("get security question", getQuestionAttribute);
+
                 question.setText(SecurityQuestion.getQuestionByNumber(questionNumber));
                 pane.getChildren().add(question);
                 vbox.getChildren().removeAll(hBox, usernameLabel);
@@ -121,8 +123,10 @@ public class LoginMenu extends Application {
         submit.setOnMouseClicked(mouseEvent -> {
             //TODO check security answer
             HashMap<String, String> attributes = new HashMap<>();
-            attributes.put("")
-            Packet packet = new Packet("username", username.getText());
+            attributes.put("username", username.getText());
+            attributes.put("answer", answer.getText());
+            attributes.put("new password", newPassword.getText());
+            Packet packet = new Packet("try to change password", attributes);
 
             if (!User.checkSecurityAnswer(username.getText(), answer.getText()))
                 answerLabel.setText("wrong answer!");
@@ -138,6 +142,7 @@ public class LoginMenu extends Application {
     @FXML
     private void generateCaptcha() {
         //TODO generate captcha
+        Packet packet = new Packet("get captcha", null);
         captchaNumber.setText(CaptchaGenerator.randomNumberGenerator());
         captchaNumber.setFill(Color.DARKGRAY);
         captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
@@ -155,6 +160,10 @@ public class LoginMenu extends Application {
         }
 
         //TODO login
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("username", username.getText());
+        attributes.put("password", password.getText());
+        Packet packet = new Packet("log in", attributes);
         LoginMenuMessages message = LoginMenuController.login(username.getText(), password.getText(), stayLoggedIn.isSelected());
         if (message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST)) {
             usernameText.setText("username does not exist");
@@ -169,6 +178,9 @@ public class LoginMenu extends Application {
 
     private void checkPassword(String password, Label label) {
         //Todo check password
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("password", password);
+        Packet packet = new Packet("live check password", attributes);
         SignupMenuMessages messages = SignupMenuController.checkPassword(password);
 
         if (messages.equals(SignupMenuMessages.SHORT_PASSWORD))
