@@ -69,6 +69,7 @@ public class LoginMenuHandler {
         } else {
             userObject = User.getUserByUsername(username);
             messageValue = "";
+            connection.setUsername(username);
         }
         Packet toBeSent = new Packet(ServerToClientCommands.LOGIN.getCommand(), (HashMap<String, String>) Map.of("user object", userObjectToJson(userObject), "message", messageValue));
         connection.sendPacket(toBeSent);

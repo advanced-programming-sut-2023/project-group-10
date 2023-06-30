@@ -34,6 +34,7 @@ public abstract class Chat {
 
     public void addMessage(Message newMessage) {
         messages.add(newMessage);
+        loadChatToDatabase();
         informWatchers();
     }
 
@@ -48,7 +49,7 @@ public abstract class Chat {
             if (connection != null) {
                 String messagesJson = new Gson().toJson(messages, new TypeToken<List<Message>>() {
                 }.getType());
-                Packet toBeSent = new Packet(ServerToClientCommands.AUTO_CHAT_UPDATE.getCommand(), (HashMap<String, String>) Map.of("messages", messagesJson));
+                Packet toBeSent = new Packet(ServerToClientCommands.AUTO_UPDATE_CHAT_MESSAGES.getCommand(), (HashMap<String, String>) Map.of("messages", messagesJson));
                 try {
                     connection.sendPacket(toBeSent);
                 } catch (IOException e) {
@@ -57,6 +58,8 @@ public abstract class Chat {
             }
         }
     }
+
+    public abstract void loadChatToDatabase();
 
     public abstract boolean hasAccess(String username);
 

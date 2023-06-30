@@ -6,6 +6,22 @@ import org.example.model.chat.*;
 import java.util.ArrayList;
 
 public class ChatController {
+    public static boolean canCreatePrivateChat(String requester, String otherParty) {
+        return PrivateChat.getPrivateChatByMembers(requester, otherParty) == null;
+    }
+
+    public static void createPrivateChat(String requester, String otherParty) {
+        PrivateChat.create(requester, otherParty);
+    }
+
+    public static boolean isRoomIDValid(String roomID) {
+        return Room.getRoomById(roomID) == null;
+    }
+
+    public static void createRoom(String admin, String roomID) {
+        Room.create(admin, roomID);
+    }
+
     public static ArrayList<String> getMyPrivateChats(String username) {
         ArrayList<String> myPrivateChats = new ArrayList<>();
         for (PrivateChat privateChat : PrivateChat.getAllPrivateChats())
@@ -52,6 +68,15 @@ public class ChatController {
         else if (chatType.equals("private")) chat = PrivateChat.getPrivateChatByMembers(senderUsername, chatID);
         else chat = Room.getRoomById(chatID);
         chat.addMessage(new Message(User.getUserByUsername(senderUsername), timeSent, chat, messageBody));
-        chat.informWatchers();
+    }
+
+    public static boolean isAdmin(String username, String roomID) {
+        return Room.getRoomById(roomID).isAdmin(username);
+    }
+
+    public static void addMemberToRoom(String roomID, String username) {
+        Room room = Room.getRoomById(roomID);
+        room.addToMembers(username);
+        room.loadChatToDatabase();
     }
 }
