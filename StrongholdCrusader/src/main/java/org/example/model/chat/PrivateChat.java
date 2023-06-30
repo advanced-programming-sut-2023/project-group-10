@@ -3,6 +3,7 @@ package org.example.model.chat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -13,8 +14,8 @@ public class PrivateChat extends Chat {
     private static ArrayList<PrivateChat> allPrivateChats;
     private final ArrayList<String> members;
 
-    public PrivateChat(String chatID, String member1, String member2) {
-        super(chatID);
+    private PrivateChat(String member1, String member2) {
+        super(member1 + "_" + member2);
         members = new ArrayList<>(2);
         members.add(member1);
         members.add(member2);
@@ -33,6 +34,24 @@ public class PrivateChat extends Chat {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void loadChatToDatabase() {
+        try {
+            FileWriter fileWriter = new FileWriter("./StrongholdCrusader/src/main/resources/chatData/privateChats.json");
+            fileWriter.write(new Gson().toJson(allPrivateChats, new TypeToken<List<PrivateChat>>() {
+            }.getType()));
+            fileWriter.close();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static PrivateChat create(String requester, String otherParty) {
+        PrivateChat privateChat = new PrivateChat(requester, otherParty);
+        allPrivateChats.add(privateChat);
+        privateChat.loadChatToDatabase();
+        return privateChat;
     }
 
     public static PrivateChat getPrivateChatByMembers(String member1, String member2) {

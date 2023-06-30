@@ -2,6 +2,7 @@ package org.example.model.chat;
 
 import com.google.gson.Gson;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -24,6 +25,16 @@ public class PublicChat extends Chat {
             instance = new Gson().fromJson(jsonString, PublicChat.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void loadChatToDatabase() {
+        try {
+            FileWriter fileWriter = new FileWriter("./StrongholdCrusader/src/main/resources/chatData/publicChat.json");
+            fileWriter.write(new Gson().toJson(instance, PublicChat.class));
+            fileWriter.close();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 

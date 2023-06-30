@@ -3,6 +3,7 @@ package org.example.model.chat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -34,6 +35,24 @@ public class Room extends Chat {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void loadChatToDatabase() {
+        try {
+            FileWriter fileWriter = new FileWriter("./StrongholdCrusader/src/main/resources/chatData/rooms.json");
+            fileWriter.write(new Gson().toJson(allRooms, new TypeToken<List<Room>>() {
+            }.getType()));
+            fileWriter.close();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public static Room create(String admin, String roomID) {
+        Room room = new Room(roomID, admin);
+        allRooms.add(room);
+        room.loadChatToDatabase();
+        return room;
     }
 
     public static Room getRoomById(String roomID) {

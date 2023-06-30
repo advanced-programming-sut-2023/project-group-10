@@ -3,6 +3,7 @@ package org.example.connection.Handlers;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import org.example.connection.Connection;
+import org.example.connection.ConnectionDatabase;
 import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
 import org.example.controller.ChatController;
@@ -24,6 +25,42 @@ public class ChatHandler {
 
     public void setReceivedPacket(Packet receivedPacket) {
         this.receivedPacket = receivedPacket;
+    }
+
+    public void canCreatePrivateChat() throws IOException {
+        String requester = receivedPacket.getAttribute().get("requester");
+        String otherParty = receivedPacket.getAttribute().get("other party");
+        boolean state = ChatController.canCreatePrivateChat(requester, otherParty);
+        Packet toBeSent = new Packet(ServerToClientCommands.CAN_CREATE_CHAT.getCommand(), (HashMap<String, String>) Map.of("state", String.valueOf(state)));
+        connection.sendPacket(toBeSent);
+    }
+
+    public void createPrivateChat() throws IOException {
+        String requester = receivedPacket.getAttribute().get("requester");
+        String otherParty = receivedPacket.getAttribute().get("other party");
+        ChatController.createPrivateChat(requester, otherParty);
+        Packet toBeSentToRequester = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), (HashMap<String, String>) Map.of("chat type", "private", "chat id", otherParty));
+        connection.sendPacket(toBeSentToRequester);
+        Connection otherConnection = ConnectionDatabase.getInstance().getConnectionByUsername(otherParty);
+        if (otherConnection != null) {
+            Packet toBeSentToOtherParty = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), (HashMap<String, String>) Map.of("chat type", "private", "chat id", requester));
+            otherConnection.sendPacket(toBeSentToOtherParty);
+        }
+    }
+
+    public void isRoomIDValid() throws IOException {
+        String roomID = receivedPacket.getAttribute().get("room id");
+        boolean state = ChatController.isRoomIDValid(roomID);
+        Packet toBeSent = new Packet(ServerToClientCommands.CAN_CREATE_CHAT.getCommand(), (HashMap<String, String>) Map.of("state", String.valueOf(state)));
+        connection.sendPacket(toBeSent);
+    }
+
+    public void creatRoom() throws IOException {
+        String admin = receivedPacket.getAttribute().get("admin");
+        String roomID = receivedPacket.getAttribute().get("room id");
+        ChatController.createRoom(admin, roomID);
+        Packet toBeSent = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), (HashMap<String, String>) Map.of("chat type", "room", "room id", roomID));
+        connection.sendPacket(toBeSent);
     }
 
     public void getMyPrivateChats() throws IOException {
@@ -89,5 +126,24 @@ public class ChatHandler {
         String chatType = receivedPacket.getAttribute().get("chat type");
         String chatID = receivedPacket.getAttribute().get("chat id");
         ChatController.sendMessage(senderUsername, messageBody, timeSent, chatType, chatID);
+    }
+
+    public void isAdmin() throws IOException {
+        String username = receivedPacket.getAttribute().get("username");
+        String roomID = receivedPacket.getAttribute().get("room id");
+        boolean admin = ChatController.isAdmin(username, roomID);
+        Packet toBeSent = new Packet(ServerToClientCommands.IS_ADMIN.getCommand(), (HashMap<String, String>) Map.of("state", String.valueOf(admin)));
+        connection.sendPacket(toBeSent);
+    }
+
+    public void addMemberToRoom() throws IOException {
+        String roomID = receivedPacket.getAttribute().get("room id");
+        String username = receivedPacket.getAttribute().get("username");
+        ChatController.addMemberToRoom(roomID, username);
+        Connection toBeInformed = ConnectionDatabase.getInstance().getConnectionByUsername(username);
+        if (toBeInformed != null) {
+            Packet toBeSent = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), (HashMap<String, String>) Map.of("chat type", "room", "room id", roomID));
+            toBeInformed.sendPacket(toBeSent);
+        }
     }
 }
