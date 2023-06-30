@@ -8,11 +8,12 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Connection extends Thread {
-    Socket socket;
-    DataOutputStream dataOutputStream;
-    DataInputStream dataInputStream;
-    PacketParser packetParser;
-    PacketHandler packetHandler;
+    private final Socket socket;
+    private final DataOutputStream dataOutputStream;
+    private final DataInputStream dataInputStream;
+    private final PacketParser packetParser;
+    private final PacketHandler packetHandler;
+    private String username;
 
     public Connection(Socket socket) throws IOException {
         this.socket = socket;
@@ -23,6 +24,15 @@ public class Connection extends Thread {
         // TODO: generate id
         String connectionID = "";
         ConnectionDatabase.getInstance().addConnection(connectionID, this);
+        username = null;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

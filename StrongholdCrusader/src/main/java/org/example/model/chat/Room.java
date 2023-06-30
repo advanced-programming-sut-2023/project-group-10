@@ -29,10 +29,18 @@ public class Room extends Chat {
     private static void loadAllRoomsToApplication() {
         try {
             String jsonString = new String(Files.readAllBytes(Paths.get("./StrongholdCrusader/src/main/resources/chatData/rooms.json")));
-            allRooms = new Gson().fromJson(jsonString, new TypeToken<List<Room>>() {}.getType());
+            allRooms = new Gson().fromJson(jsonString, new TypeToken<List<Room>>() {
+            }.getType());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Room getRoomById(String roomID) {
+        ArrayList<Room> rooms = getAllRooms();
+        for (Room room : rooms)
+            if (room.getChatID().equals(roomID)) return room;
+        return null;
     }
 
     public String getAdminUsername() {

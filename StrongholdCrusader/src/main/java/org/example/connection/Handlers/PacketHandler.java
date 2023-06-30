@@ -11,12 +11,14 @@ public class PacketHandler {
     private final SignupMenuHandler signupMenuHandler;
     private final LoginMenuHandler loginMenuHandler;
     private final ProfileMenuHandler profileMenuHandler;
+    private final ChatHandler chatHandler;
 
     public PacketHandler(Connection connection) {
         this.connection = connection;
         signupMenuHandler = new SignupMenuHandler(connection);
         loginMenuHandler = new LoginMenuHandler(connection);
         profileMenuHandler = new ProfileMenuHandler(connection);
+        chatHandler = new ChatHandler(connection);
     }
 
     public void handle(Packet receivedPacket) throws IOException {
@@ -74,8 +76,27 @@ public class PacketHandler {
             case CHANGE_EMAIL:
                 profileMenuHandler.handleChangeEmail();
                 break;
-
-
+            case GET_MY_PRIVATE_CHATS:
+                chatHandler.getMyPrivateChats();
+                break;
+            case GET_MY_ROOMS:
+                chatHandler.getMyRooms();
+                break;
+            case GET_PUBLIC_CHAT_MESSAGES:
+                chatHandler.getPublicChatMessages();
+                break;
+            case GET_ROOM_MESSAGES:
+                chatHandler.getRoomMessages();
+                break;
+            case GET_PRIVATE_CHAT_MESSAGES:
+                chatHandler.getPrivateChatMessages();
+                break;
+            case EXIT_CHAT:
+                chatHandler.exitChat();
+                break;
+            case SEND_MESSAGE:
+                chatHandler.sendMessage();
+                break;
         }
     }
 
@@ -83,5 +104,6 @@ public class PacketHandler {
         signupMenuHandler.setReceivedPacket(receivedPacket);
         loginMenuHandler.setReceivedPacket(receivedPacket);
         profileMenuHandler.setReceivedPacket(receivedPacket);
+        chatHandler.setReceivedPacket(receivedPacket);
     }
 }

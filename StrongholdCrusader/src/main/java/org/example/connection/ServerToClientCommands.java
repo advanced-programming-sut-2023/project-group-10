@@ -21,7 +21,11 @@ public enum ServerToClientCommands {
     START_GAME("start game","message"),
     //profile menu
     FAILED_CHANGE("failed change", "message"),
-    SUCCESSFUL_CHANGE("successful change", "message");
+    SUCCESSFUL_CHANGE("successful change", "message"),
+    //chat menu
+    GET_CHAT_LIST("get chat list", "chats"),
+    GET_CHAT_MESSAGES("get chat messages", "messages"),
+    AUTO_CHAT_UPDATE("auto chat update", "messages");
 
     private final String command;
     private final String[] attributes;
