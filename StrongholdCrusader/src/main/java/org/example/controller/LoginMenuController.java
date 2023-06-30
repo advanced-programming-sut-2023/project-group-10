@@ -22,6 +22,21 @@ public class LoginMenuController {
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 
+    public static LoginMenuMessages login(String username, String password) {
+        if (User.getUserByUsername(username) == null)
+            return LoginMenuMessages.USERNAME_DOESNT_EXIST;
+
+        if (!User.getUserByUsername(username).checkPassword(password))
+            return LoginMenuMessages.WRONG_PASSWORD;
+
+        // TODO: add this to the client side
+//        if (stayLoggedIn)
+//            Stronghold.addUserToFile(User.getUserByUsername(username));
+//        else
+//            Stronghold.addUserToFile(User.getUserByUsername(null));
+        return LoginMenuMessages.LOGIN_SUCCESSFUL;
+    }
+
     public static LoginMenuMessages forgetPassword(String username, String answer, String newPassword) {
         Stronghold.dataBase.loadUsersFromFile();
         if (!User.checkSecurityAnswer(username, answer))

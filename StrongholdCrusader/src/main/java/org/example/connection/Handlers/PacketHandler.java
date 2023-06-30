@@ -9,10 +9,12 @@ import java.io.IOException;
 public class PacketHandler {
     private final Connection connection;
     private final SignupMenuHandler signupMenuHandler;
+    private final LoginMenuHandler loginMenuHandler;
 
     public PacketHandler(Connection connection) {
         this.connection = connection;
         signupMenuHandler = new SignupMenuHandler(connection);
+        loginMenuHandler = new LoginMenuHandler(connection);
     }
 
     public void handle(Packet receivedPacket) throws IOException {
@@ -46,10 +48,20 @@ public class PacketHandler {
             case COMPLETE_SIGNUP:
                 signupMenuHandler.completeSignup();
                 break;
+            case GET_SECURITY_QUESTION:
+                loginMenuHandler.getSecurityQuestion();
+                break;
+            case TRY_TO_CHANGE_PASSWORD:
+                loginMenuHandler.tryToChangePassword();
+                break;
+            case LOG_IN:
+                loginMenuHandler.login();
+                break;
         }
     }
 
     private void updateHandlerPackets(Packet receivedPacket) {
         signupMenuHandler.setReceivedPacket(receivedPacket);
+        loginMenuHandler.setReceivedPacket(receivedPacket);
     }
 }

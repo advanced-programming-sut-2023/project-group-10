@@ -141,11 +141,11 @@ public class SignupMenu extends Application {
         if (SignupMenuController.createUser(username.getText(), password.getText(), confirmation.getText(),
                 email.getText(), nickname.getText()).equals(SignupMenuMessages.SHOW_QUESTIONS)) {
             try {
-//                DataBank.setUsername(username.getText());
-//                DataBank.setPassword(password.getText());
-//                DataBank.setNickname(nickname.getText());
-//                DataBank.setEmail(email.getText());
-//                DataBank.setSlogan(slogan.getText());
+                DataBank.setUsername(username.getText());
+                DataBank.setPassword(password.getText());
+                DataBank.setNickname(nickname.getText());
+                DataBank.setEmail(email.getText());
+                DataBank.setSlogan(slogan.getText());
                 goToSecurityMenu();
             } catch (Exception e) {
                 throw new RuntimeException(e);

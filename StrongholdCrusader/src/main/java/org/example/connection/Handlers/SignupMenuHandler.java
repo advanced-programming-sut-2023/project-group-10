@@ -45,8 +45,8 @@ public class SignupMenuHandler {
     }
 
     public void checkPassword() throws IOException {
-        String username = receivedPacket.getAttribute().get("password");
-        SignupMenuMessages message = SignupMenuController.checkPassword(username);
+        String password = receivedPacket.getAttribute().get("password");
+        SignupMenuMessages message = SignupMenuController.checkPassword(password);
         String messageValue;
         if (message == SignupMenuMessages.SHORT_PASSWORD) messageValue = "short password!";
         else if (message == SignupMenuMessages.NO_LOWERCASE_LETTER)
@@ -88,10 +88,9 @@ public class SignupMenuHandler {
         String nickname = receivedPacket.getAttribute().get("nickname");
         String email = receivedPacket.getAttribute().get("email");
         SignupMenuMessages result = SignupMenuController.createUser(username, password, passwordConfirmation, email, nickname);
-        String stateValue;
-        if (result == SignupMenuMessages.SHOW_QUESTIONS) stateValue = "true";
-        else stateValue = "false";
-        Packet toBeSent = new Packet(ServerToClientCommands.CAN_GO_TO_SECURITY_QUESTIONS.getCommand(), (HashMap<String, String>) Map.of("state", stateValue));
+        boolean stateValue;
+        stateValue = result == SignupMenuMessages.SHOW_QUESTIONS;
+        Packet toBeSent = new Packet(ServerToClientCommands.CAN_GO_TO_SECURITY_QUESTIONS.getCommand(), (HashMap<String, String>) Map.of("state", String.valueOf(stateValue)));
         connection.sendPacket(toBeSent);
     }
 
@@ -112,6 +111,6 @@ public class SignupMenuHandler {
         String answer = receivedPacket.getAttribute().get("answer");
 
         SignupMenuController.createUser(questionNumber, answer, username, password, nickname, slogan, email);
-        Packet toBeSent=new Packet(ServerToClientCommands.SUCCESSFUL_SIGNUP.getCommand(), null);
+        Packet toBeSent = new Packet(ServerToClientCommands.SUCCESSFUL_SIGNUP.getCommand(), null);
     }
 }
