@@ -39,9 +39,7 @@ public class Connection extends Thread {
     public synchronized void run() {
         try {
             while (true) {
-                String input = dataInputStream.readUTF();
-                Packet receivedPacket = packetParser.parsePacket(input);
-                packetHandler.handle(receivedPacket);
+                handleClient();
             }
         } catch (IOException e) {
         }
@@ -50,5 +48,13 @@ public class Connection extends Thread {
     public void sendPacket(Packet toBeSentPacket) throws IOException {
         String json = packetParser.parseGson(toBeSentPacket);
         dataOutputStream.writeUTF(json);
+    }
+
+    public void handleClient() throws IOException {
+        if(dataInputStream.available() != 0){
+            String input = dataInputStream.readUTF();
+            Packet receivedPacket = packetParser.parsePacket(input);
+            packetHandler.handle(receivedPacket);
+        }
     }
 }

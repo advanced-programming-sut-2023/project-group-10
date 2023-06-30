@@ -50,7 +50,7 @@ public class ProfileMenu extends Application {
     @FXML
     public void initialize() {
         //TODO get current user
-        avatar.setFill(new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
+        //avatar.setFill(new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
         username.setText("username: " + DataBank.getUsername());
         nickname.setText("nickname: " + DataBank.getNickname());
         email.setText("email: " + DataBank.getEmail());
@@ -410,10 +410,12 @@ public class ProfileMenu extends Application {
     }
 
     public void goToMainMenu() throws Exception {
-        new MainMenuGFX().start(stage);
+        //new MainMenuGFX().start(stage);
+        //TODO
     }
 
     public void scoreboard() throws Exception {
-        new Scoreboard().start(stage);
+        //new Scoreboard().start(stage);
+        //TODO
     }
 }

@@ -15,7 +15,7 @@ public class SecurityQuestion {
     public static String getAllQuestionsString() {
         StringBuilder result = new StringBuilder();
         for (Map.Entry<String, String> question : securityQuestions.entrySet())
-            result.append(question.getKey()).append(" ").append(question.getValue()).append("\n");
+            result.append(question.getKey()).append(".").append(" ").append(question.getValue()).append("\n");
         return result.toString();
     }
 

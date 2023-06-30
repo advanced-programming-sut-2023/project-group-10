@@ -17,6 +17,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.connection.Client;
+import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
 
@@ -53,7 +54,7 @@ public class SecurityQuestionMenu extends Application {
 
     @FXML
     public void initialize() {
-        Packet packet = new Packet("get security questions", null);
+        Packet packet = new Packet(ClientToServerCommands.GET_SECURITY_QUESTIONS.getCommand(), null);
         try {
             Client.getInstance().sendPacket(packet);
             String slogans = Client.getInstance().recievePacket().getAttribute().get("message");
@@ -107,6 +108,7 @@ public class SecurityQuestionMenu extends Application {
         attributes.put("answer", answer.getText());
         Packet packet = new Packet("complete signup", attributes);
         Client.getInstance().sendPacket(packet);
+        Client.getInstance().recievePacket();
         new LoginMenu().start(stage);
     }
 

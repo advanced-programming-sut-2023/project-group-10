@@ -9,7 +9,7 @@ public enum ServerToClientCommands {
     NICKNAME_CHECK("nickname check", "message"),
     RANDOM_PASSWORD("random password", "password"),
     RANDOM_SLOGAN("random slogan", "slogan"),
-    CAN_GO_TO_SECURITY_QUESTIONS("can go to security questions", "state"),
+    CAN_GO_TO_SECURITY_QUESTIONS("can go to security questions"),
     SECURITY_QUESTIONS("security questions", "message"),
     GET_CAPTCHA("get captcha", "number"),
     SUCCESSFUL_SIGNUP("successful sign up"),

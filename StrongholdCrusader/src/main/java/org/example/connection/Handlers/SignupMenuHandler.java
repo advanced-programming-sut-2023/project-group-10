@@ -13,7 +13,6 @@ import org.example.view.enums.messages.SignupMenuMessages;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class SignupMenuHandler {
     private final Connection connection;
@@ -31,7 +30,9 @@ public class SignupMenuHandler {
         String allSlogans = "";
         for (String slogan : RandomGenerator.getSlogans())
             allSlogans = allSlogans.concat(slogan + "\n");
-        Packet toBeSent = new Packet(ServerToClientCommands.DEFAULT_SLOGANS.getCommand(), (HashMap<String, String>) Map.of("slogans", allSlogans));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("slogans", allSlogans);
+        Packet toBeSent = new Packet(ServerToClientCommands.DEFAULT_SLOGANS.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
@@ -42,7 +43,9 @@ public class SignupMenuHandler {
         if (message.equals(SignupMenuMessages.INVALID_USERNAME_FORMAT)) messageValue = "invalid username format!";
         else if (message.equals(SignupMenuMessages.USER_EXISTS)) messageValue = "username exists!";
         else messageValue = "valid username!";
-        Packet toBeSent = new Packet(ServerToClientCommands.USERNAME_CHECK.getCommand(), (HashMap<String, String>) Map.of("message", messageValue));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("message", messageValue);
+        Packet toBeSent = new Packet(ServerToClientCommands.USERNAME_CHECK.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
@@ -59,17 +62,9 @@ public class SignupMenuHandler {
         else if (message == SignupMenuMessages.NO_SPECIAL_CHARACTER)
             messageValue = "password must have a special character";
         else messageValue = "valid password!";
-        Packet toBeSent = new Packet(ServerToClientCommands.PASSWORD_CHECK.getCommand(), (HashMap<String, String>) Map.of("message", messageValue));
-        connection.sendPacket(toBeSent);
-    }
-
-    public void checkPasswordConfirmation() throws IOException {
-        String password = receivedPacket.getAttribute().get("password");
-        String passwordConfirmation = receivedPacket.getAttribute().get("password confirmation");
-        String messageValue;
-        if (password.equals(passwordConfirmation)) messageValue = "passwords match";
-        else messageValue = "passwords don't match!";
-        Packet toBeSent = new Packet(ServerToClientCommands.PASSWORD_CONFIRMATION_CHECK.getCommand(), (HashMap<String, String>) Map.of("message", messageValue));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("message", messageValue);
+        Packet toBeSent = new Packet(ServerToClientCommands.PASSWORD_CHECK.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
@@ -81,7 +76,9 @@ public class SignupMenuHandler {
         else if (User.getUserByEmail(email) != null)
             messageValue = "email already exists!";
         else messageValue = ""; //valid email
-        Packet toBeSent = new Packet(ServerToClientCommands.EMAIL_CHECK.getCommand(), (HashMap<String, String>) Map.of("message", messageValue));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("message", messageValue);
+        Packet toBeSent = new Packet(ServerToClientCommands.EMAIL_CHECK.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
@@ -91,46 +88,54 @@ public class SignupMenuHandler {
         if(CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
             messageValue = "invalid nickname format!";
         else messageValue = ""; //valid nickname
-        Packet toBeSent = new Packet(ServerToClientCommands.NICKNAME_CHECK.getCommand(), (HashMap<String, String>) Map.of("message", messageValue));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("message", messageValue);
+        Packet toBeSent = new Packet(ServerToClientCommands.NICKNAME_CHECK.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
     public void generateRandomPassword() throws IOException {
-        Packet toBeSent = new Packet(ServerToClientCommands.RANDOM_PASSWORD.getCommand(), (HashMap<String, String>) Map.of("password", RandomGenerator.generateSecurePassword()));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("password", RandomGenerator.generateSecurePassword());
+        Packet toBeSent = new Packet(ServerToClientCommands.RANDOM_PASSWORD.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
     public void generateRandomSlogan() throws IOException {
-        Packet toBeSent = new Packet(ServerToClientCommands.RANDOM_SLOGAN.getCommand(), (HashMap<String, String>) Map.of("slogan", RandomGenerator.getRandomSlogan()));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("slogan", RandomGenerator.getRandomSlogan());
+        Packet toBeSent = new Packet(ServerToClientCommands.RANDOM_SLOGAN.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
     public void generateCaptcha() throws IOException {
-        Packet toBeSent = new Packet(ServerToClientCommands.GET_CAPTCHA.getCommand(), (HashMap<String, String>) Map.of("number", CaptchaGenerator.randomNumberGenerator()));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("number", CaptchaGenerator.randomNumberGenerator());
+        Packet toBeSent = new Packet(ServerToClientCommands.GET_CAPTCHA.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
-    public void checkSignUpInfo() throws IOException {
+    public void checkSignUpInfo() throws IOException{
         String username = receivedPacket.getAttribute().get("username");
         String password = receivedPacket.getAttribute().get("password");
         String passwordConfirmation = receivedPacket.getAttribute().get("password confirmation");
         String nickname = receivedPacket.getAttribute().get("nickname");
         String email = receivedPacket.getAttribute().get("email");
-        SignupMenuMessages result = SignupMenuController.createUser(username, password, passwordConfirmation, email, nickname);
-        boolean stateValue;
-        stateValue = result == SignupMenuMessages.SHOW_QUESTIONS;
-        Packet toBeSent = new Packet(ServerToClientCommands.CAN_GO_TO_SECURITY_QUESTIONS.getCommand(), (HashMap<String, String>) Map.of("state", String.valueOf(stateValue)));
+        SignupMenuController.createUser(username, password, passwordConfirmation, email, nickname).name();
+        Packet toBeSent = new Packet(ServerToClientCommands.CAN_GO_TO_SECURITY_QUESTIONS.getCommand(), null);
         connection.sendPacket(toBeSent);
     }
 
     public void getSecurityQuestions() throws IOException {
         // format: [q number] [q body]\n
         String allQuestions = SecurityQuestion.getAllQuestionsString();
-        Packet toBeSent = new Packet(ServerToClientCommands.SECURITY_QUESTIONS.getCommand(), (HashMap<String, String>) Map.of("message", allQuestions));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("message", allQuestions);
+        Packet toBeSent = new Packet(ServerToClientCommands.SECURITY_QUESTIONS.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
-    public void completeSignup() {
+    public void completeSignup() throws IOException{
         String username = receivedPacket.getAttribute().get("username");
         String password = receivedPacket.getAttribute().get("password");
         String nickname = receivedPacket.getAttribute().get("nickname");
@@ -138,8 +143,8 @@ public class SignupMenuHandler {
         String slogan = receivedPacket.getAttribute().get("slogan");
         String questionNumber = receivedPacket.getAttribute().get("question number");
         String answer = receivedPacket.getAttribute().get("answer");
-
         SignupMenuController.createUser(questionNumber, answer, username, password, nickname, slogan, email);
         Packet toBeSent = new Packet(ServerToClientCommands.SUCCESSFUL_SIGNUP.getCommand(), null);
+        connection.sendPacket(toBeSent);
     }
 }

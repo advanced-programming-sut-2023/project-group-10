@@ -43,38 +43,38 @@ public class SignupMenu extends Application {
     public HBox submitContainer;
     public HBox sloganContainer;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         //Stronghold.initializeApp();
         //TODO send packet initializeApp
-        Application.launch(SignupMenu.class, args);
+        new Client("localhost", 8080);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         SignupMenu.stage = stage;
-        Stronghold.initializeApp();
+        //Stronghold.initializeApp();
         //TODO send packet initializeApp
 
-        if (Stronghold.getLoggedInUserFromFile() != null) {
+        /*if (Stronghold.getLoggedInUserFromFile() != null) {
             //Stronghold.setCurrentUser(Stronghold.getLoggedInUserFromFile());
             //TODO get loggedInUser
-            new MainMenuGFX().start(stage);
-        } else {
-            BorderPane borderPane = new FXMLLoader(SignupMenu.class.getResource("/view/signupMenu.fxml")).load();
-            Background background = new Background(BackgroundBuilder.setBackground("/images/backgrounds/background2.png"));
-            borderPane.setBackground(background);
+            //new MainMenuGFX().start(stage);
+        } else {*/
+        BorderPane borderPane = new FXMLLoader(SignupMenu.class.getResource("/view/signupMenu.fxml")).load();
+        Background background = new Background(BackgroundBuilder.setBackground("/images/backgrounds/background2.png"));
+        borderPane.setBackground(background);
 
-            Scene scene = new Scene(borderPane, 1390, 850);
-            stage.setScene(scene);
-            stage.setTitle("signup menu");
-            stage.setMaximized(true);
-            stage.show();
-        }
+        Scene scene = new Scene(borderPane, 1390, 850);
+        stage.setScene(scene);
+        stage.setTitle("signup menu");
+        stage.setMaximized(true);
+        stage.show();
+        //}
     }
 
     @FXML
-    public void initialize() {
-        Packet packet = new Packet("get default slogans", null);
+    public void initialize() throws Exception {
+        Packet packet = new Packet("get default slogans", new HashMap<>());
         try {
             Client.getInstance().sendPacket(packet);
             String gson = Client.getInstance().recievePacket().getAttribute().get("slogans");
@@ -169,6 +169,8 @@ public class SignupMenu extends Application {
     }
 
     private void submitUser() throws Exception {
+        boolean isNicknameValid = false;
+        boolean isEmailValid = false;
         if (username.getText().equals("")) usernameLabel.setText("provide a username!");
         if (password.getText().equals("")) passwordLabel.setText("provide a password!");
 
@@ -180,6 +182,10 @@ public class SignupMenu extends Application {
             Client.getInstance().sendPacket(nicknameFormat);
             String message = Client.getInstance().recievePacket().getAttribute().get("message");
             if(!message.equals("")) nicknameLabel.setText("invalid nickname format!");
+            else {
+                nicknameLabel.setText("");
+                isNicknameValid = true;
+            }
         }
 
         if (email.getText().equals("")) emailLabel.setText("provide an email!");
@@ -194,10 +200,14 @@ public class SignupMenu extends Application {
                 emailLabel.setText("invalid email format!");
             else if (message.equals("email already exists!"))
                 emailLabel.setText("email already exists!");
+            else {
+                emailLabel.setText("");
+                isEmailValid = true;
+            }
         }
 
-         if(usernameLabel.getText().equals("valid username!") && passwordLabel.getText().equals("valid password!") &&
-            confirmationLabel.getText().equals("passwords match") && nicknameLabel.getText().equals("") && emailLabel.getText().equals("")){
+        if(usernameLabel.getText().equals("valid username!") && passwordLabel.getText().equals("valid password!") &&
+                confirmationLabel.getText().equals("passwords match") && isNicknameValid && isEmailValid){
             HashMap<String, String> attributes = new HashMap<>();
             attributes.put("username", username.getText());
             attributes.put("password", password.getText());
@@ -206,6 +216,7 @@ public class SignupMenu extends Application {
             attributes.put("email", email.getText());
             Packet packet = new Packet("check sign up info", attributes);
             Client.getInstance().sendPacket(packet);
+            Client.getInstance().recievePacket();
             try {
                 DataBank.setUsername(username.getText());
                 DataBank.setPassword(password.getText());

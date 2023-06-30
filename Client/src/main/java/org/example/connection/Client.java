@@ -1,6 +1,5 @@
 package org.example.connection;
 
-import javafx.stage.Stage;
 import org.example.view.SignupMenu;
 
 import java.io.DataInputStream;
@@ -9,22 +8,31 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Client {
-    private Socket socket;
     private DataInputStream dataInputStream;
     private DataOutputStream dataOutputStream;
     private PacketParser packetParser;
 
     private static Client instance;
 
-    private Client(String host, int port) throws Exception {
-        Socket socket = new Socket(host, port);
-        dataInputStream = new DataInputStream(socket.getInputStream());
-        dataOutputStream = new DataOutputStream(socket.getOutputStream());
-        packetParser = new PacketParser();
-        new SignupMenu().start(new Stage());
+    public Client(String host, int port)  {
+        try {
+            Socket socket = new Socket(host, port);
+            dataInputStream = new DataInputStream(socket.getInputStream());
+            dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            packetParser = new PacketParser();
+            String[] strings = new String[]{"a", "b"};
+            new Thread() {
+                @Override
+                public void run() {
+                    javafx.application.Application.launch(SignupMenu.class);
+                }
+            }.start();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
-    public static Client getInstance() throws Exception {
+    public static Client getInstance() {
         if(instance == null) instance = new Client("localhost", 8080);
         return instance;
     }

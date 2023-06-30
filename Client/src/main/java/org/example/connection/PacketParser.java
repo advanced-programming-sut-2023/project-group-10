@@ -1,7 +1,6 @@
 package org.example.connection;
 
 import com.google.gson.Gson;
-import org.example.connection.Packet;
 
 public class PacketParser {
     public Packet parsePacket(String gson){
@@ -9,6 +8,6 @@ public class PacketParser {
     }
 
     public String parseGson(Packet packet){
-        return null;
+        return new Gson().toJson(packet, Packet.class);
     }
 }

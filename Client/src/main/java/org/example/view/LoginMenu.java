@@ -23,7 +23,6 @@ import org.example.connection.Client;
 import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
 import org.example.view.enums.messages.LoginMenuMessages;
-import org.example.view.enums.messages.SignupMenuMessages;
 
 import java.util.HashMap;
 
@@ -114,20 +113,20 @@ public class LoginMenu extends Application {
                 if (Client.getInstance().recievePacket().getAttribute().get("message").equals("username exists!")) {
                     pane.getChildren().removeAll(text);
 
-                        HashMap<String, String> usernameAttribute = new HashMap<>();
-                        attribute.put("username", username.getText());
-                        Packet getQuestion = new Packet("get security question", usernameAttribute);
-                        Client.getInstance().sendPacket(getQuestion);
-                        HashMap<String, String> attributes = (HashMap<String, String>) Client.getInstance().recievePacket().getAttribute().clone();
-                        String isUsernameValid = attributes.get("is username valid");
-                        String questionText = attributes.get("message");
+                    HashMap<String, String> usernameAttribute = new HashMap<>();
+                    attribute.put("username", username.getText());
+                    Packet getQuestion = new Packet("get security question", usernameAttribute);
+                    Client.getInstance().sendPacket(getQuestion);
+                    HashMap<String, String> attributes = (HashMap<String, String>) Client.getInstance().recievePacket().getAttribute().clone();
+                    String isUsernameValid = attributes.get("is username valid");
+                    String questionText = attributes.get("message");
 
-                        if (isUsernameValid.equals("ture")) {
-                            question.setText(questionText);
-                            pane.getChildren().add(question);
-                            vbox.getChildren().removeAll(hBox, usernameLabel);
-                            vbox.getChildren().addAll(answer, answerLabel, passwordContainer, submit);
-                        }
+                    if (isUsernameValid.equals("ture")) {
+                        question.setText(questionText);
+                        pane.getChildren().add(question);
+                        vbox.getChildren().removeAll(hBox, usernameLabel);
+                        vbox.getChildren().addAll(answer, answerLabel, passwordContainer, submit);
+                    }
 
                 } else usernameLabel.setText("This username does not exist!");
             } catch (Exception e){
@@ -207,7 +206,8 @@ public class LoginMenu extends Application {
             usernameText.setText("");
             passwordText.setText("wrong password");
             captchaText.setText("");
-        } else new MainMenuGFX().start(stage);
+        } //else new MainMenuGFX().start(stage);
+        //TODO
     }
 
     public void signupMenu(MouseEvent mouseEvent) throws Exception {

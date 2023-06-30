@@ -8,6 +8,6 @@ public class PacketParser {
     }
 
     public String parseGson(Packet packet){
-        return null;
+        return new Gson().toJson(packet, Packet.class);
     }
 }

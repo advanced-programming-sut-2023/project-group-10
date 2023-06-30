@@ -37,7 +37,10 @@ public class LoginMenuHandler {
             isUsernameValid = false;
             messageValue = "";
         }
-        Packet toBeSent = new Packet(ServerToClientCommands.GET_SECURITY_QUESTION.getCommand(), (HashMap<String, String>) Map.of("is username valid", String.valueOf(isUsernameValid), "message", messageValue));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("is username valid", String.valueOf(isUsernameValid));
+        hashMap.put("message", messageValue);
+        Packet toBeSent = new Packet(ServerToClientCommands.GET_SECURITY_QUESTION.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
@@ -48,7 +51,9 @@ public class LoginMenuHandler {
         String newPassword = receivedPacket.getAttribute().get("new password");
         boolean isSuccessful = User.checkSecurityAnswer(username, answer);
         if (isSuccessful) User.getUserByUsername(username).setPassword(newPassword);
-        Packet toBeSent = new Packet(ServerToClientCommands.TRY_TO_CHANGE_PASSWORD.getCommand(), (HashMap<String, String>) Map.of("is successful", String.valueOf(isSuccessful)));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("is successful", String.valueOf(isSuccessful));
+        Packet toBeSent = new Packet(ServerToClientCommands.TRY_TO_CHANGE_PASSWORD.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 
@@ -69,9 +74,11 @@ public class LoginMenuHandler {
         } else {
             userObject = User.getUserByUsername(username);
             messageValue = "";
-            connection.setUsername(username);
         }
-        Packet toBeSent = new Packet(ServerToClientCommands.LOGIN.getCommand(), (HashMap<String, String>) Map.of("user object", userObjectToJson(userObject), "message", messageValue));
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("user object", userObjectToJson(userObject));
+        hashMap.put("message", messageValue);
+        Packet toBeSent = new Packet(ServerToClientCommands.LOGIN.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 

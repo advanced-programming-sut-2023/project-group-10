@@ -1,4 +1,4 @@
-module StrongholdCrusader {
+module Client {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.media;
@@ -17,9 +17,9 @@ module StrongholdCrusader {
 //    exports org.example.model.game.buildings.buildingconstants;
 //    exports org.example.model.game.units.unitconstants;
     opens org.example.model to com.google.gson;
-    exports org.example.view.transitions;
-    opens org.example.view.transitions to javafx.fxml;
+//    exports org.example.view.transitions;
+//    opens org.example.view.transitions to javafx.fxml;
     exports org.example.connection;
-    opens org.example.connection to javafx.fxml;
-//    exports org.example.controller;
+    opens org.example.connection to javafx.fxml, com.google.gson;
+    //    exports org.example.controller;
 }

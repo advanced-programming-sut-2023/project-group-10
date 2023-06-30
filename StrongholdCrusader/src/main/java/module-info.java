@@ -9,7 +9,6 @@ module StrongholdCrusader {
 
 
     opens org.example.view to javafx.fxml;
-    exports org.example.view;
     exports org.example.view.enums.messages;
     exports org.example.model;
     exports org.example.model.game;
@@ -17,7 +16,7 @@ module StrongholdCrusader {
     exports org.example.model.game.buildings.buildingconstants;
     exports org.example.model.game.units.unitconstants;
     opens org.example.model to com.google.gson;
-    exports org.example.view.transitions;
     opens org.example.view.transitions to javafx.fxml;
+    opens org.example.connection to com.google.gson;
     //exports org.example.controller;
 }
