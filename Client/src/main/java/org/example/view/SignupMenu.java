@@ -11,12 +11,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.example.controller.SignupMenuController;
-import org.example.model.Stronghold;
-import org.example.model.User;
-import org.example.model.utils.CheckFormatAndEncrypt;
-import org.example.model.utils.RandomGenerator;
+import org.example.ServerToClientCommands;
+import org.example.connection.Packet;
+import org.example.model.BackgroundBuilder;
 import org.example.view.enums.messages.SignupMenuMessages;
+
+import java.util.HashMap;
 
 public class SignupMenu extends Application {
     public static Stage stage;
@@ -44,7 +44,8 @@ public class SignupMenu extends Application {
     public HBox sloganContainer;
 
     public static void main(String[] args) {
-        Stronghold.initializeApp();
+        //Stronghold.initializeApp();
+        //TODO send packet initializeApp
         Application.launch(SignupMenu.class, args);
     }
 
@@ -52,13 +53,15 @@ public class SignupMenu extends Application {
     public void start(Stage stage) throws Exception {
         SignupMenu.stage = stage;
 
-        Stronghold.initializeApp();
+        //Stronghold.initializeApp();
+        //TODO send packet initializeApp
         if (Stronghold.getLoggedInUserFromFile() != null) {
-            Stronghold.setCurrentUser(Stronghold.getLoggedInUserFromFile());
+            //Stronghold.setCurrentUser(Stronghold.getLoggedInUserFromFile());
+            //TODO get loggedInUser
             new MainMenuGFX().start(stage);
         } else {
             BorderPane borderPane = new FXMLLoader(SignupMenu.class.getResource("/view/signupMenu.fxml")).load();
-            Background background = new Background(RandomGenerator.setBackground("/images/backgrounds/background2.png"));
+            Background background = new Background(BackgroundBuilder.setBackground("/images/backgrounds/background2.png"));
             borderPane.setBackground(background);
 
             Scene scene = new Scene(borderPane, 1390, 850);
@@ -71,7 +74,9 @@ public class SignupMenu extends Application {
 
     @FXML
     public void initialize() {
+        Packet packet = new Packet("get default slogans", null);
         for (String string : RandomGenerator.getSlogans()) {
+            //TODO getRandomSlogan
             defaultSlogan.getItems().add(string);
         }
 
@@ -92,6 +97,8 @@ public class SignupMenu extends Application {
         showPassword.setOnAction(actionEvent -> setShowPassword());
 
         randomPassword.setOnMouseClicked(mouseEvent -> {
+            //TODO get secure password
+            Packet randomPassword = new Packet("random password", null);
             password.setText(RandomGenerator.generateSecurePassword());
         });
 
@@ -119,6 +126,7 @@ public class SignupMenu extends Application {
             defaultSlogan.setVisible(true);
             main.getChildren().addAll(submitContainer, loginMenu);
             randomSlogan.setOnMouseClicked(mouseEvent -> {
+                //TODO get random slogan
                 slogan.setText(RandomGenerator.getRandomSlogan());
             });
         });
@@ -127,19 +135,26 @@ public class SignupMenu extends Application {
     private void submitUser() {
         if (username.getText().equals("")) usernameLabel.setText("provide a username!");
         if (password.getText().equals("")) passwordLabel.setText("provide a password!");
-
         if (nickname.getText().equals("")) nicknameLabel.setText("provide a nickname!");
         else if (CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname.getText()))
+            //TODO is nickname valid?
             nicknameLabel.setText("invalid nickname format!");
 
         if (email.getText().equals("")) emailLabel.setText("provide an email!");
         else if (CheckFormatAndEncrypt.isEmailFormatInvalid(email.getText()))
+            //TODO is email valid
             emailLabel.setText("invalid email format!");
         else if (User.getUserByEmail(email.getText()) != null)
             emailLabel.setText("email already exists!");
 
-        if (SignupMenuController.createUser(username.getText(), password.getText(), confirmation.getText(),
-                email.getText(), nickname.getText()).equals(SignupMenuMessages.SHOW_QUESTIONS)) {
+        else {
+            HashMap<String, String> attributes = new HashMap<>();
+            attributes.put("username", username.getText());
+            attributes.put("password", password.getText());
+            attributes.put("password confirmation", confirmation.getText());
+            attributes.put("nickname", nickname.getText());
+            attributes.put("email", email.getText());
+            Packet packet = new Packet("check sign up info", attributes);
             try {
                 DataBank.setUsername(username.getText());
                 DataBank.setPassword(password.getText());
@@ -186,7 +201,11 @@ public class SignupMenu extends Application {
     }
 
     private void checkUsername(String username, Label label) {
+        //TODO check username
         SignupMenuMessages message = SignupMenuController.checkUsername(username);
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("username", username);
+        Packet packet = new Packet("live check username", attributes);
 
         if (message.equals(SignupMenuMessages.INVALID_USERNAME_FORMAT))
             label.setText("invalid username format!");
@@ -196,7 +215,11 @@ public class SignupMenu extends Application {
     }
 
     private void checkPassword(String password, Label label) {
+        //TODO check password
         SignupMenuMessages messages = SignupMenuController.checkPassword(password);
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("password", password);
+        Packet packet = new Packet("live check password", attributes);
 
         if (messages.equals(SignupMenuMessages.SHORT_PASSWORD))
             label.setText("short password!");
