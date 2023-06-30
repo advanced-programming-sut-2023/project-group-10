@@ -3,16 +3,19 @@ package org.example.model.chat;
 import org.example.model.User;
 
 public class Message {
+    private final String messageID;
     private final User sender;
     private final String timeSent;
-    private String message;
+    private String messageBody;
     // TODO: doubt
     private final Chat chat;
 
-    public Message(User sender, String timeSent, Chat chat) {
+    public Message(User sender, String timeSent, Chat chat, String messageBody) {
+        messageID = sender.getUsername() + " " + timeSent;
         this.sender = sender;
         this.timeSent = timeSent;
         this.chat = chat;
+        this.messageBody = messageBody;
     }
 
     public User getSender() {
@@ -23,12 +26,12 @@ public class Message {
         return timeSent;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMessageBody() {
+        return messageBody;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessageBody(String messageBody) {
+        this.messageBody = messageBody;
     }
 
     public Chat getChat() {
