@@ -19,6 +19,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.example.connection.Client;
 import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
 import org.example.view.enums.messages.LoginMenuMessages;
@@ -99,55 +100,88 @@ public class LoginMenu extends Application {
         Button submit = new Button("submit");
 
         show.setOnMouseClicked(mouseEvent -> {
-            if (username.getText().equals("")) usernameLabel.setText("please provide a username!");
+            if (username.getText().equals("")){
+                usernameLabel.setText("please provide a username!");
+                return;
+            }
 
-            //TODO username exists?
-            else if (User.getUserByUsername(username.getText()) != null) {
-                pane.getChildren().removeAll(text);
-
+            try {
                 HashMap<String, String> attribute = new HashMap<>();
                 attribute.put("username", username.getText());
-                Packet packet = new Packet("get security question", attribute);
-                String questionNumber = User.getUserByUsername(username.getText()).getQuestionNumber();
-                //TODO get security question
+                Packet packet = new Packet("live check username", attribute);
+                Client.getInstance().sendPacket(packet);
 
-                question.setText(SecurityQuestion.getQuestionByNumber(questionNumber));
-                pane.getChildren().add(question);
-                vbox.getChildren().removeAll(hBox, usernameLabel);
-                vbox.getChildren().addAll(answer, answerLabel, passwordContainer, submit);
-            } else usernameLabel.setText("This username does not exist!");
+                if (Client.getInstance().recievePacket().getAttribute().get("message").equals("username exists!")) {
+                    pane.getChildren().removeAll(text);
+
+                        HashMap<String, String> usernameAttribute = new HashMap<>();
+                        attribute.put("username", username.getText());
+                        Packet getQuestion = new Packet("get security question", usernameAttribute);
+                        Client.getInstance().sendPacket(getQuestion);
+                        HashMap<String, String> attributes = (HashMap<String, String>) Client.getInstance().recievePacket().getAttribute().clone();
+                        String isUsernameValid = attributes.get("is username valid");
+                        String questionText = attributes.get("message");
+
+                        if (isUsernameValid.equals("ture")) {
+                            question.setText(questionText);
+                            pane.getChildren().add(question);
+                            vbox.getChildren().removeAll(hBox, usernameLabel);
+                            vbox.getChildren().addAll(answer, answerLabel, passwordContainer, submit);
+                        }
+
+                } else usernameLabel.setText("This username does not exist!");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         });
 
-        newPassword.textProperty().addListener((observable, oldValue, newValue) -> checkPassword(newValue, passwordLabel));
+        newPassword.textProperty().addListener((observable, oldValue, newValue) -> {
+            HashMap<String, String> attributes = new HashMap<>();
+            attributes.put("password", newValue);
+            Packet packet = new Packet("live check password", attributes);
+            try {
+                Client.getInstance().sendPacket(packet);
+                passwordLabel.setText(Client.getInstance().recievePacket().getAttribute().get("message"));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        });
 
         submit.setOnMouseClicked(mouseEvent -> {
-            //TODO check security answer
             HashMap<String, String> attributes = new HashMap<>();
             attributes.put("username", username.getText());
             attributes.put("answer", answer.getText());
             attributes.put("new password", newPassword.getText());
             Packet packet = new Packet("try to change password", attributes);
-
-            if (!User.checkSecurityAnswer(username.getText(), answer.getText()))
-                answerLabel.setText("wrong answer!");
-            else {
-                User.getUserByUsername(username.getText()).setPassword(newPassword.getText());
-                pane.getChildren().remove(0);
-                pane.getChildren().remove(question);
-                pane.getChildren().add(login);
+            try {
+                Client.getInstance().sendPacket(packet);
+                String result = Client.getInstance().recievePacket().getAttribute().get("is successful");
+                if (result.equals("false")) answerLabel.setText("wrong answer!");
+                else {
+                    pane.getChildren().remove(0);
+                    pane.getChildren().remove(question);
+                    pane.getChildren().add(login);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
         });
     }
 
     @FXML
     private void generateCaptcha() {
-        //TODO generate captcha
-        Packet packet = new Packet("get captcha", null);
-        captchaNumber.setText(CaptchaGenerator.randomNumberGenerator());
-        captchaNumber.setFill(Color.DARKGRAY);
-        captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
-        captchaNumber.setStrikethrough(true);
-        box.setWidth(captchaNumber.getText().length() * 15);
+        try {
+            Packet packet = new Packet("get captcha", null);
+            Client.getInstance().sendPacket(packet);
+            String number = Client.getInstance().recievePacket().getAttribute().get("number");
+            captchaNumber.setText(number);
+            captchaNumber.setFill(Color.DARKGRAY);
+            captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
+            captchaNumber.setStrikethrough(true);
+            box.setWidth(captchaNumber.getText().length() * 15);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void submit() throws Exception {
@@ -159,41 +193,21 @@ public class LoginMenu extends Application {
             return;
         }
 
-        //TODO login
         HashMap<String, String> attributes = new HashMap<>();
         attributes.put("username", username.getText());
         attributes.put("password", password.getText());
         Packet packet = new Packet("log in", attributes);
-        LoginMenuMessages message = LoginMenuController.login(username.getText(), password.getText(), stayLoggedIn.isSelected());
-        if (message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST)) {
+        Client.getInstance().sendPacket(packet);
+        String message = Client.getInstance().recievePacket().getAttribute().get("message value");
+        if (message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST.name())) {
             usernameText.setText("username does not exist");
             passwordText.setText("");
             captchaText.setText("");
-        } else if (message.equals(LoginMenuMessages.WRONG_PASSWORD)) {
+        } else if (message.equals(LoginMenuMessages.WRONG_PASSWORD.name())) {
             usernameText.setText("");
             passwordText.setText("wrong password");
             captchaText.setText("");
         } else new MainMenuGFX().start(stage);
-    }
-
-    private void checkPassword(String password, Label label) {
-        //Todo check password
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("password", password);
-        Packet packet = new Packet("live check password", attributes);
-        SignupMenuMessages messages = SignupMenuController.checkPassword(password);
-
-        if (messages.equals(SignupMenuMessages.SHORT_PASSWORD))
-            label.setText("short password!");
-        else if (messages.equals(SignupMenuMessages.NO_LOWERCASE_LETTER))
-            label.setText("password must have a lowercase letter");
-        else if (messages.equals(SignupMenuMessages.NO_UPPERCASE_LETTER))
-            label.setText("password must have an uppercase letter");
-        else if (messages.equals(SignupMenuMessages.NO_NUMBER))
-            label.setText("password must have a digit");
-        else if (messages.equals(SignupMenuMessages.NO_SPECIAL_CHARACTER))
-            label.setText("password must have a special character");
-        else label.setText("valid password!");
     }
 
     public void signupMenu(MouseEvent mouseEvent) throws Exception {
