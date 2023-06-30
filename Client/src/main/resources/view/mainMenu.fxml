@@ -4,10 +4,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.layout.VBox?>
 <Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19"
       fx:controller="org.example.view.MainMenuController">
-    <children>
+    <VBox fx:id="buttons">
         <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Main Menu"
               textAlignment="CENTER" wrappingWidth="400.0">
             <font>
@@ -17,6 +18,13 @@
         <Button fx:id="profileButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0"
                 style="-fx-background-color: PAPAYAWHIP; -fx-border-color: brown;" text="Profile Menu"
                 onMouseClicked="#goToProfileMenu">
+            <font>
+                <Font name="Malayalam MN" size="13.0"/>
+            </font>
+        </Button>
+        <Button fx:id="chatButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0"
+                style="-fx-background-color: PAPAYAWHIP; -fx-border-color: brown;" text="Chat Menu"
+                onMouseClicked="#goToChatMenu">
             <font>
                 <Font name="Malayalam MN" size="13.0"/>
             </font>
@@ -35,5 +43,5 @@
                 <Font name="Malayalam MN" size="13.0"/>
             </font>
         </Button>
-    </children>
+    </VBox>
 </Pane>

@@ -18,6 +18,9 @@ public enum ClientToServerCommands {
     GET_SECURITY_QUESTION("get security question", "username"),
     TRY_TO_CHANGE_PASSWORD("try to change password", "username", "answer", "new password"),
     LOG_IN("log in", "username", "password"),
+    //main menu
+    LOGOUT("logout"),
+    START_GAME("start game"),
 
     //profile menu
     CHANGE_USERNAME("change username", "new username"),
