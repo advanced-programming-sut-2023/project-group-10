@@ -3,21 +3,24 @@ package org.example.connection;
 import java.util.HashMap;
 
 public class ConnectionDatabase {
-    private static ConnectionDatabase instance;
-    private static HashMap<String, Connection> database;
+    private HashMap<String, Connection> database;
+
+    private static class Holder {
+        private static final ConnectionDatabase INSTANCE = new ConnectionDatabase();
+    }
 
     private ConnectionDatabase() {
     }
 
     public static ConnectionDatabase getInstance() {
-        synchronized (instance) {
-            if (instance == null) instance = new ConnectionDatabase();
-        }
-        return instance;
+        return Holder.INSTANCE;
+    }
+
+    public HashMap<String, Connection> getDatabase() {
+        return database;
     }
 
     public void addConnection(String connectionID, Connection connection) {
-        // TODO: check duplication
-        database.put(connectionID, connection);
+        // doesn't check duplicate id
     }
 }

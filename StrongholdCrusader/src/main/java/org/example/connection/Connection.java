@@ -1,5 +1,7 @@
 package org.example.connection;
 
+import org.example.connection.Handlers.PacketHandler;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

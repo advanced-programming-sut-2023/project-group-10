@@ -9,13 +9,7 @@ public enum ServerToClientCommands {
     CAN_GO_TO_SECURITY_QUESTIONS("can go to security questions", "state"),
     SECURITY_QUESTIONS("security questions", "message"),
     GET_CAPTCHA("get captcha", "number"),
-    SUCCESSFUL_SIGNUP("successful sign up"),
-    //main menu responses
-    LOGGED_OUT("log out"),
-    PROFILE_MENU("profile menu"),
-    //profile menu
-    FAILED_CHANGE("failed change", "message"),
-    SUCCESSFUL_CHANGE("successful change", "message");
+    SUCCESSFUL_SIGNUP("successful sign up");
 
     private final String command;
     private final String[] attributes;

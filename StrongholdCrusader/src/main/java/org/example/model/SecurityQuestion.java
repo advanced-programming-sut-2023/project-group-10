@@ -13,10 +13,10 @@ public class SecurityQuestion {
     }
 
     public static String getAllQuestionsString() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (Map.Entry<String, String> question : securityQuestions.entrySet())
-            result += question.getKey() + ". " + question.getValue() + " ";
-        return result;
+            result.append(question.getKey()).append(" ").append(question.getValue()).append("\n");
+        return result.toString();
     }
 
     public static String getQuestionByNumber(String questionNumber) {

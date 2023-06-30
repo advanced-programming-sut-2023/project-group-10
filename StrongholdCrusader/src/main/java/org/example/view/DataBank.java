@@ -1,5 +1,7 @@
 package org.example.view;
 
+
+// TODO: move to client or remove if not needed?
 public class DataBank {
     private static String username;
     private static String password;

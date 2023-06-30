@@ -2,10 +2,15 @@ package org.example;
 
 public enum ClientToServerCommands {
     //sign up menu
-    SIGN_UP("sign up", "username", "password", "password confirmation", "nickname", "email", "slogan"),
-    SECURITY_QUESTION("security question", "question number", "answer", "answer confirmation", "username",
-            "password", "password confirmation", "nickname", "email", "slogan"),
-    GO_TO_LOGIN_MENU("login menu"),
+    GET_DEFAULT_SLOGANS("get default slogans"),
+    LIVE_CHECK_USERNAME("live check username", "username"),
+    LIVE_CHECK_PASSWORD("live check password", "password"),
+    LIVE_CHECK_PASSWORD_CONFIRMATION("live check password confirmation", "password", "password confirmation"),
+    RANDOM_PASSWORD("random password"),
+    CHECK_SIGNUP_INFO("check sign up info", "username", "password", "password confirmation", "nickname", "email"),
+    GET_SECURITY_QUESTIONS("get security questions"),
+    GET_CAPTCHA("get captcha"),
+    COMPLETE_SIGNUP("complete signup", "username", "password", "nickname", "email", "slogan", "question number", "answer"),
     //login menu
     LOG_IN("log in", "username", "password", "stay logged in"),
     FORGOT_PASSWORD("forgot password", "username", "answer", "password"),
@@ -19,11 +24,9 @@ public enum ClientToServerCommands {
     GO_TO_MAIN_MENU("main menu"),
 
     //start game menu
-    START_NEW_GAME("start game","players","keeps x","keeps y","colors"),
+    START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),
     CANCEL_START_GAME("cancel start game");
     //customize map
-
-
 
 
     private final String command;
