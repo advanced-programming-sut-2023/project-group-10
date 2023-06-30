@@ -1,6 +1,7 @@
 package org.example.connection;
 
 public enum ServerToClientCommands {
+    //sign up menu
     DEFAULT_SLOGANS("default slogans", "message"),
     USERNAME_CHECK("username check", "message"),
     PASSWORD_CHECK("password check", "message"),
@@ -9,7 +10,11 @@ public enum ServerToClientCommands {
     CAN_GO_TO_SECURITY_QUESTIONS("can go to security questions", "state"),
     SECURITY_QUESTIONS("security questions", "message"),
     GET_CAPTCHA("get captcha", "number"),
-    SUCCESSFUL_SIGNUP("successful sign up");
+    SUCCESSFUL_SIGNUP("successful sign up"),
+    //login menu
+    GET_SECURITY_QUESTION("get security question", "is username valid", "message"),
+    TRY_TO_CHANGE_PASSWORD("try to change password", "is successful"),
+    LOGIN("login", "is successful", "message");
 
     private final String command;
     private final String[] attributes;

@@ -12,9 +12,9 @@ public enum ClientToServerCommands {
     GET_CAPTCHA("get captcha"),
     COMPLETE_SIGNUP("complete signup", "username", "password", "nickname", "email", "slogan", "question number", "answer"),
     //login menu
-    LOG_IN("log in", "username", "password", "stay logged in"),
-    FORGOT_PASSWORD("forgot password", "username", "answer", "password"),
-    GO_TO_SIGN_UP_MENU("sign up menu"),
+    GET_SECURITY_QUESTION("get security question", "username"),
+    TRY_TO_CHANGE_PASSWORD("try to change password", "username", "answer", "new password"),
+    LOG_IN("log in", "username", "password"),
     //main menu
     LOGOUT("logout"),
     GO_TO_PROFILE_MENU("profile menu"),
