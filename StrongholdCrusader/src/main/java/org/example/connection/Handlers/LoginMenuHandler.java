@@ -1,5 +1,6 @@
 package org.example.connection.Handlers;
 
+import com.google.gson.Gson;
 import org.example.connection.Connection;
 import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
@@ -56,20 +57,26 @@ public class LoginMenuHandler {
         // TODO: add online and offline
         String username = receivedPacket.getAttribute().get("username");
         String password = receivedPacket.getAttribute().get("password");
-        boolean state;
+        User userObject;
         String messageValue;
         LoginMenuMessages message = LoginMenuController.login(username, password);
         if (message == LoginMenuMessages.USERNAME_DOESNT_EXIST) {
-            state = false;
+            userObject = null;
             messageValue = "username does not exist";
         } else if (message == LoginMenuMessages.WRONG_PASSWORD) {
-            state = false;
+            userObject = null;
             messageValue = "wrong password";
         } else {
-            state = true;
+            userObject = User.getUserByUsername(username);
             messageValue = "";
         }
-        Packet toBeSent = new Packet(ServerToClientCommands.LOGIN.getCommand(), (HashMap<String, String>) Map.of("state", String.valueOf(state), "message", messageValue));
+        Packet toBeSent = new Packet(ServerToClientCommands.LOGIN.getCommand(), (HashMap<String, String>) Map.of("user object", userObjectToJson(userObject), "message", messageValue));
         connection.sendPacket(toBeSent);
+    }
+
+    private String userObjectToJson(User user) {
+        // null object serialized as empty string
+        if (user == null) return "";
+        return new Gson().toJson(user, User.class);
     }
 }

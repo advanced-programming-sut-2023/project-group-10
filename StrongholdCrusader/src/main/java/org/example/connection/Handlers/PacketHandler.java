@@ -35,6 +35,9 @@ public class PacketHandler {
             case LIVE_CHECK_PASSWORD_CONFIRMATION:
                 signupMenuHandler.checkPasswordConfirmation();
                 break;
+            case CHECK_EMAIL:
+                signupMenuHandler.checkEmail();
+                break;
             case RANDOM_PASSWORD:
                 signupMenuHandler.generateRandomPassword();
                 break;
