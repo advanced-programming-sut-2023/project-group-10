@@ -10,11 +10,13 @@ public class PacketHandler {
     private final Connection connection;
     private final SignupMenuHandler signupMenuHandler;
     private final LoginMenuHandler loginMenuHandler;
+    private final ProfileMenuHandler profileMenuHandler;
 
     public PacketHandler(Connection connection) {
         this.connection = connection;
         signupMenuHandler = new SignupMenuHandler(connection);
         loginMenuHandler = new LoginMenuHandler(connection);
+        profileMenuHandler = new ProfileMenuHandler(connection);
     }
 
     public void handle(Packet receivedPacket) throws IOException {
@@ -57,11 +59,26 @@ public class PacketHandler {
             case LOG_IN:
                 loginMenuHandler.login();
                 break;
+            case CHANGE_USERNAME:
+                profileMenuHandler.handleChangeUsername();
+                break;
+            case CHANGE_PASSWORD:
+                profileMenuHandler.handleChangePassword();
+                break;
+            case CHANGE_NICKNAME:
+                profileMenuHandler.handleChangeNickname();
+                break;
+            case CHANGE_EMAIL:
+                profileMenuHandler.handleChangeEmail();
+                break;
+
+
         }
     }
 
     private void updateHandlerPackets(Packet receivedPacket) {
         signupMenuHandler.setReceivedPacket(receivedPacket);
         loginMenuHandler.setReceivedPacket(receivedPacket);
+        profileMenuHandler.setReceivedPacket(receivedPacket);
     }
 }

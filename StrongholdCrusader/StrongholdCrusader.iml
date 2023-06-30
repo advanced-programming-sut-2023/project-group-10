@@ -30,14 +30,14 @@
     <orderEntry type="library" scope="TEST" name="Maven: net.bytebuddy:byte-buddy-agent:1.14.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:3.3" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:win:19.0.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:19.0.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:win:19.0.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:19.0.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:19.0.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:19.0.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:19.0.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:19.0.2.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-media:19.0.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:win:19.0.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:mac:19.0.2.1" level="project" />
   </component>
 </module>

@@ -14,7 +14,10 @@ public enum ServerToClientCommands {
     //login menu
     GET_SECURITY_QUESTION("get security question", "is username valid", "message"),
     TRY_TO_CHANGE_PASSWORD("try to change password", "is successful"),
-    LOGIN("login", "is successful", "message");
+    LOGIN("login", "is successful", "message"),
+    //profile menu
+    FAILED_CHANGE("failed change", "message"),
+    SUCCESSFUL_CHANGE("successful change", "message");
 
     private final String command;
     private final String[] attributes;

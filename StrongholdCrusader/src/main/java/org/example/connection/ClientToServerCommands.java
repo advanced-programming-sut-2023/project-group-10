@@ -15,13 +15,8 @@ public enum ClientToServerCommands {
     GET_SECURITY_QUESTION("get security question", "username"),
     TRY_TO_CHANGE_PASSWORD("try to change password", "username", "answer", "new password"),
     LOG_IN("log in", "username", "password"),
-    //main menu
-    LOGOUT("logout"),
-    GO_TO_PROFILE_MENU("profile menu"),
-    START_GAME_MENU("start game menu"),
-    GO_TO_CHAT_MENU("chat menu"),
+
     //profile menu
-    GO_TO_MAIN_MENU("main menu"),
     CHANGE_USERNAME("change username", "new username"),
     CHANGE_PASSWORD("change password", "current password", "new password"),
     CHANGE_NICKNAME("change nickname", "new nickname"),
@@ -29,7 +24,6 @@ public enum ClientToServerCommands {
     //this should be Handled in another manner/did not figure it out //TODO
     CHANGE_SLOGAN("change slogan", "slogan"),
     CHANGE_AVATAR("change avatar", "new avatar path"),
-    SCOREBOARD("scoreboard"),
 
     //start game menu
     START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),
