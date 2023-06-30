@@ -5,7 +5,9 @@ import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
 import org.example.controller.SignupMenuController;
 import org.example.model.SecurityQuestion;
+import org.example.model.User;
 import org.example.model.utils.CaptchaGenerator;
+import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.model.utils.RandomGenerator;
 import org.example.view.enums.messages.SignupMenuMessages;
 
@@ -68,6 +70,18 @@ public class SignupMenuHandler {
         if (password.equals(passwordConfirmation)) messageValue = "passwords match";
         else messageValue = "passwords don't match!";
         Packet toBeSent = new Packet(ServerToClientCommands.PASSWORD_CONFIRMATION_CHECK.getCommand(), (HashMap<String, String>) Map.of("message", messageValue));
+        connection.sendPacket(toBeSent);
+    }
+
+    public void checkEmail() throws IOException {
+        String email = receivedPacket.getAttribute().get("email");
+        String messageValue;
+        if (CheckFormatAndEncrypt.isEmailFormatInvalid(email))
+            messageValue = "invalid email format!";
+        else if (User.getUserByEmail(email) != null)
+            messageValue = "email already exists!";
+        else messageValue = ""; //valid email
+        Packet toBeSent = new Packet(ServerToClientCommands.EMAIL_CHECK.getCommand(), (HashMap<String, String>) Map.of("message", messageValue));
         connection.sendPacket(toBeSent);
     }
 

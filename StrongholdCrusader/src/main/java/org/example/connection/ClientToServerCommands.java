@@ -6,6 +6,7 @@ public enum ClientToServerCommands {
     LIVE_CHECK_USERNAME("live check username", "username"),
     LIVE_CHECK_PASSWORD("live check password", "password"),
     LIVE_CHECK_PASSWORD_CONFIRMATION("live check password confirmation", "password", "password confirmation"),
+    CHECK_EMAIL("check email", "email"),
     RANDOM_PASSWORD("random password"),
     CHECK_SIGNUP_INFO("check sign up info", "username", "password", "password confirmation", "nickname", "email"),
     GET_SECURITY_QUESTIONS("get security questions"),
@@ -27,9 +28,10 @@ public enum ClientToServerCommands {
 
     //start game menu
     START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),
-    CANCEL_START_GAME("cancel start game");
+    CANCEL_START_GAME("cancel start game"),
     //customize map
-
+    //chat menu
+    ENTER_PUBLIC_CHAT("enter public chat", "username");
 
     private final String command;
     private final String[] attributes;

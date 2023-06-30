@@ -194,4 +194,10 @@ public class User {
         Random random = new Random();
         return random.nextInt(28) + 1; //TODO set bound
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof User)) return false;
+        return ((User) obj).getUsername().equals(username);
+    }
 }
