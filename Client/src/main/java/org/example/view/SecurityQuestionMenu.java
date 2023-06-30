@@ -16,7 +16,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.example.connection.Client;
 import org.example.connection.Packet;
+import org.example.model.BackgroundBuilder;
 
 import java.util.HashMap;
 
@@ -39,7 +41,7 @@ public class SecurityQuestionMenu extends Application {
     public void start(Stage stage) throws Exception {
         SecurityQuestionMenu.stage = stage;
         BorderPane borderPane = new FXMLLoader(SecurityQuestionMenu.class.getResource("/view/securityQuestion.fxml")).load();
-        Background background = new Background(setBackground("/images/backgrounds/background7.jpeg"));
+        Background background = new Background(BackgroundBuilder.setBackground("/images/backgrounds/background7.jpeg"));
         borderPane.setBackground(background);
 
         Scene scene = new Scene(borderPane, 1390, 850);
@@ -51,11 +53,17 @@ public class SecurityQuestionMenu extends Application {
 
     @FXML
     public void initialize() {
-        //TODO get security questions
         Packet packet = new Packet("get security questions", null);
-        question1.setText(SecurityQuestion.getQuestionByNumber("1"));
-        question2.setText(SecurityQuestion.getQuestionByNumber("2"));
-        question3.setText(SecurityQuestion.getQuestionByNumber("3"));
+        try {
+            Client.getInstance().sendPacket(packet);
+            String slogans = Client.getInstance().recievePacket().getAttribute().get("message");
+            String[] sloganArray = slogans.split("\n");
+            question1.setText(sloganArray[0]);
+            question2.setText(sloganArray[1]);
+            question3.setText(sloganArray[2]);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         box.setFill(new ImagePattern(new Image(LoginMenu.class.getResource("/images/backgrounds/dotted.jpeg").toExternalForm())));
         generateCaptcha();
@@ -89,7 +97,6 @@ public class SecurityQuestionMenu extends Application {
             return;
         }
 
-        //TODO create user
         HashMap<String, String> attributes = new HashMap<>();
         attributes.put("username", DataBank.getUsername());
         attributes.put("password", DataBank.getPassword());
@@ -99,28 +106,22 @@ public class SecurityQuestionMenu extends Application {
         attributes.put("question number", question);
         attributes.put("answer", answer.getText());
         Packet packet = new Packet("complete signup", attributes);
-        SignupMenuController.createUser(question, answer.getText(), DataBank.getUsername(),
-                DataBank.getPassword(), DataBank.getNickname(), DataBank.getSlogan(), DataBank.getEmail());
+        Client.getInstance().sendPacket(packet);
         new LoginMenu().start(stage);
     }
 
-    private BackgroundImage setBackground(String url) {
-        Image image = new Image(GameMenu.class.getResource(url).toExternalForm(), 1440, 900, false, false);
-        BackgroundImage backgroundImage = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT);
-        return backgroundImage;
-    }
-
     public void generateCaptcha() {
-        //TODO generate captcha
         Packet packet = new Packet("get captcha", null);
-        captchaNumber.setText(CaptchaGenerator.randomNumberGenerator());
-        captchaNumber.setFill(Color.DARKGRAY);
-        captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
-        captchaNumber.setStrikethrough(true);
-        box.setWidth(captchaNumber.getText().length() * 15);
+        try {
+            Client.getInstance().sendPacket(packet);
+            String captcha = Client.getInstance().recievePacket().getAttribute().get("number");
+            captchaNumber.setText(captcha);
+            captchaNumber.setFill(Color.DARKGRAY);
+            captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
+            captchaNumber.setStrikethrough(true);
+            box.setWidth(captchaNumber.getText().length() * 15);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
