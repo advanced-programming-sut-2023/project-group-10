@@ -92,6 +92,7 @@ public class SignupMenuHandler {
             messageValue = "invalid nickname format!";
         else messageValue = ""; //valid nickname
         Packet toBeSent = new Packet(ServerToClientCommands.NICKNAME_CHECK.getCommand(), (HashMap<String, String>) Map.of("message", messageValue));
+        connection.sendPacket(toBeSent);
     }
 
     public void generateRandomPassword() throws IOException {

@@ -12,12 +12,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.connection.Client;
+import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
-import org.example.view.enums.messages.SignupMenuMessages;
 
 import java.util.HashMap;
-import java.util.random.RandomGenerator;
 
 public class SignupMenu extends Application {
     public static Stage stage;
@@ -53,9 +52,9 @@ public class SignupMenu extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         SignupMenu.stage = stage;
-
-        //Stronghold.initializeApp();
+        Stronghold.initializeApp();
         //TODO send packet initializeApp
+
         if (Stronghold.getLoggedInUserFromFile() != null) {
             //Stronghold.setCurrentUser(Stronghold.getLoggedInUserFromFile());
             //TODO get loggedInUser
@@ -99,10 +98,10 @@ public class SignupMenu extends Application {
         });
 
         password.textProperty().addListener((observable, oldValue, newValue) -> {
-            HashMap<String, String> attributes = new HashMap<>();
-            attributes.put("password", newValue);
-            Packet password = new Packet("live check password", attributes);
-            try {
+            try{
+                HashMap<String, String> attributes = new HashMap<>();
+                attributes.put("password", newValue);
+                Packet password = new Packet("live check password", attributes);
                 Client.getInstance().sendPacket(password);
                 passwordLabel.setText(Client.getInstance().recievePacket().getAttribute().get("message"));
             } catch (Exception e) {
@@ -119,8 +118,8 @@ public class SignupMenu extends Application {
         showPassword.setOnAction(actionEvent -> setShowPassword());
 
         randomPassword.setOnMouseClicked(mouseEvent -> {
-            Packet randomPassword = new Packet("random password", null);
             try {
+                Packet randomPassword = new Packet("random password", null);
                 Client.getInstance().sendPacket(randomPassword);
                 password.setText(Client.getInstance().recievePacket().getAttribute().get("password"));
             } catch (Exception e){
@@ -128,7 +127,13 @@ public class SignupMenu extends Application {
             }
         });
 
-        submit.setOnMouseClicked(MouseEvent -> submitUser());
+        submit.setOnMouseClicked(MouseEvent -> {
+            try {
+                submitUser();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         reset.setOnMouseClicked(mouseEvent -> {
             try {
@@ -152,8 +157,13 @@ public class SignupMenu extends Application {
             defaultSlogan.setVisible(true);
             main.getChildren().addAll(submitContainer, loginMenu);
             randomSlogan.setOnMouseClicked(mouseEvent -> {
-                //TODO get random slogan
-                slogan.setText(RandomGenerator.getRandomSlogan());
+                try {
+                    Packet randomSlogan = new Packet(ClientToServerCommands.RANDOM_SLOGAN.getCommand(), null);
+                    Client.getInstance().sendPacket(randomSlogan);
+                    slogan.setText(Client.getInstance().recievePacket().getAttribute().get("slogan"));
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             });
         });
     }
@@ -161,19 +171,33 @@ public class SignupMenu extends Application {
     private void submitUser() throws Exception {
         if (username.getText().equals("")) usernameLabel.setText("provide a username!");
         if (password.getText().equals("")) passwordLabel.setText("provide a password!");
+
         if (nickname.getText().equals("")) nicknameLabel.setText("provide a nickname!");
-        else if (CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname.getText()))
-            //TODO is nickname valid?
-            nicknameLabel.setText("invalid nickname format!");
+        else{
+            HashMap<String, String> attribute = new HashMap<>();
+            attribute.put("nickname", nickname.getText());
+            Packet nicknameFormat = new Packet(ClientToServerCommands.CHECK_NICKNAME.getCommand(), attribute);
+            Client.getInstance().sendPacket(nicknameFormat);
+            String message = Client.getInstance().recievePacket().getAttribute().get("message");
+            if(!message.equals("")) nicknameLabel.setText("invalid nickname format!");
+        }
 
         if (email.getText().equals("")) emailLabel.setText("provide an email!");
-        else if (CheckFormatAndEncrypt.isEmailFormatInvalid(email.getText()))
-            //TODO is email valid
-            emailLabel.setText("invalid email format!");
-        else if (User.getUserByEmail(email.getText()) != null)
-            emailLabel.setText("email already exists!");
-
         else {
+            HashMap<String, String> attribute = new HashMap<>();
+            attribute.put("email", email.getText());
+            Packet emailFormat = new Packet(ClientToServerCommands.CHECK_EMAIL.getCommand(), attribute);
+            Client.getInstance().sendPacket(emailFormat);
+            String message = Client.getInstance().recievePacket().getAttribute().get("message");
+
+            if (message.equals("invalid email format!"))
+                emailLabel.setText("invalid email format!");
+            else if (message.equals("email already exists!"))
+                emailLabel.setText("email already exists!");
+        }
+
+         if(usernameLabel.getText().equals("valid username!") && passwordLabel.getText().equals("valid password!") &&
+            confirmationLabel.getText().equals("passwords match") && nicknameLabel.getText().equals("") && emailLabel.getText().equals("")){
             HashMap<String, String> attributes = new HashMap<>();
             attributes.put("username", username.getText());
             attributes.put("password", password.getText());
