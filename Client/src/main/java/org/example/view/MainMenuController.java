@@ -1,27 +1,31 @@
 package org.example.view;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 public class MainMenuController {
     public Text title;
     public Button profileButton;
     public Button gameButton;
     public Button logoutButton;
+    public VBox buttons;
+    public Button chatButton;
 
     @FXML
     public void initialize() {
-        title.setLayoutX(500);
-        title.setLayoutY(100);
-        gameButton.setLayoutX(630);
-        gameButton.setLayoutY(180);
-        profileButton.setLayoutX(630);
-        profileButton.setLayoutY(290);
-        logoutButton.setLayoutX(630);
-        logoutButton.setLayoutY(400);
+        title.setTextAlignment(TextAlignment.CENTER);
+        gameButton.setAlignment(Pos.CENTER);
+        profileButton.setAlignment(Pos.CENTER);
+        logoutButton.setAlignment(Pos.CENTER);
+        chatButton.setAlignment(Pos.CENTER);
+        buttons.setTranslateX(700);
+
     }
 
     public void goToProfileMenu(MouseEvent mouseEvent) throws Exception {
@@ -43,5 +47,8 @@ public class MainMenuController {
     public void logout(MouseEvent mouseEvent) throws Exception {
         org.example.controller.MainMenuController.logout();
         new LoginMenu().start(SignupMenu.stage);
+    }
+
+    public void goToChatMenu(MouseEvent mouseEvent) {
     }
 }
