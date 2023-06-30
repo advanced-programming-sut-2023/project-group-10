@@ -15,8 +15,11 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
 import org.example.view.enums.messages.ProfileMenuMessages;
+
+import java.util.HashMap;
 
 public class ProfileMenu extends Application {
     private static Stage stage;
@@ -213,8 +216,13 @@ public class ProfileMenu extends Application {
             if (emailDetail.getText().equals("valid email!")) {
                 try {
                     if (emailDetail.getText().equals("valid email!")) {
+
                         //TODO change email
+                        HashMap<String, String> attributes = new HashMap<>();
+                        attributes.put("new email", newEmail.getText());
+                        Packet packet = new Packet("change email", attributes);
                         ProfileMenuController.changeEmail(newEmail.getText());
+
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Email change successful");
                         alert.setContentText("Your email was changed successfully");
@@ -260,6 +268,8 @@ public class ProfileMenu extends Application {
         defaultSlogans.setMaxWidth(250);
         defaultSlogans.setPromptText("slogan");
         defaultSlogans.getItems().add("None");
+
+        Packet packet = new Packet("get default slogans", null);
         for (String defaultSlogan : RandomGenerator.getSlogans()) {
             defaultSlogans.getItems().add(defaultSlogan);
         }
@@ -286,8 +296,17 @@ public class ProfileMenu extends Application {
         });
 
         submit.setOnMouseClicked(mouseEvent -> {
-            if (newSlogan.isDisable()) ProfileMenuController.changeSlogan(defaultSlogans.getValue());
-            else ProfileMenuController.changeSlogan(newSlogan.getText());
+            HashMap<String, String> attributes = new HashMap<>();
+            if (newSlogan.isDisable()) {
+                attributes.put("slogan", defaultSlogans.getValue());
+                ProfileMenuController.changeSlogan(defaultSlogans.getValue());
+            }
+            else {
+                attributes.put("slogan", newSlogan.getText());
+                ProfileMenuController.changeSlogan(newSlogan.getText());
+            }
+            Packet changeSlogan = new Packet("change slogan", attributes);
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Slogan change successful");
             alert.setContentText("Your slogan was changed successfully");
@@ -321,6 +340,9 @@ public class ProfileMenu extends Application {
     }
 
     private void checkUsername(String username, Text usernameDetail) {
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("new username", username);
+        Packet packet = new Packet("change username", attributes);
         ProfileMenuMessages message = ProfileMenuController.changeUsername(username);
 
         if (message.equals(ProfileMenuMessages.INVALID_USERNAME))
@@ -350,6 +372,9 @@ public class ProfileMenu extends Application {
 
     private void checkPassword(String newPassword, Text newPassDetail) {
         String result = CheckFormatAndEncrypt.isPasswordWeak(newPassword);
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("password", newPassword);
+        Packet packet = new Packet("live check password", attributes);
 
         switch (result) {
             case "short password":
