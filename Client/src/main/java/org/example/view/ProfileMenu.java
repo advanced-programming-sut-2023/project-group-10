@@ -15,7 +15,10 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.example.connection.Client;
+import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
+import org.example.connection.ServerToClientCommands;
 import org.example.model.BackgroundBuilder;
 import org.example.view.enums.messages.ProfileMenuMessages;
 
@@ -48,19 +51,19 @@ public class ProfileMenu extends Application {
     public void initialize() {
         //TODO get current user
         avatar.setFill(new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
-        username.setText("username: " + Stronghold.getCurrentUser().getUsername());
-        nickname.setText("nickname: " + Stronghold.getCurrentUser().getNickname());
-        email.setText("email: " + Stronghold.getCurrentUser().getEmail());
-        if (Stronghold.getCurrentUser().getSlogan() == null || Stronghold.getCurrentUser().getSlogan().equals(""))
+        username.setText("username: " + DataBank.getUsername());
+        nickname.setText("nickname: " + DataBank.getNickname());
+        email.setText("email: " + DataBank.getEmail());
+        if (DataBank.getSlogan() == null || DataBank.getSlogan().equals(""))
             slogan.setText("slogan in empty!");
-        else slogan.setText("slogan: " + Stronghold.getCurrentUser().getSlogan());
+        else slogan.setText("slogan: " + DataBank.getSlogan());
     }
 
     public void changeUsername() {
         VBox change = new VBox(20);
         change.setAlignment(Pos.CENTER);
 
-        Text currentUsername = new Text(Stronghold.getCurrentUser().getUsername());
+        Text currentUsername = new Text(DataBank.getUsername());
         TextField newUsername = new TextField();
         newUsername.setPromptText("new username");
         Text usernameDetail = new Text();
@@ -73,12 +76,16 @@ public class ProfileMenu extends Application {
             if (usernameDetail.getText().equals("valid username!")) {
                 try {
                     if (usernameDetail.getText().equals("valid username!")) {
-                        //TODO change username
-                        ProfileMenuController.changeUsername(username.getText());
+                        HashMap<String, String> attributes = new HashMap<>();
+                        attributes.put("new username", username.getText());
+                        Packet packet = new Packet("change username", attributes);
+                        Client.getInstance().sendPacket(packet);
+                        DataBank.setUsername(username.getText());
+
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Username change successful");
                         alert.setContentText("Your username was changed successfully");
-                        username.setText("username: " + Stronghold.getCurrentUser().getUsername());
+                        username.setText("username: " + DataBank.getUsername());
                         mainPane.getChildren().remove(change);
                         mainPane.getChildren().add(mainButtons);
                         //TODO username does not change in database
@@ -96,7 +103,15 @@ public class ProfileMenu extends Application {
 
         change.getChildren().addAll(currentUsername, newUsername, usernameDetail, buttons);
         newUsername.textProperty().addListener((observable, oldValue, newValue) -> {
-            checkUsername(newValue, usernameDetail);
+            HashMap<String, String> attribute = new HashMap<>();
+            attribute.put("username", newValue);
+            Packet packet = new Packet(ClientToServerCommands.LIVE_CHECK_USERNAME.getCommand(), attribute);
+            try {
+                Client.getInstance().sendPacket(packet);
+                usernameDetail.setText(Client.getInstance().recievePacket().getAttribute().get("message"));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         });
 
         mainPane.getChildren().remove(mainButtons);
@@ -123,20 +138,22 @@ public class ProfileMenu extends Application {
         buttons.getChildren().addAll(back, submit);
         submit.setOnMouseClicked(mouseEvent -> {
             if (newPassDetail.getText().equals("valid password!")) {
-                //TODO check password
-                if (!Stronghold.getCurrentUser().getPassword().equals(CheckFormatAndEncrypt.encryptString(currentPassword.getText())))
-                    currentPassDetail.setText("wrong password!");
-                else {
-                    try {
-                        Stronghold.getCurrentUser().setPassword(newPassword.getText());
+                HashMap<String, String> attribute = new HashMap<>();
+                attribute.put("current password", currentPassword.getText());
+                attribute.put("new password", newPassword.getText());
+                Packet packet = new Packet(ClientToServerCommands.CHANGE_PASSWORD.getCommand(), attribute);
+                try {
+                    Client.getInstance().sendPacket(packet);
+                    if (Client.getInstance().recievePacket().getAttribute() == null) {
+                        DataBank.setPassword(newPassword.getText());
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Password change successful");
                         alert.setContentText("Your password was changed successfully");
                         mainPane.getChildren().remove(change);
                         mainPane.getChildren().add(mainButtons);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+                    } else currentPassDetail.setText("wrong password!");
+                } catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });
@@ -148,7 +165,15 @@ public class ProfileMenu extends Application {
 
         change.getChildren().addAll(currentPassword, currentPassDetail, newPassword, newPassDetail, buttons);
         newPassword.textProperty().addListener((observable, oldValue, newValue) -> {
-            checkPassword(newValue, newPassDetail);
+            HashMap<String, String> attribute = new HashMap<>();
+            attribute.put("password", newValue);
+            Packet packet = new Packet(ClientToServerCommands.LIVE_CHECK_PASSWORD.getCommand(), attribute);
+            try {
+                Client.getInstance().sendPacket(packet);
+                newPassDetail.setText(Client.getInstance().recievePacket().getAttribute().get("message"));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         });
 
         mainPane.getChildren().remove(mainButtons);
@@ -159,7 +184,7 @@ public class ProfileMenu extends Application {
         VBox change = new VBox(20);
         change.setAlignment(Pos.CENTER);
 
-        Text currentNickname = new Text(Stronghold.getCurrentUser().getNickname());
+        Text currentNickname = new Text(DataBank.getNickname());
         TextField newNickname = new TextField();
         newNickname.setPromptText("new nickname");
         Text nicknameDetail = new Text();
@@ -171,12 +196,16 @@ public class ProfileMenu extends Application {
         submit.setOnMouseClicked(mouseEvent -> {
             if (nicknameDetail.getText().equals("valid nickname!")) {
                 try {
-                    //TODO change nickname
-                    ProfileMenuController.changeNickname(newNickname.getText());
+                    HashMap<String, String> attributes = new HashMap<>();
+                    attributes.put("new nickname", newNickname.getText());
+                    Packet packet = new Packet(ClientToServerCommands.CHANGE_NICKNAME.getCommand(), attributes);
+                    Client.getInstance().sendPacket(packet);
+                    DataBank.setNickname(newNickname.getText());
+
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Nickname change successful");
                     alert.setContentText("Your nickname was changed successfully");
-                    nickname.setText("nickname: " + Stronghold.getCurrentUser().getNickname());
+                    nickname.setText("nickname: " + DataBank.getNickname());
                     mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
                 } catch (Exception e) {
@@ -187,7 +216,15 @@ public class ProfileMenu extends Application {
 
         change.getChildren().addAll(currentNickname, newNickname, nicknameDetail, buttons);
         newNickname.textProperty().addListener((observable, oldValue, newValue) -> {
-            checkNickname(newValue, nicknameDetail);
+            HashMap<String, String> attribute = new HashMap<>();
+            attribute.put("nickname", newValue);
+            Packet packet = new Packet(ClientToServerCommands.CHECK_NICKNAME.getCommand(), attribute);
+            try {
+                Client.getInstance().sendPacket(packet);
+                nicknameDetail.setText(Client.getInstance().recievePacket().getAttribute().get("message"));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         });
 
         back.setOnMouseClicked(mouseEvent -> {
@@ -203,7 +240,7 @@ public class ProfileMenu extends Application {
         VBox change = new VBox(20);
         change.setAlignment(Pos.CENTER);
 
-        Text currentEmail = new Text(Stronghold.getCurrentUser().getEmail());
+        Text currentEmail = new Text(DataBank.getEmail());
         TextField newEmail = new TextField();
         newEmail.setPromptText("new email");
         Text emailDetail = new Text();
@@ -217,16 +254,16 @@ public class ProfileMenu extends Application {
                 try {
                     if (emailDetail.getText().equals("valid email!")) {
 
-                        //TODO change email
                         HashMap<String, String> attributes = new HashMap<>();
                         attributes.put("new email", newEmail.getText());
                         Packet packet = new Packet("change email", attributes);
-                        ProfileMenuController.changeEmail(newEmail.getText());
+                        Client.getInstance().sendPacket(packet);
+                        DataBank.setEmail(newEmail.getText());
 
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Email change successful");
                         alert.setContentText("Your email was changed successfully");
-                        email.setText(Stronghold.getCurrentUser().getEmail());
+                        email.setText(DataBank.getEmail());
                         mainPane.getChildren().remove(change);
                         mainPane.getChildren().add(mainButtons);
                     }
@@ -243,7 +280,15 @@ public class ProfileMenu extends Application {
 
         change.getChildren().addAll(currentEmail, newEmail, emailDetail, buttons);
         newEmail.textProperty().addListener((observable, oldValue, newValue) -> {
-            checkEmail(newValue, emailDetail);
+            try {
+                HashMap<String, String> attributes = new HashMap<>();
+                attributes.put("email", newValue);
+                Packet packet = new Packet(ClientToServerCommands.CHECK_EMAIL.getCommand(), attributes);
+                Client.getInstance().sendPacket(packet);
+                emailDetail.setText(Client.getInstance().recievePacket().getAttribute().get("message"));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         });
 
         mainPane.getChildren().remove(mainButtons);
@@ -270,8 +315,14 @@ public class ProfileMenu extends Application {
         defaultSlogans.getItems().add("None");
 
         Packet packet = new Packet("get default slogans", null);
-        for (String defaultSlogan : RandomGenerator.getSlogans()) {
-            defaultSlogans.getItems().add(defaultSlogan);
+        try {
+            Client.getInstance().sendPacket(packet);
+            String string = Client.getInstance().recievePacket().getAttribute().get("slogans");
+            for (String defaultSlogan : string.split("\n")) {
+                defaultSlogans.getItems().add(defaultSlogan);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
         defaultSlogans.valueProperty().addListener((observableValue, oldValue, newValue) -> {
@@ -299,28 +350,47 @@ public class ProfileMenu extends Application {
             HashMap<String, String> attributes = new HashMap<>();
             if (newSlogan.isDisable()) {
                 attributes.put("slogan", defaultSlogans.getValue());
-                ProfileMenuController.changeSlogan(defaultSlogans.getValue());
+                DataBank.setSlogan(defaultSlogans.getValue());
             }
             else {
                 attributes.put("slogan", newSlogan.getText());
-                ProfileMenuController.changeSlogan(newSlogan.getText());
+                DataBank.setSlogan(newSlogan.getText());
             }
+
             Packet changeSlogan = new Packet("change slogan", attributes);
+            try {
+                Client.getInstance().sendPacket(changeSlogan);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Slogan change successful");
             alert.setContentText("Your slogan was changed successfully");
-            slogan.setText("slogan: " + Stronghold.getCurrentUser().getSlogan());
+            slogan.setText("slogan: " + DataBank.getSlogan());
             mainPane.getChildren().remove(change);
             mainPane.getChildren().add(mainButtons);
         });
 
         random.setOnMouseClicked(mouseEvent -> {
-            newSlogan.setText(RandomGenerator.getRandomSlogan());
+            try {
+                Packet randomSlogan = new Packet(ClientToServerCommands.RANDOM_SLOGAN.getCommand(), null);
+                Client.getInstance().sendPacket(randomSlogan);
+                newSlogan.setText(Client.getInstance().recievePacket().getAttribute().get("slogan"));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         });
 
         removeSlogan.setOnMouseClicked(mouseEvent -> {
-            Stronghold.getCurrentUser().setSlogan("");
+            HashMap<String, String> attribute = new HashMap<>();
+            attribute.put("slogan", "");
+            Packet changeSlogan = new Packet("change slogan", attribute);
+            try {
+                Client.getInstance().sendPacket(changeSlogan);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Slogan removed successful");
             alert.setContentText("Your slogan was removed successfully");
@@ -337,65 +407,6 @@ public class ProfileMenu extends Application {
 
     public void changeAvatar() throws Exception {
         new ChangeAvatarMenu().start(stage);
-    }
-
-    private void checkUsername(String username, Text usernameDetail) {
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("new username", username);
-        Packet packet = new Packet("change username", attributes);
-        ProfileMenuMessages message = ProfileMenuController.changeUsername(username);
-
-        if (message.equals(ProfileMenuMessages.INVALID_USERNAME))
-            usernameDetail.setText("invalid username format!");
-        else if (message.equals(ProfileMenuMessages.OLD_USERNAME_ENTERED))
-            usernameDetail.setText("enter a new username!");
-        else if (message.equals(ProfileMenuMessages.USERNAME_EXISTS))
-            usernameDetail.setText("username exists!");
-        else usernameDetail.setText("valid username!");
-    }
-
-    private void checkNickname(String nickname, Text nicknameDetail) {
-        if (CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
-            nicknameDetail.setText("invalid nickname format!");
-        else nicknameDetail.setText("valid nickname!");
-    }
-
-    private void checkEmail(String email, Text emailDetail) {
-        if (CheckFormatAndEncrypt.isEmailFormatInvalid(email))
-            emailDetail.setText("invalid email format!");
-        else if (Stronghold.getCurrentUser().getEmail().equals(email))
-            emailDetail.setText("enter a new email!");
-        else if (User.getUserByEmail(email) != null)
-            emailDetail.setText("email exists!");
-        else emailDetail.setText("valid email!");
-    }
-
-    private void checkPassword(String newPassword, Text newPassDetail) {
-        String result = CheckFormatAndEncrypt.isPasswordWeak(newPassword);
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("password", newPassword);
-        Packet packet = new Packet("live check password", attributes);
-
-        switch (result) {
-            case "short password":
-                newPassDetail.setText("short password!");
-                break;
-            case "no lowercase letter":
-                newPassDetail.setText("password must have a lowercase letter");
-                break;
-            case "no uppercase letter":
-                newPassDetail.setText("password must have an uppercase letter");
-                break;
-            case "no number":
-                newPassDetail.setText("password must have a digit");
-                break;
-            case "no special character":
-                newPassDetail.setText("password must have a special character");
-                break;
-            default:
-                newPassDetail.setText("valid password!");
-                break;
-        }
     }
 
     public void goToMainMenu() throws Exception {

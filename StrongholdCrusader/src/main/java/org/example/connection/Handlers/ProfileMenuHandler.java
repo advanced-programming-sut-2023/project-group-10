@@ -77,4 +77,11 @@ public class ProfileMenuHandler {
         toBeSent = new Packet(ServerToClientCommands.SUCCESSFUL_CHANGE.getCommand(), null);
         connection.sendPacket(toBeSent);
     }
+
+    public void handleChangeSlogan() throws IOException {
+        ProfileMenuController.changeSlogan(receivedPacket.getAttribute().get("slogan"));
+        Packet toBeSent;
+        toBeSent = new Packet(ServerToClientCommands.SUCCESSFUL_CHANGE.getCommand(), null);
+        connection.sendPacket(toBeSent);
+    }
 }

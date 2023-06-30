@@ -85,8 +85,22 @@ public class SignupMenuHandler {
         connection.sendPacket(toBeSent);
     }
 
+    public void checkNickname() throws IOException {
+        String nickname = receivedPacket.getAttribute().get("nickname");
+        String messageValue;
+        if(CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
+            messageValue = "invalid nickname format!";
+        else messageValue = ""; //valid nickname
+        Packet toBeSent = new Packet(ServerToClientCommands.NICKNAME_CHECK.getCommand(), (HashMap<String, String>) Map.of("message", messageValue));
+    }
+
     public void generateRandomPassword() throws IOException {
         Packet toBeSent = new Packet(ServerToClientCommands.RANDOM_PASSWORD.getCommand(), (HashMap<String, String>) Map.of("password", RandomGenerator.generateSecurePassword()));
+        connection.sendPacket(toBeSent);
+    }
+
+    public void generateRandomSlogan() throws IOException {
+        Packet toBeSent = new Packet(ServerToClientCommands.RANDOM_SLOGAN.getCommand(), (HashMap<String, String>) Map.of("slogan", RandomGenerator.getRandomSlogan()));
         connection.sendPacket(toBeSent);
     }
 

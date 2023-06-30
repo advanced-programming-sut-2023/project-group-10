@@ -40,8 +40,14 @@ public class PacketHandler {
             case CHECK_EMAIL:
                 signupMenuHandler.checkEmail();
                 break;
+            case CHECK_NICKNAME:
+                signupMenuHandler.checkNickname();
+                break;
             case RANDOM_PASSWORD:
                 signupMenuHandler.generateRandomPassword();
+                break;
+            case RANDOM_SLOGAN:
+                signupMenuHandler.generateRandomSlogan();
                 break;
             case CHECK_SIGNUP_INFO:
                 signupMenuHandler.checkSignUpInfo();
@@ -75,6 +81,12 @@ public class PacketHandler {
                 break;
             case CHANGE_EMAIL:
                 profileMenuHandler.handleChangeEmail();
+                break;
+            case CHANGE_AVATAR:
+                profileMenuHandler.handleChangeAvatar();
+                break;
+            case CHANGE_SLOGAN:
+                profileMenuHandler.handleChangeSlogan();
                 break;
             case GET_MY_PRIVATE_CHATS:
                 chatHandler.getMyPrivateChats();

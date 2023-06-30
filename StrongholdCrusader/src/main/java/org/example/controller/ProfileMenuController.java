@@ -59,10 +59,6 @@ public class ProfileMenuController {
         if (!Stronghold.getCurrentUser().getPassword().equals(oldPassword))
             return ProfileMenuMessages.INCORRECT_PASSWORD;
 
-        while (oldPassword.equals(newPassword)) {
-            System.out.println("Please enter a new password!");
-            newPassword = new Scanner(System.in).nextLine();
-        }
         if (Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername())) {
             Stronghold.getCurrentUser().setPassword(newPassword);
             Stronghold.dataBase.saveUsersToFile();
