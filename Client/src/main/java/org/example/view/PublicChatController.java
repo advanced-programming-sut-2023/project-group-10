@@ -11,6 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PublicChatController {
     public Button add;
@@ -21,18 +24,18 @@ public class PublicChatController {
     String message;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         //TODO put old messages,use process message func
         initChatBox();
-        add.setOnMouseClicked(evt->{
+        add.setOnMouseClicked(evt -> {
 
-           message=messageField.getText();
-           chatBox.getChildren().add(processMessage(message,true));
-           chatScrollPane.setVvalue(1);
+            message = messageField.getText();
+            chatBox.getChildren().add(processMessage(message, true));
+            chatScrollPane.setVvalue(1);
 
         });
-        clear.setOnMouseClicked(evt->{
-            message="";
+        clear.setOnMouseClicked(evt -> {
+            message = "";
             messageField.setText("");
         });
 
@@ -43,16 +46,18 @@ public class PublicChatController {
         chatScrollPane.setVvalue(1);
     }
 
-    private HBox processMessage(String message,boolean isMine){
-        VBox messagePane=new VBox();
-        HBox newMessage=new HBox();
-        Label senderId=new Label();
+    private HBox processMessage(String message, boolean isMine) {
+        Format f = new SimpleDateFormat("HH:mm");
+        String strResult = f.format(new Date());
+        VBox messagePane = new VBox();
+        HBox newMessage = new HBox();
+        Label senderId = new Label();
         //put Avatar-> I had errors
-        ImageView avatar=new ImageView();
-        Label content=new Label(message);
-        Label time=new Label();
+        ImageView avatar = new ImageView();
+        Label content = new Label(message);
+        Label time = new Label(strResult);
         //set time and format it
-        messagePane.getChildren().addAll(senderId,content,time);
+        messagePane.getChildren().addAll(senderId, content, time);
 
         newMessage.getChildren().addAll((Node) messagePane, (Node) avatar);
         return newMessage;
