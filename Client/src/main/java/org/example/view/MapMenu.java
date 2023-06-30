@@ -1,8 +1,5 @@
 package org.example.view;
 
-import org.example.controller.MapMenuController;
-import org.example.model.game.envirnmont.Coordinate;
-import org.example.model.utils.InputProcessor;
 import org.example.view.enums.commands.MapMenuCommands;
 
 import java.util.HashMap;
