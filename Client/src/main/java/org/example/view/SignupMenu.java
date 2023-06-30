@@ -17,6 +17,7 @@ import org.example.model.BackgroundBuilder;
 import org.example.view.enums.messages.SignupMenuMessages;
 
 import java.util.HashMap;
+import java.util.random.RandomGenerator;
 
 public class SignupMenu extends Application {
     public static Stage stage;
@@ -39,7 +40,7 @@ public class SignupMenu extends Application {
     public Text loginMenu;
     public TextField slogan;
     public Button randomSlogan;
-    public ComboBox defaultSlogan;
+    public ComboBox<String> defaultSlogan;
     public HBox submitContainer;
     public HBox sloganContainer;
 
@@ -75,17 +76,38 @@ public class SignupMenu extends Application {
     @FXML
     public void initialize() {
         Packet packet = new Packet("get default slogans", null);
-        for (String string : RandomGenerator.getSlogans()) {
-            //TODO getRandomSlogan
-            defaultSlogan.getItems().add(string);
+        try {
+            Client.getInstance().sendPacket(packet);
+            String gson = Client.getInstance().recievePacket().getAttribute().get("slogans");
+            for (String string : gson.split("\n")) {
+                defaultSlogan.getItems().add(string);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
         username.textProperty().addListener((observable, olaValue, newValue) -> {
-            checkUsername(newValue, usernameLabel);
+            HashMap<String, String> attribute = new HashMap<>();
+            attribute.put("username", newValue);
+            Packet username = new Packet("live check username", attribute);
+            try {
+                Client.getInstance().sendPacket(username);
+                usernameLabel.setText(Client.getInstance().recievePacket().getAttribute().get("message"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         password.textProperty().addListener((observable, oldValue, newValue) -> {
-            checkPassword(newValue, passwordLabel);
+            HashMap<String, String> attributes = new HashMap<>();
+            attributes.put("password", newValue);
+            Packet password = new Packet("live check password", attributes);
+            try {
+                Client.getInstance().sendPacket(password);
+                passwordLabel.setText(Client.getInstance().recievePacket().getAttribute().get("message"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         });
 
         confirmation.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -97,9 +119,13 @@ public class SignupMenu extends Application {
         showPassword.setOnAction(actionEvent -> setShowPassword());
 
         randomPassword.setOnMouseClicked(mouseEvent -> {
-            //TODO get secure password
             Packet randomPassword = new Packet("random password", null);
-            password.setText(RandomGenerator.generateSecurePassword());
+            try {
+                Client.getInstance().sendPacket(randomPassword);
+                password.setText(Client.getInstance().recievePacket().getAttribute().get("password"));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         });
 
         submit.setOnMouseClicked(MouseEvent -> submitUser());
@@ -132,7 +158,7 @@ public class SignupMenu extends Application {
         });
     }
 
-    private void submitUser() {
+    private void submitUser() throws Exception {
         if (username.getText().equals("")) usernameLabel.setText("provide a username!");
         if (password.getText().equals("")) passwordLabel.setText("provide a password!");
         if (nickname.getText().equals("")) nicknameLabel.setText("provide a nickname!");
@@ -155,6 +181,7 @@ public class SignupMenu extends Application {
             attributes.put("nickname", nickname.getText());
             attributes.put("email", email.getText());
             Packet packet = new Packet("check sign up info", attributes);
+            Client.getInstance().sendPacket(packet);
             try {
                 DataBank.setUsername(username.getText());
                 DataBank.setPassword(password.getText());
@@ -198,40 +225,6 @@ public class SignupMenu extends Application {
             if (password.getText().equals(confirmation.getText()))
                 confirmationLabel.setText("passwords match");
         }
-    }
-
-    private void checkUsername(String username, Label label) {
-        //TODO check username
-        SignupMenuMessages message = SignupMenuController.checkUsername(username);
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("username", username);
-        Packet packet = new Packet("live check username", attributes);
-
-        if (message.equals(SignupMenuMessages.INVALID_USERNAME_FORMAT))
-            label.setText("invalid username format!");
-        else if (message.equals(SignupMenuMessages.USER_EXISTS))
-            label.setText("username exists!");
-        else label.setText("valid username!");
-    }
-
-    private void checkPassword(String password, Label label) {
-        //TODO check password
-        SignupMenuMessages messages = SignupMenuController.checkPassword(password);
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("password", password);
-        Packet packet = new Packet("live check password", attributes);
-
-        if (messages.equals(SignupMenuMessages.SHORT_PASSWORD))
-            label.setText("short password!");
-        else if (messages.equals(SignupMenuMessages.NO_LOWERCASE_LETTER))
-            label.setText("password must have a lowercase letter");
-        else if (messages.equals(SignupMenuMessages.NO_UPPERCASE_LETTER))
-            label.setText("password must have an uppercase letter");
-        else if (messages.equals(SignupMenuMessages.NO_NUMBER))
-            label.setText("password must have a digit");
-        else if (messages.equals(SignupMenuMessages.NO_SPECIAL_CHARACTER))
-            label.setText("password must have a special character");
-        else label.setText("valid password!");
     }
 
     private void goToSecurityMenu() throws Exception {

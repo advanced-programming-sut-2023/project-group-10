@@ -28,7 +28,7 @@ public class SignupMenuHandler {
     public void getDefaultSlogans() throws IOException {
         String allSlogans = "";
         for (String slogan : RandomGenerator.getSlogans())
-            allSlogans = allSlogans.concat(slogan + " ");
+            allSlogans = allSlogans.concat(slogan + "\n");
         Packet toBeSent = new Packet(ServerToClientCommands.DEFAULT_SLOGANS.getCommand(), (HashMap<String, String>) Map.of("slogans", allSlogans));
         connection.sendPacket(toBeSent);
     }

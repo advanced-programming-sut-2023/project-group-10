@@ -3,7 +3,6 @@ package org.example.view;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
-import org.example.connection.SoundGFX;
 
 import java.io.File;
 

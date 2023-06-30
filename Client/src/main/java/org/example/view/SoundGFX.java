@@ -1,4 +1,4 @@
-package org.example.connection;
+package org.example.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,8 +6,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.example.view.GameMenuGFXController;
-import org.example.view.SoundController;
 
 import java.net.URL;
 
