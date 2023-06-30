@@ -16,9 +16,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.example.controller.SignupMenuController;
-import org.example.model.SecurityQuestion;
-import org.example.model.utils.CaptchaGenerator;
+import org.example.connection.Packet;
+
+import java.util.HashMap;
 
 public class SecurityQuestionMenu extends Application {
 
@@ -51,6 +51,8 @@ public class SecurityQuestionMenu extends Application {
 
     @FXML
     public void initialize() {
+        //TODO get security questions
+        Packet packet = new Packet("get security questions", null);
         question1.setText(SecurityQuestion.getQuestionByNumber("1"));
         question2.setText(SecurityQuestion.getQuestionByNumber("2"));
         question3.setText(SecurityQuestion.getQuestionByNumber("3"));
@@ -87,6 +89,16 @@ public class SecurityQuestionMenu extends Application {
             return;
         }
 
+        //TODO create user
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("username", DataBank.getUsername());
+        attributes.put("password", DataBank.getPassword());
+        attributes.put("nickname", DataBank.getNickname());
+        attributes.put("email", DataBank.getEmail());
+        attributes.put("slogan", DataBank.getSlogan());
+        attributes.put("question number", question);
+        attributes.put("answer", answer.getText());
+        Packet packet = new Packet("complete signup", attributes);
         SignupMenuController.createUser(question, answer.getText(), DataBank.getUsername(),
                 DataBank.getPassword(), DataBank.getNickname(), DataBank.getSlogan(), DataBank.getEmail());
         new LoginMenu().start(stage);
@@ -103,6 +115,8 @@ public class SecurityQuestionMenu extends Application {
     }
 
     public void generateCaptcha() {
+        //TODO generate captcha
+        Packet packet = new Packet("get captcha", null);
         captchaNumber.setText(CaptchaGenerator.randomNumberGenerator());
         captchaNumber.setFill(Color.DARKGRAY);
         captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
