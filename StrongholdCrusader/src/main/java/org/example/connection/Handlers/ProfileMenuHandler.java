@@ -70,4 +70,11 @@ public class ProfileMenuHandler {
         }
         connection.sendPacket(toBeSent);
     }
+
+    public void handleChangeAvatar() throws IOException {
+        ProfileMenuController.changeAvatar(receivedPacket.getAttribute().get("new avatar"));
+        Packet toBeSent;
+        toBeSent = new Packet(ServerToClientCommands.SUCCESSFUL_CHANGE.getCommand(), null);
+        connection.sendPacket(toBeSent);
+    }
 }

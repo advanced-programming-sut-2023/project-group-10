@@ -16,10 +16,11 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
-import org.example.controller.ProfileMenuController;
-import org.example.model.Stronghold;
+import org.example.connection.Client;
+import org.example.connection.Packet;
 
 import java.io.File;
+import java.util.HashMap;
 
 public class ChangeAvatarMenu extends Application {
     private static Stage stage;
@@ -41,7 +42,7 @@ public class ChangeAvatarMenu extends Application {
     public void initialize() {
         avatarList.getItems().add("none");
         for (int i = 1; i < 29; i++) {
-            String path = Stronghold.class.getResource("/images/avatar/avatar" + i + ".png").toExternalForm();
+            String path = ChangeAvatarMenu.class.getResource("/images/avatar/avatar" + i + ".png").toExternalForm();
             avatarList.getItems().add(new Circle(30, new ImagePattern(new Image(path))));
         }
         avatarList.getSelectionModel().select("none");
@@ -71,7 +72,11 @@ public class ChangeAvatarMenu extends Application {
         fileChooser.getExtensionFilters().add(extensionFilter);
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            Stronghold.getCurrentUser().setAvatar(file.toURI().toString());
+            HashMap<String, String> attributes = new HashMap<>();
+            attributes.put("new avatar path", file.toURI().toString());
+            Packet packet = new Packet("change avatar", attributes);
+            Client.getInstance().sendPacket(packet);
+
             Popup popup = new Popup();
             Text text = new Text("Avatar Changed Successfully");
             popup.getContent().add(text);
@@ -80,9 +85,12 @@ public class ChangeAvatarMenu extends Application {
         }
     }
 
-    public void choosePhoto(DragEvent dragEvent) {
+    public void choosePhoto(DragEvent dragEvent) throws Exception {
         File file = dragEvent.getDragboard().getFiles().get(0);
-        ProfileMenuController.changeAvatar(file.toURI().toString());
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("new avatar path", file.toURI().toString());
+        Packet packet = new Packet("change avatar", attributes);
+        Client.getInstance().sendPacket(packet);
         dropHere.setFill(new ImagePattern(new Image(file.toURI().toString())));
     }
 
@@ -96,7 +104,10 @@ public class ChangeAvatarMenu extends Application {
             Circle circle = (Circle) avatarList.getSelectionModel().getSelectedItem();
             ImagePattern imagePattern = (ImagePattern) circle.getFill();
             String path = imagePattern.getImage().getUrl();
-            ProfileMenuController.changeAvatar(path);
+            HashMap<String, String> attributes = new HashMap<>();
+            attributes.put("new avatar path",path);
+            Packet packet = new Packet("change avatar", attributes);
+            Client.getInstance().sendPacket(packet);
             new ProfileMenu().start(stage);
         }
     }
