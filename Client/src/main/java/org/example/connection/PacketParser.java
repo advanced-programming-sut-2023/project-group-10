@@ -1,6 +1,7 @@
-package org.example;
+package org.example.connection;
 
 import com.google.gson.Gson;
+import org.example.connection.Packet;
 
 public class PacketParser {
     public Packet parsePacket(String gson){

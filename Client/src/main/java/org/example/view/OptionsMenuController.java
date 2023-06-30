@@ -2,6 +2,7 @@ package org.example.view;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import org.example.connection.SoundGFX;
 import org.example.controller.GameMenuController;
 import org.example.model.Stronghold;
 import org.example.model.game.Government;

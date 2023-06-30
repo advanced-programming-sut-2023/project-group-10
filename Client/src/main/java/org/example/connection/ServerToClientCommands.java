@@ -1,4 +1,4 @@
-package org.example;
+package org.example.connection;
 
 public enum ServerToClientCommands {
     //sign up menu

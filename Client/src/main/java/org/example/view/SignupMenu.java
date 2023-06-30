@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.example.ServerToClientCommands;
+import org.example.connection.Client;
 import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
 import org.example.view.enums.messages.SignupMenuMessages;
