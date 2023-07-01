@@ -16,6 +16,7 @@ import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.chat.Message;
 import org.example.view.DataBank;
+import org.example.view.SignupMenu;
 
 import java.io.IOException;
 import java.text.Format;
@@ -114,4 +115,7 @@ public class PublicChatController implements ChatControllerParent {
     private void editMessage(MouseEvent mouseEvent) {
     }
 
+    public void back(MouseEvent mouseEvent) throws Exception {
+        new ChatMenuHomeGFX().start(SignupMenu.stage);
+    }
 }

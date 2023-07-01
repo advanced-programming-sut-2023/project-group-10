@@ -16,6 +16,7 @@ import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.chat.Message;
 import org.example.view.DataBank;
+import org.example.view.SignupMenu;
 
 import java.io.IOException;
 import java.text.Format;
@@ -27,13 +28,18 @@ import java.util.List;
 
 public class PrivateChatController implements ChatControllerParent {
     public Rectangle avatar;
-    public Label nicknameLabel;
+    public Label nameLabel;
     public ScrollPane chatScrollPane;
     public VBox chatBox;
     public TextField messageField;
     public Button add;
     public Button clear;
     public HBox idBox;
+    private String chatName;
+
+    public void setChatName(String chatName) {
+        this.chatName = chatName;
+    }
 
     @FXML
     public void initialize() throws IOException {
@@ -54,7 +60,7 @@ public class PrivateChatController implements ChatControllerParent {
     }
 
     private void initID() {
-
+        nameLabel.setText(chatName);
     }
 
     public void initChatBox(ArrayList<Message> messages) {
@@ -122,5 +128,9 @@ public class PrivateChatController implements ChatControllerParent {
     }
 
     private void editMessage(MouseEvent mouseEvent) {
+    }
+
+    public void back(MouseEvent mouseEvent) throws Exception {
+        new PrivateChatsHomeGFX().start(SignupMenu.stage);
     }
 }

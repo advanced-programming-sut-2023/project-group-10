@@ -12,6 +12,7 @@ import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.chat.Message;
+import org.example.view.SignupMenu;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,9 +51,13 @@ public class RoomsViewController implements ChatListControllerParent {
     @Override
     public void goToSpecificChat(MouseEvent mouseEvent) {
         String chatId=((Label)mouseEvent.getSource()).getText();
-        //go to chat with this id
+        RoomChatGFX roomChatGFX=new RoomChatGFX();
     }
 
     private void addNemRoom(MouseEvent mouseEvent) {
+    }
+
+    public void back(MouseEvent mouseEvent) throws Exception {
+        new ChatMenuHomeGFX().start(SignupMenu.stage);
     }
 }

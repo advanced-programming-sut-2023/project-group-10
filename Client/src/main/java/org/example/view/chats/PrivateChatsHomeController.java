@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
+import org.example.view.SignupMenu;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
 
     @Override
     public void initChatList(ArrayList<String> chatIds) throws IOException {
+
         searchButton.setOnMouseClicked(this::addNewChat);
         Packet packet = new Packet(ClientToServerCommands.GET_MY_ROOMS.getCommand(), null);
         Client.getInstance().sendPacket(packet);
@@ -61,7 +63,6 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
             chatName.setOnMouseClicked(this::goToSpecificChat);
         }
 
-
     }
 
     private void addNewChat(MouseEvent mouseEvent) {
@@ -70,8 +71,11 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
 
     @Override
     public void goToSpecificChat(javafx.scene.input.MouseEvent mouseEvent) {
-
+        PrivateChatGFX privateChatGFX=new PrivateChatGFX();
     }
 
 
+    public void back(MouseEvent mouseEvent) throws Exception {
+        new ChatMenuHomeGFX().start(SignupMenu.stage);
+    }
 }

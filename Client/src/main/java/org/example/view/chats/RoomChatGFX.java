@@ -11,10 +11,17 @@ import org.example.connection.Client;
 import java.net.URL;
 
 public class RoomChatGFX extends Application {
+    public  String roomName;
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader=new FXMLLoader(new URL(RoomChatGFX.class.getResource("/view/roomChat.fxml").toExternalForm()));
         Pane chat = loader.load();
+        ((RoomChatController) loader.getController()).setRoomName(roomName);
         Client.getInstance().getNotificationReceiver().setChatController(loader.getController());
         if (stage.getScene() == null) {
             Scene scene = new Scene(chat);

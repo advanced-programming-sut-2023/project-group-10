@@ -14,7 +14,7 @@
         <VBox prefHeight="96.0" prefWidth="500.0" style="-fx-background-color: black;">
             <children>
             <Button mnemonicParsing="false" onMouseClicked="#back" text="back" />
-                <Label fx:id="roomName" alignment="CENTER" prefHeight="94.0" prefWidth="500.0" style="-fx-background-color: black;" textAlignment="CENTER" textFill="#fffafa">
+                <Label fx:id="roomNameLabel" alignment="CENTER" prefHeight="94.0" prefWidth="500.0" style="-fx-background-color: black;" textAlignment="CENTER" textFill="#fffafa">
                     <font>
                         <Font name="AppleMyungjo Regular" size="26.0" />
                     </font>

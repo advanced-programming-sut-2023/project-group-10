@@ -16,7 +16,7 @@
         <HBox fx:id="idBox" prefHeight="57.0" prefWidth="500.0">
             <children>
                 <Rectangle fx:id="avatar" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="64.0" stroke="BLACK" strokeType="INSIDE" width="73.0" />
-                <Label fx:id="nicknameLabel" alignment="CENTER" prefHeight="65.0" prefWidth="454.0" />
+                <Label fx:id="nameLabel" alignment="CENTER" prefHeight="65.0" prefWidth="454.0" />
             </children>
         </HBox>
         <ScrollPane fx:id="chatScrollPane" prefHeight="583.0" prefWidth="500.0">
