@@ -28,13 +28,13 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
 
     @FXML
     public void initialize() throws IOException {
-
         //TODO put old messages,use process message func
         Packet packet = new Packet(ClientToServerCommands.GET_MY_PRIVATE_CHATS.getCommand(), null);
         Client.getInstance().sendPacket(packet);
         Packet receivedPacket = Client.getInstance().recievePacket();
         ArrayList<String> chatIds = new Gson().fromJson(receivedPacket.getAttribute().get("chats"), new TypeToken<List<String>>() {
         }.getType());
+        Client.getInstance().getNotificationReceiver().setChatListCache(chatIds);
         chatsCache = chatIds;
         initChatList(chatIds);
         searchButton.setOnMouseClicked(evt -> {
@@ -106,6 +106,7 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
 
     @Override
     public void goToSpecificChat(MouseEvent mouseEvent) {
+        System.out.println("going to specific");
         PrivateChatGFX privateChatGFX = new PrivateChatGFX();
         privateChatGFX.setChatId(((Label) mouseEvent.getSource()).getText());
         try {

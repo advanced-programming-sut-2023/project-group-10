@@ -18,11 +18,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
-import org.example.model.User;
 import org.example.model.chat.Message;
 import org.example.view.DataBank;
 import org.example.view.SignupMenu;
@@ -43,19 +43,20 @@ public class PrivateChatController implements ChatControllerParent {
     public Button add;
     public Button clear;
     public HBox idBox;
-    private String chatName;
+    private static String chatName;
     private ArrayList<Message> messagesCache;
     private ArrayList<String> blackListIDS = new ArrayList<>();
-    Timeline updateMessages=new Timeline();
+    Timeline updateMessages = new Timeline();
 
-    public void setChatName(String chatName) {
-        this.chatName = chatName;
+    public static void setChatName(String chatName) {
+        PrivateChatController.chatName = chatName;
     }
 
     @FXML
     public void initialize() throws IOException {
         initID();
         //TODO put old messages,use process message func
+
         initChatBox(getMessages());
         Client.getInstance().getNotificationReceiver().setMessagesCache(messagesCache);
         add.setOnMouseClicked(evt -> {
@@ -69,7 +70,7 @@ public class PrivateChatController implements ChatControllerParent {
         clear.setOnMouseClicked(evt -> {
             messageField.setText("");
         });
-         updateMessages = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+        updateMessages = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             ArrayList<Message> notifiersCache = Client.getInstance().getNotificationReceiver().getMessagesCache();
             if (messagesCache != notifiersCache) {
                 messagesCache = notifiersCache;
@@ -82,12 +83,15 @@ public class PrivateChatController implements ChatControllerParent {
 
     private void initID() {
         nameLabel.setText(chatName);
+        nameLabel.setTextFill(Color.WHITE);
+        nameLabel.setFont(new Font("PT Mono", 24));
     }
 
     public void initChatBox(ArrayList<Message> messages) {
         chatBox.getChildren().clear();
-        for (Message message : getMessages())
-            chatBox.getChildren().add(processMessage(message));
+        if (messages == null) return;
+        for (Message message : messages)
+            if (!blackListIDS.contains(message.getMessageID())) chatBox.getChildren().add(processMessage(message));
         chatScrollPane.setVvalue(1);
     }
 
@@ -97,24 +101,24 @@ public class PrivateChatController implements ChatControllerParent {
         Format f = new SimpleDateFormat("HH:mm");
         String strResult = f.format(new Date());
         attributes.put("time sent", strResult);
+        attributes.put("millies sent", String.valueOf(System.currentTimeMillis()));
         attributes.put("chat type", "private");
-        // TODO: get actual id from last menu
-        attributes.put("chat id", "place holder");
+        attributes.put("chat id", chatName);
         Packet packet = new Packet(ClientToServerCommands.SEND_MESSAGE.getCommand(), attributes);
         Client.getInstance().sendPacket(packet);
     }
 
     private ArrayList<Message> getMessages() {
         HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("requester", DataBank.getUsername());
-        // TODO: get actual id from last menu
-        attributes.put("other party", "place holder");
+        attributes.put("requester", DataBank.getLoggedInUser().getUsername());
+        attributes.put("other party", chatName);
         Packet packet = new Packet(ClientToServerCommands.GET_PRIVATE_CHAT_MESSAGES.getCommand(), attributes);
         try {
             Client.getInstance().sendPacket(packet);
             Packet receivedPacket = Client.getInstance().recievePacket();
-            return new Gson().fromJson(receivedPacket.getAttribute().get("messages"), new TypeToken<List<Message>>() {
+            messagesCache = new Gson().fromJson(receivedPacket.getAttribute().get("messages"), new TypeToken<List<Message>>() {
             }.getType());
+            return messagesCache;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -157,13 +161,12 @@ public class PrivateChatController implements ChatControllerParent {
             messagePane.setBackground(Background.fill(Color.CORNFLOWERBLUE));
 
         }
-        newMessage.setId(message.getMessageID());
         return newMessage;
 
     }
 
     private void deleteForEveryOne(MouseEvent mouseEvent) {
-        String messageId = ((Button) mouseEvent.getSource()).getParent().getParent().getId();
+        String messageId = ((Button) mouseEvent.getSource()).getId();
         HashMap<String, String> attributes = new HashMap<>();
         attributes.put("message id", messageId);
         attributes.put("chat type", "private");
@@ -188,6 +191,7 @@ public class PrivateChatController implements ChatControllerParent {
         HashMap<String, String> attributes = new HashMap<>();
         attributes.put("message id", messageId);
         attributes.put("chat type", "private");
+        attributes.put("chat id", chatName);
         attributes.put("new body", messageField.getText());
         Packet packet = new Packet(ClientToServerCommands.EDIT_MESSAGE.getCommand(), attributes);
         try {

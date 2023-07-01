@@ -139,13 +139,12 @@ public class PublicChatController implements ChatControllerParent {
             messagePane.setBackground(Background.fill(Color.CORNFLOWERBLUE));
 
         }
-        newMessage.setId(message.getMessageID());
         return newMessage;
 
     }
 
     private void deleteForEveryOne(MouseEvent mouseEvent) {
-        String messageId = ((Button) mouseEvent.getSource()).getParent().getParent().getId();
+        String messageId = ((Button) mouseEvent.getSource()).getId();
         HashMap<String, String> attributes = new HashMap<>();
         //    DELETE_MESSAGE("delete message", "message id", "chat type", "chat id")
         attributes.put("message id", messageId);

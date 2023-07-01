@@ -50,6 +50,7 @@ public class RoomsViewController implements ChatListControllerParent {
 
     @Override
     public void goToSpecificChat(MouseEvent mouseEvent) {
+        System.out.println("in rooms specific");
         String chatId=((Label)mouseEvent.getSource()).getText();
         RoomChatGFX roomChatGFX=new RoomChatGFX();
     }
