@@ -12,7 +12,6 @@ import javafx.util.Duration;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
-import org.example.model.chat.Message;
 import org.example.view.SignupMenu;
 
 import java.io.IOException;
@@ -36,6 +35,7 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
         Packet receivedPacket = Client.getInstance().recievePacket();
         ArrayList<String> chatIds = new Gson().fromJson(receivedPacket.getAttribute().get("chats"), new TypeToken<List<String>>() {
         }.getType());
+        chatsCache = chatIds;
         initChatList(chatIds);
         searchButton.setOnMouseClicked(evt -> {
             username = searchBox.getText();
@@ -44,23 +44,25 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
 
 
         Timeline updateChats = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            ArrayList<String> notifiersCache = Client.getInstance().getNotificationReceiver().getPrivateChats();
+            ArrayList<String> notifiersCache = Client.getInstance().getNotificationReceiver().getChatListCache();
             if (chatsCache != notifiersCache) {
-                notifiersCache = notifiersCache;
-                if (chatsCache != null) {
-
-                }
+                chatsCache = notifiersCache;
+                if (chatsCache != null) initChatList(chatsCache);
             }
         }));
         updateChats.setCycleCount(Timeline.INDEFINITE);
-//        updateChats.play();
-
+        updateChats.play();
     }
 
     private void addNewChat(String username) {
         HashMap<String, String> attributes = new HashMap<>();
         attributes.put("other party", username);
         Packet packet = new Packet(ClientToServerCommands.CAN_CREATE_PRIVATE_CHAT.getCommand(), attributes);
+        try {
+            Client.getInstance().sendPacket(packet);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Packet receivedPacket = null;
         try {
             receivedPacket = Client.getInstance().recievePacket();
@@ -70,7 +72,7 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
         boolean canCreate = Boolean.parseBoolean(receivedPacket.getAttribute().get("state"));
         if (!canCreate) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("you can't create private chat right now");
+            alert.setContentText("you can't create private chat with " + username);
             alert.setTitle("error");
             alert.showAndWait();
         } else {
@@ -81,47 +83,25 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
             attributes.clear();
             attributes.put("other party", username);
             packet = new Packet(ClientToServerCommands.CREATE_PRIVATE_CHAT.getCommand(), attributes);
-
+            try {
+                Client.getInstance().sendPacket(packet);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-    }
-
-    private void processChat(String username) {
-        Label chat = new Label(username);
-        chat.setFont(new Font("PT Mono", 20));
-        chats.getItems().add(0, chat);
     }
 
     @Override
-    public void initChatList(ArrayList<String> chatIds) throws IOException {
-        addChats(chatIds);
-        searchButton.setOnMouseClicked(this::addNewChat);
-        Packet packet = new Packet(ClientToServerCommands.GET_MY_ROOMS.getCommand(), null);
-        Client.getInstance().sendPacket(packet);
-        Packet receivedPacket = Client.getInstance().recievePacket();
-        ArrayList<String> chats = new Gson().fromJson(receivedPacket.getAttribute().get("chats"), new TypeToken<List<String>>() {
-        }.getType());
-        if (chats == null)
+    public void initChatList(ArrayList<String> chatIds) {
+        chats.getItems().clear();
+        if (chatIds == null || chatIds.size() == 0)
             return;
-        for (int i = chats.size() - 1; i >= 0; i++) {
-            Label chatName = new Label(chats.get(i));
+        for (int i = chatIds.size() - 1; i >= 0; i--) {
+            Label chatName = new Label(chatIds.get(i));
+            chatName.setFont(new Font("PT Mono", 20));
             this.chats.getItems().add(chatName);
             chatName.setOnMouseClicked(this::goToSpecificChat);
         }
-
-    }
-
-    private void addChats(ArrayList<String> chatIds) {
-        if (chatIds == null || chatIds.size() == 0)
-            return;
-        for (String chatId : chatIds) {
-            Label chat = new Label(chatId);
-            chat.setFont(new Font("PT Mono", 20));
-            chats.getItems().add(chat);
-        }
-    }
-
-    private void addNewChat(MouseEvent mouseEvent) {
-        addNewChat(((Label) mouseEvent.getSource()).getText());
     }
 
     @Override
@@ -134,7 +114,6 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
             e.printStackTrace();
         }
     }
-
 
     public void back(MouseEvent mouseEvent) throws Exception {
         new ChatMenuHomeGFX().start(SignupMenu.stage);

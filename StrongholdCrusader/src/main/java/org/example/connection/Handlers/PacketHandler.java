@@ -102,6 +102,7 @@ public class PacketHandler {
                 break;
             case CAN_CREATE_PRIVATE_CHAT:
                 chatHandler.canCreatePrivateChat();
+                break;
             case CREATE_PRIVATE_CHAT:
                 chatHandler.createPrivateChat();
                 break;

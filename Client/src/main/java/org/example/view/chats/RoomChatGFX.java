@@ -22,7 +22,6 @@ public class RoomChatGFX extends Application {
         FXMLLoader loader=new FXMLLoader(new URL(RoomChatGFX.class.getResource("/view/roomChat.fxml").toExternalForm()));
         Pane chat = loader.load();
         ((RoomChatController) loader.getController()).setRoomName(roomName);
-        Client.getInstance().getNotificationReceiver().setChatController(loader.getController());
         if (stage.getScene() == null) {
             Scene scene = new Scene(chat);
             stage.setScene(scene);

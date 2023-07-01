@@ -30,7 +30,6 @@ public enum ServerToClientCommands {
     SORTED_USERS("sorted users", "array list"),
     //chat menu
     CAN_CREATE_CHAT("can create chat", "state"),
-    NEW_CHAT_ADDED("new chat added", "chat type", "chat id"),
     GET_CHAT_LIST("get chat list", "chats"),
     GET_CHAT_MESSAGES("get chat messages", "messages"),
     AUTO_UPDATE_CHAT_MESSAGES("auto update chat messages", "messages"),

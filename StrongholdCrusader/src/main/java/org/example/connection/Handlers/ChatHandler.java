@@ -40,18 +40,12 @@ public class ChatHandler {
         String requester = connection.getUsername();
         String otherParty = receivedPacket.getAttribute().get("other party");
         ChatController.createPrivateChat(requester, otherParty);
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("chat type", "private");
-        attributes.put("chat id", otherParty);
-        Packet toBeSentToRequester = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), attributes);
-        connection.sendPacket(toBeSentToRequester);
+        Packet toBeSent = getChatsPacket(ChatController.getMyPrivateChats(requester));
+        connection.sendNotification(toBeSent);
         Connection otherConnection = ConnectionDatabase.getInstance().getConnectionByUsername(otherParty);
         if (otherConnection != null) {
-            HashMap<String, String> attributes2 = new HashMap<>();
-            attributes2.put("chat type", "private");
-            attributes2.put("chat id", requester);
-            Packet toBeSentToOtherParty = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), attributes2);
-            otherConnection.sendNotification(toBeSentToOtherParty);
+            Packet toBeSent2 = getChatsPacket(ChatController.getMyPrivateChats(otherParty));
+            otherConnection.sendNotification(toBeSent2);
         }
     }
 
@@ -68,11 +62,8 @@ public class ChatHandler {
         String admin = connection.getUsername();
         String roomID = receivedPacket.getAttribute().get("room id");
         ChatController.createRoom(admin, roomID);
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("chat type", "room");
-        attributes.put("room id", roomID);
-        Packet toBeSent = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), attributes);
-        connection.sendPacket(toBeSent);
+        Packet toBeSent = getChatsPacket(ChatController.getMyRooms(admin));
+        connection.sendNotification(toBeSent);
     }
 
     public void getMyPrivateChats() throws IOException {
@@ -118,7 +109,7 @@ public class ChatHandler {
         String senderUsername = connection.getUsername();
         String messageBody = receivedPacket.getAttribute().get("message body");
         String timeSent = receivedPacket.getAttribute().get("time sent");
-        String milliesSent=receivedPacket.getAttribute().get("millies sent");
+        String milliesSent = receivedPacket.getAttribute().get("millies sent");
         String chatType = receivedPacket.getAttribute().get("chat type");
         String chatID = receivedPacket.getAttribute().get("chat id");
         ChatController.sendMessage(senderUsername, messageBody, timeSent, milliesSent, chatType, chatID);
@@ -141,10 +132,7 @@ public class ChatHandler {
         ChatController.addMemberToRoom(roomID, username);
         Connection toBeInformed = ConnectionDatabase.getInstance().getConnectionByUsername(username);
         if (toBeInformed != null) {
-            HashMap<String, String> attributes = new HashMap<>();
-            attributes.put("chat type", "room");
-            attributes.put("room id", roomID);
-            Packet toBeSent = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), attributes);
+            Packet toBeSent = getChatsPacket(ChatController.getMyRooms(username));
             toBeInformed.sendNotification(toBeSent);
         }
     }

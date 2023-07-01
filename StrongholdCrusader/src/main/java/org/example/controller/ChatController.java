@@ -3,13 +3,12 @@ package org.example.controller;
 import org.example.model.User;
 import org.example.model.chat.*;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ChatController {
 
     public static boolean canCreatePrivateChat(String requester, String otherParty) {
-        return PrivateChat.getPrivateChatByMembers(requester, otherParty) == null;
+        return PrivateChat.getPrivateChatByMembers(requester, otherParty) == null && User.getUserByUsername(otherParty) != null;
     }
 
     public static void createPrivateChat(String requester, String otherParty) {

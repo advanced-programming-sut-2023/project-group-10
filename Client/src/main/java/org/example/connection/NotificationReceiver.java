@@ -3,7 +3,6 @@ package org.example.connection;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.example.model.chat.Message;
-import org.example.view.chats.ChatControllerParent;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -15,17 +14,13 @@ public class NotificationReceiver extends Thread {
     private final Socket socket;
     private final DataInputStream dataInputStream;
     private final PacketParser packetParser;
-    private ChatControllerParent chatController;
     private ArrayList<Message> messagesCache;
+    private ArrayList<String> chatListCache;
 
     public NotificationReceiver(Socket socket) throws IOException {
         this.socket = socket;
         this.dataInputStream = new DataInputStream(socket.getInputStream());
         packetParser = new PacketParser();
-    }
-
-    public void setChatController(ChatControllerParent chatController) {
-        this.chatController = chatController;
     }
 
     public ArrayList<Message> getMessagesCache() {
@@ -34,6 +29,14 @@ public class NotificationReceiver extends Thread {
 
     public void setMessagesCache(ArrayList<Message> messagesCache) {
         this.messagesCache = messagesCache;
+    }
+
+    public ArrayList<String> getChatListCache() {
+        return chatListCache;
+    }
+
+    public void setChatListCache(ArrayList<String> chatListCache) {
+        this.chatListCache = chatListCache;
     }
 
     @Override
@@ -54,23 +57,17 @@ public class NotificationReceiver extends Thread {
                         break;
                     case GET_CHAT_MESSAGES:
                     case AUTO_UPDATE_CHAT_MESSAGES:
-                        ArrayList<Message> messages = new Gson().fromJson(packet.getAttribute().get("messages"), new TypeToken<List<Message>>() {
+                        messagesCache = new Gson().fromJson(packet.getAttribute().get("messages"), new TypeToken<List<Message>>() {
                         }.getType());
-                        messagesCache = messages;
                         break;
-
+                    case GET_CHAT_LIST:
+                        chatListCache = new Gson().fromJson(packet.getAttribute().get("chats"), new TypeToken<List<String>>() {
+                        }.getType());
+                        break;
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    public ArrayList<String> getRooms() {
-        return null;
-    }
-
-    public ArrayList<String> getPrivateChats(){
-        return null;
     }
 }

@@ -25,7 +25,6 @@ public class PrivateChatGFX extends Application {
         FXMLLoader loader = new FXMLLoader(new URL(RoomChatGFX.class.getResource("/view/privateChat.fxml").toExternalForm()));
         Pane chat = loader.load();
         ((PrivateChatController) loader.getController()).setChatName(this.chatId);
-        Client.getInstance().getNotificationReceiver().setChatController(loader.getController());
         if (stage.getScene() == null) {
             Scene scene = new Scene(chat);
             stage.setScene(scene);
