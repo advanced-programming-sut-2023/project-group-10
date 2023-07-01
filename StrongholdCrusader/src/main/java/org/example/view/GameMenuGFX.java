@@ -3,6 +3,7 @@ package org.example.view;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -22,16 +23,16 @@ public class GameMenuGFX extends Application {
         gameScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
 
-                case KeyCode.M:
+                case M:
                     ((GameMenuGFXController) loader.getController()).moveSelectedUnits();
                     break;
-                case KeyCode.A:
+                case A:
                     ((GameMenuGFXController) loader.getController()).attackSelectedUnits();
                     break;
-                case KeyCode.I:
+                case I:
                     ((GameMenuGFXController) loader.getController()).zoom(true);
                     break;
-                case KeyCode.O:
+                case O:
                     if (!event.isControlDown()) ((GameMenuGFXController) loader.getController()).zoom(false);
                     break;
             }

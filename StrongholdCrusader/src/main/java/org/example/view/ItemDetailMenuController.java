@@ -19,9 +19,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
-import org.example.controller.ShopMenuController;
 import org.example.model.Stronghold;
 import org.example.view.enums.messages.ShopMenuMessages;
+import org.example.controller.ShopMenuController;
 
 import java.io.File;
 

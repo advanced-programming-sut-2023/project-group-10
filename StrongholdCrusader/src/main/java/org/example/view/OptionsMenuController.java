@@ -36,7 +36,8 @@ public class OptionsMenuController {
             keeps.put(government.getOwner().getUsername(), government.getKeep());
         }
         GameMenuController.initializeGame(colors, keeps, new Map(Stronghold.getCurrentBattle().getBattleMap().getSize()));
-        new CustomizeMapMenuGFX().start(SignupMenu.stage);
+        //TODO
+        //new CustomizeMapMenuGFX().start(SignupMenu.stage);
 
     }
 

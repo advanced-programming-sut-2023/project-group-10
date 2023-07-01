@@ -83,11 +83,13 @@ public class StartGameMenuController {
             keeps.put(playerInfo.username.getText(), new Coordinate(Integer.parseInt(playerInfo.row.getText()), Integer.parseInt(playerInfo.column.getText())));
         }
         GameMenuController.initializeGame(colors, keeps, new Map(getSize()));
-        new CustomizeMapMenuGFX().start(SignupMenu.stage);
+        //TODO
+        //new CustomizeMapMenuGFX().start(SignupMenu.stage);
     }
 
     public void goBackToMainMenu() throws Exception {
-        new MainMenuGFX().start(SignupMenu.stage);
+        //TODO
+        //new MainMenuGFX().start(SignupMenu.stage);
     }
 
     static class PlayerInfoStartGame {

@@ -9,6 +9,7 @@ public class PopularityFactorsMenuController {
     }
 
     public void goToChangeRateMenu(MouseEvent mouseEvent) throws Exception {
-        new ChangeRateMenuGFX().start(SignupMenu.stage);
+        //TODO
+        //new ChangeRateMenuGFX().start(SignupMenu.stage);
     }
 }

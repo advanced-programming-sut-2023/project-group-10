@@ -20,9 +20,9 @@ import org.example.model.game.units.unitconstants.MilitaryUnitRole;
 import org.example.model.game.units.unitconstants.MilitaryUnitStance;
 import org.example.model.game.units.unitconstants.RoleName;
 import org.example.model.game.units.unitconstants.WorkerRole;
-import org.example.view.CommonGFXActions;
 import org.example.view.MountEquipmentMenu;
 import org.example.view.enums.messages.GameMenuMessages;
+import org.example.view.CommonGFXActions;
 
 import java.util.ArrayList;
 import java.util.HashMap;

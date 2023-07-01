@@ -164,7 +164,8 @@ public class CustomizeMapMenuController {
     }
 
     public void goToGame() throws Exception {
-        new GameMenuGFX().start(SignupMenu.stage);
+        //TODO
+        //new GameMenuGFX().start(SignupMenu.stage);
     }
 
     public void goToEraserMode() {

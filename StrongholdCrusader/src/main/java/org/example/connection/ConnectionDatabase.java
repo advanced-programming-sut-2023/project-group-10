@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConnectionDatabase {
-    private HashMap<String, Connection> sessionIdConnectionMap;
+    private HashMap<String, Connection> sessionIdConnectionMap = new HashMap<>();
 
     public int getConnectionCount() {
         return sessionIdConnectionMap.size();

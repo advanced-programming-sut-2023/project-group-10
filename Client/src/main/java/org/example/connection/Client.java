@@ -17,7 +17,7 @@ public class Client {
 
     private static Client instance;
 
-    public Client(String host, int port) {
+    private Client(String host, int port) {
         try {
             instance = this;
             Socket socket = new Socket(host, port);
@@ -40,7 +40,7 @@ public class Client {
     }
 
     private void openNotification() throws IOException {
-        Socket notificationSocket = new Socket("localhost", 8081);
+        Socket notificationSocket = new Socket("localhost", 8083);
         new DataOutputStream(notificationSocket.getOutputStream()).writeUTF(sessionID);
         notificationReceiver=new NotificationReceiver(notificationSocket);
         notificationReceiver.start();

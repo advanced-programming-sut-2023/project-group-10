@@ -21,6 +21,7 @@ import org.example.connection.Packet;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ChangeAvatarMenu extends Application {
     private static Stage stage;
@@ -42,7 +43,7 @@ public class ChangeAvatarMenu extends Application {
     public void initialize() {
         avatarList.getItems().add("none");
         for (int i = 1; i < 29; i++) {
-            String path = ChangeAvatarMenu.class.getResource("/images/avatar/avatar" + i + ".png").toExternalForm();
+            String path = Objects.requireNonNull(ChangeAvatarMenu.class.getResource("/images/avatar/avatar" + i + ".png")).toExternalForm();
             avatarList.getItems().add(new Circle(30, new ImagePattern(new Image(path))));
         }
         avatarList.getSelectionModel().select("none");
@@ -55,13 +56,13 @@ public class ChangeAvatarMenu extends Application {
                 browseButton.setDisable(true);
                 dropHere.setDisable(true);
                 dropHere.setOpacity(0.5);
-                dropHere.setFill(new ImagePattern(new Image(
-                        ChangeAvatarMenu.class.getResource("/images/backgrounds/drop.jpeg").toExternalForm())));
+                dropHere.setFill(new ImagePattern(new Image(Objects.requireNonNull
+                        (ChangeAvatarMenu.class.getResource("/images/backgrounds/drop.jpeg")).toExternalForm())));
             }
         });
 
         dropHere.setFill(new ImagePattern(new Image(
-                ChangeAvatarMenu.class.getResource("/images/backgrounds/drop.jpeg").toExternalForm())));
+                Objects.requireNonNull(ChangeAvatarMenu.class.getResource("/images/backgrounds/drop.jpeg")).toExternalForm())));
     }
 
     public void browse() throws Exception {

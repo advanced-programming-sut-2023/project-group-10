@@ -211,7 +211,8 @@ public class LoginMenu extends Application {
         } else { // TODO: check later
             User user = User.getUserFromJson(receivedPacket.getAttribute().get("user object"));
             DataBank.setLoggedInUser(user);
-            new MainMenuGFX().start(stage);
+            //TODO
+            //new MainMenuGFX().start(stage);
         }
         //TODO
     }

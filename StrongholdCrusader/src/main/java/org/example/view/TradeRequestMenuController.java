@@ -13,12 +13,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
-import org.example.controller.TradeMenuController;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.game.Government;
 import org.example.model.game.Item;
 import org.example.view.enums.messages.TradeMenuMessages;
+import org.example.controller.TradeMenuController;
 
 import java.util.ArrayList;
 import java.util.Map;
