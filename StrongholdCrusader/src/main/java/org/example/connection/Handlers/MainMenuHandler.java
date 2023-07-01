@@ -31,6 +31,7 @@ public class MainMenuHandler {
     public void handleLogout() throws IOException {
         MainMenuController.logout();
         User.getUserByUsername(connection.getUsername()).setOnline(false);
+        User.getUserByUsername(connection.getUsername()).setLastLogout(System.currentTimeMillis());
         Stronghold.dataBase.saveUsersToFile();
         connection.setUsername("");
         Packet toBeSent;

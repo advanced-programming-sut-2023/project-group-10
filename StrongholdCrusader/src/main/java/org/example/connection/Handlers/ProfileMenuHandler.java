@@ -115,6 +115,14 @@ public class ProfileMenuHandler {
         connection.sendPacket(toBeSent);
     }
 
+    public void lastVisit() throws IOException {
+        String username = receivedPacket.getAttribute().get("username");
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("time", Long.toString(User.getUserByUsername(username).getLastLogout()));
+        Packet toBeSent = new Packet("last visit", hashMap);
+        connection.sendPacket(toBeSent);
+    }
+
     public void allConnections() throws IOException{
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("array list", new Gson().toJson(ConnectionDatabase.getInstance().getSessionIdConnectionMap()));
