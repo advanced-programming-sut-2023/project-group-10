@@ -28,6 +28,7 @@ public class MainMenuController {
         logoutButton.setAlignment(Pos.CENTER);
         chatButton.setAlignment(Pos.CENTER);
         buttons.setTranslateX(700);
+        buttons.setSpacing(30);
 
     }
 

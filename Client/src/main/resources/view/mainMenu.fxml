@@ -10,7 +10,7 @@
       fx:controller="org.example.view.MainMenuController">
     <VBox fx:id="buttons">
         <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Main Menu"
-              textAlignment="CENTER" wrappingWidth="400.0">
+              textAlignment="CENTER" >
             <font>
                 <Font name="Bodoni 72 Smallcaps Book" size="46.0"/>
             </font>

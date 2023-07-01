@@ -18,6 +18,9 @@ public class RoomsViewGFX extends Application {
             stage.setScene(scene);
         } else
             stage.getScene().setRoot(chat);
+        stage.setTitle("Rooms");
+        stage.setHeight(700);
+        stage.setWidth(500);
         stage.show();
     }
 }

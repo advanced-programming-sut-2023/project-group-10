@@ -29,7 +29,7 @@
             <content>
                 <Group>
                     <children>
-                        <VBox fx:id="chatBox" layoutX="-1.0" layoutY="-2.0" prefHeight="568.0" prefWidth="483.0"/>
+                        <VBox fx:id="chatBox" layoutX="-1.0" layoutY="-2.0" prefHeight="568.0" prefWidth="483.0" spacing="20"/>
                     </children>
                 </Group>
             </content>

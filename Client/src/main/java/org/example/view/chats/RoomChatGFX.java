@@ -27,6 +27,9 @@ public class RoomChatGFX extends Application {
             stage.setScene(scene);
         } else
             stage.getScene().setRoot(chat);
+        stage.setTitle("Room");
+        stage.setHeight(700);
+        stage.setWidth(500);
         stage.show();
     }
 }

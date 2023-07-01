@@ -21,6 +21,8 @@ public class MainMenuGFX extends Application {
             primaryStage.setScene(scene);
         } else
             primaryStage.getScene().setRoot(mainMenu);
+        primaryStage.setWidth(mainMenu.getWidth());
+        primaryStage.setHeight(mainMenu.getHeight());
         primaryStage.setMaximized(true);
         primaryStage.show();
     }

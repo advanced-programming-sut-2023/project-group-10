@@ -18,6 +18,9 @@ public class PrivateChatsHomeGFX extends Application {
             stage.setScene(scene);
         } else
             stage.getScene().setRoot(list);
+        stage.setTitle("Private Chats");
+        stage.setHeight(700);
+        stage.setWidth(500);
         stage.show();
     }
 }
