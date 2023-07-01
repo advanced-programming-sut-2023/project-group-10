@@ -102,17 +102,65 @@ public class PublicChatController implements ChatControllerParent {
         } else
 
             newMessage.getChildren().addAll(avatar, messagePane);
+        newMessage.setId(message.getMessageID());
         return newMessage;
 
     }
 
     private void deleteForEveryOne(MouseEvent mouseEvent) {
+        String messageId=((Button) mouseEvent.getSource()).getParent().getId();
+        HashMap<String,String> attributes=new HashMap<>();
+        //    DELETE_MESSAGE("delete message", "message id", "chat type", "chat id")
+        attributes.put("message id",messageId);
+        attributes.put("chat type","public");
+        Packet packet = new Packet(ClientToServerCommands.EDIT_MESSAGE.getCommand(), attributes);
+        try {
+            Client.getInstance().sendPacket(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            initChatBox(getMessages());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void deleteForMe(MouseEvent mouseEvent) {
+        String messageId=((Button) mouseEvent.getSource()).getParent().getId();
+        try {
+            ArrayList<Message> messages=getMessages();
+            int index=0;
+            for(int i=0;i<messages.size();i++){
+                if (messages.get(i).getMessageID().equals(messageId))
+                    index=i;
+            }
+            messages.remove(index);
+            initChatBox(messages);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void editMessage(MouseEvent mouseEvent) {
+        String messageId=((Button) mouseEvent.getSource()).getParent().getId();
+        HashMap<String,String> attributes=new HashMap<>();
+        //    EDIT_MESSAGE("edit message", "message id", "chat type", "chat id", "new body");
+        attributes.put("message id",messageId);
+        attributes.put("chat type","public");
+        attributes.put("new body",messageField.getText());
+        Packet packet = new Packet(ClientToServerCommands.EDIT_MESSAGE.getCommand(), attributes);
+        try {
+            Client.getInstance().sendPacket(packet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            initChatBox(getMessages());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void back(MouseEvent mouseEvent) throws Exception{
