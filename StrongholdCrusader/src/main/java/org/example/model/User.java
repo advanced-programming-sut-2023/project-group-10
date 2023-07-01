@@ -113,7 +113,7 @@ public class User {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        User.getUserByUsername(this.username).username = username;
         Stronghold.dataBase.saveUsersToFile();
     }
 
@@ -140,7 +140,7 @@ public class User {
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        User.getUserByUsername(this.username).nickname = nickname;
         Stronghold.dataBase.saveUsersToFile();
     }
 
@@ -157,7 +157,7 @@ public class User {
     }
 
     public void setAvatar(String avatar) {
-        this.avatar = avatar;
+        User.getUserByUsername(this.username).avatar = avatar;
         Stronghold.dataBase.saveUsersToFile();
     }
 
