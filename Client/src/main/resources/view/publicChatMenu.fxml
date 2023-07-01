@@ -9,45 +9,40 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
-      prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.view.PublicChatController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.view.PublicChatController">
     <children>
         <VBox prefHeight="56.0" prefWidth="500.0" style="-fx-background-color: black;">
             <children>
-                <Label alignment="CENTER" prefHeight="58.0" prefWidth="518.0" text="Public Chat" textAlignment="CENTER"
-                       textFill="#fffafa">
+            <Button alignment="BASELINE_LEFT" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#back" text="back" />
+                <Label alignment="CENTER" prefHeight="58.0" prefWidth="518.0" text="Public Chat" textAlignment="CENTER" textFill="#fffafa">
                     <font>
-                        <Font name="AppleMyungjo Regular" size="26.0"/>
+                        <Font name="AppleMyungjo Regular" size="26.0" />
                     </font>
                 </Label>
             </children>
         </VBox>
-        <ScrollPane prefHeight="583.0" prefWidth="500.0" fx:id="chatScrollPane">
+        <ScrollPane fx:id="chatScrollPane" prefHeight="583.0" prefWidth="500.0">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="582.0" prefWidth="500.0">
                     <children>
-                        <VBox fx:id="chatBox" layoutX="-1.0" layoutY="-2.0" prefHeight="568.0" prefWidth="483.0"/>
+                        <VBox fx:id="chatBox" layoutX="-1.0" layoutY="-2.0" prefHeight="568.0" prefWidth="483.0" />
                     </children>
                 </AnchorPane>
             </content>
         </ScrollPane>
         <HBox prefHeight="57.0" prefWidth="500.0">
             <children>
-                <TextField fx:id="messageField" prefHeight="57.0" prefWidth="435.0"/>
+                <TextField fx:id="messageField" prefHeight="57.0" prefWidth="435.0" />
                 <VBox prefHeight="57.0" prefWidth="65.0" spacing="10.0">
                     <children>
-                        <Button mnemonicParsing="false" prefHeight="21.0" prefWidth="65.0"
-                                style="-fx-background-color: royalblue;" text="send" textFill="WHITE" fx:id="add">
+                        <Button fx:id="add" mnemonicParsing="false" prefHeight="21.0" prefWidth="65.0" style="-fx-background-color: royalblue;" text="send" textFill="WHITE">
                             <font>
-                                <Font name="GungSeo Regular" size="13.0"/>
+                                <Font name="GungSeo Regular" size="13.0" />
                             </font>
                         </Button>
-                        <Button mnemonicParsing="false" prefHeight="17.0" prefWidth="65.0"
-                                style="-fx-background-color: royalblue;" text="clear" textFill="WHITE" fx:id="clear">
+                        <Button fx:id="clear" mnemonicParsing="false" prefHeight="17.0" prefWidth="65.0" style="-fx-background-color: royalblue;" text="clear" textFill="WHITE">
                             <font>
-                                <Font name="GungSeo Regular" size="13.0"/>
+                                <Font name="GungSeo Regular" size="13.0" />
                             </font>
                         </Button>
                     </children>

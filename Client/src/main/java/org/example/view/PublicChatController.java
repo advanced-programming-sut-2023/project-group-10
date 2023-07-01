@@ -7,8 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import java.awt.*;
 import java.text.Format;
@@ -53,15 +55,34 @@ public class PublicChatController {
         HBox newMessage = new HBox();
         Label senderId = new Label();
         //put Avatar-> I had errors
-        ImageView avatar = new ImageView();
+        Rectangle avatar = new Rectangle();
         Label content = new Label(message);
         Label time = new Label(strResult);
         //set time and format it
         messagePane.getChildren().addAll(senderId, content, time);
+        if (isMine) {
+            Button edit=new Button("edit");
+            Button deleteForMe=new Button("del:m");
+            Button deleteForEveryOn=new Button("del:e")
+            edit.setOnMouseClicked(this::editMessage);
+            deleteForMe.setOnMouseClicked(this::deleteForMe);
+            deleteForEveryOn.setOnMouseClicked(this::deleteForEveryOne);
+            messagePane.getChildren().addAll();
+            newMessage.getChildren().addAll(messagePane, avatar);
+        } else
 
-        newMessage.getChildren().addAll((Node) messagePane, (Node) avatar);
+            newMessage.getChildren().addAll(avatar, messagePane);
         return newMessage;
 
+    }
+
+    private void deleteForEveryOne(MouseEvent mouseEvent) {
+    }
+
+    private void deleteForMe(MouseEvent mouseEvent) {
+    }
+
+    private void editMessage(MouseEvent mouseEvent) {
     }
 
 }
