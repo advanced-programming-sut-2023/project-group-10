@@ -2,13 +2,13 @@ package org.example.view;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import org.example.connection.Client;
+import org.example.view.chats.ChatMenuHomeGFX;
 
 public class MainMenuController {
     public Text title;
@@ -50,6 +50,7 @@ public class MainMenuController {
         new LoginMenu().start(SignupMenu.stage);
     }
 
-    public void goToChatMenu(MouseEvent mouseEvent) {
+    public void goToChatMenu(MouseEvent mouseEvent) throws Exception {
+        new ChatMenuHomeGFX().start(SignupMenu.stage);
     }
 }

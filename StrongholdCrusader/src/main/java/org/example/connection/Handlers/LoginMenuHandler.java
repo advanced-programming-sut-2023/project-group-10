@@ -61,9 +61,10 @@ public class LoginMenuHandler {
         // TODO: add online and offline
         String username = receivedPacket.getAttribute().get("username");
         String password = receivedPacket.getAttribute().get("password");
+        String stayLoggedIn = receivedPacket.getAttribute().get("stay logged in");
         User userObject = null;
         String messageValue;
-        LoginMenuMessages message = LoginMenuController.login(username, password);
+        LoginMenuMessages message = LoginMenuController.login(username, password, Boolean.parseBoolean(stayLoggedIn));
         messageValue = message.name();
         if (message == LoginMenuMessages.LOGIN_SUCCESSFUL)
             userObject = User.getUserByUsername(username);

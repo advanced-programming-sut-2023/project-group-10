@@ -18,7 +18,7 @@ public abstract class MilitaryUnitRole extends Role {
         this.attackRange = attackRange;
         this.accuracy = accuracy;
         this.cost = cost;
-        defaultImage = new Image(RoleName.class.getResource("/images/units/default/" + name.name() + ".png").toExternalForm());
+        defaultImage = new Image(MilitaryUnitRole.class.getResource("/images/units/default/" + name.name() + ".png").toExternalForm());
     }
 
     public Quality getAttackRating() {

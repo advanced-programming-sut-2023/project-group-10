@@ -25,6 +25,9 @@ public class PacketHandler {
         updateHandlerPackets(receivedPacket);
         ClientToServerCommands receivedPacketCommand = ClientToServerCommands.getCommandByString(receivedPacket.getCommand());
         switch (receivedPacketCommand) {
+            case INITIALIZE_APP:
+                signupMenuHandler.initializeApp();
+                break;
             case GET_DEFAULT_SLOGANS:
                 signupMenuHandler.getDefaultSlogans();
                 break;

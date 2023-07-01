@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.example.connection.Client;
@@ -52,8 +49,9 @@ public class SignupMenu extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         SignupMenu.stage = stage;
-        //Stronghold.initializeApp();
-        //TODO send packet initializeApp
+        /*Packet packet = new Packet(ClientToServerCommands.INITIALIZE_APP.getCommand(), null);
+        Client.getInstance().sendPacket(packet);
+        Client.getInstance().recievePacket();*/
 
         /*if (Stronghold.getLoggedInUserFromFile() != null) {
             //Stronghold.setCurrentUser(Stronghold.getLoggedInUserFromFile());

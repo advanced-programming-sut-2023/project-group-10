@@ -115,7 +115,7 @@ public class PublicChatController implements ChatControllerParent {
     private void editMessage(MouseEvent mouseEvent) {
     }
 
-    public void back(MouseEvent mouseEvent) throws Exception {
+    public void back(MouseEvent mouseEvent) throws Exception{
         new ChatMenuHomeGFX().start(SignupMenu.stage);
     }
 }

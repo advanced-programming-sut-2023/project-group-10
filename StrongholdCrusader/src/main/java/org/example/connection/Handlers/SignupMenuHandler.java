@@ -5,6 +5,7 @@ import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
 import org.example.controller.SignupMenuController;
 import org.example.model.SecurityQuestion;
+import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CaptchaGenerator;
 import org.example.model.utils.CheckFormatAndEncrypt;
@@ -24,6 +25,12 @@ public class SignupMenuHandler {
 
     public void setReceivedPacket(Packet receivedPacket) {
         this.receivedPacket = receivedPacket;
+    }
+
+    public void initializeApp() throws IOException {
+        Stronghold.initializeApp();
+        Packet toBeSent = new Packet(ServerToClientCommands.INITIALIZE_COMPLETE.getCommand(), null);
+        connection.sendPacket(toBeSent);
     }
 
     public void getDefaultSlogans() throws IOException {

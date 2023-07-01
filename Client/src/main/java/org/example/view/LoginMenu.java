@@ -196,6 +196,7 @@ public class LoginMenu extends Application {
         HashMap<String, String> attributes = new HashMap<>();
         attributes.put("username", username.getText());
         attributes.put("password", password.getText());
+        attributes.put("stay logged in", String.valueOf(stayLoggedIn.isSelected()));
         Packet packet = new Packet("log in", attributes);
         Client.getInstance().sendPacket(packet);
         Packet receivedPacket = Client.getInstance().recievePacket();
@@ -211,8 +212,7 @@ public class LoginMenu extends Application {
         } else { // TODO: check later
             User user = User.getUserFromJson(receivedPacket.getAttribute().get("user object"));
             DataBank.setLoggedInUser(user);
-            //TODO
-            //new MainMenuGFX().start(stage);
+            new MainMenuGFX().start(stage);
         }
         //TODO
     }

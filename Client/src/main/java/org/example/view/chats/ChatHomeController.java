@@ -1,6 +1,7 @@
 package org.example.view.chats;
 
 import javafx.scene.input.MouseEvent;
+import org.example.view.MainMenuGFX;
 import org.example.view.SignupMenu;
 
 public class ChatHomeController {
@@ -16,8 +17,8 @@ public class ChatHomeController {
         new RoomsViewGFX().start(SignupMenu.stage);
     }
 
-    public void back(MouseEvent mouseEvent) {
-        //go to main menu
+    public void back(MouseEvent mouseEvent) throws Exception {
+        new MainMenuGFX().start(SignupMenu.stage);
     }
 
 }

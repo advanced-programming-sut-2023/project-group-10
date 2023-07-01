@@ -2,6 +2,7 @@ package org.example.connection;
 
 public enum ClientToServerCommands {
     //sign up menu
+    INITIALIZE_APP("initialize app"),
     GET_DEFAULT_SLOGANS("get default slogans"),
     LIVE_CHECK_USERNAME("live check username", "username"),
     LIVE_CHECK_PASSWORD("live check password", "password"),
@@ -17,7 +18,7 @@ public enum ClientToServerCommands {
     //login menu
     GET_SECURITY_QUESTION("get security question", "username"),
     TRY_TO_CHANGE_PASSWORD("try to change password", "username", "answer", "new password"),
-    LOG_IN("log in", "username", "password"),
+    LOG_IN("log in", "username", "password", "stay logged in"),
     //main menu
     LOGOUT("logout"),
     START_GAME("start game"),
