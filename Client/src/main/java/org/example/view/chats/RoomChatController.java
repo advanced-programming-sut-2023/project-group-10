@@ -2,6 +2,8 @@ package org.example.view.chats;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -16,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
@@ -39,31 +42,52 @@ public class RoomChatController implements ChatControllerParent {
     public Button add;
     public Button clear;
     public VBox topBox;
-    String roomName;
+    private static String roomName;
     private ArrayList<String> blackListIDS = new ArrayList<>();
     private ArrayList<Message> messagesCache;
     private TextField nameField;
     private Button addUser;
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public static void setRoomName(String roomName) {
+        RoomChatController.roomName = roomName;
     }
 
     @FXML
     public void initialize() throws IOException {
         roomNameLabel.setText(roomName);
-        initChatBox(getMessages());
-
-    }
-
-    @Override
-
-    public void initChatBox(ArrayList<Message> messages) {
         try {
             initTopBox();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        initChatBox(getMessages());
+        Client.getInstance().getNotificationReceiver().setMessagesCache(messagesCache);
+
+        add.setOnMouseClicked(evt -> {
+            try {
+                sendMessage();
+                messageField.setText("");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        clear.setOnMouseClicked(evt -> {
+            messageField.setText("");
+        });
+        Timeline updateMessages = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            ArrayList<Message> notifiersCache = Client.getInstance().getNotificationReceiver().getMessagesCache();
+            if (messagesCache != notifiersCache) {
+                messagesCache = notifiersCache;
+                if (messagesCache != null) initChatBox(messagesCache);
+            }
+        }));
+        updateMessages.setCycleCount(Timeline.INDEFINITE);
+        updateMessages.play();
+    }
+
+    @Override
+
+    public void initChatBox(ArrayList<Message> messages) {
         chatBox.getChildren().clear();
         for (Message msg : messages)
             if (!blackListIDS.contains(msg.getMessageID())) chatBox.getChildren().add(processMessage(msg));
@@ -71,19 +95,33 @@ public class RoomChatController implements ChatControllerParent {
     }
 
     private void initTopBox() throws IOException {
-        HashMap<String,String> attributes=new HashMap<>();
-        attributes.put("room id",roomName);
-        Packet packet=new Packet(ClientToServerCommands.IS_ADMIN.getCommand(), attributes);
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("room id", roomName);
+        Packet packet = new Packet(ClientToServerCommands.IS_ADMIN.getCommand(), attributes);
         Client.getInstance().sendPacket(packet);
         Packet receivedPacket = Client.getInstance().recievePacket();
         boolean isAdmin = Boolean.parseBoolean(receivedPacket.getAttribute().get("state"));
-        if(!isAdmin)
+        if (!isAdmin)
             return;
         HBox top = new HBox();
         nameField = new TextField();
         nameField.setPromptText("enter user name to add to the chat");
         addUser = new Button("add");
+        addUser.setOnMouseClicked(event -> addUserToRoom());
         top.getChildren().addAll(nameField, addUser);
+        topBox.getChildren().add(top);
+    }
+
+    private void addUserToRoom() {
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("room id", roomName);
+        attributes.put("username", nameField.getText());
+        Packet packet = new Packet(ClientToServerCommands.ADD_MEMBER_TO_ROOM.getCommand(), attributes);
+        try {
+            Client.getInstance().sendPacket(packet);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {
@@ -98,13 +136,15 @@ public class RoomChatController implements ChatControllerParent {
         attributes.put("time sent", strResult);
         attributes.put("millies sent", String.valueOf(System.currentTimeMillis()));
         attributes.put("chat type", "room");
-        attributes.put("chat id",roomName);
+        attributes.put("chat id", roomName);
         Packet packet = new Packet(ClientToServerCommands.SEND_MESSAGE.getCommand(), attributes);
         Client.getInstance().sendPacket(packet);
     }
 
     private ArrayList<Message> getMessages() throws IOException {
-        Packet packet = new Packet(ClientToServerCommands.GET_PUBLIC_CHAT_MESSAGES.getCommand(), null);
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("room id", roomName);
+        Packet packet = new Packet(ClientToServerCommands.GET_ROOM_MESSAGES.getCommand(), attributes);
         Client.getInstance().sendPacket(packet);
         Packet receivedPacket = Client.getInstance().recievePacket();
         messagesCache = new Gson().fromJson(receivedPacket.getAttribute().get("messages"), new TypeToken<List<Message>>() {
@@ -149,13 +189,12 @@ public class RoomChatController implements ChatControllerParent {
             messagePane.setBackground(Background.fill(Color.CORNFLOWERBLUE));
 
         }
-        newMessage.setId(message.getMessageID());
         return newMessage;
 
     }
 
     private void deleteForEveryOne(MouseEvent mouseEvent) {
-        String messageId = ((Button) mouseEvent.getSource()).getParent().getParent().getId();
+        String messageId = ((Button) mouseEvent.getSource()).getId();
         HashMap<String, String> attributes = new HashMap<>();
         //    DELETE_MESSAGE("delete message", "message id", "chat type", "chat id")
         attributes.put("message id", messageId);
@@ -164,11 +203,6 @@ public class RoomChatController implements ChatControllerParent {
         Packet packet = new Packet(ClientToServerCommands.DELETE_MESSAGE.getCommand(), attributes);
         try {
             Client.getInstance().sendPacket(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            initChatBox(getMessages());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -186,15 +220,11 @@ public class RoomChatController implements ChatControllerParent {
         //    EDIT_MESSAGE("edit message", "message id", "chat type", "chat id", "new body");
         attributes.put("message id", messageId);
         attributes.put("chat type", "room");
+        attributes.put("chat id", roomName);
         attributes.put("new body", messageField.getText());
         Packet packet = new Packet(ClientToServerCommands.EDIT_MESSAGE.getCommand(), attributes);
         try {
             Client.getInstance().sendPacket(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            initChatBox(getMessages());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -156,11 +156,6 @@ public class PublicChatController implements ChatControllerParent {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            initChatBox(getMessages());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void deleteForMe(MouseEvent mouseEvent) {
@@ -179,11 +174,6 @@ public class PublicChatController implements ChatControllerParent {
         Packet packet = new Packet(ClientToServerCommands.EDIT_MESSAGE.getCommand(), attributes);
         try {
             Client.getInstance().sendPacket(packet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            initChatBox(getMessages());
         } catch (IOException e) {
             e.printStackTrace();
         }

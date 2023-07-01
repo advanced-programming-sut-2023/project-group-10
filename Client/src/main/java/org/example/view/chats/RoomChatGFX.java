@@ -20,8 +20,8 @@ public class RoomChatGFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader=new FXMLLoader(new URL(RoomChatGFX.class.getResource("/view/roomChat.fxml").toExternalForm()));
+        RoomChatController.setRoomName(roomName);
         Pane chat = loader.load();
-        ((RoomChatController) loader.getController()).setRoomName(roomName);
         if (stage.getScene() == null) {
             Scene scene = new Scene(chat);
             stage.setScene(scene);
