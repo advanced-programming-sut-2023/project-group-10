@@ -40,7 +40,7 @@ public class Client {
     }
 
     private void openNotification() throws IOException {
-        Socket notificationSocket = new Socket("localhost", 8001);
+        Socket notificationSocket = new Socket("localhost", 8083);
         new DataOutputStream(notificationSocket.getOutputStream()).writeUTF(sessionID);
         notificationReceiver=new NotificationReceiver(notificationSocket);
         notificationReceiver.start();
