@@ -21,6 +21,7 @@ public class User {
     private String avatar;
     private int highScore;
     private boolean isOnline;
+    private long lastLogout;
 
 
     public User(String username, String password, String nickname, String email, String slogan, String questionNumber,
@@ -33,6 +34,7 @@ public class User {
         this.questionNumber = questionNumber;
         this.questionAnswer = CheckFormatAndEncrypt.encryptString(securityAnswer);
         this.avatar = "/images/avatar/avatar" + randomNumber() + ".png";
+        lastLogout = System.currentTimeMillis();
     }
 
     public boolean isOnline() {
@@ -41,6 +43,15 @@ public class User {
 
     public void setOnline(boolean online) {
         isOnline = online;
+    }
+
+    public long getLastLogout() {
+        return lastLogout;
+    }
+
+    public void setLastLogout(long lastLogout) {
+        User.getUserByUsername(this.username).lastLogout = lastLogout;
+        Stronghold.dataBase.saveUsersToFile();
     }
 
     public static void addUser(String username, String password, String nickname, String email, String slogan,

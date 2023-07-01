@@ -108,6 +108,9 @@ public class PacketHandler {
             case GET_ALL_CONNECTIONS:
                 profileMenuHandler.allConnections();
                 break;
+            case GET_LAST_VISIT:
+                profileMenuHandler.lastVisit();
+                break;
             case LOGOUT:
                 mainMenuHandler.handleLogout();
                 break;
