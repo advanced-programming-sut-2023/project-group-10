@@ -18,5 +18,7 @@ module StrongholdCrusader {
     opens org.example.model to com.google.gson;
     opens org.example.view.transitions to javafx.fxml;
     opens org.example.connection to com.google.gson;
+    opens org.example.model.chat to com.google.gson;
+    opens org.example.connection.Handlers to com.google.gson;
     //exports org.example.controller;
 }

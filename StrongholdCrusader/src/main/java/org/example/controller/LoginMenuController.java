@@ -28,12 +28,6 @@ public class LoginMenuController {
 
         if (!User.getUserByUsername(username).checkPassword(password))
             return LoginMenuMessages.WRONG_PASSWORD;
-
-        // TODO: add this to the client side
-//        if (stayLoggedIn)
-//            Stronghold.addUserToFile(User.getUserByUsername(username));
-//        else
-//            Stronghold.addUserToFile(User.getUserByUsername(null));
         return LoginMenuMessages.LOGIN_SUCCESSFUL;
     }
 

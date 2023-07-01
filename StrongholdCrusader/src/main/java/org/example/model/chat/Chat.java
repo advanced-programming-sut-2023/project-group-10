@@ -52,8 +52,13 @@ public abstract class Chat {
         informWatchers();
     }
 
+    public ArrayList<String> getWatchersUsernames() {
+        return watchersUsernames;
+    }
+
     public void addWatcher(String username) {
         watchersUsernames.add(username);
+        loadChatToDatabase();
     }
 
     public void informWatchers() {
@@ -62,7 +67,9 @@ public abstract class Chat {
             if (connection != null) {
                 String messagesJson = new Gson().toJson(messages, new TypeToken<List<Message>>() {
                 }.getType());
-                Packet toBeSent = new Packet(ServerToClientCommands.AUTO_UPDATE_CHAT_MESSAGES.getCommand(), (HashMap<String, String>) Map.of("messages", messagesJson));
+                HashMap<String, String> attributes=new HashMap<>();
+                attributes.put("messages", messagesJson);
+                Packet toBeSent = new Packet(ServerToClientCommands.AUTO_UPDATE_CHAT_MESSAGES.getCommand(), attributes);
                 try {
                     connection.sendNotification(toBeSent);
                 } catch (IOException e) {

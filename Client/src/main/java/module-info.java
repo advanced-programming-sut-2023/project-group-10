@@ -23,5 +23,6 @@ module Client {
     opens org.example.connection to javafx.fxml, com.google.gson;
     exports org.example.view.chats;
     opens org.example.view.chats to javafx.fxml;
+    opens org.example.model.chat to com.google.gson;
     //    exports org.example.controller;
 }

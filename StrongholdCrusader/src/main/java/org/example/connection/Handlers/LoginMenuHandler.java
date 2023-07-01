@@ -66,14 +66,17 @@ public class LoginMenuHandler {
         String messageValue;
         LoginMenuMessages message = LoginMenuController.login(username, password, Boolean.parseBoolean(stayLoggedIn));
         messageValue = message.name();
-        if (message == LoginMenuMessages.LOGIN_SUCCESSFUL)
+        if (message == LoginMenuMessages.LOGIN_SUCCESSFUL) {
             userObject = User.getUserByUsername(username);
+            connection.setUsername(username);
+        }
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("user object", userObjectToJson(userObject));
         hashMap.put("message", messageValue);
         Packet toBeSent = new Packet(ServerToClientCommands.LOGIN.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
+
 
     private String userObjectToJson(User user) {
         // null object serialized as empty string

@@ -38,21 +38,21 @@ public class ChatController {
 
     public static ArrayList<Message> getPublicChatMessages(String username) {
         PublicChat publicChat = PublicChat.getInstance();
-        publicChat.addWatcher(username);
+        if (!publicChat.getWatchersUsernames().contains(username)) publicChat.addWatcher(username);
         return publicChat.getMessages();
     }
 
     public static ArrayList<Message> getPrivateChatMessages(String requester, String otherParty) {
         PrivateChat privateChat = PrivateChat.getPrivateChatByMembers(requester, otherParty);
         if (privateChat == null) return null;
-        privateChat.addWatcher(requester);
+        if (!privateChat.getWatchersUsernames().contains(requester)) privateChat.addWatcher(requester);
         return privateChat.getMessages();
     }
 
     public static ArrayList<Message> getRoomChatMessages(String roomID, String username) {
         Room room = Room.getRoomById(roomID);
         if (room == null) return null;
-        room.addWatcher(username);
+        if (!room.getWatchersUsernames().contains(username)) room.addWatcher(username);
         return room.getMessages();
     }
 

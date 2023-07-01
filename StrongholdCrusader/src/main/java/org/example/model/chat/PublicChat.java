@@ -23,6 +23,10 @@ public class PublicChat extends Chat {
         try {
             String jsonString = new String(Files.readAllBytes(Paths.get("./StrongholdCrusader/src/main/resources/chatData/publicChat.json")));
             instance = new Gson().fromJson(jsonString, PublicChat.class);
+            if (instance == null) {
+                instance = new PublicChat();
+                instance.loadChatToDatabase();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -38,7 +38,10 @@ public class NotificationReceiver extends Thread {
                 ServerToClientCommands command = ServerToClientCommands.getCommandByString(packet.command);
                 switch (command) {
                     case GET_CHAT_MESSAGES:
+                    case AUTO_UPDATE_CHAT_MESSAGES:
                         chatController.initChatBox(messages);
+                        System.out.println(messages.get(messages.size() - 1).getMessageBody());
+                        break;
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
