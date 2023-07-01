@@ -6,10 +6,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -119,6 +116,15 @@ public class RoomChatController implements ChatControllerParent {
         Packet packet = new Packet(ClientToServerCommands.ADD_MEMBER_TO_ROOM.getCommand(), attributes);
         try {
             Client.getInstance().sendPacket(packet);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            Packet responose=Client.getInstance().recievePacket();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText(responose.getAttribute().get("message"));
+            alert.setTitle("");
+            alert.showAndWait();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

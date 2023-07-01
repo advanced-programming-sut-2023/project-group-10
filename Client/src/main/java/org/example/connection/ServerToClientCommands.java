@@ -37,7 +37,8 @@ public enum ServerToClientCommands {
     GET_CHAT_MESSAGES("get chat messages", "messages"),
     AUTO_UPDATE_CHAT_MESSAGES("auto update chat messages", "messages"),
     IS_ADMIN("is admin", "state"),
-    CAN_UPDATE_MESSAGE("can update message", "state");
+    CAN_UPDATE_MESSAGE("can update message", "state"),
+    ADD_MEMBER_RESULT("add member result", "message");
 
     private final String command;
     private final String[] attributes;

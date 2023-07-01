@@ -81,10 +81,12 @@ public class ChatController {
         return Room.getRoomById(roomID).isAdmin(username);
     }
 
-    public static void addMemberToRoom(String roomID, String username) {
+    public static boolean addMemberToRoom(String roomID, String username) {
         Room room = Room.getRoomById(roomID);
+        if(room.getMembersUsernames().contains(username)) return false;
         room.addToMembers(username);
         room.loadChatToDatabase();
+        return true;
     }
 
     public static boolean canUpdateMessage(String chatId, String chatType, String messageId, String username) {

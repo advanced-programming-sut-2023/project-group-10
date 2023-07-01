@@ -7,6 +7,7 @@ import org.example.connection.ConnectionDatabase;
 import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
 import org.example.controller.ChatController;
+import org.example.model.User;
 import org.example.model.chat.Message;
 
 import java.io.IOException;
@@ -129,11 +130,21 @@ public class ChatHandler {
         // TODO: check duplicate user
         String roomID = receivedPacket.getAttribute().get("room id");
         String username = receivedPacket.getAttribute().get("username");
-        ChatController.addMemberToRoom(roomID, username);
+        String message;
+        if (User.getUserByUsername(username) == null) message = "this user doesn't exist!";
+        else {
+            boolean result = ChatController.addMemberToRoom(roomID, username);
+            if (result) message = "user added successfully!";
+            else message = "user is already in the group!";
+        }
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("message", message);
+        Packet toBeSent = new Packet(ServerToClientCommands.ADD_MEMBER_RESULT.getCommand(), attributes);
+        connection.sendPacket(toBeSent);
         Connection toBeInformed = ConnectionDatabase.getInstance().getConnectionByUsername(username);
         if (toBeInformed != null) {
-            Packet toBeSent = getChatsPacket(ChatController.getMyRooms(username));
-            toBeInformed.sendNotification(toBeSent);
+            Packet toBeSent2 = getChatsPacket(ChatController.getMyRooms(username));
+            toBeInformed.sendNotification(toBeSent2);
         }
     }
 
