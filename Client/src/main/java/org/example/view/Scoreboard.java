@@ -65,8 +65,9 @@ public class Scoreboard extends Application {
         vBox.getChildren().addAll(currentPlayerAvatar, currentPlayerUsername, currentPlayerScore, back);
 
         ListView<HBox> hBoxListView = new ListView<>();
-        hBoxListView.setMaxWidth(500);
-        hBoxListView.setMaxHeight(150);
+        hBoxListView.setMaxWidth(600);
+        hBoxListView.setMinWidth(500);
+        hBoxListView.setMaxHeight(500);
         hBoxListView.setFixedCellSize(70);
 
 
@@ -109,15 +110,6 @@ public class Scoreboard extends Application {
             Text rank = new Text(Integer.toString(i+1));
             Text username = new Text(sortedUsers.get(i).getUsername());
 
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("username", username.getText());
-            Packet online = new Packet(ClientToServerCommands.GET_CONNECTION.getCommand(), hashMap);
-            Client.getInstance().sendPacket(online);
-            String state = Client.getInstance().recievePacket().getAttribute().get("state");
-            Text connectionState = new Text();
-            if(state.equals("online")) connectionState.setText("online");
-            else connectionState.setText("offline");
-
             Circle circle = new Circle(30, new ImagePattern(new Image(sortedUsers.get(i).getAvatar())));
             circle.setOnDragDetected(mouseEvent -> {
                 Dragboard db = circle.startDragAndDrop(TransferMode.ANY);
@@ -132,9 +124,34 @@ public class Scoreboard extends Application {
             circle.setOnMouseDragged(mouseEvent -> mouseEvent.setDragDetect(true));
 
             Text highScore = new Text(Integer.toString(sortedUsers.get(i).getHighScore()));
+
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("username", username.getText());
+            Packet online = new Packet(ClientToServerCommands.GET_CONNECTION.getCommand(), hashMap);
+            Client.getInstance().sendPacket(online);
+            String state = Client.getInstance().recievePacket().getAttribute().get("state");
+            Text connectionState = new Text();
+
+            Text lastSeen = new Text();
+            HashMap <String, String> attribute = new HashMap<>();
+            attribute.put("username", username.getText());
+            Packet lastVisit = new Packet(ClientToServerCommands.GET_LAST_VISIT.getCommand(), attribute);
+            Client.getInstance().sendPacket(lastVisit);
+            long time = Long.parseLong(Client.getInstance().recievePacket().getAttribute().get("time"));
+
+            if(state.equals("online")) {
+                connectionState.setText("        online        ");
+                lastSeen.setText("        online        ");
+            }
+            else {
+                long minutes = (System.currentTimeMillis() - time) / 60000;
+                lastSeen.setText(minutes + " minutes ago");
+                connectionState.setText("offline");
+            }
+
             HBox hBox = new HBox(10);
             hBox.setAlignment(Pos.CENTER);
-            hBox.getChildren().addAll(rank, username, circle, highScore, connectionState);
+            hBox.getChildren().addAll(rank, username, circle, highScore, connectionState, lastSeen);
             hBoxListView.getItems().add(hBox);
         }
     }

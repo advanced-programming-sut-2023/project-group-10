@@ -177,7 +177,6 @@ public class PrivateChatController implements ChatControllerParent {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        initChatBox(getMessages());
     }
 
     private void deleteForMe(MouseEvent mouseEvent) {
@@ -199,7 +198,6 @@ public class PrivateChatController implements ChatControllerParent {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        initChatBox(getMessages());
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {

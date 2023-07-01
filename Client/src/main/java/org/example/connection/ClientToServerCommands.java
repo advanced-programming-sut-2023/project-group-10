@@ -35,6 +35,7 @@ public enum ClientToServerCommands {
     GET_SORTED_USERS("get sorted users"),
     GET_CONNECTION("get connection", "username"),
     GET_ALL_CONNECTIONS("get all connections"),
+    GET_LAST_VISIT("gat last visit", "username"),
 
     //start game menu
     START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),

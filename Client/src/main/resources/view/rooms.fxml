@@ -23,7 +23,7 @@
         <ListView fx:id="chats" prefHeight="643.0" prefWidth="500.0" />
         <HBox prefHeight="49.0" prefWidth="500.0">
             <children>
-                <TextField prefHeight="39.0" prefWidth="303.0" />
+                <TextField fx:id="roomIdField" prefHeight="39.0" prefWidth="303.0" />
                 <Button fx:id="addRoomButton" mnemonicParsing="false" prefHeight="39.0" prefWidth="205.0" style="-fx-background-color: blue;" text="add new room" textFill="WHITE">
                     <font>
                         <Font name="Fahkwang Regular" size="13.0" />
