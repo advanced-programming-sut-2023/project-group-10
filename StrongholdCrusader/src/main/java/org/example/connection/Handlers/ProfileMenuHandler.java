@@ -82,7 +82,7 @@ public class ProfileMenuHandler {
 
     public void handleChangeAvatar() throws IOException {
         User currentUser = User.getUserByUsername(connection.getUsername());
-        ProfileMenuController.changeAvatar(receivedPacket.getAttribute().get("new avatar"), currentUser);
+        ProfileMenuController.changeAvatar(receivedPacket.getAttribute().get("new avatar path"), currentUser);
         Packet toBeSent;
         toBeSent = new Packet(ServerToClientCommands.SUCCESSFUL_CHANGE.getCommand(), null);
         connection.sendPacket(toBeSent);
