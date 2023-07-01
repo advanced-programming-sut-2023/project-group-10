@@ -23,8 +23,8 @@ public class PrivateChatGFX extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(new URL(RoomChatGFX.class.getResource("/view/privateChat.fxml").toExternalForm()));
+        PrivateChatController.setChatName(this.chatId);
         Pane chat = loader.load();
-        ((PrivateChatController) loader.getController()).setChatName(this.chatId);
         if (stage.getScene() == null) {
             Scene scene = new Scene(chat);
             stage.setScene(scene);
