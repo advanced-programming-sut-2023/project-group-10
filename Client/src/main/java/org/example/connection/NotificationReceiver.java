@@ -70,6 +70,7 @@ public class NotificationReceiver extends Thread {
                         }.getType());
                         break;
                     case LOGGED_OUT:
+                    case LOGIN:
                         userStateChange++;
                         break;
                 }

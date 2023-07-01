@@ -2,6 +2,7 @@ package org.example.connection.Handlers;
 
 import com.google.gson.Gson;
 import org.example.connection.Connection;
+import org.example.connection.ConnectionDatabase;
 import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
 import org.example.controller.LoginMenuController;
@@ -11,6 +12,7 @@ import org.example.view.enums.messages.LoginMenuMessages;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class LoginMenuHandler {
     private final Connection connection;
@@ -77,6 +79,9 @@ public class LoginMenuHandler {
         hashMap.put("message", messageValue);
         Packet toBeSent = new Packet(ServerToClientCommands.LOGIN.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
+        for(Map.Entry<String, Connection> map : ConnectionDatabase.getInstance().getSessionIdConnectionMap().entrySet()){
+            map.getValue().sendNotification(toBeSent);
+        }
     }
 
 
