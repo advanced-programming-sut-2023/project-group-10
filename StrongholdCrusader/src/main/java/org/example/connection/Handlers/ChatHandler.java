@@ -118,9 +118,10 @@ public class ChatHandler {
         String senderUsername = connection.getUsername();
         String messageBody = receivedPacket.getAttribute().get("message body");
         String timeSent = receivedPacket.getAttribute().get("time sent");
+        String milliesSent=receivedPacket.getAttribute().get("millies sent");
         String chatType = receivedPacket.getAttribute().get("chat type");
         String chatID = receivedPacket.getAttribute().get("chat id");
-        ChatController.sendMessage(senderUsername, messageBody, timeSent, chatType, chatID);
+        ChatController.sendMessage(senderUsername, messageBody, timeSent, milliesSent, chatType, chatID);
     }
 
     public void isAdmin() throws IOException {
