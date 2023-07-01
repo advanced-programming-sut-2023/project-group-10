@@ -38,7 +38,7 @@ public class PublicChatController implements ChatControllerParent {
         Packet packet = new Packet(ClientToServerCommands.GET_PUBLIC_CHAT_MESSAGES.getCommand(), null);
         Client.getInstance().sendPacket(packet);
         Packet receivedPacket = Client.getInstance().recievePacket();
-        ArrayList<Message> messages = new Gson().fromJson(receivedPacket.getAttribute().get("messages"), new TypeToken<List<Message>>() {
+        ArrayList<Message> messages = new Gson().fromJson(receivedPacket.getAttribute().get("chats"), new TypeToken<List<Message>>() {
         }.getType());
         initChatBox(messages);
         add.setOnMouseClicked(evt -> {
