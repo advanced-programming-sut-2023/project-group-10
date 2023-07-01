@@ -77,6 +77,7 @@ public class ChangeAvatarMenu extends Application {
             attributes.put("new avatar path", file.toURI().toString());
             Packet packet = new Packet("change avatar", attributes);
             Client.getInstance().sendPacket(packet);
+            Client.getInstance().recievePacket();
 
             Popup popup = new Popup();
             Text text = new Text("Avatar Changed Successfully");
@@ -92,6 +93,7 @@ public class ChangeAvatarMenu extends Application {
         attributes.put("new avatar path", file.toURI().toString());
         Packet packet = new Packet("change avatar", attributes);
         Client.getInstance().sendPacket(packet);
+        Client.getInstance().recievePacket();
         dropHere.setFill(new ImagePattern(new Image(file.toURI().toString())));
     }
 
@@ -109,6 +111,7 @@ public class ChangeAvatarMenu extends Application {
             attributes.put("new avatar path",path);
             Packet packet = new Packet("change avatar", attributes);
             Client.getInstance().sendPacket(packet);
+            Client.getInstance().recievePacket();
             new ProfileMenu().start(stage);
         }
     }

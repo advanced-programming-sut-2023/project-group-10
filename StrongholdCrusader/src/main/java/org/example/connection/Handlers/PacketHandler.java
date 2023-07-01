@@ -3,6 +3,7 @@ package org.example.connection.Handlers;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Connection;
 import org.example.connection.Packet;
+import org.example.connection.ServerToClientCommands;
 
 import java.io.IOException;
 
@@ -23,6 +24,11 @@ public class PacketHandler {
 
     public void handle(Packet receivedPacket) throws IOException {
         updateHandlerPackets(receivedPacket);
+        if (!receivedPacket.getAttribute().get("sessionID").equals(connection.getSessionId()))
+            connection.sendNotification(new Packet(ServerToClientCommands.UNAUTHORIZED_REQUEST.getCommand(), null));
+        else if (connection.getSessionExpirationTime() < System.currentTimeMillis())
+            connection.sendNotification(new Packet(ServerToClientCommands.CONNECTION_TIMED_OUT.getCommand(), null));
+
         ClientToServerCommands receivedPacketCommand = ClientToServerCommands.getCommandByString(receivedPacket.getCommand());
         switch (receivedPacketCommand) {
             case INITIALIZE_APP:
@@ -90,6 +96,9 @@ public class PacketHandler {
                 break;
             case CHANGE_SLOGAN:
                 profileMenuHandler.handleChangeSlogan();
+                break;
+            case GET_SORTED_USERS:
+                profileMenuHandler.sortedUsers();
                 break;
             case CAN_CREATE_PRIVATE_CHAT:
                 chatHandler.canCreatePrivateChat();

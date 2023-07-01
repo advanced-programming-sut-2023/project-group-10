@@ -32,6 +32,7 @@ public enum ClientToServerCommands {
     //this should be Handled in another manner/did not figure it out //TODO
     CHANGE_SLOGAN("change slogan", "slogan"),
     CHANGE_AVATAR("change avatar", "new avatar path"),
+    GET_SORTED_USERS("get sorted users"),
 
     //start game menu
     START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),

@@ -18,7 +18,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.example.model.Stronghold;
+import org.example.connection.Client;
+import org.example.connection.ClientToServerCommands;
+import org.example.connection.Packet;
 import org.example.model.User;
 
 import java.util.ArrayList;
@@ -26,7 +28,6 @@ import java.util.List;
 
 
 public class Scoreboard extends Application {
-    private static Stage stage;
     private String path;
 
     public static void bind(ListView<Integer> rank, ListView<Circle> avatar, ListView<String> username, ListView<Integer> highScore) {
@@ -53,9 +54,7 @@ public class Scoreboard extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Scoreboard.stage = stage;
-
-        Circle currentPlayerAvatar = new Circle(50, new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
+        Circle currentPlayerAvatar = new Circle(50, new ImagePattern(new Image(DataBank.getLoggedInUser().getAvatar())));
         currentPlayerAvatar.setOnDragOver(dragEvent -> {
             if (dragEvent.getGestureSource() != currentPlayerAvatar && dragEvent.getDragboard().hasString())
                 dragEvent.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -68,8 +67,8 @@ public class Scoreboard extends Application {
             else dragEvent.setDropCompleted(false);
             dragEvent.consume();
         });
-        Text currentPlayerUsername = new Text(Stronghold.getCurrentUser().getUsername());
-        Text currentPlayerScore = new Text(Integer.toString(Stronghold.getCurrentUser().getHighScore()));
+        Text currentPlayerUsername = new Text(DataBank.getLoggedInUser().getUsername());
+        Text currentPlayerScore = new Text(Integer.toString(DataBank.getLoggedInUser().getHighScore()));
         Button back = new Button("back");
         back.setOnMouseClicked(mouseEvent -> {
             try {
@@ -95,7 +94,9 @@ public class Scoreboard extends Application {
         highScore.setMaxWidth(100);
         highScore.setFixedCellSize(70);
 
-        List<User> sortedUsers = new ArrayList<>(User.sortUsers());
+        Packet packet = new Packet(ClientToServerCommands.GET_SORTED_USERS.getCommand(), null);
+        Client.getInstance().sendPacket(packet);
+        ArrayList<User> sortedUsers = User.getSortedUsersFromJson(Client.getInstance().recievePacket().getAttribute().get("array list"));
 
         for (int i = 0; i < sortedUsers.size(); i++) {
             rank.getItems().add(i + 1);
@@ -132,7 +133,6 @@ public class Scoreboard extends Application {
     }
 
     public void profileMenu() throws Exception {
-        //TODO
-        //new ProfileMenu().start(stage);
+        new ProfileMenu().start(SignupMenu.stage);
     }
 }

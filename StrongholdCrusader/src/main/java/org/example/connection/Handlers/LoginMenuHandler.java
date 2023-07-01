@@ -69,6 +69,8 @@ public class LoginMenuHandler {
         if (message == LoginMenuMessages.LOGIN_SUCCESSFUL) {
             userObject = User.getUserByUsername(username);
             connection.setUsername(username);
+            if(Boolean.parseBoolean(stayLoggedIn))
+                connection.setUsername(username);
         }
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("user object", userObjectToJson(userObject));
