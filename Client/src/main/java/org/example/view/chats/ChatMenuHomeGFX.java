@@ -18,6 +18,7 @@ public class ChatMenuHomeGFX extends Application {
             stage.setScene(scene);
         } else
             stage.getScene().setRoot(chatHome);
+        stage.setMaximized(false);
         stage.show();
     }
 }

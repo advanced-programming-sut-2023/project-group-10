@@ -3,9 +3,11 @@ package org.example.controller;
 import org.example.model.User;
 import org.example.model.chat.*;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class ChatController {
+
     public static boolean canCreatePrivateChat(String requester, String otherParty) {
         return PrivateChat.getPrivateChatByMembers(requester, otherParty) == null;
     }
@@ -24,14 +26,20 @@ public class ChatController {
 
     public static ArrayList<String> getMyPrivateChats(String username) {
         ArrayList<String> myPrivateChats = new ArrayList<>();
-        for (PrivateChat privateChat : PrivateChat.getAllPrivateChats())
+        ArrayList<PrivateChat> privateChats = PrivateChat.getAllPrivateChats();
+        if (privateChats == null || privateChats.size() == 0)
+            return null;
+        for (PrivateChat privateChat : privateChats)
             if (privateChat.hasAccess(username)) myPrivateChats.add(privateChat.getOtherPartyUsername(username));
         return myPrivateChats;
     }
 
     public static ArrayList<String> getMyRooms(String username) {
         ArrayList<String> myRooms = new ArrayList<>();
-        for (Room room : Room.getAllRooms())
+        ArrayList<Room> allRooms = Room.getAllRooms();
+        if (allRooms == null)
+            return null;
+        for (Room room : allRooms)
             if (room.hasAccess(username)) myRooms.add(room.getChatID());
         return myRooms;
     }

@@ -57,4 +57,12 @@ public class NotificationReceiver extends Thread {
             }
         }
     }
+
+    public ArrayList<String> getRooms() {
+        return null;
+    }
+
+    public ArrayList<String> getPrivateChats(){
+        return null;
+    }
 }
