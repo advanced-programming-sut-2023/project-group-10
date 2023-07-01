@@ -2,6 +2,7 @@ package org.example.connection.Handlers;
 
 import com.google.gson.Gson;
 import org.example.connection.Connection;
+import org.example.connection.ConnectionDatabase;
 import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
 import org.example.controller.ProfileMenuController;
@@ -11,6 +12,7 @@ import org.example.view.enums.messages.ProfileMenuMessages;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class ProfileMenuHandler {
 
@@ -98,14 +100,25 @@ public class ProfileMenuHandler {
 
     public void sortedUsers() throws IOException{
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("array list", arrayListToJson(User.sortUsers()));
+        hashMap.put("array list", new Gson().toJson(User.sortUsers()));
         Packet toBeSent = new Packet(ServerToClientCommands.SORTED_USERS.getCommand(),hashMap);
         connection.sendPacket(toBeSent);
     }
 
-    private String arrayListToJson(ArrayList<User> sortedUsers) {
-        // null object serialized as empty string
-        if (sortedUsers == null) return "";
-        return new Gson().toJson(sortedUsers, ArrayList.class);
+    public void connectionDatabase() throws IOException {
+        String username = receivedPacket.getAttribute().get("username");
+        HashMap<String, String> hashMap = new HashMap<>();
+        if(ConnectionDatabase.getInstance().getConnectionByUsername(username) == null)
+            hashMap.put("state", "offline");
+        else hashMap.put("state", "online");
+        Packet toBeSent = new Packet(ServerToClientCommands.CONNECTION.getCommand(), hashMap);
+        connection.sendPacket(toBeSent);
+    }
+
+    public void allConnections() throws IOException{
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("array list", new Gson().toJson(ConnectionDatabase.getInstance().getSessionIdConnectionMap()));
+        Packet toBeSent = new Packet(ServerToClientCommands.ALL_CONNECTIONS.getCommand(), hashMap);
+        connection.sendPacket(toBeSent);
     }
 }

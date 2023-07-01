@@ -8,6 +8,7 @@ import org.example.model.Stronghold;
 import org.example.model.User;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class MainMenuHandler {
     private final Connection connection;
@@ -33,6 +34,7 @@ public class MainMenuHandler {
         Packet toBeSent;
         toBeSent = new Packet(ServerToClientCommands.LOGGED_OUT.getCommand(), null);
         connection.sendPacket(toBeSent);
+        connection.sendNotification(toBeSent);
     }
 
 

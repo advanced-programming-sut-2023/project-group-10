@@ -32,6 +32,8 @@ public enum ClientToServerCommands {
     CHANGE_SLOGAN("change slogan", "slogan"),
     CHANGE_AVATAR("change avatar", "new avatar path"),
     GET_SORTED_USERS("get sorted users"),
+    GET_CONNECTION("get connection", "username"),
+    GET_ALL_CONNECTIONS("get all connections"),
 
     //start game menu
     START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),

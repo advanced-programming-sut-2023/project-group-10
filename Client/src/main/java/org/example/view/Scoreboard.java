@@ -1,13 +1,14 @@
 package org.example.view;
 
+import com.google.gson.Gson;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
@@ -18,39 +19,21 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class Scoreboard extends Application {
     private String path;
-
-    public static void bind(ListView<Integer> rank, ListView<Circle> avatar, ListView<String> username, ListView<Integer> highScore) {
-        Node n1 = rank.lookup(".scroll-bar");
-        if (n1 instanceof ScrollBar) {
-            final ScrollBar bar1 = (ScrollBar) n1;
-            Node n2 = highScore.lookup(".scroll-bar");
-            if (n2 instanceof ScrollBar) {
-                final ScrollBar bar2 = (ScrollBar) n2;
-                bar1.valueProperty().bindBidirectional(bar2.valueProperty());
-            }
-            Node n3 = username.lookup(".scroll-bar");
-            if (n3 instanceof ScrollBar) {
-                final ScrollBar bar3 = (ScrollBar) n3;
-                bar1.valueProperty().bindBidirectional(bar3.valueProperty());
-            }
-            Node n4 = avatar.lookup(".scroll-bar");
-            if (n4 instanceof ScrollBar) {
-                final ScrollBar bar4 = (ScrollBar) n4;
-                bar1.valueProperty().bindBidirectional(bar4.valueProperty());
-            }
-        }
-    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -81,26 +64,60 @@ public class Scoreboard extends Application {
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(currentPlayerAvatar, currentPlayerUsername, currentPlayerScore, back);
 
-        ListView<Integer> rank = new ListView<>();
-        rank.setMaxWidth(70);
-        rank.setFixedCellSize(70);
-        ListView<Circle> avatar = new ListView<>();
-        avatar.setMaxWidth(150);
-        avatar.setFixedCellSize(70);
-        ListView<String> username = new ListView<>();
-        username.setMaxWidth(150);
-        username.setFixedCellSize(70);
-        ListView<Integer> highScore = new ListView<>();
-        highScore.setMaxWidth(100);
-        highScore.setFixedCellSize(70);
+        ListView<HBox> hBoxListView = new ListView<>();
+        hBoxListView.setMaxWidth(500);
+        hBoxListView.setMaxHeight(150);
+        hBoxListView.setFixedCellSize(70);
 
+
+        createListView(hBoxListView);
+        AtomicInteger firstState = new AtomicInteger(Client.getInstance().getNotificationReceiver().getUserStateChange());
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), actionEvent -> {
+            if(firstState.get() != Client.getInstance().getNotificationReceiver().getUserStateChange()){
+                firstState.set(Client.getInstance().getNotificationReceiver().getUserStateChange());
+                try {
+                    createListView(hBoxListView);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }));
+        timeline.setCycleCount(-1);
+        timeline.play();
+
+        HBox main = new FXMLLoader(Scoreboard.class.getResource("/view/scoreboard.fxml")).load();
+        main.getChildren().addAll(vBox, hBoxListView);
+        Scene scene = new Scene(main);
+        stage.setScene(scene);
+        stage.setTitle("Scoreboard");
+        stage.setMaximized(true);
+        stage.show();
+    }
+
+    public void profileMenu() throws Exception {
+        new ProfileMenu().start(SignupMenu.stage);
+    }
+
+    private void createListView(ListView<HBox> hBoxListView) throws IOException {
+        hBoxListView.getItems().clear();
         Packet packet = new Packet(ClientToServerCommands.GET_SORTED_USERS.getCommand(), null);
         Client.getInstance().sendPacket(packet);
-        ArrayList<User> sortedUsers = User.getSortedUsersFromJson(Client.getInstance().recievePacket().getAttribute().get("array list"));
+        String json = Client.getInstance().recievePacket().getAttribute().get("array list");
+        ArrayList<User> sortedUsers = new Gson().fromJson(json, new com.google.gson.reflect.TypeToken<List<User>>(){}.getType());
 
         for (int i = 0; i < sortedUsers.size(); i++) {
-            rank.getItems().add(i + 1);
-            username.getItems().add(sortedUsers.get(i).getUsername());
+            Text rank = new Text(Integer.toString(i+1));
+            Text username = new Text(sortedUsers.get(i).getUsername());
+
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("username", username.getText());
+            Packet online = new Packet(ClientToServerCommands.GET_CONNECTION.getCommand(), hashMap);
+            Client.getInstance().sendPacket(online);
+            String state = Client.getInstance().recievePacket().getAttribute().get("state");
+            Text connectionState = new Text();
+            if(state.equals("online")) connectionState.setText("online");
+            else connectionState.setText("offline");
+
             Circle circle = new Circle(30, new ImagePattern(new Image(sortedUsers.get(i).getAvatar())));
             circle.setOnDragDetected(mouseEvent -> {
                 Dragboard db = circle.startDragAndDrop(TransferMode.ANY);
@@ -113,26 +130,12 @@ public class Scoreboard extends Application {
                 path = image.getUrl();
             });
             circle.setOnMouseDragged(mouseEvent -> mouseEvent.setDragDetect(true));
-            avatar.getItems().add(circle);
-            highScore.getItems().add(sortedUsers.get(i).getHighScore());
+
+            Text highScore = new Text(Integer.toString(sortedUsers.get(i).getHighScore()));
+            HBox hBox = new HBox(10);
+            hBox.setAlignment(Pos.CENTER);
+            hBox.getChildren().addAll(rank, username, circle, highScore, connectionState);
+            hBoxListView.getItems().add(hBox);
         }
-
-        HBox hBox = new HBox(rank, avatar, username, highScore);
-        hBox.setAlignment(Pos.CENTER);
-        hBox.setMaxHeight(300);
-
-        HBox main = new FXMLLoader(Scoreboard.class.getResource("/view/scoreboard.fxml")).load();
-        main.getChildren().addAll(vBox, hBox);
-        Scene scene = new Scene(main);
-        stage.setScene(scene);
-        stage.setTitle("Scoreboard");
-        stage.setMaximized(true);
-        stage.show();
-
-        bind(rank, avatar, username, highScore);
-    }
-
-    public void profileMenu() throws Exception {
-        new ProfileMenu().start(SignupMenu.stage);
     }
 }

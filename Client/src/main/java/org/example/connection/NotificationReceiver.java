@@ -18,6 +18,7 @@ public class NotificationReceiver extends Thread {
     private final PacketParser packetParser;
     private ChatControllerParent chatController;
     private ArrayList<Message> messagesCache;
+    private int userStateChange = 0;
 
     public NotificationReceiver(Socket socket) throws IOException {
         this.socket = socket;
@@ -37,12 +38,17 @@ public class NotificationReceiver extends Thread {
         this.messagesCache = messagesCache;
     }
 
+    public int getUserStateChange() {
+        return userStateChange;
+    }
+
     @Override
     public void run() {
         // direct messages to different parts (just chat for now)
         while (true) {
             try {
                 Packet packet = packetParser.parsePacket(dataInputStream.readUTF());
+                System.out.println(userStateChange);
                 ArrayList<Message> messages = new Gson().fromJson(packet.getAttribute().get("messages"), new TypeToken<List<Message>>() {
                 }.getType());
                 ServerToClientCommands command = ServerToClientCommands.getCommandByString(packet.command);
@@ -51,6 +57,8 @@ public class NotificationReceiver extends Thread {
                     case AUTO_UPDATE_CHAT_MESSAGES:
                         messagesCache = messages;
                         break;
+                    case LOGGED_OUT:
+                        userStateChange++;
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

@@ -11,6 +11,7 @@ public class PacketHandler {
     private final SignupMenuHandler signupMenuHandler;
     private final LoginMenuHandler loginMenuHandler;
     private final ProfileMenuHandler profileMenuHandler;
+    private final MainMenuHandler mainMenuHandler;
     private final ChatHandler chatHandler;
 
     public PacketHandler(Connection connection) {
@@ -18,6 +19,7 @@ public class PacketHandler {
         signupMenuHandler = new SignupMenuHandler(connection);
         loginMenuHandler = new LoginMenuHandler(connection);
         profileMenuHandler = new ProfileMenuHandler(connection);
+        mainMenuHandler = new MainMenuHandler(connection);
         chatHandler = new ChatHandler(connection);
     }
 
@@ -93,6 +95,15 @@ public class PacketHandler {
                 break;
             case GET_SORTED_USERS:
                 profileMenuHandler.sortedUsers();
+                break;
+            case GET_CONNECTION:
+                profileMenuHandler.connectionDatabase();
+                break;
+            case GET_ALL_CONNECTIONS:
+                profileMenuHandler.allConnections();
+                break;
+            case LOGOUT:
+                mainMenuHandler.handleLogout();
                 break;
             case CAN_CREATE_PRIVATE_CHAT:
                 chatHandler.canCreatePrivateChat();

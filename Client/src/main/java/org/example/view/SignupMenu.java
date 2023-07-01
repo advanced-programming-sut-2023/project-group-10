@@ -185,7 +185,7 @@ public class SignupMenu extends Application {
             Packet nicknameFormat = new Packet(ClientToServerCommands.CHECK_NICKNAME.getCommand(), attribute);
             Client.getInstance().sendPacket(nicknameFormat);
             String message = Client.getInstance().recievePacket().getAttribute().get("message");
-            if(!message.equals("")) nicknameLabel.setText("invalid nickname format!");
+            if(!message.equals("valid nickname!")) nicknameLabel.setText("invalid nickname format!");
             else {
                 nicknameLabel.setText("");
                 isNicknameValid = true;
