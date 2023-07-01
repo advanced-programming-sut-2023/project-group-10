@@ -9,7 +9,7 @@
       xmlns="http://javafx.com/javafx"
       fx:controller="org.example.view.ChangeAvatarMenu"
       prefHeight="400.0" prefWidth="600.0"
-      spacing="40" alignment="CENTER">
+      spacing="40" alignment="CENTER" background="-fx-background">
     <VBox alignment="CENTER" spacing="40">
         <Button fx:id="browseButton" text="browse file" onMouseClicked="#browse"/>
         <Rectangle height="150" width="200" fx:id="dropHere" onDragOver="#choosePhoto"/>

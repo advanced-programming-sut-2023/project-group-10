@@ -22,7 +22,8 @@ public class EndScreenController {
 
     public void goBackToMainMenu() {
         try {
-            new MainMenuGFX().start(SignupMenu.stage);
+            //TODO
+            //new MainMenuGFX().start(SignupMenu.stage);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

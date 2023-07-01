@@ -22,6 +22,7 @@ import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class SecurityQuestionMenu extends Application {
 
@@ -66,7 +67,7 @@ public class SecurityQuestionMenu extends Application {
             e.printStackTrace();
         }
 
-        box.setFill(new ImagePattern(new Image(LoginMenu.class.getResource("/images/backgrounds/dotted.jpeg").toExternalForm())));
+        box.setFill(new ImagePattern(new Image(Objects.requireNonNull(LoginMenu.class.getResource("/images/backgrounds/dotted.jpeg")).toExternalForm())));
         generateCaptcha();
     }
 

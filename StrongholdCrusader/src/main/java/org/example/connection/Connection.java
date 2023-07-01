@@ -71,7 +71,8 @@ public class Connection extends Thread {
     }
 
     private void generateAndSendSessionId(String info) throws IOException {
-        long time = Integer.parseInt(info);
+        //long time = Integer.parseInt(info);
+        long time = 0;
         String sessionId = ConnectionDatabase.getInstance().getConnectionCount() + "_" + info + "_" + (time + 3600000);
         dataOutputStream.writeUTF(sessionId);
         this.sessionId = sessionId;

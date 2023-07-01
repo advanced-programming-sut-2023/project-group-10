@@ -46,6 +46,7 @@ public class ChangeRateMenuGFX extends Application {
     }
 
     public void cancelChanges(MouseEvent mouseEvent) throws Exception {
-        new PopularityFactorsMenuGFX().start(SignupMenu.stage);
+        //TODO
+        //new PopularityFactorsMenuGFX().start(SignupMenu.stage);
     }
 }

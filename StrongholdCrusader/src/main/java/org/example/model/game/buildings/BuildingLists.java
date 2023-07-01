@@ -44,7 +44,8 @@ public class BuildingLists {
         for (BuildingTypeName buildingTypeName : BuildingTypeName.values()) {
             VBox vBox = new VBox(2);
             vBox.setAlignment(Pos.CENTER);
-            vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
+            //TODO
+            //vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
             vBox.setPadding(new Insets(0, 10, 0, 10));
             listView.getItems().add(vBox);
             Circle circle = new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingTypeName.toString().toLowerCase() + ".png").toString())));
@@ -83,7 +84,8 @@ public class BuildingLists {
         for (BuildingType buildingType : buildings) {
             VBox vBox = new VBox(2); //TODO set spacing
             vBox.setAlignment(Pos.CENTER);
-            vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
+            //TODO
+            //vBox.setBackground(new Background(RandomGenerator.setBackground("/images/backgrounds/lightBrown1.JPG")));
             vBox.setPadding(new Insets(0, 10, 0, 10));
             listView.getItems().add(vBox);
             Circle circle = new Circle(40, new ImagePattern(new Image(GameMenuGFXController.class.getResource("/images/buildings/" + buildingType.getName() + ".png").toString())));

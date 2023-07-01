@@ -46,7 +46,7 @@ public class SignupMenu extends Application {
     public static void main(String[] args) throws Exception {
         //Stronghold.initializeApp();
         //TODO send packet initializeApp
-        new Client("localhost", 8080);
+        Client.getInstance();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class SignupMenu extends Application {
     }
 
     @FXML
-    public void initialize() throws Exception {
+    public void initialize() {
         Packet packet = new Packet("get default slogans", new HashMap<>());
         try {
             Client.getInstance().sendPacket(packet);

@@ -132,6 +132,7 @@ public class Scoreboard extends Application {
     }
 
     public void profileMenu() throws Exception {
-        new ProfileMenu().start(stage);
+        //TODO
+        //new ProfileMenu().start(stage);
     }
 }

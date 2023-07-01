@@ -10,8 +10,8 @@ import org.example.model.game.envirnmont.Coordinate;
 import org.example.model.game.envirnmont.Map;
 import org.example.model.game.units.*;
 import org.example.model.game.units.unitconstants.*;
-import org.example.view.CommonGFXActions;
 import org.example.view.enums.messages.UnitMenuMessages;
+import org.example.view.CommonGFXActions;
 
 import java.util.ArrayList;
 import java.util.Arrays;

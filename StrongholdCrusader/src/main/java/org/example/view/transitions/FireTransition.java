@@ -15,7 +15,8 @@ public class FireTransition extends Transition {
 
     public FireTransition(ImageView fireNode) {
         this.fireNode = fireNode;
-        setCycleCount(Animation.INDEFINITE);
+        //TODO
+        //setCycleCount(Animation.INDEFINITE);
         setCycleDuration(Duration.millis(2000));
     }
 

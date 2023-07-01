@@ -6,10 +6,10 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import org.example.controller.TradeMenuController;
 import org.example.model.User;
 import org.example.model.game.Trade;
 import org.example.view.enums.messages.TradeMenuMessages;
+import org.example.controller.TradeMenuController;
 
 import java.io.File;
 import java.util.Objects;

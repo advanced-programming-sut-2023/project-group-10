@@ -799,7 +799,8 @@ public class GameMenuGFXController {
         GameMenuMessages result = GameMenuController.goToNextPlayer();
         if (result == GameMenuMessages.GAME_OVER) {
             try {
-                new EndScreenGFX(Stronghold.getCurrentBattle().getAliveGovernment()).start(SignupMenu.stage);
+                //TODO
+                //new EndScreenGFX(Stronghold.getCurrentBattle().getAliveGovernment()).start(SignupMenu.stage);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -877,7 +878,7 @@ public class GameMenuGFXController {
 
         sliders.getChildren().addAll(foodRateContainer, taxRateContainer, fearRateContainer, religionContainer, back);
         sliders.setPadding(new Insets(25));
-        Image image = new Image(GameMenu.class.getResource("/images/backgrounds/greenSheet2.jpeg").toExternalForm(), 197, 316, false, false);
+        Image image = new Image(GameMenuGFX.class.getResource("/images/backgrounds/greenSheet2.jpeg").toExternalForm(), 197, 316, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
