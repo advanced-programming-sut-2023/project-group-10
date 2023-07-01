@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import org.example.connection.Client;
 
 public class MainMenuController {
     public Text title;
@@ -34,18 +35,18 @@ public class MainMenuController {
     }
 
     public void startGame(MouseEvent mouseEvent) throws Exception {
-        if (User.getUsers().size() < 2) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("not enough players");
-            alert.setHeaderText("");
-            alert.setContentText("you're the only person who has signed up!\nthere should at least be two users to start a game");
-            alert.showAndWait();
-        } else new StartGameMenu().start(SignupMenu.stage);
+//        if (User.getUsers().size() < 2) {
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("not enough players");
+//            alert.setHeaderText("");
+//            alert.setContentText("you're the only person who has signed up!\nthere should at least be two users to start a game");
+//            alert.showAndWait();
+//        } else new StartGameMenu().start(SignupMenu.stage);
 
     }
 
     public void logout(MouseEvent mouseEvent) throws Exception {
-        org.example.controller.MainMenuController.logout();
+        Client.getInstance().logout();
         new LoginMenu().start(SignupMenu.stage);
     }
 

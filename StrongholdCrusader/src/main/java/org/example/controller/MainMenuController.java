@@ -10,7 +10,6 @@ public class MainMenuController {
         if (Stronghold.getLoggedInUserFromFile() != null &&
                 Stronghold.getLoggedInUserFromFile().getUsername().equals(Stronghold.getCurrentUser().getUsername()))
             Stronghold.addUserToFile(null);
-
     }
 
     public static MainMenuMessages  startGame(){

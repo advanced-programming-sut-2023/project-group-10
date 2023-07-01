@@ -4,7 +4,8 @@ import org.example.connection.Connection;
 import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
 import org.example.controller.MainMenuController;
-import org.example.controller.ProfileMenuController;
+import org.example.model.Stronghold;
+import org.example.model.User;
 
 import java.io.IOException;
 
@@ -26,6 +27,9 @@ public class MainMenuHandler {
 
     public void handleLogout() throws IOException {
         MainMenuController.logout();
+        User.getUserByUsername(connection.getUsername()).setOnline(false);
+        Stronghold.dataBase.saveUsersToFile();
+        connection.setUsername("");
         Packet toBeSent;
         toBeSent = new Packet(ServerToClientCommands.LOGGED_OUT.getCommand(), null);
         connection.sendPacket(toBeSent);

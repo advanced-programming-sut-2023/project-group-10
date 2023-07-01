@@ -1,8 +1,11 @@
 package org.example.view;
 
 
+import org.example.model.User;
+
 // TODO: move to client or remove if not needed?
 public class DataBank {
+    private static User loggedInUser;
     private static String username;
     private static String password;
     private static String nickname;
@@ -47,5 +50,13 @@ public class DataBank {
 
     public static void setSlogan(String slogan) {
         DataBank.slogan = slogan;
+    }
+
+    public static User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public static void setLoggedInUser(User user) {
+        loggedInUser = user;
     }
 }

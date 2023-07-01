@@ -64,7 +64,7 @@ public abstract class Chat {
                 }.getType());
                 Packet toBeSent = new Packet(ServerToClientCommands.AUTO_UPDATE_CHAT_MESSAGES.getCommand(), (HashMap<String, String>) Map.of("messages", messagesJson));
                 try {
-                    connection.sendPacket(toBeSent);
+                    connection.sendNotification(toBeSent);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

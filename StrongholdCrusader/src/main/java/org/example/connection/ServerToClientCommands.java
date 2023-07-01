@@ -17,7 +17,7 @@ public enum ServerToClientCommands {
     //login menu
     GET_SECURITY_QUESTION("get security question", "is username valid", "message"),
     TRY_TO_CHANGE_PASSWORD("try to change password", "is successful"),
-    LOGIN("login", "is successful", "message"),
+    LOGIN("login", "user object", "message"),
     //main menu
     LOGGED_OUT("log out"),
     START_GAME("start game", "message"),

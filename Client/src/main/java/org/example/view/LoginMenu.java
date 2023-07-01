@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import org.example.connection.Client;
 import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
+import org.example.model.User;
 import org.example.view.enums.messages.LoginMenuMessages;
 
 import java.util.HashMap;
@@ -99,7 +100,7 @@ public class LoginMenu extends Application {
         Button submit = new Button("submit");
 
         show.setOnMouseClicked(mouseEvent -> {
-            if (username.getText().equals("")){
+            if (username.getText().equals("")) {
                 usernameLabel.setText("please provide a username!");
                 return;
             }
@@ -129,7 +130,7 @@ public class LoginMenu extends Application {
                     }
 
                 } else usernameLabel.setText("This username does not exist!");
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -141,7 +142,7 @@ public class LoginMenu extends Application {
             try {
                 Client.getInstance().sendPacket(packet);
                 passwordLabel.setText(Client.getInstance().recievePacket().getAttribute().get("message"));
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -161,7 +162,7 @@ public class LoginMenu extends Application {
                     pane.getChildren().remove(question);
                     pane.getChildren().add(login);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -178,7 +179,7 @@ public class LoginMenu extends Application {
             captchaNumber.setFont(Font.font("Verdana", FontPosture.ITALIC, 20));
             captchaNumber.setStrikethrough(true);
             box.setWidth(captchaNumber.getText().length() * 15);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -197,7 +198,8 @@ public class LoginMenu extends Application {
         attributes.put("password", password.getText());
         Packet packet = new Packet("log in", attributes);
         Client.getInstance().sendPacket(packet);
-        String message = Client.getInstance().recievePacket().getAttribute().get("message value");
+        Packet receivedPacket = Client.getInstance().recievePacket();
+        String message = receivedPacket.getAttribute().get("message");
         if (message.equals(LoginMenuMessages.USERNAME_DOESNT_EXIST.name())) {
             usernameText.setText("username does not exist");
             passwordText.setText("");
@@ -206,7 +208,11 @@ public class LoginMenu extends Application {
             usernameText.setText("");
             passwordText.setText("wrong password");
             captchaText.setText("");
-        } //else new MainMenuGFX().start(stage);
+        } else { // TODO: check later
+            User user = User.getUserFromJson(receivedPacket.getAttribute().get("user object"));
+            DataBank.setLoggedInUser(user);
+            new MainMenuGFX().start(stage);
+        }
         //TODO
     }
 

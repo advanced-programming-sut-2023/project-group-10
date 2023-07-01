@@ -11,7 +11,6 @@ import org.example.view.enums.messages.LoginMenuMessages;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 public class LoginMenuHandler {
     private final Connection connection;
@@ -62,19 +61,12 @@ public class LoginMenuHandler {
         // TODO: add online and offline
         String username = receivedPacket.getAttribute().get("username");
         String password = receivedPacket.getAttribute().get("password");
-        User userObject;
+        User userObject = null;
         String messageValue;
         LoginMenuMessages message = LoginMenuController.login(username, password);
-        if (message == LoginMenuMessages.USERNAME_DOESNT_EXIST) {
-            userObject = null;
-            messageValue = "username does not exist";
-        } else if (message == LoginMenuMessages.WRONG_PASSWORD) {
-            userObject = null;
-            messageValue = "wrong password";
-        } else {
+        messageValue = message.name();
+        if (message == LoginMenuMessages.LOGIN_SUCCESSFUL)
             userObject = User.getUserByUsername(username);
-            messageValue = "";
-        }
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("user object", userObjectToJson(userObject));
         hashMap.put("message", messageValue);

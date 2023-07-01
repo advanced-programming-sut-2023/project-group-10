@@ -20,6 +20,7 @@ public class User {
     private String questionAnswer;
     private String avatar;
     private int highScore;
+    private boolean isOnline;
 
 
     public User(String username, String password, String nickname, String email, String slogan, String questionNumber,
@@ -32,6 +33,14 @@ public class User {
         this.questionNumber = questionNumber;
         this.questionAnswer = CheckFormatAndEncrypt.encryptString(securityAnswer);
         this.avatar = "/images/avatar/avatar" + randomNumber() + ".png";
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 
     public static void addUser(String username, String password, String nickname, String email, String slogan,

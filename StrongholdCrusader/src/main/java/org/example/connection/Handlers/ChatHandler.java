@@ -51,7 +51,7 @@ public class ChatHandler {
             attributes2.put("chat type", "private");
             attributes2.put("chat id", requester);
             Packet toBeSentToOtherParty = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), attributes2);
-            otherConnection.sendPacket(toBeSentToOtherParty);
+            otherConnection.sendNotification(toBeSentToOtherParty);
         }
     }
 
@@ -143,7 +143,7 @@ public class ChatHandler {
             attributes.put("chat type", "room");
             attributes.put("room id", roomID);
             Packet toBeSent = new Packet(ServerToClientCommands.NEW_CHAT_ADDED.getCommand(), attributes);
-            toBeInformed.sendPacket(toBeSent);
+            toBeInformed.sendNotification(toBeSent);
         }
     }
 
