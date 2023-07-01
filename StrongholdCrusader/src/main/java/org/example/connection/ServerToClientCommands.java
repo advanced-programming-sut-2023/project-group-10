@@ -20,7 +20,7 @@ public enum ServerToClientCommands {
     LOGIN("login", "is successful", "message"),
     //main menu
     LOGGED_OUT("log out"),
-    START_GAME("start game","message"),
+    START_GAME("start game", "message"),
     //profile menu
     FAILED_CHANGE("failed change", "message"),
     SUCCESSFUL_CHANGE("successful change", "message"),
@@ -30,7 +30,8 @@ public enum ServerToClientCommands {
     GET_CHAT_LIST("get chat list", "chats"),
     GET_CHAT_MESSAGES("get chat messages", "messages"),
     AUTO_UPDATE_CHAT_MESSAGES("auto update chat messages", "messages"),
-    IS_ADMIN("is admin", "state");
+    IS_ADMIN("is admin", "state"),
+    CAN_UPDATE_MESSAGE("can update message", "state");
 
     private final String command;
     private final String[] attributes;

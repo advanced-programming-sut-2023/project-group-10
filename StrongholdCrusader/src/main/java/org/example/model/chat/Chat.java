@@ -38,11 +38,24 @@ public abstract class Chat {
         informWatchers();
     }
 
+    public void deleteMessage(String messageID) {
+        Message toBeRemoved = getMessageById(messageID);
+        messages.remove(toBeRemoved);
+        loadChatToDatabase();
+        informWatchers();
+    }
+
+    public void editMessage(String messageID, String newBody) {
+        Message toBeEdited = getMessageById(messageID);
+        toBeEdited.setMessageBody(newBody);
+        loadChatToDatabase();
+        informWatchers();
+    }
+
     public void addWatcher(String username) {
         watchersUsernames.add(username);
     }
 
-    // TODO: move to controller/handler
     public void informWatchers() {
         for (String username : watchersUsernames) {
             Connection connection = ConnectionDatabase.getInstance().getConnectionByUsername(username);
@@ -59,6 +72,16 @@ public abstract class Chat {
         }
     }
 
+    public void exitChat(String username) {
+        watchersUsernames.remove(username);
+    }
+
+    public Message getMessageById(String messageId) {
+        for (Message message : messages)
+            if (message.getMessageID().equals(messageId)) return message;
+        return null;
+    }
+
     public abstract void loadChatToDatabase();
 
     public abstract boolean hasAccess(String username);
@@ -67,9 +90,5 @@ public abstract class Chat {
     public boolean equals(Object obj) {
         if (!(obj instanceof Chat)) return false;
         return ((Chat) obj).getChatID().equals(chatID);
-    }
-
-    public void exitChat(String username) {
-        watchersUsernames.remove(username);
     }
 }

@@ -85,6 +85,17 @@ public class PacketHandler {
             case CHANGE_SLOGAN:
                 profileMenuHandler.handleChangeSlogan();
                 break;
+            case CAN_CREATE_PRIVATE_CHAT:
+                chatHandler.canCreatePrivateChat();
+            case CREATE_PRIVATE_CHAT:
+                chatHandler.createPrivateChat();
+                break;
+            case IS_ROOM_ID_VALID:
+                chatHandler.isRoomIDValid();
+                break;
+            case CREATE_ROOM:
+                chatHandler.creatRoom();
+                break;
             case GET_MY_PRIVATE_CHATS:
                 chatHandler.getMyPrivateChats();
                 break;
@@ -105,6 +116,15 @@ public class PacketHandler {
                 break;
             case SEND_MESSAGE:
                 chatHandler.sendMessage();
+                break;
+            case CAN_UPDATE_MESSAGE:
+                chatHandler.canUpdateMessage();
+                break;
+            case DELETE_MESSAGE:
+                chatHandler.deleteMessage();
+                break;
+            case EDIT_MESSAGE:
+                chatHandler.editMessage();
                 break;
         }
     }

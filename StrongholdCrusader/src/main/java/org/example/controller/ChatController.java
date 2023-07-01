@@ -79,4 +79,34 @@ public class ChatController {
         room.addToMembers(username);
         room.loadChatToDatabase();
     }
+
+    public static boolean canUpdateMessage(String chatId, String chatType, String messageId, String username) {
+        User sender;
+        if (chatType.equals("public"))
+            sender = PublicChat.getInstance().getMessageById(messageId).getSender();
+        else if (chatType.equals("private"))
+            sender = PrivateChat.getPrivateChatByMembers(username, chatId).getMessageById(messageId).getSender();
+        else sender = Room.getRoomById(chatId).getMessageById(messageId).getSender();
+        return sender.getUsername().equals(username);
+    }
+
+    public static void deleteMessage(String messageID, String chatType, String chatID, String username) {
+        Chat chat;
+        if (chatType.equals("public"))
+            chat = PublicChat.getInstance();
+        else if (chatType.equals("private"))
+            chat = PrivateChat.getPrivateChatByMembers(username, chatID);
+        else chat = Room.getRoomById(chatID);
+        chat.deleteMessage(messageID);
+    }
+
+    public static void editMessage(String messageID, String chatType, String chatID, String newBody, String username) {
+        Chat chat;
+        if (chatType.equals("public"))
+            chat = PublicChat.getInstance();
+        else if (chatType.equals("private"))
+            chat = PrivateChat.getPrivateChatByMembers(username, chatID);
+        else chat = Room.getRoomById(chatID);
+        chat.editMessage(messageID, newBody);
+    }
 }

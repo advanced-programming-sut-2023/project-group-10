@@ -17,9 +17,20 @@ public enum ServerToClientCommands {
     GET_SECURITY_QUESTION("get security question", "is username valid", "message"),
     TRY_TO_CHANGE_PASSWORD("try to change password", "is successful"),
     LOGIN("login", "is successful", "message"),
+    //main menu
+    LOGGED_OUT("log out"),
+    START_GAME("start game", "message"),
     //profile menu
     FAILED_CHANGE("failed change", "message"),
-    SUCCESSFUL_CHANGE("successful change", "message");
+    SUCCESSFUL_CHANGE("successful change", "message"),
+    //chat menu
+    CAN_CREATE_CHAT("can create chat", "state"),
+    NEW_CHAT_ADDED("new chat added", "chat type", "chat id"),
+    GET_CHAT_LIST("get chat list", "chats"),
+    GET_CHAT_MESSAGES("get chat messages", "messages"),
+    AUTO_UPDATE_CHAT_MESSAGES("auto update chat messages", "messages"),
+    IS_ADMIN("is admin", "state"),
+    CAN_UPDATE_MESSAGE("can update message", "state");
 
     private final String command;
     private final String[] attributes;

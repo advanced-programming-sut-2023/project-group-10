@@ -35,19 +35,22 @@ public enum ClientToServerCommands {
     CANCEL_START_GAME("cancel start game"),
     //customize map
     //chat menu
-    CAN_CREATE_PRIVATE_CHAT("can create private chat", "requester", "other party"),
-    CREATE_PRIVATE_CHAT("create private chat", "requester", "other party"),
+    CAN_CREATE_PRIVATE_CHAT("can create private chat", "other party"),
+    CREATE_PRIVATE_CHAT("create private chat", "other party"),
     IS_ROOM_ID_VALID("is room id valid", "room id"),
-    CREATE_ROOM("create room", "admin", "room id"),
-    GET_MY_PRIVATE_CHATS("get my private chats", "username"),
-    GET_MY_ROOMS("get my rooms", "username"),
-    GET_PUBLIC_CHAT_MESSAGES("get public chat messages", "username"),
+    CREATE_ROOM("create room", "room id"),
+    GET_MY_PRIVATE_CHATS("get my private chats"),
+    GET_MY_ROOMS("get my rooms"),
+    GET_PUBLIC_CHAT_MESSAGES("get public chat messages"),
     GET_PRIVATE_CHAT_MESSAGES("get private chat messages", "requester", "other party"),
-    GET_ROOM_MESSAGES("get room messages", "username", "room id"),
-    EXIT_CHAT("exit chat", "username", "chat type", "chat id"), /* chat type must be "private", "public", or "room". chat id is the other person's username for private chats. */
-    SEND_MESSAGE("send message", "sender username", "message body", "time sent", "chat type", "chat id"),
-    IS_ADMIN("is admin", "username", "room id"),
-    ADD_MEMBER_TO_ROOM("add member to room", "room id", "username");
+    GET_ROOM_MESSAGES("get room messages", "room id"),
+    EXIT_CHAT("exit chat", "chat type", "chat id"), /* chat type must be "private", "public", or "room". chat id is the other person's username for private chats. */
+    SEND_MESSAGE("send message", "message body", "time sent", "chat type", "chat id"),
+    IS_ADMIN("is admin", "room id"),
+    ADD_MEMBER_TO_ROOM("add member to room", "room id", "username"),
+    CAN_UPDATE_MESSAGE("can update message", "message id", "chat type", "chat id"),
+    DELETE_MESSAGE("delete message", "message id", "chat type", "chat id"),
+    EDIT_MESSAGE("edit message", "message id", "chat type", "chat id", "new body");
 
     private final String command;
     private final String[] attributes;

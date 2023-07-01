@@ -18,6 +18,10 @@ public class Message {
         this.messageBody = messageBody;
     }
 
+    public String getMessageID() {
+        return messageID;
+    }
+
     public User getSender() {
         return sender;
     }
