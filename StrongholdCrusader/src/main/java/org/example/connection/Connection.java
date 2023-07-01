@@ -25,8 +25,6 @@ public class Connection extends Thread {
         generateAndSendSessionId(getInfo());
         packetParser = new PacketParser();
         packetHandler = new PacketHandler(this);
-        // TODO: generate id
-        ConnectionDatabase.getInstance().addConnection(sessionId, this);
         username = null;
     }
 
@@ -74,8 +72,9 @@ public class Connection extends Thread {
         //long time = Integer.parseInt(info);
         long time = 0;
         String sessionId = ConnectionDatabase.getInstance().getConnectionCount() + "_" + info + "_" + (time + 3600000);
-        dataOutputStream.writeUTF(sessionId);
         this.sessionId = sessionId;
+        ConnectionDatabase.getInstance().addConnection(sessionId, this);
+        dataOutputStream.writeUTF(sessionId);
     }
 
     public void linkNotificationSocket(Socket socket) throws IOException {
