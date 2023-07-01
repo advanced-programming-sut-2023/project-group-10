@@ -16,6 +16,7 @@ public class NotificationReceiver extends Thread {
     private final PacketParser packetParser;
     private ArrayList<Message> messagesCache;
     private ArrayList<String> chatListCache;
+    private int userStateChange = 0;
 
     public NotificationReceiver(Socket socket) throws IOException {
         this.socket = socket;
@@ -37,6 +38,10 @@ public class NotificationReceiver extends Thread {
 
     public void setChatListCache(ArrayList<String> chatListCache) {
         this.chatListCache = chatListCache;
+    }
+
+    public int getUserStateChange() {
+        return userStateChange;
     }
 
     @Override
@@ -63,6 +68,10 @@ public class NotificationReceiver extends Thread {
                     case GET_CHAT_LIST:
                         chatListCache = new Gson().fromJson(packet.getAttribute().get("chats"), new TypeToken<List<String>>() {
                         }.getType());
+                        break;
+                    case LOGGED_OUT:
+                    case LOGIN:
+                        userStateChange++;
                         break;
                 }
             } catch (IOException e) {

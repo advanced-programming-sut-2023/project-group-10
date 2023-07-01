@@ -8,6 +8,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import org.example.connection.Client;
+import org.example.connection.ClientToServerCommands;
+import org.example.connection.Packet;
 import org.example.view.chats.ChatMenuHomeGFX;
 
 public class MainMenuController {
@@ -46,6 +48,9 @@ public class MainMenuController {
     }
 
     public void logout(MouseEvent mouseEvent) throws Exception {
+        Packet packet = new Packet(ClientToServerCommands.LOGOUT.getCommand(), null);
+        Client.getInstance().sendPacket(packet);
+        Client.getInstance().recievePacket();
         Client.getInstance().logout();
         new LoginMenu().start(SignupMenu.stage);
     }
