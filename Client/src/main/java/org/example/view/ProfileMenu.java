@@ -83,6 +83,7 @@ public class ProfileMenu extends Application {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Username change successful");
                         alert.setContentText("Your username was changed successfully");
+                        alert.show();
                         username.setText("username: " + DataBank.getLoggedInUser().getUsername());
                         mainPane.getChildren().remove(change);
                         mainPane.getChildren().add(mainButtons);
@@ -147,6 +148,7 @@ public class ProfileMenu extends Application {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Password change successful");
                         alert.setContentText("Your password was changed successfully");
+                        alert.show();
                         mainPane.getChildren().remove(change);
                         mainPane.getChildren().add(mainButtons);
                     } else currentPassDetail.setText("wrong password!");
@@ -204,6 +206,7 @@ public class ProfileMenu extends Application {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Nickname change successful");
                     alert.setContentText("Your nickname was changed successfully");
+                    alert.show();
                     nickname.setText("nickname: " + DataBank.getLoggedInUser().getNickname());
                     mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
@@ -263,6 +266,7 @@ public class ProfileMenu extends Application {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Email change successful");
                         alert.setContentText("Your email was changed successfully");
+                        alert.show();
                         email.setText(DataBank.getLoggedInUser().getEmail());
                         mainPane.getChildren().remove(change);
                         mainPane.getChildren().add(mainButtons);

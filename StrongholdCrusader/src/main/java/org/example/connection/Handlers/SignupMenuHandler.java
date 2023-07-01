@@ -83,7 +83,7 @@ public class SignupMenuHandler {
             messageValue = "invalid email format!";
         else if (User.getUserByEmail(email) != null)
             messageValue = "email already exists!";
-        else messageValue = ""; //valid email
+        else messageValue = "valid email!"; //valid email
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("message", messageValue);
         Packet toBeSent = new Packet(ServerToClientCommands.EMAIL_CHECK.getCommand(), hashMap);
@@ -95,7 +95,7 @@ public class SignupMenuHandler {
         String messageValue;
         if(CheckFormatAndEncrypt.isNicknameFormatInvalid(nickname))
             messageValue = "invalid nickname format!";
-        else messageValue = ""; //valid nickname
+        else messageValue = "valid nickname!"; //valid nickname
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("message", messageValue);
         Packet toBeSent = new Packet(ServerToClientCommands.NICKNAME_CHECK.getCommand(), hashMap);
