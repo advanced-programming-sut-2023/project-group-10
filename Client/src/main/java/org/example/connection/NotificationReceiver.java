@@ -2,6 +2,7 @@ package org.example.connection;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import javafx.beans.property.SimpleBooleanProperty;
 import org.example.model.chat.Message;
 import org.example.view.chats.ChatControllerParent;
 
@@ -16,6 +17,7 @@ public class NotificationReceiver extends Thread {
     private final DataInputStream dataInputStream;
     private final PacketParser packetParser;
     private ChatControllerParent chatController;
+    private ArrayList<Message> messagesCache;
 
     public NotificationReceiver(Socket socket) throws IOException {
         this.socket = socket;
@@ -25,6 +27,14 @@ public class NotificationReceiver extends Thread {
 
     public void setChatController(ChatControllerParent chatController) {
         this.chatController = chatController;
+    }
+
+    public ArrayList<Message> getMessagesCache() {
+        return messagesCache;
+    }
+
+    public void setMessagesCache(ArrayList<Message> messagesCache) {
+        this.messagesCache = messagesCache;
     }
 
     @Override
@@ -39,8 +49,7 @@ public class NotificationReceiver extends Thread {
                 switch (command) {
                     case GET_CHAT_MESSAGES:
                     case AUTO_UPDATE_CHAT_MESSAGES:
-                        chatController.initChatBox(messages);
-                        System.out.println(messages.get(messages.size() - 1).getMessageBody());
+                        messagesCache = messages;
                         break;
                 }
             } catch (IOException e) {

@@ -2,6 +2,8 @@ package org.example.view.chats;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
@@ -33,10 +36,14 @@ public class PublicChatController implements ChatControllerParent {
     public VBox chatBox;
     public ScrollPane chatScrollPane;
 
+    private ArrayList<Message> messagesCache;
+
     @FXML
     public void initialize() throws IOException {
         //TODO put old messages,use process message func
-        initChatBox(getMessages());
+        messagesCache = getMessages();
+        Client.getInstance().getNotificationReceiver().setMessagesCache(messagesCache);
+        initChatBox(messagesCache);
         add.setOnMouseClicked(evt -> {
             try {
                 sendMessage();
@@ -49,6 +56,16 @@ public class PublicChatController implements ChatControllerParent {
         clear.setOnMouseClicked(evt -> {
             messageField.setText("");
         });
+
+        Timeline updateMessages = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            ArrayList<Message> notifiersCache = Client.getInstance().getNotificationReceiver().getMessagesCache();
+            if (messagesCache != notifiersCache) {
+                messagesCache = notifiersCache;
+                if (messagesCache != null) initChatBox(messagesCache);
+            }
+        }));
+        updateMessages.setCycleCount(Timeline.INDEFINITE);
+        updateMessages.play();
     }
 
     private void sendMessage() throws IOException {
