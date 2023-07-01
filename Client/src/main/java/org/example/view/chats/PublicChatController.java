@@ -12,8 +12,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -129,9 +131,13 @@ public class PublicChatController implements ChatControllerParent {
             newMessage.getChildren().addAll(messagePane, avatar);
             messagePane.getChildren().addAll(container);
             newMessage.setAlignment(Pos.CENTER_RIGHT);
+            messagePane.setBackground(Background.fill(Color.LIGHTGRAY));
+
         } else {
             newMessage.getChildren().addAll(avatar, messagePane);
             newMessage.setAlignment(Pos.CENTER_LEFT);
+            messagePane.setBackground(Background.fill(Color.CORNFLOWERBLUE));
+
         }
         newMessage.setId(message.getMessageID());
         return newMessage;

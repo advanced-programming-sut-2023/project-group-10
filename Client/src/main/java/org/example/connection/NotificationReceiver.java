@@ -2,9 +2,7 @@ package org.example.connection;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import javafx.beans.property.SimpleBooleanProperty;
 import org.example.model.chat.Message;
-import org.example.view.chats.ChatControllerParent;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -16,18 +14,13 @@ public class NotificationReceiver extends Thread {
     private final Socket socket;
     private final DataInputStream dataInputStream;
     private final PacketParser packetParser;
-    private ChatControllerParent chatController;
     private ArrayList<Message> messagesCache;
-    private int userStateChange = 0;
+    private ArrayList<String> chatListCache;
 
     public NotificationReceiver(Socket socket) throws IOException {
         this.socket = socket;
         this.dataInputStream = new DataInputStream(socket.getInputStream());
         packetParser = new PacketParser();
-    }
-
-    public void setChatController(ChatControllerParent chatController) {
-        this.chatController = chatController;
     }
 
     public ArrayList<Message> getMessagesCache() {
@@ -38,8 +31,12 @@ public class NotificationReceiver extends Thread {
         this.messagesCache = messagesCache;
     }
 
-    public int getUserStateChange() {
-        return userStateChange;
+    public ArrayList<String> getChatListCache() {
+        return chatListCache;
+    }
+
+    public void setChatListCache(ArrayList<String> chatListCache) {
+        this.chatListCache = chatListCache;
     }
 
     @Override
@@ -48,17 +45,25 @@ public class NotificationReceiver extends Thread {
         while (true) {
             try {
                 Packet packet = packetParser.parsePacket(dataInputStream.readUTF());
-                System.out.println(userStateChange);
-                ArrayList<Message> messages = new Gson().fromJson(packet.getAttribute().get("messages"), new TypeToken<List<Message>>() {
-                }.getType());
                 ServerToClientCommands command = ServerToClientCommands.getCommandByString(packet.command);
                 switch (command) {
+                    case UNAUTHORIZED_REQUEST:
+                        System.out.println("access denied");
+                        System.exit(0);
+                        break;
+                    case CONNECTION_TIMED_OUT:
+                        System.out.println("connection timed out");
+                        System.exit(0);
+                        break;
                     case GET_CHAT_MESSAGES:
                     case AUTO_UPDATE_CHAT_MESSAGES:
-                        messagesCache = messages;
+                        messagesCache = new Gson().fromJson(packet.getAttribute().get("messages"), new TypeToken<List<Message>>() {
+                        }.getType());
                         break;
-                    case LOGGED_OUT:
-                        userStateChange++;
+                    case GET_CHAT_LIST:
+                        chatListCache = new Gson().fromJson(packet.getAttribute().get("chats"), new TypeToken<List<String>>() {
+                        }.getType());
+                        break;
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

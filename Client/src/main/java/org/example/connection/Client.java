@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Client {
     private DataInputStream dataInputStream;
@@ -56,6 +57,11 @@ public class Client {
     }
 
     public void sendPacket(Packet packet) throws IOException {
+        if (packet.getAttribute() == null) {
+            HashMap<String, String> attributes = new HashMap<>();
+            attributes.put("sessionID", sessionID);
+            packet.setAttribute(attributes);
+        } else packet.getAttribute().put("sessionID", sessionID);
         String gson = this.packetParser.parseGson(packet);
         this.dataOutputStream.writeUTF(gson);
     }

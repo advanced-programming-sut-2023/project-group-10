@@ -3,13 +3,16 @@ package org.example.view.chats;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
@@ -116,12 +119,20 @@ public class PrivateChatController implements ChatControllerParent {
             HBox buttons = new HBox();
             buttons.getChildren().addAll(edit, deleteForMe, deleteForEveryOne);
             messagePane.getChildren().addAll(messagePane, buttons);
+            messagePane.setAlignment(Pos.CENTER_RIGHT);
+            messagePane.setBackground(Background.fill(Color.LIGHTGRAY));
         }
+        else {
+            messagePane.setAlignment(Pos.CENTER_LEFT);
+            messagePane.setBackground(Background.fill(Color.CORNFLOWERBLUE));
+        }
+
         return messagePane;
 
     }
 
     private void deleteForEveryOne(MouseEvent mouseEvent) {
+
     }
 
     private void deleteForMe(MouseEvent mouseEvent) {

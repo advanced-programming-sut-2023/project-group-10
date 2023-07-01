@@ -36,6 +36,10 @@ public class Connection extends Thread {
         this.username = username;
     }
 
+    public String getSessionId() {
+        return sessionId;
+    }
+
     @Override
     public synchronized void run() {
         try {
@@ -69,8 +73,7 @@ public class Connection extends Thread {
     }
 
     private void generateAndSendSessionId(String info) throws IOException {
-        //long time = Integer.parseInt(info);
-        long time = 0;
+        long time = Long.parseLong(info);
         String sessionId = ConnectionDatabase.getInstance().getConnectionCount() + "_" + info + "_" + (time + 3600000);
         this.sessionId = sessionId;
         ConnectionDatabase.getInstance().addConnection(sessionId, this);
@@ -80,5 +83,10 @@ public class Connection extends Thread {
     public void linkNotificationSocket(Socket socket) throws IOException {
         notificationSocket = socket;
         notificationDataOutputStream = new DataOutputStream(socket.getOutputStream());
+    }
+
+    public long getSessionExpirationTime() {
+        String[] parts = sessionId.split("_");
+        return Long.parseLong(parts[parts.length - 1]);
     }
 }

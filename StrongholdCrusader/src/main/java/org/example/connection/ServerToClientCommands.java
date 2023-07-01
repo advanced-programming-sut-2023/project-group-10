@@ -1,6 +1,8 @@
 package org.example.connection;
 
 public enum ServerToClientCommands {
+    UNAUTHORIZED_REQUEST("unauthorized request"),
+    CONNECTION_TIMED_OUT("connection timed out"),
     //sign up menu
     DEFAULT_SLOGANS("default slogans", "message"),
     USERNAME_CHECK("username check", "message"),
@@ -31,7 +33,6 @@ public enum ServerToClientCommands {
     ALL_CONNECTIONS("all connections", "array list"),
     //chat menu
     CAN_CREATE_CHAT("can create chat", "state"),
-    NEW_CHAT_ADDED("new chat added", "chat type", "chat id"),
     GET_CHAT_LIST("get chat list", "chats"),
     GET_CHAT_MESSAGES("get chat messages", "messages"),
     AUTO_UPDATE_CHAT_MESSAGES("auto update chat messages", "messages"),
