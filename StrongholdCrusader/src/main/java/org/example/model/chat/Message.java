@@ -10,8 +10,8 @@ public class Message {
     // TODO: doubt
     private transient final Chat chat;
 
-    public Message(User sender, String timeSent, Chat chat, String messageBody) {
-        messageID = sender.getUsername() + " " + timeSent;
+    public Message(User sender, String timeSent, String milliesSent, Chat chat, String messageBody) {
+        messageID = sender.getUsername() + "_" + milliesSent;
         this.sender = sender;
         this.timeSent = timeSent;
         this.chat = chat;
