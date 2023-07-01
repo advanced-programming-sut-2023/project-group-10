@@ -91,6 +91,9 @@ public class PacketHandler {
             case CHANGE_SLOGAN:
                 profileMenuHandler.handleChangeSlogan();
                 break;
+            case GET_SORTED_USERS:
+                profileMenuHandler.sortedUsers();
+                break;
             case CAN_CREATE_PRIVATE_CHAT:
                 chatHandler.canCreatePrivateChat();
             case CREATE_PRIVATE_CHAT:

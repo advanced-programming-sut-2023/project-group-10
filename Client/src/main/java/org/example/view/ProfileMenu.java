@@ -6,10 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -45,21 +47,20 @@ public class ProfileMenu extends Application {
 
     @FXML
     public void initialize() {
-        //TODO get current user
-        //avatar.setFill(new ImagePattern(new Image(Stronghold.getCurrentUser().getAvatar())));
-        username.setText("username: " + DataBank.getUsername());
-        nickname.setText("nickname: " + DataBank.getNickname());
-        email.setText("email: " + DataBank.getEmail());
-        if (DataBank.getSlogan() == null || DataBank.getSlogan().equals(""))
+        avatar.setFill(new ImagePattern(new Image(DataBank.getLoggedInUser().getAvatar())));
+        username.setText("username: " + DataBank.getLoggedInUser().getUsername());
+        nickname.setText("nickname: " + DataBank.getLoggedInUser().getNickname());
+        email.setText("email: " + DataBank.getLoggedInUser().getEmail());
+        if (DataBank.getLoggedInUser().getSlogan() == null || DataBank.getLoggedInUser().getSlogan().equals(""))
             slogan.setText("slogan in empty!");
-        else slogan.setText("slogan: " + DataBank.getSlogan());
+        else slogan.setText("slogan: " + DataBank.getLoggedInUser().getSlogan());
     }
 
     public void changeUsername() {
         VBox change = new VBox(20);
         change.setAlignment(Pos.CENTER);
 
-        Text currentUsername = new Text(DataBank.getUsername());
+        Text currentUsername = new Text(DataBank.getLoggedInUser().getUsername());
         TextField newUsername = new TextField();
         newUsername.setPromptText("new username");
         Text usernameDetail = new Text();
@@ -72,16 +73,17 @@ public class ProfileMenu extends Application {
             if (usernameDetail.getText().equals("valid username!")) {
                 try {
                     if (usernameDetail.getText().equals("valid username!")) {
-                        HashMap<String, String> attributes = new HashMap<>();
-                        attributes.put("new username", username.getText());
-                        Packet packet = new Packet("change username", attributes);
+                        HashMap<String, String> usernameAttribute = new HashMap<>();
+                        usernameAttribute.put("new username", newUsername.getText());
+                        Packet packet = new Packet(ClientToServerCommands.CHANGE_USERNAME.getCommand(), usernameAttribute);
                         Client.getInstance().sendPacket(packet);
-                        DataBank.setUsername(username.getText());
+                        Client.getInstance().recievePacket();
+                        DataBank.getLoggedInUser().setUsername(newUsername.getText());
 
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Username change successful");
                         alert.setContentText("Your username was changed successfully");
-                        username.setText("username: " + DataBank.getUsername());
+                        username.setText("username: " + DataBank.getLoggedInUser().getUsername());
                         mainPane.getChildren().remove(change);
                         mainPane.getChildren().add(mainButtons);
                         //TODO username does not change in database
@@ -140,8 +142,8 @@ public class ProfileMenu extends Application {
                 Packet packet = new Packet(ClientToServerCommands.CHANGE_PASSWORD.getCommand(), attribute);
                 try {
                     Client.getInstance().sendPacket(packet);
-                    if (Client.getInstance().recievePacket().getAttribute() == null) {
-                        DataBank.setPassword(newPassword.getText());
+                    if (Client.getInstance().recievePacket().getAttribute().get("message").equals("")) {
+                        DataBank.getLoggedInUser().setPassword(newPassword.getText());
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Password change successful");
                         alert.setContentText("Your password was changed successfully");
@@ -196,12 +198,13 @@ public class ProfileMenu extends Application {
                     attributes.put("new nickname", newNickname.getText());
                     Packet packet = new Packet(ClientToServerCommands.CHANGE_NICKNAME.getCommand(), attributes);
                     Client.getInstance().sendPacket(packet);
-                    DataBank.setNickname(newNickname.getText());
+                    Client.getInstance().recievePacket();
+                    DataBank.getLoggedInUser().setNickname(newNickname.getText());
 
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Nickname change successful");
                     alert.setContentText("Your nickname was changed successfully");
-                    nickname.setText("nickname: " + DataBank.getNickname());
+                    nickname.setText("nickname: " + DataBank.getLoggedInUser().getNickname());
                     mainPane.getChildren().remove(change);
                     mainPane.getChildren().add(mainButtons);
                 } catch (Exception e) {
@@ -254,12 +257,13 @@ public class ProfileMenu extends Application {
                         attributes.put("new email", newEmail.getText());
                         Packet packet = new Packet("change email", attributes);
                         Client.getInstance().sendPacket(packet);
-                        DataBank.setEmail(newEmail.getText());
+                        Client.getInstance().recievePacket();
+                        DataBank.getLoggedInUser().setEmail(newEmail.getText());
 
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.setTitle("Email change successful");
                         alert.setContentText("Your email was changed successfully");
-                        email.setText(DataBank.getEmail());
+                        email.setText(DataBank.getLoggedInUser().getEmail());
                         mainPane.getChildren().remove(change);
                         mainPane.getChildren().add(mainButtons);
                     }
@@ -346,16 +350,17 @@ public class ProfileMenu extends Application {
             HashMap<String, String> attributes = new HashMap<>();
             if (newSlogan.isDisable()) {
                 attributes.put("slogan", defaultSlogans.getValue());
-                DataBank.setSlogan(defaultSlogans.getValue());
+                DataBank.getLoggedInUser().setSlogan(defaultSlogans.getValue());
             }
             else {
                 attributes.put("slogan", newSlogan.getText());
-                DataBank.setSlogan(newSlogan.getText());
+                DataBank.getLoggedInUser().setSlogan(newSlogan.getText());
             }
 
             Packet changeSlogan = new Packet("change slogan", attributes);
             try {
                 Client.getInstance().sendPacket(changeSlogan);
+                Client.getInstance().recievePacket();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -363,7 +368,7 @@ public class ProfileMenu extends Application {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Slogan change successful");
             alert.setContentText("Your slogan was changed successfully");
-            slogan.setText("slogan: " + DataBank.getSlogan());
+            slogan.setText("slogan: " + DataBank.getLoggedInUser().getSlogan());
             mainPane.getChildren().remove(change);
             mainPane.getChildren().add(mainButtons);
         });
@@ -382,8 +387,10 @@ public class ProfileMenu extends Application {
             HashMap<String, String> attribute = new HashMap<>();
             attribute.put("slogan", "");
             Packet changeSlogan = new Packet("change slogan", attribute);
+            DataBank.getLoggedInUser().setSlogan("");
             try {
                 Client.getInstance().sendPacket(changeSlogan);
+                Client.getInstance().recievePacket();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -406,12 +413,10 @@ public class ProfileMenu extends Application {
     }
 
     public void goToMainMenu() throws Exception {
-        //new MainMenuGFX().start(stage);
-        //TODO
+        new MainMenuGFX().start(stage);
     }
 
     public void scoreboard() throws Exception {
-        //new Scoreboard().start(stage);
-        //TODO
+        new Scoreboard().start(stage);
     }
 }

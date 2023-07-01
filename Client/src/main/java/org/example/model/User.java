@@ -2,8 +2,8 @@ package org.example.model;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Random;
 
 public class User {
     private String username;
@@ -45,6 +45,10 @@ public class User {
         return Objects.requireNonNull(User.class.getResource(this.avatar)).toString();
     }
 
+    public int getHighScore() {
+        return highScore;
+    }
+
     public void setSecurityQuestion(String number, String answer) {
         questionNumber = number;
         questionAnswer = answer;
@@ -58,7 +62,31 @@ public class User {
         return questionAnswer;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public static User getUserFromJson(String json) {
         return new Gson().fromJson(json, User.class);
+    }
+
+    public static ArrayList getSortedUsersFromJson (String json) {
+        return new Gson().fromJson(json, ArrayList.class);
     }
 }

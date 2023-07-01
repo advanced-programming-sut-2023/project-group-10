@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.connection.Connection;
 import org.example.model.Stronghold;
 import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
@@ -13,8 +14,9 @@ public class LoginMenuController {
         if (!User.getUserByUsername(username).checkPassword(password))
             return LoginMenuMessages.WRONG_PASSWORD;
 
-        if (stayLoggedIn)
+        if (stayLoggedIn) {
             Stronghold.addUserToFile(User.getUserByUsername(username));
+        }
         else
             Stronghold.addUserToFile(User.getUserByUsername(null));
 
