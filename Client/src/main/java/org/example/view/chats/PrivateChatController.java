@@ -15,12 +15,14 @@ import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.chat.Message;
+import org.example.view.DataBank;
 
 import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class PrivateChatController implements ChatControllerParent {
@@ -32,30 +34,23 @@ public class PrivateChatController implements ChatControllerParent {
     public Button add;
     public Button clear;
     public HBox idBox;
-    private String message;
 
     @FXML
     public void initialize() throws IOException {
         initID();
         //TODO put old messages,use process message func
-        Packet packet = new Packet(ClientToServerCommands.GET_PRIVATE_CHAT_MESSAGES.getCommand(), );
-        Client.getInstance().sendPacket(packet);
-        Packet receivedPacket = Client.getInstance().recievePacket();
-        ArrayList<Message> messages = new Gson().fromJson(receivedPacket.getAttribute().get("messages"), new TypeToken<List<Message>>() {
-        }.getType());
-        initChatBox(messages);
+        initChatBox(getMessages());
         add.setOnMouseClicked(evt -> {
-
-            message = messageField.getText();
-            chatBox.getChildren().add(processMessage(message, true));
-            chatScrollPane.setVvalue(1);
-
+            try {
+                sendMessage();
+                messageField.setText("");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
         clear.setOnMouseClicked(evt -> {
-            message = "";
             messageField.setText("");
         });
-
     }
 
     private void initID() {
@@ -63,18 +58,48 @@ public class PrivateChatController implements ChatControllerParent {
     }
 
     public void initChatBox(ArrayList<Message> messages) {
-        //old chats
+        chatBox.getChildren().clear();
+        for (Message message : getMessages())
+            chatBox.getChildren().add(processMessage(message));
         chatScrollPane.setVvalue(1);
     }
 
-    private VBox processMessage(String message, boolean isMine) {
+    private void sendMessage() throws IOException {
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("message body", messageField.getText());
         Format f = new SimpleDateFormat("HH:mm");
         String strResult = f.format(new Date());
+        attributes.put("time sent", strResult);
+        attributes.put("chat type", "private");
+        // TODO: get actual id from last menu
+        attributes.put("chat id", "place holder");
+        Packet packet = new Packet(ClientToServerCommands.SEND_MESSAGE.getCommand(), attributes);
+        Client.getInstance().sendPacket(packet);
+    }
+
+    private ArrayList<Message> getMessages() {
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("requester", DataBank.getUsername());
+        // TODO: get actual id from last menu
+        attributes.put("other party", "place holder");
+        Packet packet = new Packet(ClientToServerCommands.GET_PRIVATE_CHAT_MESSAGES.getCommand(), attributes);
+        try {
+            Client.getInstance().sendPacket(packet);
+            Packet receivedPacket = Client.getInstance().recievePacket();
+            return new Gson().fromJson(receivedPacket.getAttribute().get("messages"), new TypeToken<List<Message>>() {
+            }.getType());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private VBox processMessage(Message message) {
+        boolean isMine = message.getSender().getUsername().equals(DataBank.getLoggedInUser().getUsername());
+        String strResult = message.getTimeSent();
         VBox messagePane = new VBox();
-        Label content = new Label(message);
+        Label content = new Label(message.getMessageBody());
         Label time = new Label(strResult);
         messagePane.getChildren().addAll(content, time);
-
         if (isMine) {
             Button edit = new Button("edit");
             Button deleteForMe = new Button("del:m");

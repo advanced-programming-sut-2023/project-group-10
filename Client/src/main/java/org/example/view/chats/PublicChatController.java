@@ -22,6 +22,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class PublicChatController implements ChatControllerParent {
@@ -30,41 +31,58 @@ public class PublicChatController implements ChatControllerParent {
     public TextField messageField;
     public VBox chatBox;
     public ScrollPane chatScrollPane;
-    String message;
 
     @FXML
     public void initialize() throws IOException {
         //TODO put old messages,use process message func
-        Packet packet = new Packet(ClientToServerCommands.GET_PUBLIC_CHAT_MESSAGES.getCommand(), null);
-        Client.getInstance().sendPacket(packet);
-        Packet receivedPacket = Client.getInstance().recievePacket();
-        ArrayList<Message> messages = new Gson().fromJson(receivedPacket.getAttribute().get("chats"), new TypeToken<List<Message>>() {
-        }.getType());
-        initChatBox(messages);
+        initChatBox(getMessages());
         add.setOnMouseClicked(evt -> {
-            Packet
+            try {
+                sendMessage();
+                messageField.setText("");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             chatScrollPane.setVvalue(1);
         });
         clear.setOnMouseClicked(evt -> {
-            message = "";
             messageField.setText("");
         });
+    }
 
+    private void sendMessage() throws IOException {
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("message body", messageField.getText());
+        Format f = new SimpleDateFormat("HH:mm");
+        String strResult = f.format(new Date());
+        attributes.put("time sent", strResult);
+        attributes.put("chat type", "public");
+        attributes.put("chat id", "public_chat");
+        Packet packet = new Packet(ClientToServerCommands.SEND_MESSAGE.getCommand(), attributes);
+        Client.getInstance().sendPacket(packet);
+    }
+
+    private ArrayList<Message> getMessages() throws IOException {
+        Packet packet = new Packet(ClientToServerCommands.GET_PUBLIC_CHAT_MESSAGES.getCommand(), null);
+        Client.getInstance().sendPacket(packet);
+        Packet receivedPacket = Client.getInstance().recievePacket();
+        return new Gson().fromJson(receivedPacket.getAttribute().get("messages"), new TypeToken<List<Message>>() {
+        }.getType());
     }
 
     public void initChatBox(ArrayList<Message> messages) {
+        chatBox.getChildren().clear();
         for (Message msg : messages)
-            processMessage(msg);
+            chatBox.getChildren().add(processMessage(msg));
         chatScrollPane.setVvalue(1);
     }
 
     private HBox processMessage(Message message) {
         boolean isMine = message.getSender().equals(DataBank.getLoggedInUser());
-        Format f = new SimpleDateFormat("HH:mm");
-        String strResult = f.format(new Date());
+        String strResult = message.getTimeSent();
         VBox messagePane = new VBox();
         HBox newMessage = new HBox();
-        Label senderId = new Label();
+        Label senderId = new Label(message.getSender().getUsername());
         //put Avatar-> I had errors
         Rectangle avatar = new Rectangle();
         Label content = new Label(message.getMessageBody());
