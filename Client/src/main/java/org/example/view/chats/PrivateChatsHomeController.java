@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
@@ -47,7 +48,30 @@ public class PrivateChatsHomeController implements ChatListControllerParent {
     }
 
     @Override
-    public void initChatList(ArrayList<String> chatIds) {
+    public void initChatList(ArrayList<String> chatIds) throws IOException {
+        searchButton.setOnMouseClicked(this::addNewChat);
+        Packet packet = new Packet(ClientToServerCommands.GET_MY_ROOMS.getCommand(), null);
+        Client.getInstance().sendPacket(packet);
+        Packet receivedPacket = Client.getInstance().recievePacket();
+        ArrayList<String> chats = new Gson().fromJson(receivedPacket.getAttribute().get("chats"), new TypeToken<List<String>>() {
+        }.getType());
+        for (int i = chats.size() - 1; i >= 0; i++) {
+            Label chatName = new Label(chats.get(i));
+            this.chats.getItems().add(chatName);
+            chatName.setOnMouseClicked(this::goToSpecificChat);
+        }
+
 
     }
+
+    private void addNewChat(MouseEvent mouseEvent) {
+        addNewChat(((Label) mouseEvent.getSource()).getText());
+    }
+
+    @Override
+    public void goToSpecificChat(javafx.scene.input.MouseEvent mouseEvent) {
+
+    }
+
+
 }

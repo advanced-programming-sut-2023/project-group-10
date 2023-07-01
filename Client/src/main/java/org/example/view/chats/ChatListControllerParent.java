@@ -9,4 +9,6 @@ public interface ChatListControllerParent {
     void initChatList(ArrayList<String> chatIds) throws IOException;
 
     void goToSpecificChat(MouseEvent mouseEvent);
+
+
 }
