@@ -62,12 +62,12 @@ public class ChatController {
         else Room.getRoomById(chatID).exitChat(username);
     }
 
-    public static void sendMessage(String senderUsername, String messageBody, String timeSent, String chatType, String chatID) {
+    public static void sendMessage(String senderUsername, String messageBody, String timeSent, String milliesSent, String chatType, String chatID) {
         Chat chat;
         if (chatType.equals("public")) chat = PublicChat.getInstance();
         else if (chatType.equals("private")) chat = PrivateChat.getPrivateChatByMembers(senderUsername, chatID);
         else chat = Room.getRoomById(chatID);
-        chat.addMessage(new Message(User.getUserByUsername(senderUsername), timeSent, chat, messageBody));
+        chat.addMessage(new Message(User.getUserByUsername(senderUsername), timeSent, milliesSent, chat, messageBody));
     }
 
     public static boolean isAdmin(String username, String roomID) {
