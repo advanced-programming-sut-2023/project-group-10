@@ -12,6 +12,7 @@ import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
+import org.example.model.User;
 
 import java.util.HashMap;
 
@@ -53,21 +54,26 @@ public class SignupMenu extends Application {
         Client.getInstance().sendPacket(packet);
         Client.getInstance().recievePacket();*/
 
-        /*if (Stronghold.getLoggedInUserFromFile() != null) {
-            //Stronghold.setCurrentUser(Stronghold.getLoggedInUserFromFile());
-            //TODO get loggedInUser
-            //new MainMenuGFX().start(stage);
-        } else {*/
-        BorderPane borderPane = new FXMLLoader(SignupMenu.class.getResource("/view/signupMenu.fxml")).load();
-        Background background = new Background(BackgroundBuilder.setBackground("/images/backgrounds/background2.png"));
-        borderPane.setBackground(background);
+        //TODO move logged in user to client
+        Packet packet = new Packet(ClientToServerCommands.GET_LOGGED_IN_USER.getCommand(), null);
+        Client.getInstance().sendPacket(packet);
+        User user = User.getUserFromJson(Client.getInstance().recievePacket().getAttribute().get("user object"));
+        if(user != null){
+            DataBank.setLoggedInUser(user);
+            new MainMenuGFX().start(stage);
+        }
 
-        Scene scene = new Scene(borderPane, 1390, 850);
-        stage.setScene(scene);
-        stage.setTitle("signup menu");
-        stage.setMaximized(true);
-        stage.show();
-        //}
+        else {
+            BorderPane borderPane = new FXMLLoader(SignupMenu.class.getResource("/view/signupMenu.fxml")).load();
+            Background background = new Background(BackgroundBuilder.setBackground("/images/backgrounds/background2.png"));
+            borderPane.setBackground(background);
+
+            Scene scene = new Scene(borderPane, 1390, 850);
+            stage.setScene(scene);
+            stage.setTitle("signup menu");
+            stage.setMaximized(true);
+            stage.show();
+        }
     }
 
     @FXML

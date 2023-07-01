@@ -28,6 +28,9 @@ public class PacketHandler {
             case INITIALIZE_APP:
                 signupMenuHandler.initializeApp();
                 break;
+            case GET_LOGGED_IN_USER:
+                signupMenuHandler.getLoggedInUser();
+                break;
             case GET_DEFAULT_SLOGANS:
                 signupMenuHandler.getDefaultSlogans();
                 break;

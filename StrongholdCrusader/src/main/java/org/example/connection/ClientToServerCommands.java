@@ -3,6 +3,7 @@ package org.example.connection;
 public enum ClientToServerCommands {
     //sign up menu
     INITIALIZE_APP("initialize app"),
+    GET_LOGGED_IN_USER("get logged in user"),
     GET_DEFAULT_SLOGANS("get default slogans"),
     LIVE_CHECK_USERNAME("live check username", "username"),
     LIVE_CHECK_PASSWORD("live check password", "password"),

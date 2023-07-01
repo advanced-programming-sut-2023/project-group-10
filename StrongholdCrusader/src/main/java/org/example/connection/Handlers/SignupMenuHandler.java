@@ -1,5 +1,6 @@
 package org.example.connection.Handlers;
 
+import com.google.gson.Gson;
 import org.example.connection.Connection;
 import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
@@ -153,5 +154,18 @@ public class SignupMenuHandler {
         SignupMenuController.createUser(questionNumber, answer, username, password, nickname, slogan, email);
         Packet toBeSent = new Packet(ServerToClientCommands.SUCCESSFUL_SIGNUP.getCommand(), null);
         connection.sendPacket(toBeSent);
+    }
+
+    public void getLoggedInUser() throws IOException{
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("user object", userObjectToJson(Stronghold.getLoggedInUserFromFile()));
+        Packet toBeSent = new Packet(ServerToClientCommands.SEND_LOGGED_IN_USER.getCommand(), hashMap);
+        connection.sendPacket(toBeSent);
+    }
+
+    private String userObjectToJson(User user) {
+        // null object serialized as empty string
+        if (user == null) return "";
+        return new Gson().toJson(user, User.class);
     }
 }

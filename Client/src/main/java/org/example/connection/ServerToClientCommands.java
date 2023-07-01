@@ -14,6 +14,7 @@ public enum ServerToClientCommands {
     GET_CAPTCHA("get captcha", "number"),
     SUCCESSFUL_SIGNUP("successful sign up"),
     INITIALIZE_COMPLETE("initialize complete"),
+    SEND_LOGGED_IN_USER("send logged in user", "user object"),
     //login menu
     GET_SECURITY_QUESTION("get security question", "is username valid", "message"),
     TRY_TO_CHANGE_PASSWORD("try to change password", "is successful"),
