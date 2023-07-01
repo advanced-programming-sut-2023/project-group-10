@@ -1,22 +1,29 @@
-package org.example.view;
+package org.example.view.chats;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import org.example.connection.Client;
+import org.example.connection.ClientToServerCommands;
+import org.example.connection.Packet;
+import org.example.model.chat.Message;
 
+import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class PrivateChatController {
+public class PrivateChatController implements ChatControllerParent {
     public Rectangle avatar;
     public Label nicknameLabel;
     public ScrollPane chatScrollPane;
@@ -28,10 +35,15 @@ public class PrivateChatController {
     private String message;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
         initID();
         //TODO put old messages,use process message func
-        initChatBox();
+        Packet packet = new Packet(ClientToServerCommands.GET_PRIVATE_CHAT_MESSAGES.getCommand(), );
+        Client.getInstance().sendPacket(packet);
+        Packet receivedPacket = Client.getInstance().recievePacket();
+        ArrayList<Message> messages = new Gson().fromJson(receivedPacket.getAttribute().get("messages"), new TypeToken<List<Message>>() {
+        }.getType());
+        initChatBox(messages);
         add.setOnMouseClicked(evt -> {
 
             message = messageField.getText();
@@ -50,7 +62,7 @@ public class PrivateChatController {
 
     }
 
-    private void initChatBox() {
+    public void initChatBox(ArrayList<Message> messages) {
         //old chats
         chatScrollPane.setVvalue(1);
     }

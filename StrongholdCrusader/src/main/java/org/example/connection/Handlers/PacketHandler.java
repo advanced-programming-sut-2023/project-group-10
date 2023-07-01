@@ -114,6 +114,12 @@ public class PacketHandler {
             case EXIT_CHAT:
                 chatHandler.exitChat();
                 break;
+            case IS_ADMIN:
+                chatHandler.isAdmin();
+                break;
+            case ADD_MEMBER_TO_ROOM:
+                chatHandler.addMemberToRoom();
+                break;
             case SEND_MESSAGE:
                 chatHandler.sendMessage();
                 break;

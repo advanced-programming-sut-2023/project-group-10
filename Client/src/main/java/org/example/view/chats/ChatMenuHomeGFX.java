@@ -1,12 +1,10 @@
-package org.example.view;
+package org.example.view.chats;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import org.example.model.BackgroundBuilder;
 
 import java.net.URL;
 
@@ -21,6 +19,5 @@ public class ChatMenuHomeGFX extends Application {
         } else
             stage.getScene().setRoot(chatHome);
         stage.show();
-
     }
 }

@@ -134,6 +134,7 @@ public class ChatHandler {
     }
 
     public void addMemberToRoom() throws IOException {
+        // TODO: check duplicate user
         String roomID = receivedPacket.getAttribute().get("room id");
         String username = receivedPacket.getAttribute().get("username");
         ChatController.addMemberToRoom(roomID, username);

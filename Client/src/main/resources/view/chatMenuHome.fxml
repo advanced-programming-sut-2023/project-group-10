@@ -8,7 +8,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
       prefWidth="600.0" style="-fx-background-color: darkblue;" xmlns="http://javafx.com/javafx/19"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.view.ChatHomeController">
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.view.chats.ChatHomeController">
     <children>
         <VBox layoutX="190.0" layoutY="46.0" prefHeight="291.0" prefWidth="220.0" spacing="40.0">
             <children>

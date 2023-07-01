@@ -13,6 +13,7 @@ public class Client {
     private DataOutputStream dataOutputStream;
     private PacketParser packetParser;
     private String sessionID;
+    private NotificationReceiver notificationReceiver;
 
     private static Client instance;
 
@@ -41,12 +42,17 @@ public class Client {
     private void openNotification() throws IOException {
         Socket notificationSocket = new Socket("localhost", 8081);
         new DataOutputStream(notificationSocket.getOutputStream()).writeUTF(sessionID);
-        new NotificationReceiver(notificationSocket).start();
+        notificationReceiver=new NotificationReceiver(notificationSocket);
+        notificationReceiver.start();
     }
 
     public static Client getInstance() {
         if (instance == null) instance = new Client("localhost", 8080);
         return instance;
+    }
+
+    public NotificationReceiver getNotificationReceiver() {
+        return notificationReceiver;
     }
 
     public void sendPacket(Packet packet) throws IOException {

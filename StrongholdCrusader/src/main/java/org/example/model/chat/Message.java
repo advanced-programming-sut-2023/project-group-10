@@ -8,7 +8,7 @@ public class Message {
     private final String timeSent;
     private String messageBody;
     // TODO: doubt
-    private final Chat chat;
+    private transient final Chat chat;
 
     public Message(User sender, String timeSent, Chat chat, String messageBody) {
         messageID = sender.getUsername() + " " + timeSent;
