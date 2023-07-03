@@ -51,12 +51,19 @@ public enum ClientToServerCommands {
     GET_PRIVATE_CHAT_MESSAGES("get private chat messages", "requester", "other party"),
     GET_ROOM_MESSAGES("get room messages", "room id"),
     EXIT_CHAT("exit chat", "chat type", "chat id"), /* chat type must be "private", "public", or "room". chat id is the other person's username for private chats. */
-    SEND_MESSAGE("send message", "message body", "time sent","millies sent", "chat type", "chat id"),
+    SEND_MESSAGE("send message", "message body", "time sent", "millies sent", "chat type", "chat id"),
     IS_ADMIN("is admin", "room id"),
     ADD_MEMBER_TO_ROOM("add member to room", "room id", "username"),
     CAN_UPDATE_MESSAGE("can update message", "message id", "chat type", "chat id"),
     DELETE_MESSAGE("delete message", "message id", "chat type", "chat id"),
-    EDIT_MESSAGE("edit message", "message id", "chat type", "chat id", "new body");
+    EDIT_MESSAGE("edit message", "message id", "chat type", "chat id", "new body"),
+    //lobby
+    CREATE_GROUP("create group", "group name", "player count", "is private"),
+    REFRESH_GROUP_LIST("refresh group list"),
+    JOIN_GROUP("join group", "group id"),
+    LEAVE_GROUP("leave group", "group id"),
+    START_EARLY("start early", "group id"),
+    CHANGE_GROUP_PRIVACY("change group privacy", "group id", "is private");
 
     private final String command;
     private final String[] attributes;

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.view.lobby.LobbyHomeController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <center>
+        <VBox alignment="CENTER">
+            <Button text="new group" onMouseClicked="#createNewGroup"/>
+            <HBox>
+                <TextField fx:id="groupIdField" promptText="group id"/>
+                <Button text="join" onMouseClicked="#joinGroupByFieldId"/>
+            </HBox>
+            <ListView fx:id="groupsList"/>
+            <Button text="refresh" onMouseClicked="#refreshGroupsList"/>
+        </VBox>
+    </center>
+</BorderPane>

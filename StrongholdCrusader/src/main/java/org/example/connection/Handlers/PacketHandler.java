@@ -14,6 +14,7 @@ public class PacketHandler {
     private final ProfileMenuHandler profileMenuHandler;
     private final MainMenuHandler mainMenuHandler;
     private final ChatHandler chatHandler;
+    private final LobbyHandler lobbyHandler;
 
     public PacketHandler(Connection connection) {
         this.connection = connection;
@@ -22,6 +23,7 @@ public class PacketHandler {
         profileMenuHandler = new ProfileMenuHandler(connection);
         mainMenuHandler = new MainMenuHandler(connection);
         chatHandler = new ChatHandler(connection);
+        lobbyHandler = new LobbyHandler(connection);
     }
 
     public void handle(Packet receivedPacket) throws IOException {
@@ -162,6 +164,24 @@ public class PacketHandler {
             case EDIT_MESSAGE:
                 chatHandler.editMessage();
                 break;
+            case CREATE_GROUP:
+                lobbyHandler.createGroup();
+                break;
+            case REFRESH_GROUP_LIST:
+                lobbyHandler.refreshGroupList();
+                break;
+            case JOIN_GROUP:
+                lobbyHandler.joinGroup();
+                break;
+            case LEAVE_GROUP:
+                lobbyHandler.leaveGroup();
+                break;
+            case START_EARLY:
+                lobbyHandler.startEarly();
+                break;
+            case CHANGE_GROUP_PRIVACY:
+                lobbyHandler.changeGroupPrivacy();
+                break;
         }
     }
 
@@ -170,5 +190,6 @@ public class PacketHandler {
         loginMenuHandler.setReceivedPacket(receivedPacket);
         profileMenuHandler.setReceivedPacket(receivedPacket);
         chatHandler.setReceivedPacket(receivedPacket);
+        lobbyHandler.setReceivedPacket(receivedPacket);
     }
 }

@@ -3,6 +3,7 @@ package org.example.connection;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.example.model.chat.Message;
+import org.example.model.lobby.Group;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -17,6 +18,9 @@ public class NotificationReceiver extends Thread {
     private ArrayList<Message> messagesCache;
     private ArrayList<String> chatListCache;
     private int userStateChange = 0;
+    private ArrayList<Group> groupListCache;
+    private Group groupCache;
+    private boolean isGroupComplete = false;
 
     public NotificationReceiver(Socket socket) throws IOException {
         this.socket = socket;
@@ -42,6 +46,30 @@ public class NotificationReceiver extends Thread {
 
     public int getUserStateChange() {
         return userStateChange;
+    }
+
+    public ArrayList<Group> getGroupListCache() {
+        return groupListCache;
+    }
+
+    public void setGroupListCache(ArrayList<Group> groupListCache) {
+        this.groupListCache = groupListCache;
+    }
+
+    public Group getGroupCache() {
+        return groupCache;
+    }
+
+    public void setGroupCache(Group groupCache) {
+        this.groupCache = groupCache;
+    }
+
+    public boolean isGroupComplete() {
+        return isGroupComplete;
+    }
+
+    public void setGroupComplete(boolean groupComplete) {
+        isGroupComplete = groupComplete;
     }
 
     @Override
@@ -72,6 +100,19 @@ public class NotificationReceiver extends Thread {
                     case LOGGED_OUT:
                     case LOGIN:
                         userStateChange++;
+                        break;
+                    case GROUP_LIST_REFRESHED:
+                        groupListCache = new Gson().fromJson(packet.getAttribute().get("groups"), new TypeToken<List<Group>>() {
+                        }.getType());
+                        break;
+                    case GROUP_INFO_REFRESHED:
+                        groupCache = new Gson().fromJson(packet.getAttribute().get("group object"), Group.class);
+                        break;
+                    case GROUP_TIMED_OUT:
+                        groupCache = null;
+                        break;
+                    case Group_IS_COMPLETE:
+                        isGroupComplete = true;
                         break;
                 }
             } catch (IOException e) {

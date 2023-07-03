@@ -11,6 +11,7 @@ import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.view.chats.ChatMenuHomeGFX;
+import org.example.view.lobby.LobbyHomeGFX;
 
 public class MainMenuController {
     public Text title;
@@ -38,14 +39,7 @@ public class MainMenuController {
     }
 
     public void startGame(MouseEvent mouseEvent) throws Exception {
-//        if (User.getUsers().size() < 2) {
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("not enough players");
-//            alert.setHeaderText("");
-//            alert.setContentText("you're the only person who has signed up!\nthere should at least be two users to start a game");
-//            alert.showAndWait();
-//        } else new StartGameMenu().start(SignupMenu.stage);
-
+        new LobbyHomeGFX().start(SignupMenu.stage);
     }
 
     public void logout(MouseEvent mouseEvent) throws Exception {

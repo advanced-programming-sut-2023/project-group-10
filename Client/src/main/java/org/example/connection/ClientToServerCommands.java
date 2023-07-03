@@ -57,7 +57,14 @@ public enum ClientToServerCommands {
     ADD_MEMBER_TO_ROOM("add member to room", "room id", "username"),
     CAN_UPDATE_MESSAGE("can update message", "message id", "chat type", "chat id"),
     DELETE_MESSAGE("delete message", "message id", "chat type", "chat id"),
-    EDIT_MESSAGE("edit message", "message id", "chat type", "chat id", "new body");
+    EDIT_MESSAGE("edit message", "message id", "chat type", "chat id", "new body"),
+    //lobby
+    CREATE_GROUP("create group", "group name", "player count", "is private"),
+    REFRESH_GROUP_LIST("refresh group list"),
+    JOIN_GROUP("join group", "group id"),
+    LEAVE_GROUP("leave group", "group id"),
+    START_EARLY("start early", "group id"),
+    CHANGE_GROUP_PRIVACY("change group privacy", "group id", "is private");
 
     private final String command;
     private final String[] attributes;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.view.lobby.NewGroupController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <center>
+        <VBox alignment="CENTER">
+            <TextField fx:id="groupNameField" promptText="group name"/>
+            <HBox alignment="CENTER">
+                <Label text="player count"/>
+                <Spinner fx:id="playerCountSpinner"/>
+            </HBox>
+            <HBox alignment="CENTER">
+                <CheckBox fx:id="isPrivateCheckbox" text="private"/>
+            </HBox>
+            <Button text="create" onMouseClicked="#createNewGroup"/>
+        </VBox>
+    </center>
+</BorderPane>

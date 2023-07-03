@@ -86,7 +86,13 @@ public class User {
         return new Gson().fromJson(json, User.class);
     }
 
-    public static ArrayList getSortedUsersFromJson (String json) {
+    public static ArrayList getSortedUsersFromJson(String json) {
         return new Gson().fromJson(json, ArrayList.class);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof User)) return false;
+        return ((User) obj).getUsername().equals(username);
     }
 }

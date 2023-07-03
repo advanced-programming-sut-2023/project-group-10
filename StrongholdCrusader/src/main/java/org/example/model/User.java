@@ -1,6 +1,7 @@
 package org.example.model;
 
 import com.google.gson.Gson;
+import org.example.model.lobby.Group;
 import org.example.model.utils.CheckFormatAndEncrypt;
 
 import java.util.ArrayList;
@@ -22,10 +23,10 @@ public class User {
     private int highScore;
     private boolean isOnline;
     private long lastLogout;
+    private ArrayList<Group> viewingGroupsInList;
 
 
-    public User(String username, String password, String nickname, String email, String slogan, String questionNumber,
-                String securityAnswer) {
+    public User(String username, String password, String nickname, String email, String slogan, String questionNumber, String securityAnswer) {
         this.username = username;
         this.password = CheckFormatAndEncrypt.encryptString(password);
         this.nickname = nickname;
@@ -54,8 +55,7 @@ public class User {
         Stronghold.dataBase.saveUsersToFile();
     }
 
-    public static void addUser(String username, String password, String nickname, String email, String slogan,
-                               String questionNumber, String securityAnswer) {
+    public static void addUser(String username, String password, String nickname, String email, String slogan, String questionNumber, String securityAnswer) {
         Stronghold.dataBase.loadUsersFromFile();
         users.add(new User(username, password, nickname, email, slogan, questionNumber, securityAnswer));
         Stronghold.dataBase.saveUsersToFile();
@@ -76,24 +76,20 @@ public class User {
 
     public static User getUserByUsername(String username) {
         Stronghold.dataBase.loadUsersFromFile();
-        if (users.size() == 0)
-            return null;
+        if (users.size() == 0) return null;
         for (User user : users) {
-            if (user.getUsername().equals(username))
-                return user;
+            if (user.getUsername().equals(username)) return user;
         }
         return null;
     }
 
     public static User getUserByEmail(String email) {
         Stronghold.dataBase.loadUsersFromFile();
-        if (users.size() == 0)
-            return null;
+        if (users.size() == 0) return null;
         email = email.toLowerCase();
         for (User user : users) {
 
-            if (user.email.toLowerCase().equals(email))
-                return user;
+            if (user.email.toLowerCase().equals(email)) return user;
         }
         return null;
     }
@@ -196,16 +192,14 @@ public class User {
     }
 
     public void setHighScore(int highScore) {
-        if (this.highScore <= highScore)
-            User.getUserByUsername(this.username).highScore = highScore;
+        if (this.highScore <= highScore) User.getUserByUsername(this.username).highScore = highScore;
         Stronghold.dataBase.saveUsersToFile();
     }
 
     public int getRank() {
         ArrayList<User> sorted = sortUsers();
         for (int i = 0; i < sorted.size(); i++) {
-            if (sorted.get(i).equals(this))
-                return i + 1;
+            if (sorted.get(i).equals(this)) return i + 1;
         }
         return 0;
     }
@@ -213,6 +207,18 @@ public class User {
     private int randomNumber() {
         Random random = new Random();
         return random.nextInt(28) + 1; //TODO set bound
+    }
+
+    public ArrayList<Group> getViewingGroupsInList() {
+        return viewingGroupsInList;
+    }
+
+    public void updateViewingGroup(ArrayList<Group> newGroups) {
+        if (viewingGroupsInList != null) for (Group viewingGroup : viewingGroupsInList)
+            viewingGroup.removeWatcher(this);
+        if (newGroups != null) for (Group group : newGroups)
+            group.addWatcher(this);
+        viewingGroupsInList = newGroups;
     }
 
     @Override

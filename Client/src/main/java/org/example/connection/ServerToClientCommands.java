@@ -38,7 +38,13 @@ public enum ServerToClientCommands {
     AUTO_UPDATE_CHAT_MESSAGES("auto update chat messages", "messages"),
     IS_ADMIN("is admin", "state"),
     CAN_UPDATE_MESSAGE("can update message", "state"),
-    ADD_MEMBER_RESULT("add member result", "message");
+    ADD_MEMBER_RESULT("add member result", "message"),
+    //lobby
+    GROUP_CREATED("group created", "group object"),
+    GROUP_LIST_REFRESHED("group list refreshed", "groups"),
+    GROUP_INFO_REFRESHED("group info refreshed", "group object"),
+    GROUP_TIMED_OUT("group timed out", "group object"),
+    Group_IS_COMPLETE("group is complete");
 
     private final String command;
     private final String[] attributes;
