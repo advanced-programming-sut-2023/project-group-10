@@ -31,7 +31,6 @@ public class LobbyHomeController {
     public void initialize() {
         groupsList.setPrefWidth(SignupMenu.stage.getWidth() / 2);
         refreshGroupsList();
-        Client.getInstance().getNotificationReceiver().setGroupListCache(currentList);
 
         updateGroup = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             ArrayList<Group> groupsListCache = Client.getInstance().getNotificationReceiver().getGroupListCache();
@@ -59,11 +58,17 @@ public class LobbyHomeController {
         }
         currentList = new Gson().fromJson(response.getAttribute().get("groups"), new TypeToken<List<Group>>() {
         }.getType());
+        Client.getInstance().getNotificationReceiver().setGroupListCache(currentList);
         updateListView();
     }
 
     public void joinGroupByFieldId() {
-        joinGroup(groupIdField.getId());
+        if(groupIdField.getText().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("enter a group id first!");
+            alert.showAndWait();
+        }
+        joinGroup(groupIdField.getText());
     }
 
     private void joinGroup(String groupId) {

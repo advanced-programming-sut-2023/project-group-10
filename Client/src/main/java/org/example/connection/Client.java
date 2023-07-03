@@ -41,14 +41,14 @@ public class Client {
     }
 
     private void openNotification() throws IOException {
-        Socket notificationSocket = new Socket("localhost", 8083);
+        Socket notificationSocket = new Socket("localhost", 8082);
         new DataOutputStream(notificationSocket.getOutputStream()).writeUTF(sessionID);
         notificationReceiver = new NotificationReceiver(notificationSocket);
         notificationReceiver.start();
     }
 
     public static Client getInstance() {
-        if (instance == null) instance = new Client("localhost", 8080);
+        if (instance == null) instance = new Client("localhost", 8081);
         return instance;
     }
 

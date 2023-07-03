@@ -14,6 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Group {
+    private final long TIMEOUT_LIMIT = 300000;
     private final static ArrayList<Group> allGroups = new ArrayList<>();
     private final String groupId;
     private final String groupName;
@@ -42,13 +43,20 @@ public class Group {
                 sendTimeOutToMembers();
                 informWatchers();
             }
-        }, 300000);
+        }, TIMEOUT_LIMIT);
         listWatchers = new ArrayList<>();
         allGroups.add(this);
     }
 
     public static ArrayList<Group> getAllGroups() {
         return allGroups;
+    }
+
+    public static ArrayList<Group> getAllPublicGroups() {
+        ArrayList<Group> publicGroups = new ArrayList<>();
+        for (Group group : allGroups)
+            if (!group.isPrivate) publicGroups.add(group);
+        return publicGroups;
     }
 
     public static Group getGroupById(String groupId) {
@@ -130,7 +138,7 @@ public class Group {
                     sendTimeOutToMembers();
                     informWatchers();
                 }
-            }, 300000);
+            }, TIMEOUT_LIMIT);
             informMembers();
             informWatchers();
         }
@@ -142,7 +150,7 @@ public class Group {
             deleteGroup();
             informWatchers();
         } else {
-            if (user == admin) admin = members.get(0);
+            if (user.equals(admin)) admin = members.get(0);
             informMembers();
             informWatchers();
         }
@@ -165,7 +173,6 @@ public class Group {
     }
 
     private void startGameSequence() {
-        // TODO: send packet to members to start game
         Packet toBeSent = new Packet(ServerToClientCommands.Group_IS_COMPLETE.getCommand(), null);
         for (User member : members) {
             Connection connection = ConnectionDatabase.getInstance().getConnectionByUsername(member.getUsername());

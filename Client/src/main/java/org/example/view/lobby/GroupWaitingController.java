@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -37,7 +36,6 @@ public class GroupWaitingController {
 
     @FXML
     public void initialize() {
-
         currentGroup = GroupWaitingMenu.targetGroup;
         Client.getInstance().getNotificationReceiver().setGroupCache(currentGroup);
         updateGroupView();
@@ -45,8 +43,8 @@ public class GroupWaitingController {
         updateGroup = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             Group groupCache = Client.getInstance().getNotificationReceiver().getGroupCache();
             if (Client.getInstance().getNotificationReceiver().isGroupComplete()) {
-                currentGroup = groupCache;
                 Client.getInstance().getNotificationReceiver().setGroupComplete(false);
+                currentGroup = groupCache;
                 startSequence();
             } else if (currentGroup != groupCache) {
                 currentGroup = groupCache;
@@ -54,14 +52,14 @@ public class GroupWaitingController {
                 else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setContentText("group removed due to inactivity!");
-                    alert.showAndWait();
+                    updateGroup.stop();
+                    alert.show();
                     GroupWaitingMenu.targetGroup = null;
                     try {
                         new LobbyHomeGFX().start(SignupMenu.stage);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-                    updateGroup.stop();
                 }
             }
         }));
@@ -77,7 +75,7 @@ public class GroupWaitingController {
         checkboxContainer.getChildren().clear();
         if (buttonsBox.getChildren().size() > 1) buttonsBox.getChildren().remove(1);
         buttonsBox.setSpacing(15);
-        groupMembersLabel.setText(currentGroup.getGroupName() + " (id: " + currentGroup.getGroupId() + ")");
+        groupNameIdLabel.setText(currentGroup.getGroupName() + " (id: " + currentGroup.getGroupId() + ")");
         groupMemberCountLabel.setText(currentGroup.getMembers().size() + "/" + currentGroup.getMembersCap());
         StringBuilder membersText = new StringBuilder("MEMBERS:\n");
         for (User member : currentGroup.getMembers()) {
@@ -90,10 +88,26 @@ public class GroupWaitingController {
             Button startButton = new Button("start");
             startButton.setFont(new Font("Chalkboard", 13));
             startButton.setBackground(Background.fill(Color.WHITE));
-            startButton.setOnMouseClicked(mouseEvent -> startSequence());
+            startButton.setOnMouseClicked(mouseEvent -> {
+                if (currentGroup.getMembers().size() < 2) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setContentText("not enough players are in the group to start the game");
+                    alert.showAndWait();
+                } else {
+                    HashMap<String, String> attributes = new HashMap<>();
+                    attributes.put("group id", currentGroup.getGroupId());
+                    Packet request = new Packet(ClientToServerCommands.START_EARLY.getCommand(), attributes);
+                    try {
+                        Client.getInstance().sendPacket(request);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
             buttonsBox.getChildren().add(startButton);
 
             CheckBox isPrivateCheckbox = new CheckBox("private");
+            isPrivateCheckbox.setSelected(currentGroup.isPrivate());
             isPrivateCheckbox.selectedProperty().addListener(observable -> {
                 HashMap<String, String> attributes = new HashMap<>();
                 attributes.put("group id", currentGroup.getGroupId());
@@ -111,17 +125,11 @@ public class GroupWaitingController {
     }
 
     private void startSequence() {
-        if (currentGroup.getMembers().size() < 2) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("not enough players are in the group to start the game");
-            alert.showAndWait();
-        } else {
-            MapMenu.setGroup(currentGroup);
-            try {
-                new MapMenu().start(SignupMenu.stage);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        MapMenu.setGroup(currentGroup);
+        try {
+            new MapMenu().start(SignupMenu.stage);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         updateGroup.stop();
     }

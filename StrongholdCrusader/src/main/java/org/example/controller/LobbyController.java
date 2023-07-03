@@ -7,24 +7,21 @@ import java.util.ArrayList;
 
 public class LobbyController {
     public static Group createGroup(String groupName, User admin, int membersCap, boolean isPrivate) {
-        Group newGroup = new Group(groupName, admin, membersCap, isPrivate);
-        return newGroup;
+        return new Group(groupName, admin, membersCap, isPrivate);
     }
 
     public static ArrayList<Group> getTenRandomPublicGroups(User user) {
-        ArrayList<Group> allGroups = Group.getAllGroups();
+        ArrayList<Group> allGroups = Group.getAllPublicGroups();
         ArrayList<Group> result;
-        if (allGroups.size() <= 10) result = allGroups;
-        else {
-            result = new ArrayList<>();
-            int count = 0;
-            int allGroupsCount = allGroups.size();
-            while (count < 10) {
-                int nextIndex = (int) (Math.random() * allGroupsCount);
-                if (allGroups.get(nextIndex).isPrivate() || result.contains(allGroups.get(nextIndex))) continue;
-                result.add(allGroups.get(nextIndex));
-                count++;
-            }
+        int limit = Math.min(allGroups.size(), 10);
+        result = new ArrayList<>();
+        int count = 0;
+        int allGroupsCount = allGroups.size();
+        while (count < limit) {
+            int nextIndex = (int) (Math.random() * allGroupsCount);
+            if (allGroups.get(nextIndex).isPrivate() || result.contains(allGroups.get(nextIndex))) continue;
+            result.add(allGroups.get(nextIndex));
+            count++;
         }
         user.updateViewingGroup(result);
         return result;
