@@ -13,6 +13,13 @@ public class NewGroupMenu extends Application {
         FXMLLoader loader = new FXMLLoader(new URL(NewGroupMenu.class.getResource("/view/newGroupMenu.fxml").toExternalForm()));
         Pane root = loader.load();
         stage.getScene().setRoot(root);
+        stage.centerOnScreen();
+        stage.setWidth(600);
+        stage.setHeight(400);
+        stage.setTitle("New Group");
+        root.setPrefHeight(400);
+        root.setPrefWidth(600);
+        stage.getScene().setRoot(root);
         stage.show();
     }
 }

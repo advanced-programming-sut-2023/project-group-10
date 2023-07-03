@@ -7,8 +7,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
@@ -33,6 +37,7 @@ public class GroupWaitingController {
 
     @FXML
     public void initialize() {
+
         currentGroup = GroupWaitingMenu.targetGroup;
         Client.getInstance().getNotificationReceiver().setGroupCache(currentGroup);
         updateGroupView();
@@ -64,9 +69,14 @@ public class GroupWaitingController {
         updateGroup.play();
     }
 
+    private void stylePane() {
+
+    }
+
     private void updateGroupView() {
         checkboxContainer.getChildren().clear();
         if (buttonsBox.getChildren().size() > 1) buttonsBox.getChildren().remove(1);
+        buttonsBox.setSpacing(15);
         groupMembersLabel.setText(currentGroup.getGroupName() + " (id: " + currentGroup.getGroupId() + ")");
         groupMemberCountLabel.setText(currentGroup.getMembers().size() + "/" + currentGroup.getMembersCap());
         StringBuilder membersText = new StringBuilder("MEMBERS:\n");
@@ -78,6 +88,8 @@ public class GroupWaitingController {
         groupMembersLabel.setText(membersText.toString());
         if (DataBank.getLoggedInUser().equals(currentGroup.getAdmin())) {
             Button startButton = new Button("start");
+            startButton.setFont(new Font("Chalkboard", 13));
+            startButton.setBackground(Background.fill(Color.WHITE));
             startButton.setOnMouseClicked(mouseEvent -> startSequence());
             buttonsBox.getChildren().add(startButton);
 
@@ -94,6 +106,7 @@ public class GroupWaitingController {
                 }
             });
             checkboxContainer.getChildren().add(isPrivateCheckbox);
+            checkboxContainer.setSpacing(15);
         }
     }
 

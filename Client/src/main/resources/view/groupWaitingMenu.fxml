@@ -5,20 +5,22 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.view.lobby.GroupWaitingController"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.view.lobby.GroupWaitingController">
 
     <center>
-        <VBox alignment="CENTER">
-            <Label fx:id="groupNameIdLabel"/>
-            <Label fx:id="groupMemberCountLabel"/>
-            <Label fx:id="groupMembersLabel"/>
+        <VBox alignment="CENTER" style="-fx-background-color: pink;">
+            <Label fx:id="groupNameIdLabel" />
+            <Label fx:id="groupMemberCountLabel" />
+            <Label fx:id="groupMembersLabel" />
             <VBox fx:id="checkboxContainer" alignment="CENTER">
             </VBox>
             <HBox fx:id="buttonsBox" alignment="CENTER">
-                <Button text="exit" onMouseClicked="#exitGroup"/>
+                <Button onMouseClicked="#exitGroup" style="-fx-background-color: white;" text="exit">
+               <font>
+                  <Font name="Chalkboard" size="13.0" />
+               </font></Button>
             </HBox>
         </VBox>
     </center>

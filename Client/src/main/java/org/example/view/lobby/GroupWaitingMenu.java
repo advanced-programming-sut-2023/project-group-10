@@ -20,6 +20,10 @@ public class GroupWaitingMenu extends Application {
         FXMLLoader loader = new FXMLLoader(new URL(GroupWaitingMenu.class.getResource("/view/groupWaitingMenu.fxml").toExternalForm()));
         Pane root = loader.load();
         stage.getScene().setRoot(root);
+        stage.centerOnScreen();
+        stage.setWidth(600);
+        stage.setHeight(400);
+        stage.setTitle("waiting menu");
         stage.show();
     }
 }

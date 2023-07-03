@@ -14,6 +14,10 @@ public class LobbyHomeGFX extends Application {
         FXMLLoader loader = new FXMLLoader(new URL(LobbyHomeGFX.class.getResource("/view/lobbyHome.fxml").toExternalForm()));
         Pane root = loader.load();
         stage.getScene().setRoot(root);
+        stage.centerOnScreen();
+        stage.setWidth(600);
+        stage.setHeight(400);
+        stage.setTitle("Lobby");
         stage.show();
     }
 }
