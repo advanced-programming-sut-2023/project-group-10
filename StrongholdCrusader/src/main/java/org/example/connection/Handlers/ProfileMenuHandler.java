@@ -125,9 +125,9 @@ public class ProfileMenuHandler {
 
     public void getSearchedUsers() throws IOException {
         String search = receivedPacket.getAttribute().get("search");
-        ArrayList<User> searchedUsers = ProfileMenuController.searchUsers(search);
+        User searchedUser = ProfileMenuController.searchUsers(search);
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("users", new Gson().toJson(searchedUsers));
+        hashMap.put("user", new Gson().toJson(searchedUser));
         Packet toBeSent = new Packet(ServerToClientCommands.GET_SEARCHED_USERS.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }

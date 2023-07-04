@@ -126,14 +126,13 @@ public class ProfileMenuController {
         else return ProfileMenuMessages.STRONG_PASSWORD;
     }
 
-    public static ArrayList<User> searchUsers (String search) {
+    public static User searchUsers (String search) {
         Stronghold.dataBase.saveUsersToFile();
-        ArrayList<User> searchedUsers = new ArrayList<>();
         for(User user : User.getUsers()){
-            if(user.getUsername().contains(search))
-                searchedUsers.add(user);
+            if(user.getUsername().equals(search))
+                return user;
         }
-        return searchedUsers;
+        return null;
     }
 
     public static ArrayList<User> getFriends (String username) {

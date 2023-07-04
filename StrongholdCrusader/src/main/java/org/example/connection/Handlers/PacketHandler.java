@@ -113,6 +113,9 @@ public class PacketHandler {
             case GET_LAST_VISIT:
                 profileMenuHandler.lastVisit();
                 break;
+            case SEARCH_USER:
+                profileMenuHandler.getSearchedUsers();
+                break;
             case GET_FRIENDS:
                 profileMenuHandler.getFriends();
                 break;

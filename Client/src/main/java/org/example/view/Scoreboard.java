@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -42,21 +43,13 @@ public class Scoreboard extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        TextField search = new TextField();
-        search.setPromptText("search");
-        search.textProperty().addListener((observable, oldValue, newValue) -> {
-            /*HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("search", newValue);
-            Packet packet = new Packet(ClientToServerCommands.SEARCH_USER.getCommand(), hashMap);
-            try {
-                Client.getInstance().sendPacket(packet);
-                String json = Client.getInstance().recievePacket().getAttribute().get("users");
-                ArrayList<User> searchedUsers = new Gson().fromJson(json, new com.google.gson.reflect.TypeToken<List<User>>(){}.getType());
-                showSearch(searchedUsers);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }*/
-        });
+        HBox search = new HBox(10);
+        search.setAlignment(Pos.CENTER);
+        TextField searchField = new TextField();
+        searchField.setPromptText("search");
+        Button searchButton = new Button("search");
+        search.getChildren().addAll(searchField, searchButton);
+        searchButton.setOnMouseClicked(mouseEvent -> searchUser(searchField.getText()));
 
         Circle currentPlayerAvatar = new Circle(50, new ImagePattern(new Image(DataBank.getLoggedInUser().getAvatar())));
         currentPlayerAvatar.setOnDragOver(dragEvent -> {
@@ -177,24 +170,25 @@ public class Scoreboard extends Application {
             hBoxListView.getItems().add(hBox);
         }
     }
-    private void showSearch(ArrayList<User> searched) {
-        Popup popup = new Popup();
-        VBox all = new VBox(10);
-        all.setAlignment(Pos.CENTER);
 
-        for(User user : searched){
-            HBox hBox = new HBox(10);
-            hBox.setAlignment(Pos.CENTER);
-            Text username = new Text(user.getUsername());
-            Circle avatar = new Circle(30, new ImagePattern(new Image(user.getAvatar())));
-            Text highScore = new Text(Integer.toString(user.getHighScore()));
-            hBox.getChildren().addAll(username, avatar, highScore);
-            all.getChildren().add(hBox);
+    private void searchUser(String username) {
+        try {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("search", username);
+            Packet packet = new Packet(ClientToServerCommands.SEARCH_USER.getCommand(), hashMap);
+            Client.getInstance().sendPacket(packet);
+            String json = Client.getInstance().recievePacket().getAttribute().get("user");
+            User user = new Gson().fromJson(json, new com.google.gson.reflect.TypeToken<User>() {}.getType());
+            if (user != null) showProfile(user);
+            else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("username not found!");
+                alert.setContentText("user with this username does not exist");
+                alert.show();
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
-
-        all.setBackground(Background.fill(Color.BEIGE));
-        popup.getContent().add(all);
-        popup.show(SignupMenu.stage);
     }
 
     private void showProfile(User user){
