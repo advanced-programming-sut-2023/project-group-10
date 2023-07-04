@@ -539,15 +539,15 @@ public class ProfileMenu extends Application {
             }
             if(result.equals("successful")){
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("successful request");
-                alert.setContentText("You have successfully requested to be " + user.getUsername() + "'s friend!");
+                alert.setTitle("successful add");
+                alert.setContentText("You have successfully accepted " + user.getUsername() + " as friend!");
                 alert.show();
                 popup.hide();
                 showFriends();
             }
             else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("unable to request");
+                alert.setTitle("unable to accept");
                 alert.setContentText("You have reached your friends limit!");
                 alert.show();
             }
