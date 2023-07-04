@@ -146,4 +146,22 @@ public class ProfileMenuHandler {
         Packet toBeSent = new Packet(ServerToClientCommands.FRIENDS_LIST.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
+
+    public void getPendingFriends() throws IOException {
+        String username = receivedPacket.getAttribute().get("username");
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("pending", new Gson().toJson(ProfileMenuController.getPendingFriends(username)));
+        Packet toBeSent = new Packet(ServerToClientCommands.PENDING_FRIENDS.getCommand(), hashMap);
+        connection.sendPacket(toBeSent);
+    }
+
+    public void requestFriend() throws IOException {
+        String owner = receivedPacket.getAttribute().get("owner");
+        String requester = receivedPacket.getAttribute().get("requester");
+        String result = ProfileMenuController.requestFriend(owner, requester);
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("result", result);
+        Packet toBeSent = new Packet(ServerToClientCommands.REQUEST_FRIEND.getCommand(), hashMap);
+        connection.sendPacket(toBeSent);
+    }
 }

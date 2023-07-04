@@ -38,7 +38,8 @@ public enum ClientToServerCommands {
     GET_LAST_VISIT("gat last visit", "username"),
     SEARCH_USER("search user", "search"),
     GET_FRIENDS("get friends", "username"),
-
+    GET_PENDING_FRIENDS("get pending friends", "username"),
+    REQUEST_FRIEND("request friend", "owner", "requester"),
     //start game menu
     START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),
     CANCEL_START_GAME("cancel start game"),

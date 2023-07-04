@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.DoubleAccumulator;
 
 
 public class Scoreboard extends Application {
@@ -225,9 +226,11 @@ public class Scoreboard extends Application {
         Circle avatar = new Circle(30, new ImagePattern(new Image(user.getAvatar())));
         Text username = new Text(user.getUsername());
         Text highScore = new Text(String.valueOf(user.getHighScore()));
+        Button request = new Button("request");
+        request.setOnMouseClicked(mouseEvent -> request(user));
         Button button = new Button("back");
         button.setOnMouseClicked(mouseEvent -> popup.hide());
-        vBox.getChildren().addAll(avatar, username, highScore, button);
+        vBox.getChildren().addAll(avatar, username, highScore, request, button);
         hBox.getChildren().addAll(vBox, vBox2);
         hBox.setBackground(Background.fill(Color.BEIGE));
         popup.getContent().add(hBox);
@@ -243,5 +246,31 @@ public class Scoreboard extends Application {
         Text highScore = new Text(String.valueOf(user.getHighScore()));
         hBox.getChildren().addAll(avatar, username, nickname, highScore);
         return hBox;
+    }
+
+    private void request(User user){
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("owner", user.getUsername());
+        hashMap.put("requester", DataBank.getLoggedInUser().getUsername());
+        Packet packet = new Packet(ClientToServerCommands.REQUEST_FRIEND.getCommand(), hashMap);
+        String result = "";
+        try {
+            Client.getInstance().sendPacket(packet);
+            result = Client.getInstance().recievePacket().getAttribute().get("result");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        if(result.equals("successful")){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("successful request");
+            alert.setContentText("You have successfully requested to be " + user.getUsername() + "'s friend!");
+            alert.show();
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("unable to request");
+            alert.setContentText("You have reached your friends limit!");
+            alert.show();
+        }
     }
 }

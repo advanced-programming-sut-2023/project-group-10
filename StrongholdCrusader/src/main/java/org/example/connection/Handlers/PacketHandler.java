@@ -119,6 +119,12 @@ public class PacketHandler {
             case GET_FRIENDS:
                 profileMenuHandler.getFriends();
                 break;
+            case GET_PENDING_FRIENDS:
+                profileMenuHandler.getPendingFriends();
+                break;
+            case REQUEST_FRIEND:
+                profileMenuHandler.requestFriend();
+                break;
             case LOGOUT:
                 mainMenuHandler.handleLogout();
                 break;

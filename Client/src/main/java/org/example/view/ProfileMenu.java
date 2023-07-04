@@ -1,5 +1,7 @@
 package org.example.view;
 
+import com.google.common.collect.HashBiMap;
+import com.google.gson.Gson;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -14,13 +17,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.BackgroundBuilder;
+import org.example.model.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ProfileMenu extends Application {
     private static Stage stage;
@@ -422,5 +429,102 @@ public class ProfileMenu extends Application {
 
     public void scoreboard() throws Exception {
         new Scoreboard().start(stage);
+    }
+
+    public void showFriends() {
+        VBox friends = new VBox(10);
+        Text friendsText = new Text("friends");
+        ListView<HBox> friendsListView = getFriendsList();
+        friends.getChildren().addAll(friendsText, friendsListView);
+
+        VBox pending = new VBox(10);
+        Text pendingText = new Text("pending");
+        ListView<HBox> pendingListView = getPendingList();
+        pending.getChildren().addAll(pendingText, pendingListView);
+
+        Button back = new Button("back");
+
+        HBox main = new HBox(20);
+        main.setAlignment(Pos.CENTER);
+        main.getChildren().addAll(back, friends, pending);
+        Popup popup = new Popup();
+        popup.getContent().add(main);
+        popup.show(SignupMenu.stage);
+        back.setOnMouseClicked(mouseEvent -> popup.hide());
+    }
+
+    private ListView<HBox> getFriendsList () {
+        ArrayList<User> friendsArrayList = new ArrayList<>();
+
+        HashMap<String, String> attribute = new HashMap<>();
+        attribute.put("username", DataBank.getLoggedInUser().getUsername());
+        Packet packet = new Packet(ClientToServerCommands.GET_FRIENDS.getCommand(), attribute);
+        try {
+            Client.getInstance().sendPacket(packet);
+            String json = Client.getInstance().recievePacket().getAttribute().get("friends");
+            friendsArrayList = new Gson().fromJson(json, new com.google.gson.reflect.TypeToken<List<User>>() {}.getType());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        ListView<HBox> friendsListView = new ListView<>();
+        if(friendsArrayList != null){
+            for(User user : friendsArrayList){
+                friendsListView.getItems().add(createFriendHbox(user));
+            }
+        }
+        return friendsListView;
+    }
+
+    private ListView<HBox> getPendingList() {
+        ArrayList<User> pendingArrayList = new ArrayList<>();
+
+        HashMap<String, String> attribute = new HashMap<>();
+        attribute.put("username", DataBank.getLoggedInUser().getUsername());
+        Packet packet = new Packet(ClientToServerCommands.GET_PENDING_FRIENDS.getCommand(), attribute);
+        try{
+            Client.getInstance().sendPacket(packet);
+            String json = Client.getInstance().recievePacket().getAttribute().get("pending");
+            pendingArrayList = new Gson().fromJson(json, new com.google.gson.reflect.TypeToken<List<User>>() {}.getType());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        ListView<HBox> pendingListView = new ListView<>();
+        if(pendingArrayList != null){
+            for (User user : pendingArrayList){
+                System.out.println(user.getUsername());
+                pendingListView.getItems().add(createPendingHbox(user));
+            }
+        }
+        return pendingListView;
+    }
+
+    private HBox createFriendHbox (User user){
+        HBox hBox = new HBox(10);
+        hBox.setAlignment(Pos.CENTER);
+        Circle avatar = new Circle(20, new ImagePattern(new Image(user.getAvatar())));
+        Text username = new Text(user.getUsername());
+        Text nickname = new Text(user.getNickname());
+        Text highScore = new Text(String.valueOf(user.getHighScore()));
+        Button button = new Button("remove");
+        hBox.getChildren().addAll(avatar, username, nickname, highScore, button);
+        return hBox;
+    }
+
+    private HBox createPendingHbox (User user){
+        HBox hBox = new HBox(10);
+        hBox.setAlignment(Pos.CENTER);
+        Circle avatar = new Circle(20, new ImagePattern(new Image(user.getAvatar())));
+        Text username = new Text(user.getUsername());
+        Text nickname = new Text(user.getNickname());
+        Text highScore = new Text(String.valueOf(user.getHighScore()));
+        HBox buttons = new HBox(5);
+        buttons.setAlignment(Pos.CENTER);
+        Button reject = new Button("reject");
+        Button accept = new Button("accept");
+        buttons.getChildren().addAll(accept, reject);
+        hBox.getChildren().addAll(avatar, username, nickname, highScore, buttons);
+        return hBox;
     }
 }

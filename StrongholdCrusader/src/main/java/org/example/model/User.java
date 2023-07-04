@@ -5,6 +5,7 @@ import org.example.model.lobby.Group;
 import org.example.model.utils.CheckFormatAndEncrypt;
 
 import java.util.*;
+import java.util.concurrent.atomic.DoubleAccumulator;
 
 public class User {
     static final Gson gson = new Gson();
@@ -21,7 +22,8 @@ public class User {
     private boolean isOnline;
     private long lastLogout;
     private ArrayList<Group> viewingGroupsInList;
-    private ArrayList<User> friends;
+    private final ArrayList<User> friends;
+    private final ArrayList<User> pendingFriends;
 
 
     public User(String username, String password, String nickname, String email, String slogan, String questionNumber, String securityAnswer) {
@@ -35,6 +37,7 @@ public class User {
         this.avatar = "/images/avatar/avatar" + randomNumber() + ".png";
         lastLogout = System.currentTimeMillis();
         friends = new ArrayList<>();
+        pendingFriends = new ArrayList<>();
     }
 
     public boolean isOnline() {
@@ -196,13 +199,16 @@ public class User {
     }
 
     public ArrayList<User> getFriends(){
-        if(this.friends.size() != 0)
-            return this.friends;
-        return null;
+        return friends;
     }
 
-    public void addFriend (String username){
-        this.friends.add(User.getUserByUsername(username));
+    public ArrayList<User> getPendingFriends() {
+        return pendingFriends;
+    }
+
+    public void addPending(String requester) {
+        User requesterUser = User.getUserByUsername(requester);
+        pendingFriends.add(requesterUser);
         Stronghold.dataBase.saveUsersToFile();
     }
 

@@ -136,8 +136,26 @@ public class ProfileMenuController {
     }
 
     public static ArrayList<User> getFriends (String username) {
-        if(User.getUserByUsername(username).getFriends() != null)
-            return User.getUserByUsername(username).getFriends();
-        return null;
+        return User.getUserByUsername(username).getFriends();
+    }
+
+    public static ArrayList<User> getPendingFriends (String username) {
+        return User.getUserByUsername(username).getPendingFriends();
+    }
+
+    public static String requestFriend (String owner, String requester) {
+        if(User.getUserByUsername(requester).getFriends().size() == 100)
+            return "no storage";
+        else{
+            User ownerUser = User.getUserByUsername(owner);
+            ownerUser.addPending(requester);
+            System.out.println(ownerUser.getPendingFriends().get(0));
+            System.out.println(ownerUser.getPendingFriends().size());
+            for(User user : User.getUsers()){
+                System.out.println(user.getPendingFriends().size());
+                if(user.equals(ownerUser)) System.out.println("yes");
+            }
+            return "successful";
+        }
     }
 }

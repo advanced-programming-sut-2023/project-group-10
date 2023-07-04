@@ -28,6 +28,7 @@
             <Button text="change email" onMouseClicked="#changeEmail"/>
             <Button text="change slogan" onMouseClicked="#changeSlogan"/>
             <Button text="change avatar" onMouseClicked="#changeAvatar"/>
+            <Button text="friends" onMouseClicked="#showFriends"/>
             <Button text="scoreboard" onMouseClicked="#scoreboard"/>
         </VBox>
     </HBox>
