@@ -47,11 +47,6 @@ public class GroupWaitingController {
             if (Client.getInstance().getNotificationReceiver().isGroupComplete()) {
                 Client.getInstance().getNotificationReceiver().setGroupComplete(false);
                 currentGroup = groupCache;
-                try {
-                    startChatPage();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 startSequence();
             } else if (currentGroup != groupCache) {
                 currentGroup = groupCache;
@@ -74,35 +69,15 @@ public class GroupWaitingController {
         updateGroup.play();
     }
 
-    private void startChatPage() throws Exception {
+    public void startChatPage() {
         RoomChatGFX roomChatGFX = new RoomChatGFX();
-        roomChatGFX.setRoomName(groupNameIdLabel.getText());
         roomChatGFX.setForGame(true);
-        HashMap<String, String> attributes = new HashMap<>();
-        attributes.put("room id", groupNameIdLabel.getText());
-        Packet packet = new Packet(ClientToServerCommands.CREATE_ROOM.getCommand(), attributes);
+        roomChatGFX.setRoomName(currentGroup.getGroupId());
         try {
-            Client.getInstance().sendPacket(packet);
-        } catch (IOException e) {
+            roomChatGFX.start(new Stage());
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        for (User member : currentGroup.getMembers()) {
-            attributes.clear();
-            attributes.put("room id", groupNameIdLabel.getText());
-            attributes.put("username", member.getUsername());
-            Packet packet1 = new Packet(ClientToServerCommands.ADD_MEMBER_TO_ROOM.getCommand(), attributes);
-            try {
-                Client.getInstance().sendPacket(packet1);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        roomChatGFX.start(new Stage());
-
-    }
-
-    private void stylePane() {
-
     }
 
     private void updateGroupView() {

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Room extends Chat {
     private static ArrayList<Room> allRooms;
-    private final String adminUsername;
+    private String adminUsername;
     private final ArrayList<String> membersUsernames;
 
     public Room(String chatID, String adminUsername) {
@@ -50,9 +50,14 @@ public class Room extends Chat {
 
     public static Room create(String admin, String roomID) {
         Room room = new Room(roomID, admin);
-        allRooms.add(room);
+        getAllRooms().add(room);
         room.loadChatToDatabase();
         return room;
+    }
+
+    public void delete() {
+        getAllRooms().remove(this);
+        loadChatToDatabase();
     }
 
     public static Room getRoomById(String roomID) {
@@ -64,6 +69,10 @@ public class Room extends Chat {
 
     public String getAdminUsername() {
         return adminUsername;
+    }
+
+    public void setAdminUsername(String adminUsername) {
+        this.adminUsername = adminUsername;
     }
 
     public boolean isAdmin(String username) {

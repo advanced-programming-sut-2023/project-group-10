@@ -138,7 +138,8 @@ public class RoomChatController implements ChatControllerParent {
     }
 
     public void back(MouseEvent mouseEvent) throws Exception {
-        new RoomsViewGFX().start(SignupMenu.stage);
+        if (isForGame) RoomChatGFX.stage.close();
+        else new RoomsViewGFX().start(SignupMenu.stage);
     }
 
     private void sendMessage() throws IOException {
