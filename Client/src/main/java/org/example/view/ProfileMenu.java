@@ -432,6 +432,8 @@ public class ProfileMenu extends Application {
     }
 
     public void showFriends() {
+        Popup popup = new Popup();
+
         VBox friends = new VBox(10);
         Text friendsText = new Text("friends");
         ListView<HBox> friendsListView = getFriendsList();
@@ -439,7 +441,7 @@ public class ProfileMenu extends Application {
 
         VBox pending = new VBox(10);
         Text pendingText = new Text("pending");
-        ListView<HBox> pendingListView = getPendingList();
+        ListView<HBox> pendingListView = getPendingList(popup);
         pending.getChildren().addAll(pendingText, pendingListView);
 
         Button back = new Button("back");
@@ -447,7 +449,6 @@ public class ProfileMenu extends Application {
         HBox main = new HBox(20);
         main.setAlignment(Pos.CENTER);
         main.getChildren().addAll(back, friends, pending);
-        Popup popup = new Popup();
         popup.getContent().add(main);
         popup.show(SignupMenu.stage);
         back.setOnMouseClicked(mouseEvent -> popup.hide());
@@ -476,7 +477,7 @@ public class ProfileMenu extends Application {
         return friendsListView;
     }
 
-    private ListView<HBox> getPendingList() {
+    private ListView<HBox> getPendingList(Popup popup) {
         ArrayList<User> pendingArrayList = new ArrayList<>();
 
         HashMap<String, String> attribute = new HashMap<>();
@@ -493,8 +494,7 @@ public class ProfileMenu extends Application {
         ListView<HBox> pendingListView = new ListView<>();
         if(pendingArrayList != null){
             for (User user : pendingArrayList){
-                System.out.println(user.getUsername());
-                pendingListView.getItems().add(createPendingHbox(user));
+                pendingListView.getItems().add(createPendingHbox(user, popup));
             }
         }
         return pendingListView;
@@ -507,12 +507,11 @@ public class ProfileMenu extends Application {
         Text username = new Text(user.getUsername());
         Text nickname = new Text(user.getNickname());
         Text highScore = new Text(String.valueOf(user.getHighScore()));
-        Button button = new Button("remove");
-        hBox.getChildren().addAll(avatar, username, nickname, highScore, button);
+        hBox.getChildren().addAll(avatar, username, nickname, highScore);
         return hBox;
     }
 
-    private HBox createPendingHbox (User user){
+    private HBox createPendingHbox (User user, Popup popup){
         HBox hBox = new HBox(10);
         hBox.setAlignment(Pos.CENTER);
         Circle avatar = new Circle(20, new ImagePattern(new Image(user.getAvatar())));
@@ -525,6 +524,50 @@ public class ProfileMenu extends Application {
         Button accept = new Button("accept");
         buttons.getChildren().addAll(accept, reject);
         hBox.getChildren().addAll(avatar, username, nickname, highScore, buttons);
+
+        accept.setOnMouseClicked(mouseEvent -> {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("owner", DataBank.getLoggedInUser().getUsername());
+            hashMap.put("requester", user.getUsername());
+            Packet packet = new Packet(ClientToServerCommands.ACCEPT_FRIEND.getCommand(), hashMap);
+            String result = "";
+            try {
+                Client.getInstance().sendPacket(packet);
+                result = Client.getInstance().recievePacket().getAttribute().get("result");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            if(result.equals("successful")){
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("successful request");
+                alert.setContentText("You have successfully requested to be " + user.getUsername() + "'s friend!");
+                alert.show();
+                popup.hide();
+                showFriends();
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("unable to request");
+                alert.setContentText("You have reached your friends limit!");
+                alert.show();
+            }
+        });
+
+        reject.setOnMouseClicked(mouseEvent -> {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("owner", DataBank.getLoggedInUser().getUsername());
+            hashMap.put("requester", user.getUsername());
+            Packet packet = new Packet(ClientToServerCommands.REJECT_FRIEND.getCommand(), hashMap);
+            try {
+                Client.getInstance().sendPacket(packet);
+                Client.getInstance().recievePacket();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+            popup.hide();
+            showFriends();
+        });
+
         return hBox;
     }
 }

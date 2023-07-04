@@ -178,8 +178,8 @@ public class ProfileMenuHandler {
     public void rejectFriend() throws IOException{
         String owner = receivedPacket.getAttribute().get("owner");
         String requester = receivedPacket.getAttribute().get("requester");
-        ProfileMenuController.acceptFriend(owner, requester);
-        Packet toBeSent = new Packet(ServerToClientCommands.ACCEPT_FRIEND.getCommand(), null);
+        ProfileMenuController.rejectFriend(owner, requester);
+        Packet toBeSent = new Packet(ServerToClientCommands.REJECT_FRIEND.getCommand(), null);
         connection.sendPacket(toBeSent);
     }
 }
