@@ -5,19 +5,24 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.connection.Client;
@@ -37,6 +42,22 @@ public class Scoreboard extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        TextField search = new TextField();
+        search.setPromptText("search");
+        search.textProperty().addListener((observable, oldValue, newValue) -> {
+            /*HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("search", newValue);
+            Packet packet = new Packet(ClientToServerCommands.SEARCH_USER.getCommand(), hashMap);
+            try {
+                Client.getInstance().sendPacket(packet);
+                String json = Client.getInstance().recievePacket().getAttribute().get("users");
+                ArrayList<User> searchedUsers = new Gson().fromJson(json, new com.google.gson.reflect.TypeToken<List<User>>(){}.getType());
+                showSearch(searchedUsers);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }*/
+        });
+
         Circle currentPlayerAvatar = new Circle(50, new ImagePattern(new Image(DataBank.getLoggedInUser().getAvatar())));
         currentPlayerAvatar.setOnDragOver(dragEvent -> {
             if (dragEvent.getGestureSource() != currentPlayerAvatar && dragEvent.getDragboard().hasString())
@@ -62,14 +83,13 @@ public class Scoreboard extends Application {
         });
         VBox vBox = new VBox(10);
         vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().addAll(currentPlayerAvatar, currentPlayerUsername, currentPlayerScore, back);
+        vBox.getChildren().addAll(search, currentPlayerAvatar, currentPlayerUsername, currentPlayerScore, back);
 
         ListView<HBox> hBoxListView = new ListView<>();
         hBoxListView.setMaxWidth(600);
         hBoxListView.setMinWidth(500);
         hBoxListView.setMaxHeight(500);
         hBoxListView.setFixedCellSize(70);
-
 
         createListView(hBoxListView);
         AtomicInteger firstState = new AtomicInteger(Client.getInstance().getNotificationReceiver().getUserStateChange());
@@ -122,6 +142,8 @@ public class Scoreboard extends Application {
                 path = image.getUrl();
             });
             circle.setOnMouseDragged(mouseEvent -> mouseEvent.setDragDetect(true));
+            int finalI = i;
+            circle.setOnMouseClicked(mouseEvent -> showProfile(sortedUsers.get(finalI)));
 
             Text highScore = new Text(Integer.toString(sortedUsers.get(i).getHighScore()));
 
@@ -149,10 +171,83 @@ public class Scoreboard extends Application {
                 connectionState.setText("offline");
             }
 
-            HBox hBox = new HBox(10);
+            HBox hBox = new HBox(20);
             hBox.setAlignment(Pos.CENTER);
             hBox.getChildren().addAll(rank, username, circle, highScore, connectionState, lastSeen);
             hBoxListView.getItems().add(hBox);
         }
+    }
+    private void showSearch(ArrayList<User> searched) {
+        Popup popup = new Popup();
+        VBox all = new VBox(10);
+        all.setAlignment(Pos.CENTER);
+
+        for(User user : searched){
+            HBox hBox = new HBox(10);
+            hBox.setAlignment(Pos.CENTER);
+            Text username = new Text(user.getUsername());
+            Circle avatar = new Circle(30, new ImagePattern(new Image(user.getAvatar())));
+            Text highScore = new Text(Integer.toString(user.getHighScore()));
+            hBox.getChildren().addAll(username, avatar, highScore);
+            all.getChildren().add(hBox);
+        }
+
+        all.setBackground(Background.fill(Color.BEIGE));
+        popup.getContent().add(all);
+        popup.show(SignupMenu.stage);
+    }
+
+    private void showProfile(User user){
+        Popup popup = new Popup();
+        HBox hBox = new HBox(15);
+        hBox.setAlignment(Pos.CENTER);
+        hBox.setPadding(new Insets(20));
+        VBox vBox = new VBox(15);
+        vBox.setAlignment(Pos.CENTER);
+        ArrayList<User> friends = new ArrayList<>();
+
+        try {
+            HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("username", user.getUsername());
+            Packet packet = new Packet(ClientToServerCommands.GET_FRIENDS.getCommand(), hashMap);
+            Client.getInstance().sendPacket(packet);
+            String json = Client.getInstance().recievePacket().getAttribute().get("friends");
+            friends = new Gson().fromJson(json, new com.google.gson.reflect.TypeToken<List<User>>() {}.getType());
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Text text = new Text("friends list");
+        ListView<HBox> listView = new ListView<>();
+        listView.setMaxHeight(300);
+        if(friends != null) {
+            for (User friend : friends) {
+                listView.getItems().add(createFriendHbox(friend));
+            }
+        }
+        VBox vBox2 = new VBox(15);
+        vBox2.setAlignment(Pos.CENTER);
+        vBox2.getChildren().addAll(text, listView);
+        Circle avatar = new Circle(30, new ImagePattern(new Image(user.getAvatar())));
+        Text username = new Text(user.getUsername());
+        Text highScore = new Text(String.valueOf(user.getHighScore()));
+        Button button = new Button("back");
+        button.setOnMouseClicked(mouseEvent -> popup.hide());
+        vBox.getChildren().addAll(avatar, username, highScore, button);
+        hBox.getChildren().addAll(vBox, vBox2);
+        hBox.setBackground(Background.fill(Color.BEIGE));
+        popup.getContent().add(hBox);
+        popup.show(SignupMenu.stage);
+    }
+
+    private HBox createFriendHbox (User user){
+        HBox hBox = new HBox(10);
+        hBox.setAlignment(Pos.CENTER);
+        Circle avatar = new Circle(30, new ImagePattern(new Image(user.getAvatar())));
+        Text username = new Text(user.getUsername());
+        Text nickname = new Text(user.getNickname());
+        Text highScore = new Text(String.valueOf(user.getHighScore()));
+        hBox.getChildren().addAll(avatar, username, nickname, highScore);
+        return hBox;
     }
 }

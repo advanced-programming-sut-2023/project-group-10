@@ -5,6 +5,8 @@ import org.example.model.User;
 import org.example.model.utils.CheckFormatAndEncrypt;
 import org.example.view.enums.messages.ProfileMenuMessages;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class ProfileMenuController {
@@ -122,5 +124,21 @@ public class ProfileMenuController {
             return ProfileMenuMessages.NO_SPECIAL_CHARACTER;
 
         else return ProfileMenuMessages.STRONG_PASSWORD;
+    }
+
+    public static ArrayList<User> searchUsers (String search) {
+        Stronghold.dataBase.saveUsersToFile();
+        ArrayList<User> searchedUsers = new ArrayList<>();
+        for(User user : User.getUsers()){
+            if(user.getUsername().contains(search))
+                searchedUsers.add(user);
+        }
+        return searchedUsers;
+    }
+
+    public static ArrayList<User> getFriends (String username) {
+        if(User.getUserByUsername(username).getFriends() != null)
+            return User.getUserByUsername(username).getFriends();
+        return null;
     }
 }

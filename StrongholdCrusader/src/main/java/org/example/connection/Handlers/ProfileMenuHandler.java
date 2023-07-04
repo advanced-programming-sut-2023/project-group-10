@@ -123,10 +123,27 @@ public class ProfileMenuHandler {
         connection.sendPacket(toBeSent);
     }
 
-    public void allConnections() throws IOException{
+    public void getSearchedUsers() throws IOException {
+        String search = receivedPacket.getAttribute().get("search");
+        ArrayList<User> searchedUsers = ProfileMenuController.searchUsers(search);
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("users", new Gson().toJson(searchedUsers));
+        Packet toBeSent = new Packet(ServerToClientCommands.GET_SEARCHED_USERS.getCommand(), hashMap);
+        connection.sendPacket(toBeSent);
+    }
+
+    public void allConnections() throws IOException {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("array list", new Gson().toJson(ConnectionDatabase.getInstance().getSessionIdConnectionMap()));
         Packet toBeSent = new Packet(ServerToClientCommands.ALL_CONNECTIONS.getCommand(), hashMap);
+        connection.sendPacket(toBeSent);
+    }
+
+    public void getFriends() throws IOException {
+        String username = receivedPacket.getAttribute().get("username");
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("friends", new Gson().toJson(ProfileMenuController.getFriends(username)));
+        Packet toBeSent = new Packet(ServerToClientCommands.FRIENDS_LIST.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
 }

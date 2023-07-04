@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import org.example.model.lobby.Group;
 import org.example.model.utils.CheckFormatAndEncrypt;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class User {
     static final Gson gson = new Gson();
@@ -24,6 +21,7 @@ public class User {
     private boolean isOnline;
     private long lastLogout;
     private ArrayList<Group> viewingGroupsInList;
+    private ArrayList<User> friends;
 
 
     public User(String username, String password, String nickname, String email, String slogan, String questionNumber, String securityAnswer) {
@@ -36,6 +34,7 @@ public class User {
         this.questionAnswer = CheckFormatAndEncrypt.encryptString(securityAnswer);
         this.avatar = "/images/avatar/avatar" + randomNumber() + ".png";
         lastLogout = System.currentTimeMillis();
+        friends = new ArrayList<>();
     }
 
     public boolean isOnline() {
@@ -193,6 +192,17 @@ public class User {
 
     public void setHighScore(int highScore) {
         if (this.highScore <= highScore) User.getUserByUsername(this.username).highScore = highScore;
+        Stronghold.dataBase.saveUsersToFile();
+    }
+
+    public ArrayList<User> getFriends(){
+        if(this.friends.size() != 0)
+            return this.friends;
+        return null;
+    }
+
+    public void addFriend (String username){
+        this.friends.add(User.getUserByUsername(username));
         Stronghold.dataBase.saveUsersToFile();
     }
 

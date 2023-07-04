@@ -31,6 +31,8 @@ public enum ServerToClientCommands {
     CONNECTION("connection", "state"),
     ALL_CONNECTIONS("all connections", "array list"),
     LAST_VISIT("last visit", "time"),
+    GET_SEARCHED_USERS("get searched users", "users"),
+    FRIENDS_LIST("friends list", "friends"),
     //chat menu
     CAN_CREATE_CHAT("can create chat", "state"),
     GET_CHAT_LIST("get chat list", "chats"),
