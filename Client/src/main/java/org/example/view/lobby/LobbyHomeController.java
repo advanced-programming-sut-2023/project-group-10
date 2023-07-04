@@ -14,6 +14,7 @@ import org.example.connection.ClientToServerCommands;
 import org.example.connection.Packet;
 import org.example.model.User;
 import org.example.model.lobby.Group;
+import org.example.view.MainMenuGFX;
 import org.example.view.SignupMenu;
 
 import java.io.IOException;
@@ -63,7 +64,7 @@ public class LobbyHomeController {
     }
 
     public void joinGroupByFieldId() {
-        if(groupIdField.getText().isEmpty()) {
+        if (groupIdField.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("enter a group id first!");
             alert.showAndWait();
@@ -122,5 +123,9 @@ public class LobbyHomeController {
         VBox result = new VBox(groupNameId, groupMemberCount, members, joinButton);
         result.setAlignment(Pos.CENTER);
         return result;
+    }
+
+    public void goToMainMenu() throws Exception {
+        new MainMenuGFX().start(SignupMenu.stage);
     }
 }

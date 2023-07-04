@@ -5,7 +5,9 @@ import org.example.connection.Connection;
 import org.example.connection.ConnectionDatabase;
 import org.example.connection.Packet;
 import org.example.connection.ServerToClientCommands;
+import org.example.controller.ChatController;
 import org.example.model.User;
+import org.example.model.chat.Room;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class Group {
     private int membersCap;
     private transient final Timer expirationTimer;
     private transient final ArrayList<User> listWatchers;
+    private transient final Room room;
 
     public Group(String groupName, User admin, int membersCap, boolean isPrivate) {
         this.groupName = groupName;
@@ -45,6 +48,7 @@ public class Group {
             }
         }, TIMEOUT_LIMIT);
         listWatchers = new ArrayList<>();
+        room = Room.create(admin.getUsername(), groupId);
         allGroups.add(this);
     }
 
@@ -128,6 +132,7 @@ public class Group {
     public synchronized void addMember(User user) {
         listWatchers.remove(user);
         members.add(user);
+        ChatController.addMemberToRoom(room.getChatID(), user.getUsername());
         if (members.size() == membersCap) {
             startGameSequence();
         } else {
@@ -150,13 +155,17 @@ public class Group {
             deleteGroup();
             informWatchers();
         } else {
-            if (user.equals(admin)) admin = members.get(0);
+            if (user.equals(admin)) {
+                admin = members.get(0);
+                room.setAdminUsername(admin.getUsername());
+            }
             informMembers();
             informWatchers();
         }
     }
 
     private void deleteGroup() {
+        room.delete();
         for (User listWatcher : listWatchers)
             listWatcher.getViewingGroupsInList().remove(this);
         allGroups.remove(this);

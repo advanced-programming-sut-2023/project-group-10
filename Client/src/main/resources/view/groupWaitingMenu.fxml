@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.view.lobby.GroupWaitingController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.example.view.lobby.GroupWaitingController">
 
     <center>
         <VBox alignment="CENTER" style="-fx-background-color: pink;">
-            <Label fx:id="groupNameIdLabel" />
-            <Label fx:id="groupMemberCountLabel" />
-            <Label fx:id="groupMembersLabel" />
+            <Label fx:id="groupNameIdLabel" textAlignment="CENTER"/>
+            <Label fx:id="groupMemberCountLabel" textAlignment="CENTER"/>
+            <Label fx:id="groupMembersLabel" textAlignment="CENTER"/>
+            <Button text="go to chat" onMouseClicked="#startChatPage"/>
             <VBox fx:id="checkboxContainer" alignment="CENTER">
             </VBox>
             <HBox fx:id="buttonsBox" alignment="CENTER">
                 <Button onMouseClicked="#exitGroup" style="-fx-background-color: white;" text="exit">
-               <font>
-                  <Font name="Chalkboard" size="13.0" />
-               </font></Button>
+                    <font>
+                        <Font name="Chalkboard" size="13.0"/>
+                    </font>
+                </Button>
             </HBox>
         </VBox>
     </center>

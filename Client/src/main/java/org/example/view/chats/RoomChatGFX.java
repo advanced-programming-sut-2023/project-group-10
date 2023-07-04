@@ -1,18 +1,17 @@
 package org.example.view.chats;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import org.example.connection.Client;
 
 import java.net.URL;
 
 public class RoomChatGFX extends Application {
-    public  String roomName;
-    public boolean isForGame=false;
+    public static Stage stage;
+    public String roomName;
+    public boolean isForGame = false;
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
@@ -24,7 +23,8 @@ public class RoomChatGFX extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader=new FXMLLoader(new URL(RoomChatGFX.class.getResource("/view/roomChat.fxml").toExternalForm()));
+        RoomChatGFX.stage = stage;
+        FXMLLoader loader = new FXMLLoader(new URL(RoomChatGFX.class.getResource("/view/roomChat.fxml").toExternalForm()));
         RoomChatController.setRoomName(roomName);
         RoomChatController.setForGame(this.isForGame);
         Pane chat = loader.load();

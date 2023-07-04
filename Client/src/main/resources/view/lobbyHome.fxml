@@ -31,6 +31,10 @@
             <font>
                <Font name="Chalkboard" size="13.0" />
             </font></Button>
+            <Button onMouseClicked="#goToMainMenu" style="-fx-background-color: cornflowerblue;" text="back">
+                <font>
+                    <Font name="Chalkboard" size="13.0" />
+                </font></Button>
         </VBox>
     </center>
 </BorderPane>
