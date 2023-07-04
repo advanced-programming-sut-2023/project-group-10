@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.connection.Client;
 import org.example.connection.ClientToServerCommands;
@@ -21,6 +22,7 @@ import org.example.model.lobby.Group;
 import org.example.view.DataBank;
 import org.example.view.MapMenu;
 import org.example.view.SignupMenu;
+import org.example.view.chats.RoomChatGFX;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -45,6 +47,11 @@ public class GroupWaitingController {
             if (Client.getInstance().getNotificationReceiver().isGroupComplete()) {
                 Client.getInstance().getNotificationReceiver().setGroupComplete(false);
                 currentGroup = groupCache;
+                try {
+                    startChatPage();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 startSequence();
             } else if (currentGroup != groupCache) {
                 currentGroup = groupCache;
@@ -65,6 +72,33 @@ public class GroupWaitingController {
         }));
         updateGroup.setCycleCount(Timeline.INDEFINITE);
         updateGroup.play();
+    }
+
+    private void startChatPage() throws Exception {
+        RoomChatGFX roomChatGFX = new RoomChatGFX();
+        roomChatGFX.setRoomName(groupNameIdLabel.getText());
+        roomChatGFX.setForGame(true);
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("room id", groupNameIdLabel.getText());
+        Packet packet = new Packet(ClientToServerCommands.CREATE_ROOM.getCommand(), attributes);
+        try {
+            Client.getInstance().sendPacket(packet);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        for (User member : currentGroup.getMembers()) {
+            attributes.clear();
+            attributes.put("room id", groupNameIdLabel.getText());
+            attributes.put("username", member.getUsername());
+            Packet packet1 = new Packet(ClientToServerCommands.ADD_MEMBER_TO_ROOM.getCommand(), attributes);
+            try {
+                Client.getInstance().sendPacket(packet1);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        roomChatGFX.start(new Stage());
+
     }
 
     private void stylePane() {

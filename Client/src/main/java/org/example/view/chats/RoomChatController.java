@@ -44,6 +44,11 @@ public class RoomChatController implements ChatControllerParent {
     private ArrayList<Message> messagesCache;
     private TextField nameField;
     private Button addUser;
+    private static boolean isForGame = false;
+
+    public static void setForGame(boolean forGame) {
+        isForGame = forGame;
+    }
 
     public static void setRoomName(String roomName) {
         RoomChatController.roomName = roomName;
@@ -52,10 +57,12 @@ public class RoomChatController implements ChatControllerParent {
     @FXML
     public void initialize() throws IOException {
         roomNameLabel.setText(roomName);
-        try {
-            initTopBox();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!isForGame) {
+            try {
+                initTopBox();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         initChatBox(getMessages());
         Client.getInstance().getNotificationReceiver().setMessagesCache(messagesCache);
@@ -120,7 +127,7 @@ public class RoomChatController implements ChatControllerParent {
             throw new RuntimeException(e);
         }
         try {
-            Packet responose=Client.getInstance().recievePacket();
+            Packet responose = Client.getInstance().recievePacket();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setContentText(responose.getAttribute().get("message"));
             alert.setTitle("");
