@@ -538,10 +538,6 @@ public class ProfileMenu extends Application {
                 e.printStackTrace();
             }
             if(result.equals("successful")){
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("successful add");
-                alert.setContentText("You have successfully accepted " + user.getUsername() + " as friend!");
-                alert.show();
                 popup.hide();
                 showFriends();
             }
