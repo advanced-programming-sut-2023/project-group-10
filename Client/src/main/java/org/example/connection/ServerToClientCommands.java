@@ -35,6 +35,8 @@ public enum ServerToClientCommands {
     FRIENDS_LIST("friends list", "friends"),
     PENDING_FRIENDS("pending friends", "pending"),
     REQUEST_FRIEND("request friend", "result"),
+    ACCEPT_FRIEND("accept friend", "result"),
+    REJECT_FRIEND("reject friend"),
     //chat menu
     CAN_CREATE_CHAT("can create chat", "state"),
     GET_CHAT_LIST("get chat list", "chats"),

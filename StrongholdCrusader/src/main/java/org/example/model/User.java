@@ -22,8 +22,8 @@ public class User {
     private boolean isOnline;
     private long lastLogout;
     private ArrayList<Group> viewingGroupsInList;
-    private final ArrayList<User> friends;
-    private final ArrayList<User> pendingFriends;
+    private final ArrayList<String> friends;
+    private final ArrayList<String> pendingFriends;
 
 
     public User(String username, String password, String nickname, String email, String slogan, String questionNumber, String securityAnswer) {
@@ -198,17 +198,27 @@ public class User {
         Stronghold.dataBase.saveUsersToFile();
     }
 
-    public ArrayList<User> getFriends(){
+    public ArrayList<String> getFriends(){
         return friends;
     }
 
-    public ArrayList<User> getPendingFriends() {
+    public ArrayList<String> getPendingFriends() {
         return pendingFriends;
     }
 
     public void addPending(String requester) {
-        User requesterUser = User.getUserByUsername(requester);
-        pendingFriends.add(requesterUser);
+        pendingFriends.add(requester);
+        Stronghold.dataBase.saveUsersToFile();
+    }
+
+    public void addFriend(String requester) {
+        pendingFriends.remove(requester);
+        friends.add(requester);
+        Stronghold.dataBase.saveUsersToFile();
+    }
+
+    public void rejectFriend (String requester) {
+        pendingFriends.remove(requester);
         Stronghold.dataBase.saveUsersToFile();
     }
 

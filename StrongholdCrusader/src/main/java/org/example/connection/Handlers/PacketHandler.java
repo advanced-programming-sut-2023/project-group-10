@@ -125,6 +125,12 @@ public class PacketHandler {
             case REQUEST_FRIEND:
                 profileMenuHandler.requestFriend();
                 break;
+            case ACCEPT_FRIEND:
+                profileMenuHandler.acceptFriend();
+                break;
+            case REJECT_FRIEND:
+                profileMenuHandler.rejectFriend();
+                break;
             case LOGOUT:
                 mainMenuHandler.handleLogout();
                 break;

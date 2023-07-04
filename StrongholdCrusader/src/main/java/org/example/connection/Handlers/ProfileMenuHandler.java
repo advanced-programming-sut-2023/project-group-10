@@ -164,4 +164,22 @@ public class ProfileMenuHandler {
         Packet toBeSent = new Packet(ServerToClientCommands.REQUEST_FRIEND.getCommand(), hashMap);
         connection.sendPacket(toBeSent);
     }
+
+    public void acceptFriend() throws IOException{
+        String owner = receivedPacket.getAttribute().get("owner");
+        String requester = receivedPacket.getAttribute().get("requester");
+        String result = ProfileMenuController.acceptFriend(owner, requester);
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("result", result);
+        Packet toBeSent = new Packet(ServerToClientCommands.ACCEPT_FRIEND.getCommand(), hashMap);
+        connection.sendPacket(toBeSent);
+    }
+
+    public void rejectFriend() throws IOException{
+        String owner = receivedPacket.getAttribute().get("owner");
+        String requester = receivedPacket.getAttribute().get("requester");
+        ProfileMenuController.acceptFriend(owner, requester);
+        Packet toBeSent = new Packet(ServerToClientCommands.ACCEPT_FRIEND.getCommand(), null);
+        connection.sendPacket(toBeSent);
+    }
 }

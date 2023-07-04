@@ -39,6 +39,8 @@ public enum ClientToServerCommands {
     GET_FRIENDS("get friends", "username"),
     GET_PENDING_FRIENDS("get pending friends", "username"),
     REQUEST_FRIEND("request friend", "owner", "requester"),
+    ACCEPT_FRIEND("accept friend", "owner", "requester"),
+    REJECT_FRIEND("reject friend", "owner", "requester"),
     //start game menu
     START_NEW_GAME("start game", "players", "keeps x", "keeps y", "colors"),
     CANCEL_START_GAME("cancel start game"),

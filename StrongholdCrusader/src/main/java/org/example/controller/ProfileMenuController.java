@@ -136,11 +136,21 @@ public class ProfileMenuController {
     }
 
     public static ArrayList<User> getFriends (String username) {
-        return User.getUserByUsername(username).getFriends();
+        ArrayList<User> arrayList = new ArrayList<>();
+        User user = User.getUserByUsername(username);
+        for(String string : user.getFriends()){
+            arrayList.add(User.getUserByUsername(string));
+        }
+        return arrayList;
     }
 
     public static ArrayList<User> getPendingFriends (String username) {
-        return User.getUserByUsername(username).getPendingFriends();
+        ArrayList<User> arrayList = new ArrayList<>();
+        User user = User.getUserByUsername(username);
+        for(String string : user.getPendingFriends()){
+            arrayList.add(User.getUserByUsername(string));
+        }
+        return arrayList;
     }
 
     public static String requestFriend (String owner, String requester) {
@@ -149,13 +159,22 @@ public class ProfileMenuController {
         else{
             User ownerUser = User.getUserByUsername(owner);
             ownerUser.addPending(requester);
-            System.out.println(ownerUser.getPendingFriends().get(0));
-            System.out.println(ownerUser.getPendingFriends().size());
-            for(User user : User.getUsers()){
-                System.out.println(user.getPendingFriends().size());
-                if(user.equals(ownerUser)) System.out.println("yes");
-            }
             return "successful";
         }
+    }
+
+    public static String acceptFriend(String owner, String requester) {
+        User ownerUser = User.getUserByUsername(owner);
+        if(ownerUser.getFriends().size() == 100)
+            return "no storage";
+        else {
+            ownerUser.addFriend(requester);
+            return "successful";
+        }
+    }
+
+    public static void rejectFriend(String owner, String requester) {
+        User ownerUser = User.getUserByUsername(owner);
+        ownerUser.rejectFriend(requester);
     }
 }
